@@ -162,7 +162,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 <div class="header">
   <a class="back" href="mainlines_concept.html">&#8592; 返回</a>
   <h1>板块 RPS 分析</h1>
-  <div class="subtitle" id="subtitle">通达信 401 个板块 · 板块RPS5 / 板块RPS10 / 板块RPS20 两线红 / 自定义 / 查询 ｜ 数据日期加载中…</div>
+  <div class="subtitle" id="subtitle">通达信 401 个板块 · 数据日期 <span id="data-date" style="color:#1976d2;font-weight:600;">加载中…</span></div>
 </div>
 <div class="container">
 
@@ -271,8 +271,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   var D = window.BOARD_RPS || { anchor: "—", boards: {} };
   var ANCHOR = D.anchor;
   var BOARDS = D.boards;
-  document.getElementById("subtitle").textContent =
-    "通达信 401 个板块 · 板块RPS5 / 板块RPS10 / 板块RPS20 两线红 / 自定义 / 查询 ｜ 数据日期 " + ANCHOR;
+  document.getElementById("data-date").textContent = ANCHOR;
   document.getElementById("anchor-text").textContent = ANCHOR;
 
   var list = [];
