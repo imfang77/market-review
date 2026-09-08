@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>板块 RPS 分析</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+.header { background: #fff; border-bottom: 1px solid #e9ecef; padding: 18px 96px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; }
+.header a.back { position: absolute; left: 12px; top: 12px; font-size: 14px; color: #4263eb; text-decoration: none; white-space: nowrap; }
+.header h1 { font-size: 20px; font-weight: 700; }
+.header .subtitle { margin-top: 4px; font-size: 12px; line-height: 1.5; color: #868e96; }
+.rps-now-row { white-space: nowrap; font-size: 13px; line-height: 1.5; }
+.container { max-width: 1280px; margin: 16px auto; padding: 0 16px; }
+.section { background: #fff; border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.section-title { font-size: 18px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; position: relative; }
+.section-title .count-inline { margin-left: auto; font-size: 13px; font-weight: 700; padding: 3px 12px; border-radius: 12px; white-space: nowrap; flex-shrink: 0; background: #e8f5e9; color: #2e7d32; }
+/* 筛选框 */
+.filter-panel { background: #fff; border: 1px solid #dee2e6; border-radius: 8px; padding: 10px 12px; margin: 0 0 12px; font-size: 13px; display: flex; flex-direction: column; gap: 8px; }
+.fp-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.fp-row2 { padding-top: 4px; border-top: 1px dashed #e9ecef; gap: 6px; }
+.fp-seg { display: flex; align-items: center; gap: 4px; background: #f1f3f5; border-radius: 6px; padding: 3px 6px; }
+.fp-seg span { font-size: 12px; color: #495057; white-space: nowrap; }
+.fp-seg input { width: 48px; border: none; background: transparent; text-align: center; padding: 0; height: 28px; font-size: 13px; outline: none; }
+.fp-seg input:focus { box-shadow: 0 0 0 2px rgba(66,99,235,0.18); border-radius: 4px; }
+.fp-search input { width: 220px; height: 36px; box-sizing: border-box; border: 1px solid #ced4da; border-radius: 6px; padding: 0 12px; font-size: 13px; background: #fff; outline: none; }
+.fp-search input:focus { border-color: #4263eb; box-shadow: 0 0 0 2px rgba(66,99,235,0.12); }
+.fp-reset { height: 36px; box-sizing: border-box; border: 1px solid #4263eb; background: #4263eb; color: #fff; padding: 0 16px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+.fp-reset:hover { background: #3b5bdb; }
+.fp-export { height: 36px; box-sizing: border-box; border: 1px solid #4263eb; background: #fff; color: #4263eb; padding: 0 16px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+.fp-export:hover { background: #eef2ff; }
+.fp-actions { display: inline-flex; gap: 8px; white-space: nowrap; align-items: center; margin-left: auto; }
+.fp-plan { height: 36px; box-sizing: border-box; border: 1px solid #ced4da; border-radius: 6px; background: #fff; padding: 0 8px; font-size: 13px; color: #343a40; outline: none; cursor: pointer; }
+.fp-plan:focus { border-color: #4263eb; box-shadow: 0 0 0 2px rgba(66,99,235,0.12); }
+.fp-check { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: #495057; cursor: pointer; user-select: none; }
+.fp-check input[type=checkbox] { width: 15px; height: 15px; cursor: pointer; accent-color: #4263eb; }
+.fp-fresh-win { width: 46px; height: 26px; border: 1px solid #ced4da; border-radius: 4px; text-align: center; font-size: 12px; background: #fff; color: #343a40; outline: none; }
+.fp-fresh-win:focus { border-color: #4263eb; }
+  .fp-hint { font-size: 12px; color: #4263eb; font-weight: 600; margin-left: 4px; }
+.fp-hidden { display: none !important; }
+.fp-op { border: none; background: transparent; font-size: 13px; color: #495057; outline: none; cursor: pointer; margin: 0 1px; }
+.b-code { font-family: "SF Mono", Consolas, monospace; font-size: 12px; color: #212529; display: block; }
+.b-name { font-weight: 600; font-size: 13px; color: #212529; display: inline; border-bottom: 1px dotted #adb5bd; }
+.dl-link { display: inline-block; padding: 10px 18px; background: #4263eb; color: #fff; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; }
+.dl-link:hover { background: #3b5bdb; }
+/* 表格 */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { background: #f1f3f5; padding: 8px 7px; text-align: center; font-weight: 600; color: #495057; font-size: 12px; border-bottom: 2px solid #dee2e6; white-space: normal; vertical-align: middle; line-height: 1.25; }
+.th-clamp { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; white-space: normal; -webkit-box-align: center; text-align: center; }
+.th-multi { display: block; -webkit-line-clamp: unset; overflow: visible; text-align: center; }
+th.sortable { cursor: pointer; user-select: none; transition: background 0.15s; }
+th.sortable:hover { background: #dbeafe; color: #1976d2; }
+th.sortable::after { content: " \21C5"; font-size: 10px; opacity: 0.35; font-weight: normal; }
+th.sortable.asc::after { content: " \2191"; opacity: 1; color: #1976d2; font-weight: 700; }
+th.sortable.desc::after { content: " \2193"; opacity: 1; color: #1976d2; font-weight: 700; }
+th.rps-hdr { color: #1a1a2e; }   /* 板块RPS表头：黑色 */
+td { padding: 6px 8px; border-bottom: 1px solid #e9ecef; text-align: center; font-size: 12px; white-space: nowrap; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+th.num { text-align: right; }
+td.name { text-align: left; font-weight: 600; white-space: nowrap; }
+td.code { text-align: left; font-family: "SF Mono", Consolas, monospace; font-size: 12px; color: #868e96; white-space: nowrap; }
+td.col-stock { position: sticky; left: 0; z-index: 2; background: #fff; box-shadow: 2px 0 3px -2px rgba(0,0,0,.18); text-align: center; }
+th.col-stock { position: sticky; left: 0; background: #f1f3f5; z-index: 4; text-align: center; }
+.c-three { min-width: 80px; }
+.c-lead { min-width: 60px; }
+td.merged { text-align: center; }
+td.merged .b-code, td.merged .b-name { text-align: center; }
+.board-link { color: #212529; cursor: pointer; }
+.board-link:hover { text-decoration: underline; }
+.rps-now-row { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: #495057; }
+.rps-now-row b { font-size: 15px; }
+tbody tr:hover td { background: #f8f9fa; }
+tbody tr:hover td.col-stock { background: #fff; }
+tr.three-yes > td { background: #fff3e0; }
+tr.three-yes:hover > td { background: #ffe8cc; }
+.rps-hot { color: #d63031; font-weight: 700; }   /* 板块RPS > 90 红 */
+.up { color: #d63031; font-weight: 600; }
+.down { color: #00b894; font-weight: 600; }
+.flat { color: #868e96; }
+.badge-yes { display: inline-block; padding: 1px 8px; border-radius: 8px; background: #ff922b; color: #fff; font-size: 12px; font-weight: 600; }
+.badge-no { color: #adb5bd; }
+.empty-result { text-align: center; padding: 32px 16px; color: #adb5bd; font-size: 14px; }
+.pager { display: flex; gap: 10px; align-items: center; justify-content: center; margin: 12px 0; flex-wrap: wrap; }
+.pager button { padding: 6px 14px; border: 1px solid #ced4da; border-radius: 6px; background: #fff; cursor: pointer; font-size: 13px; }
+.pager button:disabled { color: #adb5bd; cursor: not-allowed; }
+.pager .pg-info { font-size: 13px; color: #495057; }
+/* ---- 龙头个股 / 相关ETF 列（可点击下钻） ---- */
+.drill-link { color: #212529; cursor: pointer; border-bottom: 1px dotted #868e96; }
+.drill-link:hover { text-decoration: underline; color: #4263eb; }
+.lead-txt { font-size: 11px; line-height: 1.55; }
+.lead-txt .seg { white-space: nowrap; }
+.lead-txt .tag { color: #868e96; font-size: 10px; }
+.lead-txt .no { color: #adb5bd; }
+/* ---- 弹窗内表格：与每日主线分析「核心个股明细 / 相关ETF」格式一致 ---- */
+.dt-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.dt-table th { background: #f1f3f5; padding: 6px 6px; font-size: 11px; font-weight: 600; color: #495057; border-bottom: 2px solid #dee2e6; white-space: normal; text-align: center; vertical-align: middle; line-height: 1.25; }
+.dt-table td { padding: 5px 6px; border-bottom: 1px solid #e9ecef; font-size: 12px; text-align: center; white-space: nowrap; }
+.dt-table .stock-name { text-align: left; font-weight: 600; }
+.dt-table .stock-name .stock-code { display: block; font-weight: 400; font-size: 10px; color: #868e96; font-family: "SF Mono", Consolas, monospace; }
+/* Top5 单元格：与每日主线分析「核心个股明细」完全一致（_ml_assemble_concept.js 同名样式） */
+.dt-table td.cell-gain { background: #f8bbd0; }   /* 涨幅Top5 粉色背景（字色保持默认黑） */
+.dt-table td.cell-amt { background: #bbdefb; }    /* 成交额Top5 蓝色背景（字色保持默认黑） */
+.dt-table td.cell-cap { background: #c62828; color: #fff; }   /* 市值Top5 深红背景 + 白字 */
+.dt-table td.note-cell { text-align: center; vertical-align: middle; white-space: normal; padding: 6px 4px; }
+.dt-table .chg-cell.up { color: #d63031; font-weight: 600; }
+.dt-table .chg-cell.down { color: #00b894; font-weight: 600; }
+.rank-tags { display: flex; flex-wrap: wrap; gap: 2px; justify-content: center; }
+.rt { display: inline-block; padding: 1px 5px; border-radius: 3px; font-size: 10px; color: #fff; white-space: nowrap; }
+/* 备注列 Top N 标签：同主线原样式（浅底 + 同色系深字，市值Top 为深红底白字） */
+.rt-gain { background: #f8bbd0; color: #e91e63; }
+.rt-amt { background: #bbdefb; color: #1565c0; }
+.rt-cap { background: #c62828; color: #fff; }
+.rt-susp { background: #fff3bf; color: #e67700; }
+.dt-table td.holds-cell { text-align: left; white-space: nowrap; vertical-align: top; }   /* 末列内容不换行（表头 th 默认 normal 仍可换行） */
+.holds-detail > summary { cursor: pointer; color: #4263eb; font-size: 11px; font-weight: 600; list-style: none; user-select: none; }
+.holds-detail > summary::-webkit-details-marker { display: none; }
+.holds-detail > summary::before { content: "\25B8 "; }
+.holds-detail[open] > summary::before { content: "\25BE "; }
+.hold-row { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; line-height: 1.5; white-space: nowrap; }
+.hold-row.core { background: #fff6f5; border-radius: 3px; }
+.hold-row .hn { font-weight: 600; color: #495057; }
+.hold-row .hr { color: #868e96; }
+.core-tag { font-style: normal; font-size: 9px; background: #d63031; color: #fff; border-radius: 2px; padding: 0 3px; margin-left: 3px; }
+.dt-empty { text-align: center; padding: 18px; color: #adb5bd; font-size: 12px; }
+.dt-note { margin-top: 10px; font-size: 11px; color: #868e96; line-height: 1.6; }
+.footer { text-align: center; padding: 24px; font-size: 12px; color: #adb5bd; }
+/* 折叠说明 */
+.desc-fold { font-size: 13px; color: #495057; line-height: 1.7; margin-bottom: 10px; }
+.desc-fold > summary { cursor: pointer; list-style: none; color: #4263eb; font-size: 13px; font-weight: 600; padding: 10px 14px; background: #f8f9fa; border-radius: 6px; user-select: none; -webkit-tap-highlight-color: transparent; }
+.desc-fold > summary::-webkit-details-marker { display: none; }
+.desc-fold > summary::before { content: " \25B8 "; font-size: 12px; }
+.desc-fold[open] > summary::before { content: " \25BE "; }
+.desc-fold > div { padding: 10px 14px; }
+.desc-fold b { color: #343a40; }
+@media (max-width: 600px) {
+  .header { padding: 16px 56px; }
+  .fp-search input { width: 100%; }
+  .fp-row { gap: 6px; }
+  /* 自定义模式：三个框保持一行（空间不足可横向滚动） */
+  #custom-row { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+  #custom-row .fp-seg { flex: 0 0 auto; }
+  #custom-row .fp-seg > span:first-child { font-size: 11px; }
+  #custom-row .fp-seg input { width: 36px; height: 26px; font-size: 12px; }
+  #custom-row .fp-seg select { font-size: 12px; }
+  /* 查询框撑满一整行 */
+  #query-row .fp-search { flex: 1 1 100%; }
+  #query-row .fp-search input { width: 100%; }
+  /* 表格更紧凑 */
+  th { font-size: 11px; padding: 6px 4px; }
+  td { font-size: 11px; padding: 5px 5px; }
+  /* 弹窗 RPS 描述：手机端缩小字号，确保一行放得下（不再折行） */
+  .rps-now-row { font-size: 11px; line-height: 1.6; }
+  /* 手机端筛选行：缩小字号、禁止折行，使"N日内首次两线转红 2026/8/25~2026/8/31"保持一行 */
+  .fp-check { font-size: 12px; }
+  .fp-fresh-win { width: 42px; height: 24px; }
+  .fp-hint { font-size: 11px; }
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+<div class="header">
+  <a class="back" href="mainlines_concept.html">&#8592; 返回</a>
+  <h1>板块 RPS 分析</h1>
+  <div class="subtitle" id="subtitle">通达信 401 个板块 · 板块RPS5 / 板块RPS10 / 板块RPS20 两线红 / 自定义 / 查询 ｜ 数据日期加载中…</div>
+</div>
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">筛选条件</div>
+    <div class="filter-panel">
+      <div class="fp-row">
+        <select id="fp-plan" class="fp-plan">
+          <option value="tri_red" selected>板块RPS两线红</option>
+          <option value="custom">板块RPS自定义</option>
+          <option value="query">板块RPS查询</option>
+        </select>
+        <span class="fp-actions">
+          <button id="fp-reset" class="fp-reset" type="button">重置</button>
+          <button id="fp-export" class="fp-export" type="button">下载</button>
+        </span>
+      </div>
+
+      <!-- 两线红模式 -->
+      <div class="fp-row fp-row2" id="tri-row">
+        <label class="fp-check"><input type="checkbox" id="tri-fresh" checked> <input type="number" id="tri-fresh-win" class="fp-fresh-win" value="5" min="2" max="250"> 日内首次两线转红 <span class="fp-hint" id="fresh-range"></span></label>
+      </div>
+
+      <!-- 自定义模式 -->
+      <div class="fp-row fp-row2 fp-hidden" id="custom-row">
+        <span class="fp-seg"><span>板块RPS5</span><select id="c5op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c5" type="number" value="85"></span>
+        <span class="fp-seg"><span>10</span><select id="c10op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c10" type="number" value="85"></span>
+        <span class="fp-seg"><span>20</span><select id="c20op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c20" type="number" value="85"></span>
+      </div>
+
+      <!-- 查询模式 -->
+      <div class="fp-row fp-row2 fp-hidden" id="query-row">
+        <span class="fp-search"><input id="q" type="text" placeholder="输入板块名称或代码，如 石油 / 880310"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span>筛选结果</span><span class="count-inline" id="count-inline">—</span></div>
+    <div class="table-wrap">
+      <table id="tbl">
+        <thead><tr id="thead"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="pager">
+      <button type="button" id="sr-prev">上一页</button>
+      <span class="pg-info" id="sr-pg-info"></span>
+      <button type="button" id="sr-next">下一页</button>
+    </div>
+    <div class="empty-result fp-hidden" id="empty">无符合条件的板块</div>
+  </div>
+
+  <div class="section">
+    <details class="desc-fold">
+      <summary>第一个通达信401个板块的来源及下载</summary>
+      <div>本页的 <b>通达信401个板块</b> 以你提供的《板块指数RPS20260830（401只）》为准，系从通达信系统导出「行业板块 + 概念板块」成分股清单（覆盖 325 个板块）与「全部A股-细分+概念主题」导出（推导其余 76 个板块）去重并集而成，全部为通达信板块指数（880xxx 代码段），涵盖二级行业、细分行业与概念主题，<b>不再区分层级</b>，统一称为"这 通达信401个板块"。最终确认的「通达信401个板块 ↔ 沪深个股」双向映射文件见本页最下方下载链接。</div>
+    </details>
+    <details class="desc-fold">
+      <summary>通达信401个板块涨跌幅的数据源</summary>
+      <div>板块涨跌幅取自 <b>通达信公共行情服务器</b>（pytdx <code>get_index_bars</code>，market=1，category=9）的 880xxx 板块指数日K线。板块指数为成分股加权合成、<b>无分红除权</b>，故直接读取指数收盘价计算 N 日收益率即为板块涨跌幅，零除权失真。锚点日（最新收盘）见页面顶部，当前为 <b id="anchor-text">—</b>。成交额、当日涨幅均为该最新交易日数据。</div>
+    </details>
+    <details class="desc-fold">
+      <summary>板块RPS 口径与其他说明</summary>
+      <div>
+        <p><b>板块RPS 定义</b>：把每个板块当作一只"股票"，按其 N 日收益率在 <b>通达信401个板块内</b> 做百分位排名（100 = 最强，≥ 90 为领先板块）。板块RPS5 / 板块RPS10 / 板块RPS20 与<b>个股RPS 是相互独立的两套体系，请勿混淆</b>。</p>
+        <p><b>两线红</b> = 板块RPS5 / 板块RPS10 / 板块RPS20 中<b>至少 2 条 ≥ 90</b>（RPS 到了 90 才叫转红，表中 ≥ 90 标红）。<b>两线转红日</b> = 该板块最近一次由"非两线红"跳变为"两线红"的交易日。<b>领先周期数</b> = 板块RPS5/10/20 中 ≥ 90 的个数（0~3）。</p>
+        <p><b>涨跌幅列</b>：涨跌幅5日% / 10日% / 20日% 为板块对应周期的收益率（百分比数值，表头已含 %，单元格内为纯数字）。</p>
+        <p><b>日期区间（已取消，由「N日内首次两线转红」替代）</b>：两线红默认按<b>最新交易日（页面顶部数据日期）</b>查看"当前两线红板块"（数值列始终为最新交易日快照，仅"是否两线红 / 两线转红日"随口径变化）。勾选「N日内首次两线转红」即按"两线转红日落在近 N 个交易日"筛选，对应交易日区间实时显示在勾选框右侧（例如 N=5 即最近 5 个交易日）；不再提供独立的起止日期选择器。</p>
+      </div>
+    </details>
+    <div style="text-align:center; padding: 6px 0 4px;">
+      <a class="dl-link" href="401板块映射_个股与板块.xlsx" download>下载：通达信401个板块与个股映射（.xlsx）</a>
+    </div>
+  </div>
+
+  <div id="rpsModal" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center">
+    <div style="background:#fff;border-radius:12px;padding:18px 20px;width:min(860px,94vw);max-height:92vh;overflow:auto;box-shadow:0 8px 32px rgba(0,0,0,.18)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div id="rpsTitle" style="font-size:16px;font-weight:700"></div>
+        <button onclick="closeBoardRps()" style="border:none;background:#f1f3f5;font-size:19px;line-height:1;width:30px;height:30px;border-radius:6px;cursor:pointer;color:#495057">×</button>
+      </div>
+      <div id="rpsRange" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap"></div>
+      <div id="rpsChart" style="width:100%;height:360px"></div>
+      <div id="rpsNow" style="margin-top:12px;font-size:13px;line-height:1.5"></div>
+      <div style="margin-top:8px;font-size:12px;color:#868e96">红色线段 = 该周期 板块RPS ≥ 90（通达信401个板块内前 10%）。历史曲线由每日横截面排名回溯计算，可切换至 6 个月（当前历史最长约半年）。</div>
+    </div>
+  </div>
+
+  <div id="drillModal" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center">
+    <div style="background:#fff;border-radius:12px;padding:18px 20px;width:min(920px,94vw);max-height:92vh;overflow:auto;box-shadow:0 8px 32px rgba(0,0,0,.18)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px">
+        <div id="drillTitle" style="font-size:16px;font-weight:700"></div>
+        <button onclick="closeDrill()" style="border:none;background:#f1f3f5;font-size:19px;line-height:1;width:30px;height:30px;border-radius:6px;cursor:pointer;color:#495057;flex:0 0 auto">×</button>
+      </div>
+      <div id="drillBody"></div>
+    </div>
+  </div>
+
+  <div class="footer">数据仅供参考，不构成投资建议 ｜ 板块RPS 由 880xxx 板块指数日K 计算</div>
+</div>
+
+<script src="_board_rps_data.js?v=20260901f"></script>
+<script>
+(function () {
+  var D = window.BOARD_RPS || { anchor: "—", boards: {} };
+  var ANCHOR = D.anchor;
+  var BOARDS = D.boards;
+  document.getElementById("subtitle").textContent =
+    "通达信 401 个板块 · 板块RPS5 / 板块RPS10 / 板块RPS20 两线红 / 自定义 / 查询 ｜ 数据日期 " + ANCHOR;
+  document.getElementById("anchor-text").textContent = ANCHOR;
+
+  var list = [];
+  for (var code in BOARDS) {
+    var b = BOARDS[code];
+    b.code = code;
+    list.push(b);
+  }
+
+  // 交易日历（所有板块 hist 日期并集，升序），用于两线红"按日期"与新鲜度计算
+  var ALLDATES = [];
+  (function () {
+    var set = {};
+    list.forEach(function (b) { if (b.hist) b.hist.forEach(function (h) { set[h[0]] = 1; }); });
+    ALLDATES = Object.keys(set).sort();
+  })();
+  var MIN_DATE = ALLDATES.length ? ALLDATES[0] : ANCHOR;
+
+  // 列定义
+  var COLS = [
+    { k: "code", t: "板块", num: false, sticky: true, merged: true },
+    { k: "amount", t: "成交额(亿)", num: true },
+    { k: "chg", t: "当日涨幅(%)", num: true, sign: true, black: true },
+    { k: "rps5", t: "板块RPS5", num: true, rps: true, hdrBlack: true },
+    { k: "rps10", t: "板块RPS10", num: true, rps: true, hdrBlack: true },
+    { k: "rps20", t: "板块RPS20", num: true, rps: true, hdrBlack: true },
+    { k: "ret5", t: "涨跌幅5日%", num: true, sign: true, black: true },
+    { k: "ret10", t: "涨跌幅10日%", num: true, sign: true, black: true },
+    { k: "ret20", t: "涨跌幅20日%", num: true, sign: true, black: true },
+    { k: "three", t: "是否两<br>线红", num: false, bool: true, cls: "c-three" },
+    { k: "red_date", t: "三线转红日", num: false },
+    { k: "lead", t: "领先周期<br>数", num: true, cls: "c-lead" },
+    { k: "lg", t: "龙头个股", num: false, drill: "lead", cls: "c-drill", nosort: true },
+    { k: "etfTop", t: "相关ETF", num: false, drill: "etf", cls: "c-drill", nosort: true }
+  ];
+
+  // 状态
+  var state = {
+    mode: "tri_red",
+    triFresh: true, triFreshWin: 5,
+    c5: 85, c10: 85, c20: 85,
+    c5op: "ge", c10op: "ge", c20op: "ge",
+    q: "",
+    sortKey: "rps5", sortDir: "desc"
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var PAGE_SIZE = 20, page = 1;
+
+  // 渲染表头
+  function renderHead() {
+    var tr = $("thead");
+    tr.innerHTML = "";
+    COLS.forEach(function (c) {
+      var th = document.createElement("th");
+      var s = document.createElement("span");
+      s.className = "th-clamp" + (c.t.indexOf("<br>") >= 0 ? " th-multi" : "");
+      s.innerHTML = c.t;
+      th.appendChild(s);
+      th.className = (c.nosort ? "" : "sortable") + (c.num ? " num" : "") + (c.sticky ? " col-stock" : "") + (c.hdrBlack ? " rps-hdr" : "") + (c.cls ? " " + c.cls : "");
+      if (state.sortKey === c.k) th.classList.add(state.sortDir);
+      if (!c.nosort) th.onclick = function () { onSort(c.k); };
+      tr.appendChild(th);
+    });
+  }
+
+  function onSort(k) {
+    if (state.sortKey === k) {
+      state.sortDir = state.sortDir === "desc" ? "asc" : "desc";
+    } else {
+      state.sortKey = k;
+      state.sortDir = "desc";
+    }
+    renderHead();
+    page = 1;
+    renderBody();
+  }
+  function threeAsOf(b, d) {
+    if (!b.hist || !b.hist.length) return false;
+    var chosen = null;
+    for (var i = 0; i < b.hist.length; i++) {
+      if (b.hist[i][0] <= d) chosen = b.hist[i]; else break;
+    }
+    return chosen ? chosen[4] === 1 : false;
+  }
+  // 新鲜度：三线转红日 距 选定结束日 的交易日数 <= 窗口
+  function isFreshAsOf(b, d) {
+    if (!b.red_date) return false;
+    var di = ALLDATES.indexOf(d);
+    var ri = ALLDATES.indexOf(b.red_date);
+    if (ri < 0) return false;            // 早于历史窗口，视为不新鲜
+    if (di < 0) di = ALLDATES.length - 1;
+    return (di - ri) <= state.triFreshWin;
+  }
+  // 新鲜度区间提示：N日内首次三线转红 对应的交易日区间（替代原日期选项）
+  function updateFreshRange() {
+    var el = document.getElementById("fresh-range");
+    if (!el) return;
+    if (!state.triFresh) { el.textContent = ""; return; }
+    var n = state.triFreshWin || 5;
+    var di = ALLDATES.indexOf(ANCHOR);
+    if (di < 0) di = ALLDATES.length - 1;
+    var si = Math.max(0, di - n + 1);
+    function fmt(d) { var p = d.split('-'); return p[0] + '/' + (+p[1]) + '/' + (+p[2]); }
+    el.textContent = fmt(ALLDATES[si]) + "~" + fmt(ALLDATES[di]);
+  }
+  // 自定义模式：>= / <= 比较
+  function cmpOp(v, op, thr) {
+    if (v == null) return false;
+    return op === "le" ? (v <= thr) : (v >= thr);
+  }
+
+  function filtered() {
+    var base = list.filter(function (b) { return b.ok; });
+    var out;
+    if (state.mode === "tri_red") {
+      out = base.filter(function (b) { return threeAsOf(b, ANCHOR); });     // 截至最新数据日两线红
+      if (state.triFresh) {
+        out = out.filter(function (b) { return isFreshAsOf(b, ANCHOR); }); // N日内首次三线转红（替代日期选项）
+      }
+    } else if (state.mode === "custom") {
+      out = base.filter(function (b) {
+        return cmpOp(b.rps5, state.c5op, state.c5)
+            && cmpOp(b.rps10, state.c10op, state.c10)
+            && cmpOp(b.rps20, state.c20op, state.c20);
+      });
+    } else { // query
+      var q = state.q.trim().toLowerCase();
+      if (!q) { out = base.slice(); }
+      else {
+        out = base.filter(function (b) {
+          return b.code.indexOf(q) >= 0 || (b.name || "").toLowerCase().indexOf(q) >= 0;
+        });
+      }
+    }
+    return out;
+  }
+
+  function cmp(a, b) {
+    var k = state.sortKey, dir = state.sortDir === "desc" ? -1 : 1;
+    var va = a[k], vb = b[k];
+    if (va == null) va = -1e9;
+    if (vb == null) vb = -1e9;
+    if (typeof va === "string") return va.localeCompare(vb) * dir;
+    return (va - vb) * dir;
+  }
+
+  function cellHTML(c, b) {
+    var v = b[c.k];
+    if (c.bool) {
+      return '<td class="' + (c.cls || "") + '">' + (v === 1 ? '<span class="badge-yes">是</span>' : '<span class="badge-no">—</span>') + '</td>';
+    }
+    if (c.drill === "lead") {
+      var lg = b.lg || [];
+      if (!lg.length) return '<td class="' + (c.cls || "") + '"><span class="no" style="color:#adb5bd">—</span></td>';
+      var lh = '<div class="lead-txt">';
+      lg.forEach(function (x) {
+        var nmv = (x.v == null) ? "" : (x.t === "涨幅" ? (" " + x.v + "%") : (" " + x.v + "亿"));
+        lh += '<div class="seg drill-link" data-drill="lead" data-code="' + (b.code || "") + '">'
+          + '<span class="tag">' + x.t + '</span>' + (x.n || "") + '<span style="color:#adb5bd">' + nmv + '</span>'
+          + '</div>';
+      });
+      return '<td class="' + (c.cls || "") + '">' + lh + '</div></td>';
+    }
+    if (c.drill === "etf") {
+      var et = b.etfTop;
+      if (!et) return '<td class="' + (c.cls || "") + '"><span class="no" style="color:#adb5bd">—</span></td>';
+      var cv = (et.chg == null) ? "" : ' <span class="' + (et.chg > 0 ? "up" : (et.chg < 0 ? "down" : "flat")) + '">'
+        + (et.chg > 0 ? "+" : "") + et.chg + '%</span>';
+      return '<td class="' + (c.cls || "") + '"><div class="lead-txt"><div class="seg drill-link" data-drill="etf" data-code="'
+        + (b.code || "") + '"><span class="tag">涨幅</span>' + (et.n || "") + cv + '</div></div></td>';
+    }
+    if (c.merged) {
+      return '<td class="col-stock merged"><span class="b-code">' + (b.code || "") + '</span><span class="b-name board-link" data-code="' + (b.code || "") + '" data-nm="' + (b.name || "") + '">' + (b.name || "") + '</span></td>';
+    }
+    if (v == null) return '<td class="' + (c.num ? "num" : "") + (c.cls ? " " + c.cls : "") + '">—</td>';
+    if (c.rps) {
+      var cls = "num" + (v >= 90 ? " rps-hot" : "") + (c.cls ? " " + c.cls : "");
+      return '<td class="' + cls + '">' + v + '</td>';
+    }
+    if (c.sign) {
+      var cls2 = "num " + (c.black ? "" : (v > 0 ? "up" : (v < 0 ? "down" : "flat"))) + (c.cls ? " " + c.cls : "");
+      var txt = (v > 0 ? "+" : "") + v.toFixed(2);
+      return '<td class="' + cls2 + '">' + txt + '</td>';
+    }
+    if (c.k === "amount") return '<td class="num' + (c.cls ? " " + c.cls : "") + '">' + v.toFixed(2) + '</td>';
+    if (c.num) return '<td class="num' + (c.cls ? " " + c.cls : "") + '">' + v + '</td>';
+    return '<td class="' + (c.cls || "") + '">' + v + '</td>';
+  }
+
+  function renderBody() {
+    var rows = filtered().sort(cmp);
+    var total = rows.length;
+    var pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    if (page > pages) page = pages;
+    if (page < 1) page = 1;
+    var start = (page - 1) * PAGE_SIZE;
+    var end = Math.min(start + PAGE_SIZE, total);
+    var tb = $("tbody");
+    tb.innerHTML = "";
+    for (var i = start; i < end; i++) {
+      var b = rows[i];
+      var tr = document.createElement("tr");
+      var isThree = (state.mode === "tri_red") ? threeAsOf(b, ANCHOR) : (b.three === 1);
+      if (isThree) tr.className = "three-yes";
+      COLS.forEach(function (c) {
+        tr.insertAdjacentHTML("beforeend", cellHTML(c, b));
+      });
+      tb.appendChild(tr);
+    }
+    $("count-inline").textContent = total + " 个板块";
+    $("empty").classList.toggle("fp-hidden", total > 0);
+    var info = $("sr-pg-info");
+    if (info) info.textContent = "第 " + page + " / " + pages + " 页 · 共 " + total + " 条";
+    var prev = $("sr-prev"), next = $("sr-next");
+    if (prev) prev.disabled = page <= 1;
+    if (next) next.disabled = page >= pages;
+  }
+
+  // 模式显隐
+  function applyMode() {
+    $("tri-row").classList.toggle("fp-hidden", state.mode !== "tri_red");
+    $("custom-row").classList.toggle("fp-hidden", state.mode !== "custom");
+    $("query-row").classList.toggle("fp-hidden", state.mode !== "query");
+  }
+
+  // 事件绑定
+  $("fp-plan").onchange = function () { state.mode = this.value; applyMode(); page = 1; renderBody(); };
+  $("tri-fresh").onchange = function () { state.triFresh = this.checked; updateFreshRange(); page = 1; renderBody(); };
+  $("tri-fresh-win").oninput = function () { state.triFreshWin = parseInt(this.value, 10) || 5; updateFreshRange(); page = 1; renderBody(); };
+  $("c5").oninput = function () { state.c5 = parseFloat(this.value) || 0; page = 1; renderBody(); };
+  $("c10").oninput = function () { state.c10 = parseFloat(this.value) || 0; page = 1; renderBody(); };
+  $("c20").oninput = function () { state.c20 = parseFloat(this.value) || 0; page = 1; renderBody(); };
+  $("c5op").onchange = function () { state.c5op = this.value; page = 1; renderBody(); };
+  $("c10op").onchange = function () { state.c10op = this.value; page = 1; renderBody(); };
+  $("c20op").onchange = function () { state.c20op = this.value; page = 1; renderBody(); };
+  $("q").oninput = function () { state.q = this.value; page = 1; renderBody(); };
+  var prev = $("sr-prev"), next = $("sr-next");
+  if (prev) prev.onclick = function () { page--; renderBody(); };
+  if (next) next.onclick = function () { page++; renderBody(); };
+
+  $("fp-reset").onclick = function () {
+    state.mode = "tri_red";
+    state.triFresh = true; state.triFreshWin = 5;
+    state.c5 = 85; state.c10 = 85; state.c20 = 85;
+    state.c5op = "ge"; state.c10op = "ge"; state.c20op = "ge";
+    state.q = "";
+    state.sortKey = "rps5"; state.sortDir = "desc";
+    $("fp-plan").value = "tri_red";
+    $("tri-fresh").checked = true; $("tri-fresh-win").value = 5; updateFreshRange();
+    $("c5").value = 85; $("c10").value = 85; $("c20").value = 85;
+    $("c5op").value = "ge"; $("c10op").value = "ge"; $("c20op").value = "ge";
+    $("q").value = "";
+    page = 1; applyMode(); renderHead(); renderBody();
+  };
+
+  $("fp-export").onclick = function () {
+    var rows = filtered().sort(cmp);
+    var head = COLS.map(function (c) { return c.t; }).join(",");
+    var lines = [head];
+    rows.forEach(function (b) {
+      var line = COLS.map(function (c) {
+        if (c.merged) return (b.code || "") + " " + (b.name || "");
+        var v = b[c.k];
+        if (c.bool) return v === 1 ? "是" : "—";
+        if (v == null) return "";
+        if (c.sign || c.k === "amount") return v.toFixed(2);
+        return v;
+      });
+      lines.push(line.join(","));
+    });
+    var blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "板块RPS分析_" + ANCHOR + ".csv";
+    a.click();
+  };
+
+  // 板块 RPS 下钻弹窗
+  var boardCode = null, boardRpsDays = 20, boardChart = null;
+  function openBoardRps(code, name) {
+    boardCode = code;
+    var b = BOARDS[code];
+    if (!b || !b.hist || !b.hist.length) { alert("该板块暂无 RPS 历史数据"); return; }
+    document.getElementById("rpsTitle").textContent = code + " " + (name || "");
+    document.getElementById("rpsModal").style.display = "flex";
+    var rg = document.getElementById("rpsRange");
+    if (rg && !rg.getAttribute("data-init")) {
+      [[20, "1个月"], [60, "3个月"], [120, "6个月"]].forEach(function (o) {
+        var btn = document.createElement("button");
+        btn.setAttribute("data-d", o[0]); btn.textContent = o[1];
+        btn.style.cssText = "padding:5px 12px;border:1px solid #ced4da;border-radius:6px;background:#fff;color:#1a1a2e;font-size:13px;cursor:pointer";
+        if (o[0] === 20) { btn.style.background = "#4263eb"; btn.style.color = "#fff"; btn.style.borderColor = "#4263eb"; }
+        rg.appendChild(btn);
+      });
+      rg.setAttribute("data-init", "1");
+    }
+    drawBoardChart();
+  }
+  function closeBoardRps() { document.getElementById("rpsModal").style.display = "none"; }
+  window.closeBoardRps = closeBoardRps;
+  function drawBoardChart() {
+    var box = document.getElementById("rpsChart");
+    if (typeof echarts === "undefined") {
+      box.innerHTML = '<div style="padding:70px;text-align:center;color:#868e96;font-size:14px">ECharts 未加载（无网络），无法绘制曲线。</div>';
+      return;
+    }
+    var b = BOARDS[boardCode];
+    if (!b || !b.hist || !b.hist.length) { box.innerHTML = '<div style="padding:70px;text-align:center;color:#868e96;font-size:14px">暂无历史数据</div>'; return; }
+    var win = b.hist.slice(-boardRpsDays);
+    var dates = win.map(function (h) { return h[0]; });
+    var mk = function (idx, name, color) {
+      var arr = win.map(function (h) { return h[idx]; });
+      var hot = arr.map(function (v) { return (v != null && v >= 90) ? v : null; });
+      return [
+        { name: name, type: "line", data: arr, symbol: "none", connectNulls: true, lineStyle: { width: 1.6, color: color }, itemStyle: { color: color }, z: 2 },
+        { name: name + "-hot", type: "line", data: hot, symbol: "none", connectNulls: true, lineStyle: { width: 2.8, color: "#d63031" }, itemStyle: { color: "#d63031" }, z: 3, tooltip: { show: false } }
+      ];
+    };
+    if (!boardChart) boardChart = echarts.init(box);
+    boardChart.setOption({
+      tooltip: { trigger: "axis", axisPointer: { type: "cross" }, formatter: function (ps) { var h = ps[0].axisValue + "<br/>"; ps.forEach(function (o) { if (o.seriesName.indexOf("-hot") < 0 && o.value != null) h += o.marker + o.seriesName + "：" + o.value + "<br/>"; }); return h; } },
+      legend: { data: ["板块RPS5", "板块RPS10", "板块RPS20"], top: 0, textStyle: { fontSize: 12 } },
+      grid: { left: 46, right: 18, top: 40, bottom: 38 },
+      xAxis: { type: "category", data: dates, boundaryGap: false, axisLabel: { fontSize: 10, color: "#868e96", formatter: function (v) { return String(v).slice(5); } } },
+      yAxis: { type: "value", min: 0, max: 100, axisLabel: { fontSize: 11, color: "#868e96" }, splitLine: { lineStyle: { color: "#e9ecef" } } },
+      series: mk(1, "板块RPS5", "#4263eb").concat(mk(2, "板块RPS10", "#0ca678")).concat(mk(3, "板块RPS20", "#f59f00"))
+    }, true);
+    boardChart.resize();
+    var last = b.hist[b.hist.length - 1];
+    var html = '<div class="rps-now-row">';
+    ["板块RPS5", "板块RPS10", "板块RPS20"].forEach(function (nm, i) {
+      var v = last[i + 1];
+      var col = (v != null && v >= 90) ? "#d63031" : "#1a1a2e";
+      html += "<span>" + nm + "：" + (v == null ? "—" : '<b style="color:' + col + '">' + v + "</b>") + "</span> ";
+    });
+    html += "</div>";
+    document.getElementById("rpsNow").innerHTML = html;
+  }
+  /* ===== 龙头个股 / 相关ETF 下钻弹窗（格式与每日主线分析一致） ===== */
+  function pct2(v) { return v == null ? "-" : ((v > 0 ? "+" : "") + v.toFixed(2) + "%"); }
+  function pctn(v) { return v == null ? "-" : ((v > 0 ? "+" : "") + v.toFixed(2)); } /* 同 pct2 但无 %（% 已上提至表头） */
+  function cls2(v) { return v == null ? "" : (v > 0 ? "up" : (v < 0 ? "down" : "flat")); }
+
+  // 核心个股明细（5日口径）：与主线 stockTable 一致 —— 市值Top5 ∪ 成交额Top5 ∪ 涨幅Top5，按市值降序
+  // 弹窗表格排序状态与可排序表头（格式同主表 th.sortable：⇅/↑/↓）
+  var drillState = { kind: null, code: null, sortKey: null, sortDir: "desc" };
+  function drillTh(label, skey, isNum) {
+    if (!skey) return '<th>' + label + '</th>';
+    var active = drillState.sortKey === skey;
+    var cls = "sortable" + (isNum ? " num" : "");
+    if (active) cls += " " + drillState.sortDir;
+    return '<th class="' + cls + '" data-skey="' + skey + '">' + label + '</th>';
+  }
+  function drillCmp(a, b, key, dir) {
+    var va = a[key], vb = b[key];
+    if (va == null) va = -1e9;
+    if (vb == null) vb = -1e9;
+    if (typeof va === "string") return va.localeCompare(vb) * dir;
+    return (va - vb) * dir;
+  }
+  function renderDrill() {
+    var b = BOARDS[drillState.code];
+    if (!b) return "";
+    return drillState.kind === "lead" ? stockDrillHTML(b) : etfDrillHTML(b);
+  }
+
+  function stockDrillHTML(b) {
+    var rows = b.sd || [];
+    if (!rows.length) return '<div class="dt-empty">（暂无核心个股明细）</div>';
+    if (drillState.sortKey) {
+      rows = rows.slice().sort(function (a, b) {
+        return drillCmp(a, b, drillState.sortKey, drillState.sortDir === "desc" ? -1 : 1);
+      });
+    }
+    var h = '<div class="table-wrap"><table class="dt-table">'
+      + '<colgroup><col style="width:21%"><col style="width:13%"><col style="width:13%"><col style="width:6%"><col style="width:6%"><col style="width:6%"><col style="width:35%"></colgroup>'
+      + '<thead><tr>'
+      + drillTh('个股', 'n', false)
+      + drillTh('当日市值(亿)', 'cap', true)
+      + drillTh('当日成交额(亿)', 'amt', true)
+      + drillTh('涨幅5日%', 'chg', true)
+      + drillTh('涨幅10日%', 'c10', true)
+      + drillTh('涨幅20日%', 'c20', true)
+      + '<th>备注</th>'
+      + '</tr></thead><tbody>';
+    rows.forEach(function (r) {
+      var tags = [];
+      if (r.cr && r.cr <= 5) tags.push('<span class="rt rt-cap">市值Top' + r.cr + '</span>');
+      if (r.ar && r.ar <= 5) tags.push('<span class="rt rt-amt">成交额Top' + r.ar + '</span>');
+      if (r.gr && r.gr <= 5) tags.push('<span class="rt rt-gain">涨幅Top' + r.gr + '</span>');
+      if (r.s) tags.push('<span class="rt rt-susp">停牌</span>');
+      var note = tags.length ? '<div class="rank-tags">' + tags.join("") + '</div>' : "-";
+      var amtCell = r.s ? '<span style="color:#adb5bd">停牌</span>'
+        : ((r.amt == null || r.amt === 0) ? "-" : r.amt);
+      h += '<tr>'
+        + '<td class="stock-name">' + r.n + '<span class="stock-code">' + r.c + '</span></td>'
+        + '<td class="' + ((r.cr && r.cr <= 5) ? "cell-cap" : "") + '">' + (r.cap == null ? "-" : r.cap) + '</td>'
+        + '<td class="' + ((r.ar && r.ar <= 5) ? "cell-amt" : "") + '">' + amtCell + '</td>'
+        /* 涨幅(5/10/20日)数值一律保持黑色；10/20 日仅展示，不参与排名与着色 */
+        + '<td class="' + ((r.gr && r.gr <= 5) ? "cell-gain" : "") + '">' + pctn(r.chg) + '</td>'
+        + '<td>' + pctn(r.c10) + '</td>'
+        + '<td>' + pctn(r.c20) + '</td>'
+        + '<td class="note-cell">' + note + '</td></tr>';
+    });
+    h += '</tbody></table></div>'
+      + '<div class="dt-note">口径与每日主线分析「5日主线 · 核心个股明细」一致：'
+      + '<b>市值Top5 ∪ 5日累计成交额Top5 ∪ 5日涨幅Top5</b> 的并集，默认按当日市值降序。'
+      + '单元格底色与「备注」标签<b>与主线一致</b>：'
+      + '<span style="background:#c62828;color:#fff;padding:0 4px;border-radius:2px">市值Top5</span> '
+      + '<span style="background:#bbdefb;color:#1565c0;padding:0 4px;border-radius:2px">成交额Top5</span> '
+      + '<span style="background:#f8bbd0;color:#e91e63;padding:0 4px;border-radius:2px">涨幅Top5</span>。'
+      + '<b>涨幅(10日) / 涨幅(20日) 仅为展示</b>，不参与入表筛选与 Top5 着色；入表与排名一律按 5 日口径。'
+      + '成交额按「成交量 × 均价」估算（与主线 approxAmt 同口径）。</div>';
+    return h;
+  }
+
+  // 相关ETF：与主线 etfSection 一致 —— 十大持仓含本板块个股≥3 或 名称命中；成交额>0.5亿；按当日涨幅降序
+  function etfDrillHTML(b) {
+    var list = b.etf || [];
+    if (!list.length) {
+      return '<div class="dt-empty">（暂无匹配的相关 ETF：本板块个股未被任何 ETF 十大持仓命中 ≥3 只，且名称/关键词亦无对应 ETF，或匹配 ETF 当日成交额均 ≤ 0.5亿）</div>';
+    }
+    if (drillState.sortKey) {
+      list = list.slice().sort(function (a, b) {
+        return drillCmp(a, b, drillState.sortKey, drillState.sortDir === "desc" ? -1 : 1);
+      });
+    }
+    var h = '<div class="table-wrap"><table class="dt-table">'
+      + '<colgroup><col style="width:18%"><col style="width:9%"><col style="width:9%"><col style="width:11%"><col style="width:11%"><col style="width:11%"><col style="width:11%"><col style="width:20%"></colgroup>'
+      + '<thead><tr>'
+      + drillTh('ETF（代码）', 'n', false)
+      + drillTh('当日成交金额(亿)', 'amt', true)
+      + drillTh('总规模(亿)', 'size', true)
+      + drillTh('当日涨跌幅%', 'chg', true)
+      + drillTh('5日涨跌幅%', 'c5', true)
+      + drillTh('10日涨跌幅%', 'c10', true)
+      + drillTh('20日涨跌幅%', 'c20', true)
+      + '<th>十大持仓 / 说明</th>'
+      + '</tr></thead><tbody>';
+    list.forEach(function (e) {
+      var holdsCell;
+      if (e.ns || !(e.h || []).length) {
+        holdsCell = '<td class="holds-cell" style="color:#adb5bd">跟踪商品价格 · 无个股持仓</td>';
+      } else {
+        var hs = e.h.map(function (x) {
+          return '<div class="hold-row' + (x.core ? " core" : "") + '"><span class="hn">' + x.n
+            + (x.core ? '<i class="core-tag">核心</i>' : '') + '</span><span class="hr">'
+            + (x.r == null ? "-" : x.r) + '%</span></div>';
+        }).join("");
+        holdsCell = '<td class="holds-cell"><details class="holds-detail"><summary>持仓明细(' + e.h.length
+          + ')</summary><div>' + hs + '</div></details></td>';
+      }
+      h += '<tr>'
+        + '<td class="stock-name">' + e.n + '<span class="stock-code">' + e.c + '</span></td>'
+        + '<td>' + (e.amt == null ? "-" : e.amt) + '</td>'
+        + '<td>' + (e.size == null ? "-" : e.size) + '</td>'
+        + '<td class="chg-cell ' + cls2(e.chg) + '">' + pctn(e.chg) + '</td>'
+        + '<td class="chg-cell ' + cls2(e.c5) + '">' + pctn(e.c5) + '</td>'
+        + '<td class="chg-cell ' + cls2(e.c10) + '">' + pctn(e.c10) + '</td>'
+        + '<td class="chg-cell ' + cls2(e.c20) + '">' + pctn(e.c20) + '</td>'
+        + holdsCell + '</tr>';
+    });
+    h += '</tbody></table></div>'
+      + '<div class="dt-note">口径与每日主线分析「相关ETF」一致：十大持仓含本板块个股 <b>≥3 只</b>，'
+      + '或<b>名称/关键词命中</b>（如 半导体 → 半导体ETF / 芯片ETF）；当日成交额 <b>&gt; 0.5亿</b>；'
+      + '持仓重合命中按「重合数 → 总规模」取前 20 后再按当日涨幅降序。'
+      + '持仓明细中带 <i class="core-tag">核心</i> 标记者为「核心个股明细」成分。</div>';
+    return h;
+  }
+
+  function openDrill(kind, code) {
+    var b = BOARDS[code];
+    if (!b) return;
+    drillState.kind = kind; drillState.code = code; drillState.sortKey = null; drillState.sortDir = "desc";
+    var title = (kind === "lead") ? "龙头个股 · 核心个股明细（5日口径）" : "相关ETF";
+    $("drillTitle").innerHTML = title
+      + '<span style="font-size:13px;color:#868e96;font-weight:400">　' + (b.name || "") + " " + code + "</span>";
+    $("drillBody").innerHTML = renderDrill();
+    $("drillModal").style.display = "flex";
+  }
+  window.closeDrill = function () { $("drillModal").style.display = "none"; };
+  $("drillModal").addEventListener("click", function (e) { if (e.target === this) this.style.display = "none"; });
+  // 弹窗表头升降序（点击 th.sortable 重排，格式同主表）
+  $("drillBody").addEventListener("click", function (e) {
+    var th = e.target.closest ? e.target.closest("th.sortable") : null;
+    if (!th) return;
+    var k = th.getAttribute("data-skey");
+    if (drillState.sortKey === k) drillState.sortDir = (drillState.sortDir === "desc") ? "asc" : "desc";
+    else { drillState.sortKey = k; drillState.sortDir = "desc"; }
+    $("drillBody").innerHTML = renderDrill();
+  });
+
+  document.addEventListener("click", function (e) {
+    var t = e.target;
+    if (t && t.classList && t.classList.contains("board-link")) {
+      openBoardRps(t.getAttribute("data-code"), t.getAttribute("data-nm")); return;
+    }
+    if (t && t.classList && t.classList.contains("drill-link")) {
+      openDrill(t.getAttribute("data-drill"), t.getAttribute("data-code")); return;
+    }
+    if (t && t.getAttribute && t.getAttribute("data-d")) {
+      boardRpsDays = parseInt(t.getAttribute("data-d"), 10);
+      var bs = document.querySelectorAll("#rpsRange button");
+      for (var i = 0; i < bs.length; i++) {
+        var on = (bs[i] === t);
+        bs[i].style.background = on ? "#4263eb" : "#fff";
+        bs[i].style.color = on ? "#fff" : "#1a1a2e";
+        bs[i].style.borderColor = on ? "#4263eb" : "#ced4da";
+      }
+      drawBoardChart();
+    }
+  });
+  document.getElementById("rpsModal").addEventListener("click", function (e) { if (e.target === this) this.style.display = "none"; });
+
+  // 初始化
+  $("c5op").value = state.c5op;
+  $("c10op").value = state.c10op;
+  $("c20op").value = state.c20op;
+  updateFreshRange();
+  applyMode();
+  renderHead();
+  renderBody();
+})();
+</script>
+</body></html>
