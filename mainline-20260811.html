@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026-08-11 5-20日主线分析 | A股复盘选股中心</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+.header { background: #fff; border-bottom: 1px solid #e9ecef; padding: 40px 0 14px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; }
+.header a.back { position: absolute; left: 12px; top: 12px; font-size: 13px; color: #4263eb; text-decoration: none; white-space: nowrap; }
+.header h1 { font-size: 20px; font-weight: 700; }
+.header .subtitle { margin-top: 4px; font-size: 13px; color: #868e96; }
+.container { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+.section { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.section-title { font-size: 18px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.section-title.cand-title { margin-top: 18px; color: #1565c0; }
+.cmp-title { font-size: 13px; font-weight: 700; color: #4263eb; margin: 6px 0 4px; }
+.cmp-note { font-size: 11px; color: #868e96; margin-bottom: 2px; line-height: 1.5; }
+.section-title .badge { font-size: 12px; padding: 2px 10px; border-radius: 10px; background: #e3f2fd; color: #1976d2; font-weight: 600; }
+.section-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; line-height: 1.6; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; table-layout: auto; border-collapse: collapse; font-size: 13px; }
+th { background: #f1f3f5; padding: 10px 8px; text-align: right; font-weight: 600; color: #495057; font-size: 12px; border-bottom: 2px solid #dee2e6; white-space: normal; word-break: break-word; }
+/* 文本列统一在下方“文本列居中”块中显式居中；此处不再对首/次列做全局 left */
+th.grp { border-left: 2px solid #adb5bd; }
+td.grp { border-left: 2px solid #e9ecef; }
+td { padding: 10px 8px; border-bottom: 1px solid #e9ecef; text-align: right; white-space: nowrap; vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+/* 文本列居中（覆盖数字列默认的居右）：行业名 / 股票名称 / 所属一级 等 */
+.summary-l1 td:nth-child(1), .summary-l1 th:nth-child(1),
+.summary-l2 td:nth-child(1), .summary-l2 th:nth-child(1),
+.summary-l2 td:nth-child(2), .summary-l2 th:nth-child(2),
+#sw1-table td:nth-child(1), #sw1-table th:nth-child(1),
+#sw2-table td:nth-child(1), #sw2-table th:nth-child(1),
+#cap-table td:nth-child(1), #cap-table th:nth-child(1) { text-align: center; }
+tr:hover td { background: #f8f9fa; }
+.stock-code { font-family: "SF Mono", Consolas, monospace; font-size: 11px; color: #868e96; display: block; margin-top: 2px; }
+.stock-table td.stock-name { font-weight: 600; white-space: nowrap; }
+/* 核心个股明细表 / ETF表 字号继承全局 table（桌面13px / 手机10px），不额外放大，保证与按概念/题材报告一致且不溢出 */
+.up { color: #d63031; font-weight: 600; }
+.down { color: #00b894; font-weight: 600; }
+.flat { color: #495057; }
+.rank-cell { font-weight: 700; color: #1a1a2e; background: #fff8e1; }
+.muted { color: #adb5bd; }
+.info-box { background: #e3f2fd; border-left: 4px solid #1976d2; border-radius: 4px; padding: 16px; margin-top: 16px; font-size: 13px; color: #1565c0; line-height: 1.8; }
+.info-box strong { color: #0d47a1; }
+.footer { text-align: center; padding: 24px; font-size: 12px; color: #adb5bd; }
+@media (max-width: 600px) { .container { padding: 0 10px; } .section { padding: 14px; } table { font-size: 10px; } th, td { padding: 6px 3px; } .stock-code { font-size: 9px; } .section-title { font-size: 16px; } .theme-summary { padding: 12px 14px 12px 30px; font-size: 14px; } .theme-summary::before { position: absolute; left: 14px; top: 12px; } .theme-role { flex: 0 0 72px; } .theme-name-wrap { flex: 1 1 auto; } .theme-meta { flex: 0 0 calc(100% - 72px); margin-left: 72px; margin-top: 2px; white-space: nowrap; font-size: 11px; } .basis-summary { position: relative; padding-left: 30px; } .basis-summary::before { position: absolute; left: 14px; top: 14px; } .table-wrap { overflow-x: auto; } .part-header { font-size: 17px; } .part-header .date-range { font-size: 12px; } }
+.part-header { font-size: 20px; font-weight: 800; color: #1a1a2e; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #4263eb; }
+.part-header .date-range { font-size: 13px; color: #868e96; font-weight: 400; margin-left: 8px; }
+.theme-details { border-radius: 8px; margin-bottom: 14px; border: 1px solid #e9ecef; }
+.theme-details.dt-main { border-left: 5px solid #c62828; background: #fff6f5; }
+.theme-details.dt-cand { border-left: 5px solid #1565c0; background: #f5f9ff; }
+.theme-summary { font-size: 15px; font-weight: 700; margin: 0; cursor: pointer; list-style: none; user-select: none; padding: 14px 16px 14px 30px; position: relative; display: flex; align-items: baseline; flex-wrap: wrap; }
+.theme-summary::-webkit-details-marker { display: none; }
+.theme-summary::before { content: "▸ "; position: absolute; left: 14px; top: 14px; color: #868e96; font-weight: 400; }
+.theme-details[open] > summary.theme-summary::before { content: "▾ "; }
+.theme-role { flex: 0 0 auto; min-width: 62px; }
+  .theme-name-wrap { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .theme-meta { font-size: 12px; font-weight: 400; color: #495057; margin-left: 6px; }
+.theme-meta b { font-weight: 700; }
+.theme-type { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; margin-right: 6px; }
+.type-role-main { background: #c62828; color: #fff; }
+.type-role-cand { background: #1565c0; color: #fff; }
+.type-concept { background: #eceff1; color: #607d8b; }
+.type-l1 { background: #eceff1; color: #607d8b; }
+.theme-data .data-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.theme-data .data-item { background: #fff; border: 1px solid #e9ecef; padding: 2px 10px; border-radius: 14px; font-size: 12px; }
+.theme-data { padding: 0 16px 14px; }
+.theme-data .logic { font-size: 13px; color: #495057; line-height: 1.7; margin-bottom: 8px; }
+.theme-data .logic b { color: #1a1a2e; }
+.stock-table-title { font-size: 12px; font-weight: 700; color: #4263eb; margin: 12px 0 6px; }
+.overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.overview-card { background: #f8f9fa; border-radius: 8px; padding: 14px; text-align: center; }
+.overview-card .label { font-size: 12px; color: #868e96; margin-bottom: 4px; }
+.overview-card .value { font-size: 22px; font-weight: 700; }
+.overview-card .sub { font-size: 11px; color: #adb5bd; margin-top: 2px; }
+@media (max-width: 600px) { .overview-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; } .overview-card { padding: 10px 4px; } .overview-card .value { font-size: 18px; } .overview-card .label { font-size: 11px; } }
+.chart-box { width: 100%; margin: 12px 0; background: #fff; border: 1px solid #e9ecef; border-radius: 10px; padding: 8px 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.pie-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 8px 0; }
+.pie-box { width: 100%; height: 240px; }
+@media (max-width: 700px) { .pie-grid { grid-template-columns: 1fr; } .pie-box { height: 220px; } }
+.sub-header { font-size: 17px; font-weight: 700; margin: 18px 0 12px; padding-left: 10px; border-left: 4px solid #4263eb; color: #1a1a2e; }
+.summary-table { table-layout: auto; }
+.summary-table th, .summary-table td { text-align: right; padding: 10px 6px; }
+.summary-table .grp { border-left: 2px solid #ced4da; }
+.summary-table th { white-space: normal; line-height: 1.15; vertical-align: middle; cursor: pointer; position: relative; }
+.summary-table th:hover { background: #e7ebef; }
+.summary-table .stock-name { font-weight: 600; }
+@media (max-width: 600px) { .summary-table { font-size: 9.5px; } .summary-table th, .summary-table td { padding: 4px 2px; } }
+.data-basis-title { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.basis-details { border-radius: 12px; }
+.basis-summary { font-size: 16px; font-weight: 700; color: #1a1a2e; padding: 14px 16px; cursor: pointer; list-style: none; user-select: none; display: flex; align-items: center; gap: 8px; }
+.basis-summary::-webkit-details-marker { display: none; }
+.basis-summary::before { content: "▸ "; color: #868e96; font-weight: 400; }
+.basis-details[open] > .basis-summary::before { content: "▾ "; }
+.table-legend { font-size: 11px; color: #868e96; margin-top: 6px; line-height: 1.6; }
+.stock-table { table-layout: fixed; }
+/* 概览/主力资金表：与按概念/题材报告一致改用 table-layout:auto（概念报告无 fixed 表），
+   单元格允许换行（white-space:normal; word-break:break-word），内容自适应列宽，手机端不溢出、无需右划 */
+#sw1-table td, #sw2-table td, #cap-table td { white-space: normal; word-break: break-word; }
+.stock-table th, .stock-table td { padding: 8px 10px; text-align: center; border-bottom: 1px solid #f1f3f5; vertical-align: middle; }
+.stock-table th { white-space: normal; word-break: break-word; }
+.stock-table td { white-space: normal; word-break: break-word; }
+.stock-table th { background: #f8f9fa; color: #495057; font-weight: 600; cursor: pointer; user-select: none; transition: background 0.15s; }
+.stock-table th:hover { color: #4263eb; }
+.stock-table td { color: #495057; }
+/* 备注列：允许换行（标签 flex 自动换行），与按概念/题材报告统一；不会被 .stock-table td 的 nowrap 覆盖 */
+.stock-table .note-cell { white-space: normal; text-align: center; vertical-align: middle; padding: 6px 4px; }
+/* 数字列居右；文本列（个股名称 / 备注）居中 */
+.stock-table td:nth-child(2), .stock-table td:nth-child(3), .stock-table td:nth-child(4) { text-align: right; white-space: nowrap; }
+.stock-table th:first-child, .stock-table th:nth-child(5) { text-align: center; }
+.stock-table .stock-code { font-family: "SF Mono", Consolas, monospace; font-size: 11px; color: #868e96; display: block; margin-top: 2px; white-space: nowrap; }
+/* 相关ETF 区块样式（与按概念/题材报告统一） */
+.etf-section { margin-top:14px; border-top:1px dashed #e9ecef; padding-top:10px; }
+.etf-section > summary.etf-section-title { font-size:12px; font-weight:700; color:#4263eb; margin:0 0 8px; cursor:pointer; list-style:none; user-select:none; }
+.etf-section > summary.etf-section-title::-webkit-details-marker { display:none; }
+.etf-section > summary.etf-section-title::before { content:"▸ "; }
+.etf-section[open] > summary.etf-section-title::before { content:"▾ "; }
+  .etf-table { table-layout:fixed; }
+  /* 字体与「核心个股明细」表完全一致：继承全局 table（桌面13px / 手机10px），不单独指定 */
+  .etf-table th, .etf-table td { padding:6px 8px; text-align:center; border-bottom:1px solid #f1f3f5; vertical-align:middle; white-space:normal; word-break:break-word; }
+  .etf-table th { background:#f8f9fa; color:#495057; font-weight:600; cursor:pointer; }
+  .etf-table td.stock-name { text-align:left; font-weight:600; white-space:nowrap; }
+  .etf-table td.chg-cell { white-space:nowrap !important; word-break:normal !important; }
+  .etf-table td.holds-cell { text-align:left; white-space:normal; vertical-align:top; }
+  .etf-empty { font-size:12px; color:#868e96; padding:6px 2px; }
+.holds-detail { margin:0; }
+.holds-detail > summary { cursor:pointer; color:#4263eb; font-size:9px; font-weight:600; list-style:none; padding:2px 0; user-select:none; white-space:nowrap; }
+.holds-detail > summary::-webkit-details-marker { display:none; }
+.holds-detail > summary::before { content:"▸ "; }
+.holds-detail[open] > summary::before { content:"▾ "; }
+.holds-detail[open] > summary { margin-bottom:4px; }
+.holds-list { margin-top:2px; }
+.hold-row { display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:11px; line-height:1.5; padding:1px 0; white-space:nowrap; }
+.hold-row.core { background:#fff6f5; border-radius:3px; }
+.hold-row .hn { font-weight:600; color:#495057; }
+.hold-row .hr { color:#868e96; font-variant-numeric:tabular-nums; }
+.etf-table .core-tag { display:inline-block; font-size:10px; padding:0 5px; border-radius:3px; background:#c62828; color:#fff; margin-left:3px; font-weight:600; vertical-align:middle; }
+/* 表头排序小箭头：默认 ⇅，升序 ↑，降序 ↓（与概念/题材报告统一） */
+th.sortable { cursor: pointer; user-select: none; transition: background 0.15s; white-space: normal; }
+th.sortable:hover { background: #e7ebef; color: #4263eb; }
+th.sortable::after { content: " \21C5"; font-size: 10px; opacity: 0.35; font-weight: normal; }
+th.sortable.asc::after { content: " \2191"; opacity: 1; color: #4263eb; font-weight: 700; }
+th.sortable.desc::after { content: " \2193"; opacity: 1; color: #4263eb; font-weight: 700; }
+.rt { display: inline-block; font-size: 10px; padding: 1px 5px; border-radius: 3px; font-weight: 600; margin-right: 4px; white-space: nowrap; }
+.rt-gain { background: #fdecea; color: #c62828; }
+.rt-amt { background: #e8f5e9; color: #2e7d32; }
+.rt-cap { background: #e3f2fd; color: #1565c0; }
+.rank-tags { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+/* 主线研判 */
+.ml-judgement { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 12px 0 18px; }
+.ml-block { border-radius: 8px; padding: 14px 16px; border: 1px solid #e9ecef; }
+.ml-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #1a1a2e; }
+.ml-list { margin: 0; padding-left: 18px; }
+.ml-list li { font-size: 13px; color: #495057; line-height: 1.7; margin-bottom: 6px; }
+.tag-l1 { font-size: 11px; padding: 1px 6px; border-radius: 4px; background: #f1f3f5; color: #495057; margin-left: 4px; }
+@media (max-width: 700px) { .ml-judgement { grid-template-columns: 1fr; } }
+/* 层级对应 */
+.hier-row { font-size: 13px; line-height: 1.9; padding: 6px 0; border-bottom: 1px dashed #e9ecef; }
+.hier-row:last-child { border-bottom: none; }
+.hier-l1 { font-weight: 700; color: #1a1a2e; }
+.hier-l1c { font-size: 12px; color: #c62828; font-weight: 600; }
+.hier-l2 { display: inline-block; background: #f1f3f5; border-radius: 4px; padding: 1px 8px; margin: 2px 4px 2px 0; font-size: 12px; color: #495057; }
+</style>
+</head>
+<body>
+<div class="header">
+  <a class="back" href="mainlines.html">&#8592; 返回</a>
+  <h1>5-20日主线分析 · 2026-08-11 周二</h1>
+  <div class="subtitle">行业分类口径：申万一级（概览）/ 申万二级（明细）| 5日 / 10日 / 20日 主线研判</div>
+</div>
+<div class="container">
+
+  <div class="section">
+    <div class="part-header">第一部分：5日主线分析 <span class="date-range">(近5个交易日(含当日))</span></div>
+    <div class="section-title">主线研判</div>
+    <div class="empty">本周期无明显主线</div>
+    
+  </div><div class="section">
+    <div class="part-header">第二部分：10日主线分析 <span class="date-range">(近10个交易日(含当日))</span></div>
+    <div class="section-title">主线研判</div>
+    <div class="empty">本周期无明显主线</div>
+    
+  </div><div class="section">
+    <div class="part-header">第三部分：20日主线分析 <span class="date-range">(近20个交易日(含当日))</span></div>
+    <div class="section-title">主线研判</div>
+    <div class="empty">本周期无明显主线</div>
+    
+  </div>
+
+  <details class="section basis-details">
+    <summary class="basis-summary">附录：完整数据依据</summary>
+    <div class="data-basis-title" style="margin-top:12px;font-size:14px">申万一级行业概览（全31个，含5/10/20日涨幅） <span class="badge">L1 概览</span></div>
+    <div class="table-wrap">
+      <table id="sw1-table">
+        <colgroup><col style="width:25%"><col style="width:25%"><col style="width:25%"><col style="width:25%"></colgroup>
+        <thead><tr><th class="sortable">申万一级行业</th><th class="sortable desc">5日涨幅</th><th class="sortable">10日涨幅</th><th class="sortable">20日涨幅</th></tr></thead>
+        <tbody><tr><td><span class="stock-name">美容护理</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">商贸零售</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">钢铁</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">银行</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">社会服务</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">建筑材料</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">传媒</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">通信</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">公用事业</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">石油石化</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">环保</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">纺织服饰</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">轻工制造</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">基础化工</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">国防军工</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">电力设备</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">汽车</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">有色金属</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">家用电器</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">计算机</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">机械设备</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">医药生物</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">交通运输</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">电子</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">综合</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">非银金融</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">农林牧渔</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">食品饮料</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">煤炭</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">房地产</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">建筑装饰</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr></tbody>
+      </table>
+    </div>
+    <div class="data-basis-title" style="margin-top:16px;font-size:14px">申万二级行业明细（按5日涨幅TOP40） <span class="badge">L2 明细</span></div>
+    <div class="table-wrap">
+      <table id="sw2-table">
+        <colgroup><col style="width:25%"><col style="width:25%"><col style="width:25%"><col style="width:25%"></colgroup>
+        <thead><tr><th class="sortable">申万二级行业</th><th class="sortable desc">5日涨幅</th><th class="sortable">10日涨幅</th><th class="sortable">20日涨幅</th></tr></thead>
+        <tbody><tr><td><span class="stock-name">保险Ⅱ</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">医疗服务</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">军工电子Ⅱ</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">工程咨询服务Ⅱ</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">乘用车</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">金属新材料</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">白酒Ⅱ</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">焦炭Ⅱ</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">贵金属</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">酒店餐饮</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">光学光电子</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">化学制药</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">地面兵装Ⅱ</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">软件开发</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">服装家纺</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">互联网电商</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">农商行Ⅱ</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">房地产服务</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">光伏设备</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">航天装备Ⅱ</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">普钢</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">铁路公路</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">汽车零部件</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">炼化及贸易</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">基础建设</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">照明设备Ⅱ</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">非金属材料Ⅱ</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">电子化学品Ⅱ</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">一般零售</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">计算机设备</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">航运港口</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">化学纤维</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">家电零部件Ⅱ</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">航空装备Ⅱ</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">小家电</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">房地产开发</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">水泥</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">电池</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">半导体</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr><tr><td><span class="stock-name">工业金属</span></td><td class="flat">-</td><td class="flat">-</td><td class="flat">-</td></tr></tbody>
+      </table>
+    </div>
+    <div class="data-basis-title" style="margin-top:16px;font-size:14px">申万一级 ↔ 二级 层级对应（本次分析板块） <span class="badge">L1 → L2</span></div>
+    <div class="hier-wrap"></div>
+    <div class="data-basis-title" style="margin-top:16px;font-size:14px">主力资金净流入TOP20 <span class="badge">5日/10日/20日主力净流入</span></div>
+    <div class="table-wrap">
+      <table id="cap-table">
+        <colgroup><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"></colgroup>
+        <thead><tr><th class="sortable">股票</th><th class="sortable desc">今日涨幅</th><th class="sortable">5日涨幅</th><th class="sortable">10日涨幅</th><th class="sortable">20日涨幅</th></tr></thead>
+        <tbody><tr><td><span class="stock-code">sz300489</span><br><span class="stock-name">光智科技</span></td><td class="up">+11.71%</td><td class="up">+35.93%</td><td class="up">+65.70%</td><td class="down">-0.68%</td></tr><tr><td><span class="stock-code">sh603228</span><br><span class="stock-name">景旺电子</span></td><td class="up">+10.00%</td><td class="up">+25.16%</td><td class="up">+30.39%</td><td class="up">+49.76%</td></tr><tr><td><span class="stock-code">sz300620</span><br><span class="stock-name">光库科技</span></td><td class="up">+9.96%</td><td class="up">+18.40%</td><td class="up">+45.43%</td><td class="up">+7.37%</td></tr><tr><td><span class="stock-code">sz300394</span><br><span class="stock-name">天孚通信</span></td><td class="up">+7.89%</td><td class="up">+10.70%</td><td class="up">+31.83%</td><td class="down">-7.46%</td></tr><tr><td><span class="stock-code">sh688313</span><br><span class="stock-name">仕佳光子</span></td><td class="up">+7.20%</td><td class="up">+22.06%</td><td class="up">+45.72%</td><td class="down">-4.64%</td></tr><tr><td><span class="stock-code">sh600667</span><br><span class="stock-name">太极实业</span></td><td class="up">+7.12%</td><td class="up">+23.09%</td><td class="up">+30.52%</td><td class="up">+9.13%</td></tr><tr><td><span class="stock-code">sz300570</span><br><span class="stock-name">太辰光</span></td><td class="up">+6.63%</td><td class="up">+13.20%</td><td class="up">+24.80%</td><td class="down">-23.91%</td></tr><tr><td><span class="stock-code">sh600183</span><br><span class="stock-name">生益科技</span></td><td class="up">+5.86%</td><td class="up">+16.65%</td><td class="up">+32.40%</td><td class="down">-6.04%</td></tr><tr><td><span class="stock-code">sz002428</span><br><span class="stock-name">云南锗业</span></td><td class="up">+5.68%</td><td class="up">+28.13%</td><td class="up">+58.23%</td><td class="up">+20.66%</td></tr><tr><td><span class="stock-code">sz002938</span><br><span class="stock-name">鹏鼎控股</span></td><td class="up">+4.48%</td><td class="up">+10.83%</td><td class="up">+19.53%</td><td class="down">-1.97%</td></tr><tr><td><span class="stock-code">sz300548</span><br><span class="stock-name">长芯博创</span></td><td class="up">+4.07%</td><td class="up">+13.52%</td><td class="up">+24.81%</td><td class="down">-15.42%</td></tr><tr><td><span class="stock-code">sz300666</span><br><span class="stock-name">江丰电子</span></td><td class="up">+3.96%</td><td class="up">+18.73%</td><td class="up">+20.21%</td><td class="down">-6.41%</td></tr><tr><td><span class="stock-code">sz000657</span><br><span class="stock-name">中钨高新</span></td><td class="up">+3.35%</td><td class="up">+22.64%</td><td class="up">+34.05%</td><td class="up">+0.90%</td></tr><tr><td><span class="stock-code">sh601869</span><br><span class="stock-name">长飞光纤</span></td><td class="up">+2.94%</td><td class="up">+10.69%</td><td class="up">+22.75%</td><td class="down">-18.72%</td></tr><tr><td><span class="stock-code">sz300476</span><br><span class="stock-name">胜宏科技</span></td><td class="up">+1.77%</td><td class="up">+18.21%</td><td class="up">+38.58%</td><td class="up">+0.95%</td></tr><tr><td><span class="stock-code">sh600601</span><br><span class="stock-name">方正科技</span></td><td class="up">+1.73%</td><td class="up">+21.80%</td><td class="up">+35.14%</td><td class="up">+10.67%</td></tr><tr><td><span class="stock-code">sh601208</span><br><span class="stock-name">东材科技</span></td><td class="up">+1.53%</td><td class="up">+23.06%</td><td class="up">+32.24%</td><td class="down">-6.00%</td></tr><tr><td><span class="stock-code">sh600584</span><br><span class="stock-name">长电科技</span></td><td class="up">+0.66%</td><td class="up">+13.35%</td><td class="up">+9.07%</td><td class="down">-15.44%</td></tr><tr><td><span class="stock-code">sh600206</span><br><span class="stock-name">有研新材</span></td><td class="up">+0.57%</td><td class="up">+33.01%</td><td class="up">+32.84%</td><td class="up">+11.12%</td></tr><tr><td><span class="stock-code">sz002080</span><br><span class="stock-name">中材科技</span></td><td class="up">+0.41%</td><td class="up">+16.78%</td><td class="up">+30.67%</td><td class="down">-15.71%</td></tr></tbody>
+      </table>
+    </div>
+  </details>
+
+</div>
+<div class="footer">行业分类采用申万宏源2021版（一级31 / 二级134 / 三级346）。数据仅供参考，不构成投资建议</div>
+<script>
+function attachSort(table) {
+  var ths = table.querySelectorAll('th.sortable');
+  ths.forEach(function(th) {
+    th.addEventListener('click', function() {
+      var actualIdx = Array.prototype.indexOf.call(th.parentNode.children, th);
+      var tbody = table.querySelector('tbody'); var rows = Array.from(tbody.querySelectorAll('tr'));
+      var isDesc = th.classList.contains('desc');
+      var forceText = th.classList.contains('sort-text');
+      ths.forEach(function(t) { t.classList.remove('asc'); t.classList.remove('desc'); });
+      th.classList.add(isDesc ? 'asc' : 'desc');
+      var dir = isDesc ? 1 : -1;
+      rows.sort(function(a, b) {
+        var ta = a.cells[actualIdx].textContent.trim();
+        var tb = b.cells[actualIdx].textContent.trim();
+        if (!forceText) {
+          var aMiss = (ta === '-' || ta === ''), bMiss = (tb === '-' || tb === '');
+          if (aMiss || bMiss) {
+            // 缺失值“-”始终排到表格末尾，不受升/降序方向影响
+            if (aMiss && bMiss) return 0;
+            if (aMiss) return 1;
+            return -1;
+          }
+          var na = parseFloat(ta.replace(/[^0-9.\-]/g, '')), nb = parseFloat(tb.replace(/[^0-9.\-]/g, ''));
+          if (!isNaN(na) && !isNaN(nb)) return (na - nb) * dir;
+        }
+        return ta.localeCompare(tb) * dir;
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+    });
+  });
+}
+document.querySelectorAll('table').forEach(function(t) { if (t.querySelector('th.sortable')) attachSort(t); });
+</script>
+<script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script>
+</body>
+</html>

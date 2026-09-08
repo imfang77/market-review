@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V3严格版·逻辑公式盒（股息率挪后+步进器）</title>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;background:#eef1f4;color:#1a1a2e;font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;padding:24px;}
+  .demo-title{font-size:16px;font-weight:600;margin-bottom:4px;}
+  .demo-sub{font-size:13px;color:#6b7280;margin:0 0 20px;line-height:1.7;max-width:780px;}
+
+  /* —— 严格照搬 V3 基准色系（技术面G2中性灰） —— */
+  :root{
+    --panel-bg:#f8f9fa; --panel-bd:#e9ecef;
+    --inp-bg:#fff; --inp-bd:#ced4da;
+    --lbl:#868e96; --txt:#495057; --op:#adb5bd; --op-and:#9aa1a9;
+  }
+  .panel{background:var(--panel-bg);border:1px solid var(--panel-bd);border-radius:8px;padding:14px 16px;font-size:13px;color:var(--txt);max-width:780px;}
+
+  /* V3 白底公式盒 + 浅灰胶囊 term（原样照搬，无括号、无额外白底框） */
+  .formula{border:1px solid #dee2e6;border-radius:8px;background:#fff;padding:12px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px;}
+  .term{background:#f1f3f5;border-radius:6px;padding:5px 9px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;}
+  .flabel{font-size:12px;color:var(--lbl);}
+  .op{font-size:12px;color:var(--op);font-weight:700;padding:0 6px;white-space:nowrap;}
+  .op.and{color:var(--op-and);}
+
+  /* 步进器（替代原 input，放进胶囊内） */
+  .stepper{display:inline-flex;align-items:stretch;height:28px;border:1px solid var(--inp-bd);border-radius:6px;background:var(--inp-bg);overflow:hidden;user-select:none;}
+  .stepper .val{width:40px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#212529;}
+  .stepper .btns{display:flex;flex-direction:column;border-left:1px solid var(--inp-bd);}
+  .stepper .btns button{width:20px;height:14px;border:none;background:#f1f3f5;cursor:pointer;font-size:9px;line-height:1;color:#495057;display:flex;align-items:center;justify-content:center;padding:0;}
+  .stepper .btns button:first-child{border-bottom:1px solid var(--inp-bd);}
+  .stepper .btns button:hover{background:#e9ecef;}
+  .stepper .btns button:active{background:#dee2e6;}
+
+  .row2{display:flex;align-items:center;gap:14px;margin-top:12px;}
+  .freset{padding:6px 14px;border:1px solid #ced4da;border-radius:6px;background:#fff;cursor:pointer;font-size:13px;color:var(--txt);}
+  .freset:hover{background:#f1f3f5;}
+  .count{font-size:13px;color:#495057;font-weight:600;}
+  .hint{margin-top:16px;font-size:12px;color:#9aa1a9;line-height:1.6;max-width:780px;}
+</style>
+</head>
+<body>
+  <div class="demo-title">V3 严格版 · 逻辑公式盒（股息率移至 TTM-ROE 后 + 步进器）</div>
+  <div class="demo-sub">严格照搬 V3：白底公式盒 + 浅灰胶囊 term，运算符用中文「或 / 且」——<b>无括号、无额外白底框</b>。仅两处改动：① 股息率 term 移到 TTM-ROE 之后；② 阈值改为上下步进器（只读、点 ▲▼ 增减，不可手输）。「且」关系靠把收入同比与扣非净利润放进<b>同一个胶囊</b>表达，正是 V3 的本来做法。</div>
+
+  <div class="panel">
+    <div class="formula">
+      <span class="term"><span class="flabel">TTM-ROE≥</span><span class="stepper" data-key="roe" data-step="0.5" data-min="0"><span class="val">15</span><span class="btns"><button data-d="1">▲</button><button data-d="-1">▼</button></span></span>%</span>
+      <span class="op">或</span>
+      <span class="term"><span class="flabel">股息率≥</span><span class="stepper" data-key="div" data-step="0.1" data-min="0"><span class="val">3.0</span><span class="btns"><button data-d="1">▲</button><button data-d="-1">▼</button></span></span>%</span>
+      <span class="op">或</span>
+      <span class="term"><span class="flabel">收入同比≥</span><span class="stepper" data-key="rev" data-step="1" data-min="0"><span class="val">20</span><span class="btns"><button data-d="1">▲</button><button data-d="-1">▼</button></span></span>% <span class="op and">且</span> <span class="flabel">扣非净利同比≥</span><span class="stepper" data-key="deduct" data-step="1" data-min="0"><span class="val">20</span><span class="btns"><button data-d="1">▲</button><button data-d="-1">▼</button></span></span>%</span>
+    </div>
+    <div class="row2"><button class="freset">重置</button><span class="count">符合条件 1043 只</span></div>
+  </div>
+
+  <div class="hint">↑ 点击任意 ▲ / ▼ 可看到数值增减；「重置」恢复默认。本页仅为样式稿，尚未落地到选股系统代码。手机访问：通过云端站点路径打开此文件即可。</div>
+
+<script>
+  const DEF={roe:15,div:3.0,rev:20,deduct:20};
+  document.querySelectorAll('.stepper button').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const st=b.closest('.stepper');
+      const step=parseFloat(st.dataset.step), min=parseFloat(st.dataset.min||0);
+      const valEl=st.querySelector('.val');
+      let v=parseFloat(valEl.textContent)+parseInt(b.dataset.d)*step;
+      if(v<min)v=min;
+      valEl.textContent=(step<1)?v.toFixed(1):String(v);
+    });
+  });
+  document.querySelector('.freset').addEventListener('click',()=>{
+    document.querySelectorAll('.stepper').forEach(st=>{
+      const k=st.dataset.key;
+      st.querySelector('.val').textContent=(parseFloat(st.dataset.step)<1)?DEF[k].toFixed(1):String(DEF[k]);
+    });
+  });
+</script>
+</body>
+</html>

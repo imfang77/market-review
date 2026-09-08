@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股收盘复盘 | 2026年8月6日</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #2d3436; line-height: 1.7; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 20px 60px; }
+  .header { text-align: center; padding: 32px 0 24px; border-bottom: 2px solid #e8ecf0; margin-bottom: 28px; }
+  .header h1 { font-size: 26px; font-weight: 700; color: #1a1a2e; letter-spacing: 1px; }
+  .header .subtitle { font-size: 14px; color: #636e72; margin-top: 8px; }
+  .header .date-tag { display: inline-block; background: #0984e3; color: #fff; font-size: 12px; padding: 3px 12px; border-radius: 12px; margin-top: 10px; }
+  .tldr { background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%); border: 1px solid #dfe6e9; border-radius: 12px; padding: 24px; margin-bottom: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .tldr h2 { font-size: 16px; color: #0984e3; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .tldr h2::before { content: ""; display: inline-block; width: 4px; height: 18px; background: #0984e3; border-radius: 2px; }
+  .tldr ul { list-style: none; }
+  .tldr li { padding: 6px 0 6px 20px; position: relative; font-size: 14px; color: #2d3436; }
+  .tldr li::before { content: "▸"; position: absolute; left: 0; color: #0984e3; font-weight: bold; }
+  .tldr .highlight { color: #d63031; font-weight: 600; }
+  .tldr .highlight-green { color: #00b894; font-weight: 600; }
+  .section { background: #fff; border: 1px solid #e8ecf0; border-radius: 10px; padding: 22px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.03); }
+  .section h2 { font-size: 17px; color: #1a1a2e; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 8px; }
+  .section h2 .icon { font-size: 20px; }
+  .section h3 { font-size: 14px; color: #2d3436; margin: 14px 0 8px; font-weight: 600; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
+  th { background: #f8f9fa; color: #636e72; font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 2px solid #e8ecf0; white-space: nowrap; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; }
+  tr:hover td { background: #f8f9fb; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .up { color: #d63031; font-weight: 600; }
+  .down { color: #00b894; font-weight: 600; }
+  .flat { color: #636e72; }
+  .chart-box { width: 100%; margin: 12px 0; }
+  .chart-title { font-size: 13px; color: #636e72; margin-bottom: 6px; font-weight: 500; }
+  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-right: 4px; }
+  .tag-up { background: #fadbd8; color: #c0392b; }
+  .tag-down { background: #d5f5e3; color: #27ae60; }
+  .tag-neutral { background: #dfe6e9; color: #636e72; }
+  .theme-card { border-left: 3px solid #0984e3; padding: 12px 16px; margin: 10px 0; background: #f8f9fb; border-radius: 0 8px 8px 0; }
+  .theme-card.coal { border-left-color: #e17055; }
+  .theme-card.semi { border-left-color: #0984e3; }
+  .theme-card.metal { border-left-color: #fdcb6e; }
+  .theme-card.weak { border-left-color: #00b894; }
+  .theme-card h4 { font-size: 14px; margin-bottom: 6px; }
+  .theme-card .meta { font-size: 12px; color: #636e72; margin-bottom: 4px; }
+  .theme-card p { font-size: 13px; color: #2d3436; }
+  .news-item { padding: 10px 0; border-bottom: 1px dashed #e8ecf0; }
+  .news-item:last-child { border-bottom: none; }
+  .news-item .news-title { font-size: 13px; font-weight: 600; color: #2d3436; }
+  .news-item .news-desc { font-size: 12px; color: #636e72; margin-top: 3px; }
+  .news-item .news-source { font-size: 11px; color: #b2bec3; margin-top: 2px; }
+  .state-badge { display: inline-block; font-size: 13px; font-weight: 600; padding: 4px 14px; border-radius: 20px; }
+  .state-mix { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+  .source-note { font-size: 11px; color: #b2bec3; margin-top: 6px; text-align: right; }
+  .disclaimer { font-size: 12px; color: #b2bec3; margin-top: 24px; padding: 16px; background: #f8f9fa; border-radius: 8px; line-height: 1.8; }
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0; }
+  .summary-card { text-align: center; padding: 14px 8px; border-radius: 8px; background: #f8f9fa; }
+  .summary-card .label { font-size: 11px; color: #636e72; margin-bottom: 4px; }
+  .summary-card .value { font-size: 20px; font-weight: 700; }
+  .summary-card .change { font-size: 12px; margin-top: 2px; }
+  .obs-list { list-style: none; }
+  .obs-list li { padding: 6px 0 6px 22px; position: relative; font-size: 13px; }
+  .obs-list li::before { content: "→"; position: absolute; left: 0; color: #0984e3; font-weight: bold; }
+  @media (max-width: 600px) {
+    .container { padding: 16px 12px 40px; }
+    .header { padding: 20px 0 16px; margin-bottom: 20px; }
+    .header h1 { font-size: 20px; }
+    .header .subtitle { font-size: 12px; }
+    .section { padding: 14px; margin-bottom: 14px; }
+    .section h2 { font-size: 15px; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .summary-card { padding: 10px 6px; }
+    .summary-card .value { font-size: 16px; }
+    .summary-card .label { font-size: 10px; }
+    .summary-card .change { font-size: 11px; }
+    table { font-size: 12px; }
+    th, td { padding: 6px 6px; }
+    .tldr { padding: 16px; }
+    .tldr li { font-size: 13px; }
+    .theme-card { padding: 10px 12px; }
+    .theme-card p { font-size: 12px; }
+    #chart-index { height: 340px !important; }
+    #chart-sector { height: 420px !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>A股收盘复盘报告</h1>
+    <div class="subtitle">沪指低开高走涨0.57% 煤炭掀涨停潮 科技内部分化 | 两市成交2.53万亿</div>
+    <span class="date-tag">2026-08-06 周四 收盘</span>
+  </div>
+
+  <div class="tldr">
+    <h2>核心结论</h2>
+    <ul>
+      <li>三大指数分化，沪指 <span class="highlight">+0.57%</span> 报 3900.35 创日内新高；深成指 <span class="highlight-green">-0.24%</span>、创业板指 <span class="highlight-green">-0.55%</span>，呈现典型的"沪强深弱"格局</li>
+      <li>两市成交约 <span class="highlight">2.53万亿</span>，较前一交易日缩量约1308亿，量能仍处高位但边际回落</li>
+      <li><span class="highlight">煤炭股掀涨停潮</span>：潞安环能、淮北矿业、兖矿能源、昊华能源、平煤股份等多股涨停；贵金属、小金属、化工（氟化工/工业气体）、电子化学品、半导体、CPO 等概念活跃</li>
+      <li>电力设备/电网设备、传媒、汽车/新能源车、教育、AI应用等板块调整，创业板承压；<span class="highlight-green">宁德时代跌4.24%、药明康德跌3.25%</span></li>
+      <li>全市场 <span class="highlight">2789只上涨、2590只下跌</span>（上涨占比约50%），<span class="highlight">83只涨停、1只跌停</span>，情绪较前两日降温、回归结构性行情</li>
+      <li>市场状态判断：<span class="state-badge state-mix">震荡分化 · 沪强深弱</span>，资源周期占优、科技成长内部分化，短期以精选结构性机会为主</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">📊</span> 一、市场概览</h2>
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="label">上证指数</div>
+        <div class="value" style="color:#d63031">3900.35</div>
+        <div class="change" style="color:#d63031">+0.57%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">深证成指</div>
+        <div class="value" style="color:#00b894">14110.12</div>
+        <div class="change" style="color:#00b894">-0.24%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">创业板指</div>
+        <div class="value" style="color:#00b894">3515.56</div>
+        <div class="change" style="color:#00b894">-0.55%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">沪深300</div>
+        <div class="value" style="color:#00b894">4651.31</div>
+        <div class="change" style="color:#00b894">-0.15%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">中证全指</div>
+        <div class="value" style="color:#d63031">5896.36</div>
+        <div class="change" style="color:#d63031">+0.25%</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>指数</th>
+          <th class="num">收盘价</th>
+          <th class="num">涨跌幅</th>
+          <th class="num">成交额(亿)</th>
+          <th class="num">振幅</th>
+          <th class="num">年初至今</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>上证指数</td><td class="num">3900.35</td><td class="num up" style="color:#d63031">+0.57%</td><td class="num">11668.19</td><td class="num">0.97%</td><td class="num down" style="color:#00b894">-1.73%</td></tr>
+        <tr><td>深证成指</td><td class="num">14110.12</td><td class="num down" style="color:#00b894">-0.24%</td><td class="num">13619.63</td><td class="num">2.33%</td><td class="num up" style="color:#d63031">+4.33%</td></tr>
+        <tr><td>创业板指</td><td class="num">3515.56</td><td class="num down" style="color:#00b894">-0.55%</td><td class="num">6579.08</td><td class="num">3.68%</td><td class="num up" style="color:#d63031">+9.75%</td></tr>
+        <tr><td>沪深300</td><td class="num">4651.31</td><td class="num down" style="color:#00b894">-0.15%</td><td class="num">7477.84</td><td class="num">1.39%</td><td class="num up" style="color:#d63031">+0.46%</td></tr>
+        <tr><td>科创50</td><td class="num">1701.29</td><td class="num up" style="color:#d63031">+0.45%</td><td class="num">1237.81</td><td class="num">4.52%</td><td class="num up" style="color:#d63031">+26.57%</td></tr>
+        <tr><td>中证1000</td><td class="num">7530.43</td><td class="num up" style="color:#d63031">+0.50%</td><td class="num">5286.47</td><td class="num">1.74%</td><td class="num down" style="color:#00b894">-0.85%</td></tr>
+        <tr><td>中证500</td><td class="num">7829.36</td><td class="num up" style="color:#d63031">+0.26%</td><td class="num">4943.75</td><td class="num">1.87%</td><td class="num up" style="color:#d63031">+4.87%</td></tr>
+        <tr><td>北证50</td><td class="num">1122.88</td><td class="num up" style="color:#d63031">+0.31%</td><td class="num">189.05</td><td class="num">1.50%</td><td class="num down" style="color:#00b894">-22.05%</td></tr>
+        <tr><td>中证全指</td><td class="num">5896.36</td><td class="num up" style="color:#d63031">+0.25%</td><td class="num">24490.58</td><td class="num">1.43%</td><td class="num down" style="color:#00b894">-0.38%</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="source-note">数据来源：腾讯自选股 | 截至 2026-08-06 15:00</div>
+
+    <div id="chart-index" style="width:100%;height:380px;margin-top:16px;"></div>
+
+    <h3>盘面解读</h3>
+    <p style="font-size:13px; color:#2d3436;">
+      今日 A 股三大指数涨跌互现，沪指低开后震荡走高、尾盘创出日内新高收涨 0.57%，而深市与创业板低窄幅震荡收跌，呈现"沪强深弱"的结构分化。板块层面，<strong>煤炭、贵金属、小金属、化工（氟化工/工业气体）、电子化学品、半导体、CPO</strong> 等周期与科技细分方向活跃，其中煤炭股集体涨停潮成为全天最大亮点；与之相对，<strong>电力设备、传媒、汽车、教育、AI应用</strong> 等前期热点集体调整，拖累创业板与深成指。全市场涨跌家数接近（2789:2590），涨停 83 家、跌停仅 1 家，情绪较前两日的高亢明显降温，行情从普涨反攻回归结构性轮动。两市成交 2.53 万亿虽较昨日缩量约 1308 亿，但仍维持在高位，说明资金并未离场、而是在板块间快速腾挪。
+    </p>
+  </div>
+
+  <div class="section">
+<h2><span class="icon">📈</span> 二、板块涨跌 <span class="badge">申万行业分类</span></h2>
+    <div class="source-note" style="margin-bottom:12px">行业分类口径：申万宏源2021版 一级（31个，概览）/ 二级（124个，明细）。下列涨跌幅为对应周期含当日收益。</div>
+    <div id="chart-sector" style="width:100%;height:420px;margin-bottom:16px;"></div>
+
+    <div class="section-title" style="font-size:15px;margin:8px 0 6px">申万一级行业概览 <span class="badge">L1 · 按5日涨幅 TOP15</span></div>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>申万一级行业</th><th class="num">5日</th><th class="num">10日</th><th class="num">20日</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>通信</td>
+          <td class="num" style="color:#d63031">+14.22%</td>
+          <td class="num" style="color:#00b894">-4.85%</td>
+          <td class="num" style="color:#00b894">-17.76%</td>
+        </tr>
+        <tr>
+          <td>综合</td>
+          <td class="num" style="color:#d63031">+12.90%</td>
+          <td class="num" style="color:#d63031">+5.80%</td>
+          <td class="num" style="color:#00b894">-7.46%</td>
+        </tr>
+        <tr>
+          <td>电子</td>
+          <td class="num" style="color:#d63031">+12.62%</td>
+          <td class="num" style="color:#00b894">-1.52%</td>
+          <td class="num" style="color:#00b894">-24.28%</td>
+        </tr>
+        <tr>
+          <td>计算机</td>
+          <td class="num" style="color:#d63031">+11.45%</td>
+          <td class="num" style="color:#d63031">+7.40%</td>
+          <td class="num" style="color:#d63031">+1.96%</td>
+        </tr>
+        <tr>
+          <td>机械设备</td>
+          <td class="num" style="color:#d63031">+11.29%</td>
+          <td class="num" style="color:#d63031">+4.39%</td>
+          <td class="num" style="color:#00b894">-11.73%</td>
+        </tr>
+        <tr>
+          <td>有色金属</td>
+          <td class="num" style="color:#d63031">+9.64%</td>
+          <td class="num" style="color:#d63031">+5.56%</td>
+          <td class="num" style="color:#d63031">+7.51%</td>
+        </tr>
+        <tr>
+          <td>传媒</td>
+          <td class="num" style="color:#d63031">+8.73%</td>
+          <td class="num" style="color:#d63031">+11.60%</td>
+          <td class="num" style="color:#d63031">+5.99%</td>
+        </tr>
+        <tr>
+          <td>国防军工</td>
+          <td class="num" style="color:#d63031">+6.72%</td>
+          <td class="num" style="color:#d63031">+4.40%</td>
+          <td class="num" style="color:#00b894">-8.23%</td>
+        </tr>
+        <tr>
+          <td>环保</td>
+          <td class="num" style="color:#d63031">+6.71%</td>
+          <td class="num" style="color:#d63031">+4.95%</td>
+          <td class="num" style="color:#00b894">-1.13%</td>
+        </tr>
+        <tr>
+          <td>建筑材料</td>
+          <td class="num" style="color:#d63031">+6.65%</td>
+          <td class="num" style="color:#d63031">+5.21%</td>
+          <td class="num" style="color:#00b894">-12.79%</td>
+        </tr>
+        <tr>
+          <td>基础化工</td>
+          <td class="num" style="color:#d63031">+6.13%</td>
+          <td class="num" style="color:#d63031">+4.38%</td>
+          <td class="num" style="color:#00b894">-2.08%</td>
+        </tr>
+        <tr>
+          <td>轻工制造</td>
+          <td class="num" style="color:#d63031">+5.89%</td>
+          <td class="num" style="color:#d63031">+6.78%</td>
+          <td class="num" style="color:#d63031">+0.76%</td>
+        </tr>
+        <tr>
+          <td>社会服务</td>
+          <td class="num" style="color:#d63031">+4.78%</td>
+          <td class="num" style="color:#d63031">+8.40%</td>
+          <td class="num" style="color:#d63031">+3.38%</td>
+        </tr>
+        <tr>
+          <td>纺织服饰</td>
+          <td class="num" style="color:#d63031">+4.48%</td>
+          <td class="num" style="color:#d63031">+8.29%</td>
+          <td class="num" style="color:#d63031">+1.93%</td>
+        </tr>
+        <tr>
+          <td>建筑装饰</td>
+          <td class="num" style="color:#d63031">+3.94%</td>
+          <td class="num" style="color:#d63031">+2.94%</td>
+          <td class="num" style="color:#00b894">-1.07%</td>
+        </tr></tbody>
+    </table>
+    </div>
+
+    <div class="section-title" style="font-size:15px;margin:16px 0 6px">申万二级行业明细 <span class="badge">L2 · 按5日涨幅 TOP25</span></div>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>申万二级行业</th><th class="num">5日</th><th class="num">10日</th><th class="num">20日</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>元件</td>
+          <td class="num" style="color:#d63031">+22.67%</td>
+          <td class="num" style="color:#d63031">+3.88%</td>
+          <td class="num" style="color:#00b894">-18.19%</td>
+        </tr>
+        <tr>
+          <td>小金属</td>
+          <td class="num" style="color:#d63031">+19.07%</td>
+          <td class="num" style="color:#d63031">+9.21%</td>
+          <td class="num" style="color:#00b894">-5.56%</td>
+        </tr>
+        <tr>
+          <td>电子化学品Ⅱ</td>
+          <td class="num" style="color:#d63031">+17.91%</td>
+          <td class="num" style="color:#d63031">+6.34%</td>
+          <td class="num" style="color:#00b894">-26.09%</td>
+        </tr>
+        <tr>
+          <td>非金属材料Ⅱ</td>
+          <td class="num" style="color:#d63031">+16.81%</td>
+          <td class="num" style="color:#d63031">+3.50%</td>
+          <td class="num" style="color:#00b894">-24.41%</td>
+        </tr>
+        <tr>
+          <td>通用设备</td>
+          <td class="num" style="color:#d63031">+16.26%</td>
+          <td class="num" style="color:#d63031">+6.04%</td>
+          <td class="num" style="color:#00b894">-14.38%</td>
+        </tr>
+        <tr>
+          <td>通信设备</td>
+          <td class="num" style="color:#d63031">+15.70%</td>
+          <td class="num" style="color:#00b894">-6.12%</td>
+          <td class="num" style="color:#00b894">-20.36%</td>
+        </tr>
+        <tr>
+          <td>自动化设备</td>
+          <td class="num" style="color:#d63031">+15.55%</td>
+          <td class="num" style="color:#d63031">+4.44%</td>
+          <td class="num" style="color:#00b894">-16.60%</td>
+        </tr>
+        <tr>
+          <td>航天装备Ⅱ</td>
+          <td class="num" style="color:#d63031">+15.53%</td>
+          <td class="num" style="color:#d63031">+5.05%</td>
+          <td class="num" style="color:#00b894">-19.36%</td>
+        </tr>
+        <tr>
+          <td>塑料</td>
+          <td class="num" style="color:#d63031">+15.06%</td>
+          <td class="num" style="color:#d63031">+8.12%</td>
+          <td class="num" style="color:#00b894">-12.41%</td>
+        </tr>
+        <tr>
+          <td>金属新材料</td>
+          <td class="num" style="color:#d63031">+14.27%</td>
+          <td class="num" style="color:#d63031">+6.80%</td>
+          <td class="num" style="color:#00b894">-13.29%</td>
+        </tr>
+        <tr>
+          <td>IT服务Ⅱ</td>
+          <td class="num" style="color:#d63031">+13.52%</td>
+          <td class="num" style="color:#d63031">+7.29%</td>
+          <td class="num" style="color:#d63031">+2.34%</td>
+        </tr>
+        <tr>
+          <td>光学光电子</td>
+          <td class="num" style="color:#d63031">+13.43%</td>
+          <td class="num" style="color:#d63031">+3.62%</td>
+          <td class="num" style="color:#00b894">-19.96%</td>
+        </tr>
+        <tr>
+          <td>广告营销</td>
+          <td class="num" style="color:#d63031">+13.35%</td>
+          <td class="num" style="color:#d63031">+16.26%</td>
+          <td class="num" style="color:#d63031">+14.32%</td>
+        </tr>
+        <tr>
+          <td>综合Ⅱ</td>
+          <td class="num" style="color:#d63031">+12.90%</td>
+          <td class="num" style="color:#d63031">+5.80%</td>
+          <td class="num" style="color:#00b894">-7.46%</td>
+        </tr>
+        <tr>
+          <td>其他电源设备Ⅱ</td>
+          <td class="num" style="color:#d63031">+12.72%</td>
+          <td class="num" style="color:#d63031">+1.38%</td>
+          <td class="num" style="color:#00b894">-12.78%</td>
+        </tr>
+        <tr>
+          <td>电机Ⅱ</td>
+          <td class="num" style="color:#d63031">+12.71%</td>
+          <td class="num" style="color:#d63031">+12.09%</td>
+          <td class="num" style="color:#d63031">+1.07%</td>
+        </tr>
+        <tr>
+          <td>玻璃玻纤</td>
+          <td class="num" style="color:#d63031">+12.71%</td>
+          <td class="num" style="color:#d63031">+6.95%</td>
+          <td class="num" style="color:#00b894">-24.89%</td>
+        </tr>
+        <tr>
+          <td>其他电子Ⅱ</td>
+          <td class="num" style="color:#d63031">+12.58%</td>
+          <td class="num" style="color:#d63031">+2.32%</td>
+          <td class="num" style="color:#00b894">-24.71%</td>
+        </tr>
+        <tr>
+          <td>贵金属</td>
+          <td class="num" style="color:#d63031">+12.36%</td>
+          <td class="num" style="color:#d63031">+10.28%</td>
+          <td class="num" style="color:#d63031">+22.62%</td>
+        </tr>
+        <tr>
+          <td>橡胶</td>
+          <td class="num" style="color:#d63031">+12.35%</td>
+          <td class="num" style="color:#d63031">+6.03%</td>
+          <td class="num" style="color:#00b894">-15.98%</td>
+        </tr>
+        <tr>
+          <td>工程咨询服务Ⅱ</td>
+          <td class="num" style="color:#d63031">+12.34%</td>
+          <td class="num" style="color:#d63031">+14.94%</td>
+          <td class="num" style="color:#00b894">-3.88%</td>
+        </tr>
+        <tr>
+          <td>环保设备Ⅱ</td>
+          <td class="num" style="color:#d63031">+11.79%</td>
+          <td class="num" style="color:#d63031">+7.89%</td>
+          <td class="num" style="color:#00b894">-6.77%</td>
+        </tr>
+        <tr>
+          <td>专用设备</td>
+          <td class="num" style="color:#d63031">+11.52%</td>
+          <td class="num" style="color:#d63031">+5.58%</td>
+          <td class="num" style="color:#00b894">-11.54%</td>
+        </tr>
+        <tr>
+          <td>软件开发</td>
+          <td class="num" style="color:#d63031">+11.26%</td>
+          <td class="num" style="color:#d63031">+12.02%</td>
+          <td class="num" style="color:#d63031">+6.70%</td>
+        </tr>
+        <tr>
+          <td>照明设备Ⅱ</td>
+          <td class="num" style="color:#d63031">+11.14%</td>
+          <td class="num" style="color:#d63031">+8.32%</td>
+          <td class="num" style="color:#00b894">-4.21%</td>
+        </tr></tbody>
+    </table>
+    </div>
+    <div class="source-note">数据来源：申万宏源行业分类（westock-data industry_list_sw1 / sw2）| 截至 2026-08-06 15:00</div>
+  </div>
+<div class="section">
+    <h2><span class="icon">🎯</span> 三、主线研判</h2>
+
+    <div class="theme-card coal">
+      <h4>资源周期（煤炭 / 贵金属 / 小金属 / 化工）</h4>
+      <div class="meta">煤炭开采 +4.56% · 贵金属 +2.78% · 小金属 +3.13% · 锗镓概念 +4.01%</div>
+      <p>今日最强主线，煤炭股掀涨停潮，潞安环能、淮北矿业、兖矿能源、昊华能源、平煤股份、辽宁能源等多股涨停；有色金属（云南锗业、盛达资源、中钨高新、银河磁体）与化工（氟化工、工业气体）同步活跃。驱动来自涨价链条与中报业绩预期，叠加前期跟随科技股回调后估值消化，机构认为部分有业绩支撑的品种已显现中长期配置机会。该主线兼具"高股息防御 + 商品价格弹性"，在科技分化期获得资金避险与进攻的双重青睐。</p>
+    </div>
+
+    <div class="theme-card semi">
+      <h4>电子半导体 / CPO / 电子化学品</h4>
+      <div class="meta">电子化学品 +4.73% · 元件 +2.33% · 通信设备 +1.49%（主力5日净流入325.9亿）</div>
+      <p>科技硬件延续活跃但内部分化。电子化学品、半导体设备、CPO/PCB 仍有资金承接，通信设备板块主力 5 日净流入居首（约 325.9 亿），显示机构对国产算力、半导体设备、PCB/光模块的中期景气仍具信心。但个股层面已现分化：长电科技、有研新材、云南锗业等封板，而东山精密、兆易创新、中际旭创等冲高回落。机构普遍认为科技硬件处于"筑底反弹、分化式修复"阶段，配置应由"投入规模"转向"收入兑现"。</p>
+    </div>
+
+    <div class="theme-card metal">
+      <h4>小金属 / 新材料（钨、锡、钽、锗镓）</h4>
+      <div class="meta">小金属 +3.13% · 锗镓概念 +4.01% · 非金属材料 +3.19%</div>
+      <p>受稀有金属涨价与国产替代逻辑驱动，云南锗业、中钨高新、厦门钨业、盛达资源等活跃。兴业证券指出，前期受益于涨价链的小金属及金属新材料标的在 7 月跟随科技股回调幅度较大，当前部分有业绩支撑的标的已显现超跌后的配置机会，看好钨、锡、钽等品种。</p>
+    </div>
+
+    <div class="theme-card weak">
+      <h4>弱势方向：电力设备 / 传媒 / 汽车 / AI应用</h4>
+      <div class="meta">电力设备震荡走低 · 传媒冲高回落 · 汽车表现不佳</div>
+      <p>新能源链条（电力设备、电网设备、汽车）与前期热炒的传媒、AI应用今日集体调整，宁德时代跌 4.24%、药明康德跌 3.25%。这属于反弹行情中的正常轮动与获利了结，不代表产业逻辑逆转，但在量能边际回落背景下，高位题材的兑现压力需警惕。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">💰</span> 四、资金流向与情绪</h2>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="label">上涨家数</div>
+        <div class="value up" style="color:#d63031">2789</div>
+        <div class="change up" style="color:#d63031">占比约50%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">下跌家数</div>
+        <div class="value down" style="color:#00b894">2590</div>
+        <div class="change down" style="color:#00b894">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">涨停/跌停</div>
+        <div class="value up" style="color:#d63031">83/1</div>
+        <div class="change up" style="color:#d63031">情绪降温</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">两市成交额</div>
+        <div class="value up" style="color:#d63031">2.53</div>
+        <div class="change up" style="color:#d63031">-0.13万亿</div>
+      </div>
+    </div>
+
+    <h3>资金动向</h3>
+    <ul class="obs-list">
+      <li>通信设备板块主力净流入约 25.9 亿（5 日累计约 325.9 亿），元件净流入约 19.1 亿，电子化学品净流入约 16.1 亿，科技硬件仍是主力资金主攻方向</li>
+      <li>煤炭、贵金属、小金属获避险与涨价双逻辑加持，资金从高位科技题材向资源周期切换迹象明显</li>
+      <li>两市成交 2.53 万亿，较昨缩量约 1308 亿，量能仍处高位但边际回落，资金在板块间快速轮动</li>
+      <li>涨停 83 家、跌停仅 1 家，连板情绪仍在但较前高收敛，结构性行情特征突出</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">📰</span> 五、消息面</h2>
+    <div class="news-item">
+      <div class="news-title">A股三大股指涨跌互现，煤炭股掀涨停潮</div>
+      <div class="news-desc">8月6日沪指低开高走涨0.57%报3900.35，深成指跌0.24%，创业板指跌0.55%。煤炭股领涨两市，潞安环能、淮北矿业、兖矿能源、昊华能源、平煤股份、辽宁能源等多股涨停；有色金属、建筑材料、贵金属活跃；电力设备、传媒、汽车调整。两市成交约25288亿元，较前一交易日缩量约1308亿元。</div>
+      <div class="news-source">来源：澎湃新闻 / 2026-08-06</div>
+    </div>
+    <div class="news-item">
+      <div class="news-title">机构：市场或进入筑底反弹阶段，科技硬件分化式修复</div>
+      <div class="news-desc">兴业证券研报称，7月下跌中主动公募对AI硬件配置已显著消化，科技成长板块拥挤度回落至历史底部，关注国产算力、先进制程、半导体设备。中信证券提醒短期反弹更多具超跌修复特征，板块内部将明显分化。中信建投建议提高芯片、算力等高景气科技细分关注度，并关注贵金属波段机会。</div>
+      <div class="news-source">来源：澎湃新闻 / 2026-08-06</div>
+    </div>
+    <div class="news-item">
+      <div class="news-title">工业气体、氟化工、煤炭等概念走强，血制品/AI语料/短剧跌幅居前</div>
+      <div class="news-desc">盘后复盘显示，板块方面工业气体、氟化工、煤炭采选、电子化学品、贵金属等行业及概念涨幅居前；血制品、AI语料、短剧、证券等行业及概念跌幅居前。全市场2789只上涨、2590只下跌，83只涨停、1只跌停。</div>
+      <div class="news-source">来源：界面新闻 / 2026-08-06</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🔭</span> 六、后市研判</h2>
+    <ul class="obs-list">
+      <li><strong>短期：</strong>指数分化、量能边际回落，市场从普涨反攻转入结构性轮动。沪指 3900 点附近获得承接，但深市与创业板受新能源、传媒等权重拖累偏弱，短期以"轻指数、重结构"思路应对。</li>
+      <li><strong>中期：</strong>机构普遍判断市场进入筑底反弹阶段，科技硬件（国产算力、半导体设备、PCB/光模块）经 7 月回调后筹码压力消化，具备分化式修复基础；但反弹强度取决于中报业绩兑现度与海外科技限制政策落地。</li>
+      <li><strong>策略：</strong>均衡持仓，关注两条线——① 资源周期（煤炭/贵金属/小金属）的高股息+涨价弹性；② 科技硬件中"收入兑现"确定性高、筹码与估值压力较小的半导体设备、PCB/光模块方向。规避业绩不及预期的高位题材。</li>
+      <li><strong>风险：</strong>量能能否维持在 2.5 万亿以上、高位题材兑现压力、海外对华科技限制政策、中报业绩不及预期带来的波动。</li>
+    </ul>
+  </div>
+
+  <div class="disclaimer">
+    <strong>免责声明：</strong>本报告基于公开数据整理，仅供复盘参考，不构成任何投资建议。股市有风险，投资需谨慎。报告中的分析观点仅代表作者基于当前数据的判断，不构成对未来走势的承诺。
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const upColor = '#d63031', downColor = '#00b894';
+  const idxData = [{"name":"上证指数","value":0.57},{"name":"深证成指","value":-0.24},{"name":"创业板指","value":-0.55},{"name":"沪深300","value":-0.15},{"name":"科创50","value":0.45},{"name":"中证1000","value":0.50},{"name":"中证500","value":0.26},{"name":"北证50","value":0.31},{"name":"中证全指","value":0.25}];
+
+  const chartIndex = echarts.init(document.getElementById('chart-index'));
+  chartIndex.setOption({
+    title: { text: '主要指数涨跌幅', left: 'center', textStyle: { fontSize: 14, color: '#2d3436' } },
+    tooltip: { trigger: 'axis', formatter: '{b}: {c}%' },
+    grid: { left: '3%', right: '8%', bottom: '3%', top: '12%', containLabel: true },
+    xAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
+    yAxis: { type: 'category', data: idxData.map(i => i.name).reverse(), axisLabel: { fontSize: 12 } },
+    series: [{
+      type: 'bar',
+      data: idxData.map(i => ({ value: i.value, itemStyle: { color: i.value >= 0 ? upColor : downColor } })).reverse(),
+      label: { show: true, position: 'right', formatter: '{c}%', color: '#2d3436' }
+    }]
+  });
+
+  const sectorData = [{"name":"元件","chg":22.67},{"name":"小金属","chg":19.07},{"name":"电子化学品Ⅱ","chg":17.91},{"name":"非金属材料Ⅱ","chg":16.81},{"name":"通用设备","chg":16.26},{"name":"通信设备","chg":15.7},{"name":"自动化设备","chg":15.55},{"name":"航天装备Ⅱ","chg":15.53},{"name":"塑料","chg":15.06},{"name":"金属新材料","chg":14.27},{"name":"IT服务Ⅱ","chg":13.52},{"name":"光学光电子","chg":13.43},{"name":"广告营销","chg":13.35},{"name":"综合Ⅱ","chg":12.9},{"name":"其他电源设备Ⅱ","chg":12.72},{"name":"电机Ⅱ","chg":12.71},{"name":"玻璃玻纤","chg":12.71},{"name":"其他电子Ⅱ","chg":12.58},{"name":"贵金属","chg":12.36},{"name":"橡胶","chg":12.35},{"name":"工程咨询服务Ⅱ","chg":12.34},{"name":"环保设备Ⅱ","chg":11.79},{"name":"专用设备","chg":11.52},{"name":"软件开发","chg":11.26},{"name":"照明设备Ⅱ","chg":11.14}];
+  const upSectors = sectorData.filter(s => s.chg >= 0).sort((a, b) => a.chg - b.chg);
+  const chartSector = echarts.init(document.getElementById('chart-sector'));
+  chartSector.setOption({
+    title: { text: '申万二级行业涨跌幅（按5日 TOP25）', left: 'center', textStyle: { fontSize: 14, color: '#2d3436' } },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}: {c}%' },
+    grid: { left: '3%', right: '8%', bottom: '3%', top: '12%', containLabel: true },
+    xAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
+    yAxis: { type: 'category', data: upSectors.map(s => s.name).reverse(), axisLabel: { fontSize: 11 } },
+    series: [{
+      type: 'bar',
+      data: upSectors.map(s => ({ value: s.chg, itemStyle: { color: upColor } })).reverse(),
+      label: { show: true, position: 'right', formatter: '{c}%', color: '#2d3436', fontSize: 11 }
+    }]
+  });
+
+  window.addEventListener('resize', () => { chartIndex.resize(); chartSector.resize(); });
+})();
+</script>
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

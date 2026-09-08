@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026-08-04 条件选股 | A股复盘选股中心</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+.header { background: #fff; border-bottom: 1px solid #e9ecef; padding: 20px 0; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; }
+.header a.back, .header a.back, .header .back { position: absolute; left: 12px; top: 12px; font-size: 13px; color: #4263eb; text-decoration: none; white-space: nowrap; }
+.header h1 { font-size: 20px; font-weight: 700; }
+.header .subtitle { margin-top: 4px; font-size: 13px; color: #868e96; }
+.container { max-width: 900px; margin: 24px auto; padding: 0 16px; }
+.section { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.section-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.section-title .badge { font-size: 12px; padding: 2px 10px; border-radius: 10px; background: #e3f2fd; color: #1976d2; font-weight: 600; }
+.section-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; line-height: 1.6; }
+.conditions { background: #f8f9fa; border-radius: 8px; padding: 16px; margin-bottom: 16px; font-size: 13px; color: #495057; line-height: 1.8; }
+.conditions .cond-item { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+.conditions .cond-num { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: #4263eb; color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+.conditions .cond-text { flex: 1; }
+.conditions .approx { display: inline-block; margin-left: 6px; font-size: 11px; padding: 1px 6px; border-radius: 4px; background: #fff3cd; color: #856404; }
+.conditions .precise { display: inline-block; margin-left: 6px; font-size: 11px; padding: 1px 6px; border-radius: 4px; background: #c8e6c9; color: #2e7d32; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { background: #f1f3f5; padding: 10px 12px; text-align: left; font-weight: 600; color: #495057; font-size: 13px; border-bottom: 2px solid #dee2e6; white-space: nowrap; }
+th.sortable { cursor: pointer; user-select: none; transition: background 0.15s; }
+th.sortable:hover { background: #dbeafe; color: #1976d2; }
+th.sortable::after { content: " \21C5"; font-size: 10px; opacity: 0.35; font-weight: normal; }
+th.sortable.asc::after { content: " \2191"; opacity: 1; color: #1976d2; font-weight: 700; }
+th.sortable.desc::after { content: " \2193"; opacity: 1; color: #1976d2; font-weight: 700; }
+td { padding: 10px 12px; border-bottom: 1px solid #e9ecef; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8f9fa; }
+.stock-code { font-family: "SF Mono", Consolas, monospace; font-size: 13px; color: #868e96; }
+.stock-name { font-weight: 600; }
+.up { color: #d63031; font-weight: 600; }
+.down { color: #00b894; font-weight: 600; }
+.flat { color: #868e96; }
+.breakthrough-tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; margin: 1px; }
+.bt-2yr { background: #e8f5e9; color: #2e7d32; }
+.bt-3yr { background: #e3f2fd; color: #1565c0; }
+.bt-4yr { background: #fce4ec; color: #c62828; }
+.holdings-cell { font-size: 12px; color: #495057; line-height: 1.8; white-space: nowrap; }
+.info-box { background: #e3f2fd; border-left: 4px solid #1976d2; border-radius: 4px; padding: 16px; margin-top: 16px; font-size: 13px; color: #1565c0; line-height: 1.8; }
+.info-box strong { color: #0d47a1; }
+.tecscore-box { background: #f3e5f5; border-left: 4px solid #7b1fa2; border-radius: 4px; padding: 16px; margin-top: 16px; font-size: 13px; color: #6a1b9a; line-height: 1.8; }
+.tecscore-box strong { color: #4a148c; }
+.count-tag { display: inline-block; font-size: 13px; padding: 4px 12px; border-radius: 12px; font-weight: 600; margin-bottom: 12px; }
+.count-tag.g1 { background: #e8f5e9; color: #2e7d32; }
+.count-tag.g2 { background: #e3f2fd; color: #1565c0; }
+.count-tag.g3 { background: #fff3e0; color: #e65100; }
+.empty-result { text-align: center; padding: 32px 16px; color: #adb5bd; font-size: 14px; }
+.empty-result .icon { font-size: 36px; margin-bottom: 8px; }
+.theme-card { background: #f8f9fa; border-radius: 8px; padding: 16px; margin-bottom: 12px; border-left: 4px solid #4263eb; }
+.theme-card .theme-name { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+.theme-card .theme-type { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; margin-left: 8px; }
+.theme-card .type-main { background: #fce4ec; color: #c62828; }
+.theme-card .type-cand { background: #e3f2fd; color: #1565c0; }
+.theme-card .theme-data { font-size: 13px; color: #495057; line-height: 1.8; margin-top: 8px; }
+.theme-card .theme-data .data-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.theme-card .theme-data .data-item { background: #fff; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin: 2px 0; }
+.footer { text-align: center; padding: 24px; font-size: 12px; color: #adb5bd; }
+@media (max-width: 600px) {
+  .container { padding: 0 12px; }
+  .section { padding: 16px; }
+  table { font-size: 12px; }
+  th, td { padding: 8px 4px; }
+  .stock-code { font-size: 11px; }
+  .section-title { font-size: 16px; }
+  .holdings-cell { white-space: nowrap; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <a class="back" href="screening.html">&#8592; 返回</a>
+  <h1>条件选股 · 2026-08-04 周二</h1>
+  <div class="subtitle">收盘后自动生成 | 数据仅供参考 | 点击表头排序</div>
+</div>
+<div class="container">
+
+  <!-- Group 1 -->
+  <div class="section">
+    <div class="section-title">第一组：趋势突破选股 <span class="badge">5条件同时满足</span></div>
+    <div class="section-desc">年线之上 + 创半年新高 + 突破2/3/4年线 + RPS近似 + 当日成交额>5亿</div>
+    <div class="conditions">
+      <div class="cond-item"><span class="cond-num">1</span><span class="cond-text">年线之上：ClosePrice > MA_250 <span class="precise">精确</span></span></div>
+      <div class="cond-item"><span class="cond-num">2</span><span class="cond-text">创半年新高：ClosePrice >= MA_120 * 0.95 <span class="precise">精确</span></span></div>
+      <div class="cond-item"><span class="cond-num">3</span><span class="cond-text">突破2/3/4年线：K线手动计算MA480/720/960，判断今日上穿 <span class="precise">精确</span></span></div>
+      <div class="cond-item"><span class="cond-num">4</span><span class="cond-text">RPS5/10/20≥90：TecScore >= 80 <span class="approx">近似（工具无RPS字段）</span></span></div>
+      <div class="cond-item"><span class="cond-num">5</span><span class="cond-text">当日成交额 > 5亿元 <span class="precise">精确</span></span></div>
+    </div>
+    <span class="count-tag g1">1 只</span>
+    <div class="table-wrap">
+      <table id="g1-table">
+        <thead><tr>
+          <th class="sortable">股票</th>
+          <th class="sortable">涨跌幅</th>
+          <th class="sortable">收盘价</th>
+          <th class="sortable">MA250</th>
+          <th class="sortable">MA120</th>
+          <th class="sortable">成交额</th>
+          <th>突破年线</th>
+          <th class="sortable">技术评分</th>
+          <th class="sortable">综合评分</th>
+        </tr></thead>
+        <tbody><tr>
+        <td><span class="stock-code">sz300795</span><br><span class="stock-name">米奥会展</span></td>
+        <td class="up">+9.72%</td>
+        <td>15.58</td>
+        <td>12.950</td>
+        <td>11.282</td>
+        <td>8.01亿</td>
+        <td><span class="breakthrough-tag bt-3yr">3年线</span><span class="breakthrough-tag bt-4yr">4年线</span></td>
+        <td>83.82</td>
+        <td>79.04</td>
+      </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Group 2 -->
+  <div class="section">
+    <div class="section-title">第二组：跳空缺口选股 <span class="badge">4条件同时满足</span></div>
+    <div class="section-desc">跳空缺口20日未回补 + 创半年新高 + 年线之上 + 当日成交额>5亿</div>
+    <div class="conditions">
+      <div class="cond-item"><span class="cond-num">1</span><span class="cond-text">跳空缺口20日未回补：rise_big_up策略 + K线验证 <span class="precise">精确</span></span></div>
+      <div class="cond-item"><span class="cond-num">2</span><span class="cond-text">创半年新高：ClosePrice >= MA_120 * 0.95 <span class="precise">精确</span></span></div>
+      <div class="cond-item"><span class="cond-num">3</span><span class="cond-text">年线之上：ClosePrice > MA_250 <span class="precise">精确</span></span></div>
+      <div class="cond-item"><span class="cond-num">4</span><span class="cond-text">当日成交额 > 5亿元 <span class="precise">精确</span></span></div>
+    </div>
+    <span class="count-tag g2">0 只</span>
+    <div class="table-wrap">
+      <table id="g2-table">
+        <thead><tr>
+          <th class="sortable">股票</th>
+          <th class="sortable">涨跌幅</th>
+          <th class="sortable">收盘价</th>
+          <th class="sortable">开盘价</th>
+          <th class="sortable">昨收</th>
+          <th class="sortable">成交额</th>
+          <th class="sortable">缺口日期</th>
+          <th class="sortable">MA250</th>
+          <th class="sortable">MA120</th>
+        </tr></thead>
+        <tbody><tr><td colspan="10" class="empty-result"><div class="icon">&#128269;</div>无符合条件的股票（原2只均因成交额不足5亿被过滤）</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Group 3 -->
+  <div class="section">
+    <div class="section-title">第三组：ETF 5日最强 <span class="badge">5日涨幅Top20</span></div>
+    <div class="section-desc">按5日涨幅排名前20只ETF，补充成交额、规模、10日/20日/年初至今涨跌幅及十大持仓</div>
+    <span class="count-tag g3">20 只</span>
+    <div class="table-wrap">
+      <table id="g3-table">
+        <thead><tr>
+          <th class="sortable">排名</th>
+          <th class="sortable">ETF</th>
+          <th class="sortable">成交额</th>
+          <th class="sortable">总规模</th>
+          <th class="sortable">当日涨幅</th>
+          <th class="sortable">5日涨幅</th>
+          <th class="sortable">10日涨幅</th>
+          <th class="sortable">20日涨幅</th>
+          <th class="sortable">年初至今</th>
+          <th>十大持仓股</th>
+        </tr></thead>
+        <tbody><tr>
+      <td>1</td>
+      <td><span class="stock-code">sh512980</span><br><span class="stock-name">传媒ETF广发</span></td>
+      <td>7.52亿</td>
+      <td>34.88亿</td>
+      <td class="up">+0.35%</td>
+      <td class="up">+11.50%</td>
+      <td class="flat">暂无</td>
+      <td class="up">+5.44%</td>
+      <td class="down">-14.53%</td>
+      <td class="holdings-cell">世纪华通(9.52%) 分众传媒(7.15%) 蓝色光标(7.03%) 巨人网络(5.24%) 岩山科技(5.16%) 昆仑万维(4.89%) 利欧股份(4.62%) 恺英网络(4.09%) 三七互娱(4.07%) 吉比特(3.02%)</td>
+    </tr><tr>
+      <td>2</td>
+      <td><span class="stock-code">sz159805</span><br><span class="stock-name">传媒ETF鹏华</span></td>
+      <td>0.90亿</td>
+      <td>2.84亿</td>
+      <td class="up">+0.50%</td>
+      <td class="up">+11.47%</td>
+      <td class="up">+9.55%</td>
+      <td class="up">+6.03%</td>
+      <td class="down">-14.70%</td>
+      <td class="holdings-cell">世纪华通(9.53%) 分众传媒(7.18%) 蓝色光标(6.93%) 巨人网络(5.38%) 岩山科技(5.2%) 昆仑万维(4.9%) 利欧股份(4.66%) 恺英网络(4.24%) 三七互娱(4.03%) 中文在线(2.46%)</td>
+    </tr><tr>
+      <td>3</td>
+      <td><span class="stock-code">sh516190</span><br><span class="stock-name">传媒ETF华夏</span></td>
+      <td>0.45亿</td>
+      <td>1.01亿</td>
+      <td class="up">+0.39%</td>
+      <td class="up">+11.28%</td>
+      <td class="flat">暂无</td>
+      <td class="up">+5.99%</td>
+      <td class="down">-16.99%</td>
+      <td class="holdings-cell">世纪华通(9.44%) 中国中免(6.79%) 分众传媒(6.57%) 蓝色光标(6.04%) 巨人网络(4.83%) 昆仑万维(4.47%) 三六零(4.08%) 利欧股份(3.96%) 吉比特(3.76%) 三七互娱(3.71%)</td>
+    </tr><tr>
+      <td>4</td>
+      <td><span class="stock-code">sh513360</span><br><span class="stock-name">教育ETF博时</span></td>
+      <td>1.84亿</td>
+      <td>2.82亿</td>
+      <td class="up">+1.73%</td>
+      <td class="up">+11.08%</td>
+      <td class="up">+9.07%</td>
+      <td class="up">+6.80%</td>
+      <td class="down">-12.13%</td>
+      <td class="holdings-cell">好未来(18.6%) 新东方-S(17.24%) 中公教育(7.37%) 视源股份(6.09%) 拓维信息(4.47%) 科大讯飞(4.46%) 智微智能(4%) 优必选(3.23%) 运达科技(2.55%) 创业黑马(2.44%)</td>
+    </tr><tr>
+      <td>5</td>
+      <td><span class="stock-code">sz159725</span><br><span class="stock-name">线上消费ETF工银</span></td>
+      <td>0.40亿</td>
+      <td>0.97亿</td>
+      <td class="down">-1.13%</td>
+      <td class="up">+10.97%</td>
+      <td class="flat">暂无</td>
+      <td class="up">+3.41%</td>
+      <td class="down">-15.07%</td>
+      <td class="holdings-cell">暂无持仓数据</td>
+    </tr><tr>
+      <td>6</td>
+      <td><span class="stock-code">sh517770</span><br><span class="stock-name">游戏传媒ETF浦银</span></td>
+      <td>0.18亿</td>
+      <td>1.38亿</td>
+      <td class="up">+1.39%</td>
+      <td class="up">+10.50%</td>
+      <td class="up">+6.67%</td>
+      <td class="up">+6.29%</td>
+      <td class="down">-19.27%</td>
+      <td class="holdings-cell">腾讯控股(10.78%) 快手-W(10.03%) 分众传媒(5.88%) 蓝色光标(5.76%) 哔哩哔哩-W(4.64%) 巨人网络(4.31%) 岩山科技(4.22%) 昆仑万维(3.96%) 利欧股份(3.8%) 恺英网络(3.43%)</td>
+    </tr><tr>
+      <td>7</td>
+      <td><span class="stock-code">sh516770</span><br><span class="stock-name">游戏ETF华泰柏瑞</span></td>
+      <td>0.50亿</td>
+      <td>3.83亿</td>
+      <td class="up">+1.02%</td>
+      <td class="up">+10.45%</td>
+      <td class="up">+6.49%</td>
+      <td class="up">+2.69%</td>
+      <td class="down">-20.70%</td>
+      <td class="holdings-cell">世纪华通(13.8%) 巨人网络(12.55%) 三七互娱(10.15%) 恺英网络(10.05%) 吉比特(6.52%) 光线传媒(5.59%) 神州泰岳(5.52%) 完美世界(4.97%) 掌趣科技(3.87%) 游族网络(3.7%)</td>
+    </tr><tr>
+      <td>8</td>
+      <td><span class="stock-code">sh516010</span><br><span class="stock-name">游戏ETF国泰</span></td>
+      <td>1.63亿</td>
+      <td>23.19亿</td>
+      <td class="up">+1.08%</td>
+      <td class="up">+10.26%</td>
+      <td class="flat">暂无</td>
+      <td class="up">+2.47%</td>
+      <td class="down">-21.76%</td>
+      <td class="holdings-cell">暂无持仓数据</td>
+    </tr><tr>
+      <td>9</td>
+      <td><span class="stock-code">sz159869</span><br><span class="stock-name">游戏ETF华夏</span></td>
+      <td>8.08亿</td>
+      <td>79.63亿</td>
+      <td class="up">+1.17%</td>
+      <td class="up">+10.16%</td>
+      <td class="flat">暂无</td>
+      <td class="up">+2.45%</td>
+      <td class="down">-21.67%</td>
+      <td class="holdings-cell">世纪华通(13.25%) 巨人网络(12.13%) 三七互娱(9.76%) 恺英网络(9.74%) 吉比特(6.83%) 光线传媒(5.45%) 神州泰岳(5.34%) 完美世界(4.81%) 掌趣科技(3.75%) 游族网络(3.58%)</td>
+    </tr><tr>
+      <td>10</td>
+      <td><span class="stock-code">sz159035</span><br><span class="stock-name">软件ETF天弘</span></td>
+      <td>0.18亿</td>
+      <td>3.29亿</td>
+      <td class="up">+2.21%</td>
+      <td class="up">+10.14%</td>
+      <td class="flat">暂无</td>
+      <td class="up">+7.98%</td>
+      <td class="down">-10.48%</td>
+      <td class="holdings-cell">科大讯飞(11.41%) 同花顺(10.71%) 金山办公(9.53%) 恒生电子(4.84%) 三六零(4.73%) 拓维信息(4.56%) 润和软件(4.39%) 深信服(4.01%) 指南针(3.81%) 中科创达(3.53%)</td>
+    </tr><tr>
+      <td>11</td>
+      <td><span class="stock-code">sz159068</span><br><span class="stock-name">软件ETF华夏</span></td>
+      <td>0.21亿</td>
+      <td>2.54亿</td>
+      <td class="up">+1.55%</td>
+      <td class="up">+10.08%</td>
+      <td class="up">+6.80%</td>
+      <td class="up">+9.39%</td>
+      <td class="up">+9.39%</td>
+      <td class="holdings-cell">科大讯飞(10.24%) 同花顺(8.85%) 金山办公(7.87%) 恒生电子(4.44%) 三六零(4.18%) 拓维信息(4.01%) 指南针(3.94%) 润和软件(3.62%) 深信服(3.31%) 中科创达(2.92%)</td>
+    </tr><tr>
+      <td>12</td>
+      <td><span class="stock-code">sz159590</span><br><span class="stock-name">软件ETF汇添富</span></td>
+      <td>1.02亿</td>
+      <td>5.58亿</td>
+      <td class="up">+0.76%</td>
+      <td class="up">+9.96%</td>
+      <td class="flat">暂无</td>
+      <td class="up">+6.67%</td>
+      <td class="down">-18.54%</td>
+      <td class="holdings-cell">科大讯飞(10.2%) 同花顺(9.01%) 金山办公(7.86%) 恒生电子(4.32%) 三六零(4.12%) 拓维信息(4.09%) 润和软件(3.77%) 指南针(3.56%) 深信服(3.5%) 中科创达(2.9%)</td>
+    </tr><tr>
+      <td>13</td>
+      <td><span class="stock-code">sz159793</span><br><span class="stock-name">线上消费ETF平安</span></td>
+      <td>0.22亿</td>
+      <td>0.30亿</td>
+      <td class="up">+3.67%</td>
+      <td class="up">+9.72%</td>
+      <td class="flat">暂无</td>
+      <td class="up">+8.45%</td>
+      <td class="down">-17.20%</td>
+      <td class="holdings-cell">暂无持仓数据</td>
+    </tr><tr>
+      <td>14</td>
+      <td><span class="stock-code">sh515230</span><br><span class="stock-name">软件ETF国泰</span></td>
+      <td>3.68亿</td>
+      <td>48.48亿</td>
+      <td class="up">+0.56%</td>
+      <td class="up">+9.53%</td>
+      <td class="up">+6.81%</td>
+      <td class="up">+6.00%</td>
+      <td class="down">-19.20%</td>
+      <td class="holdings-cell">科大讯飞(10.07%) 同花顺(9.59%) 金山办公(7.58%) 恒生电子(4.49%) 三六零(4.07%) 拓维信息(3.99%) 润和软件(3.67%) 指南针(3.41%) 深信服(3.19%) 合合信息(3.16%)</td>
+    </tr><tr>
+      <td>15</td>
+      <td><span class="stock-code">sz159036</span><br><span class="stock-name">软件开发ETF华宝</span></td>
+      <td>0.45亿</td>
+      <td>4.38亿</td>
+      <td class="up">+0.52%</td>
+      <td class="up">+9.42%</td>
+      <td class="flat">暂无</td>
+      <td class="up">+4.67%</td>
+      <td class="down">-1.73%</td>
+      <td class="holdings-cell">科大讯飞(7.99%) 同花顺(7.19%) 金山办公(5.68%) 达梦数据(4.79%) 指南针(3.41%) 恒生电子(3.37%) 三六零(3.35%) 拓维信息(3.26%) 润和软件(2.75%) 中科创达(2.53%)</td>
+    </tr><tr>
+      <td>16</td>
+      <td><span class="stock-code">sz159899</span><br><span class="stock-name">软件ETF招商</span></td>
+      <td>0.34亿</td>
+      <td>5.79亿</td>
+      <td class="up">+0.41%</td>
+      <td class="up">+9.33%</td>
+      <td class="flat">暂无</td>
+      <td class="up">+6.80%</td>
+      <td class="down">-17.91%</td>
+      <td class="holdings-cell">科大讯飞(10.45%) 同花顺(9.4%) 金山办公(7.43%) 恒生电子(4.4%) 拓维信息(4.27%) 三六零(4.12%) 润和软件(3.59%) 指南针(3.35%) 深信服(3.13%) 合合信息(3.1%)</td>
+    </tr><tr>
+      <td>17</td>
+      <td><span class="stock-code">sh561010</span><br><span class="stock-name">软件ETF华安</span></td>
+      <td>0.27亿</td>
+      <td>2.18亿</td>
+      <td class="up">+0.78%</td>
+      <td class="up">+9.22%</td>
+      <td class="flat">暂无</td>
+      <td class="up">+4.65%</td>
+      <td class="down">-21.81%</td>
+      <td class="holdings-cell">暂无持仓数据</td>
+    </tr><tr>
+      <td>18</td>
+      <td><span class="stock-code">sz159299</span><br><span class="stock-name">金融科技ETF易方达</span></td>
+      <td>0.21亿</td>
+      <td>4.87亿</td>
+      <td class="up">+0.85%</td>
+      <td class="up">+9.05%</td>
+      <td class="up">+5.44%</td>
+      <td class="up">+2.89%</td>
+      <td class="down">-23.88%</td>
+      <td class="holdings-cell">东方财富(11.3%) 同花顺(9.78%) 恒生电子(6.54%) 润和软件(5.88%) 指南针(5.8%) 东华软件(3.15%) 新大陆(2.7%) 星环科技(2.64%) 银之杰(2.53%) 广电运通(2.46%)</td>
+    </tr><tr>
+      <td>19</td>
+      <td><span class="stock-code">sz159851</span><br><span class="stock-name">金融科技ETF华宝</span></td>
+      <td>1.70亿</td>
+      <td>64.59亿</td>
+      <td class="up">+0.16%</td>
+      <td class="up">+8.78%</td>
+      <td class="flat">暂无</td>
+      <td class="up">+2.27%</td>
+      <td class="down">-25.47%</td>
+      <td class="holdings-cell">东方财富(11.09%) 同花顺(10.97%) 恒生电子(6.6%) 润和软件(5.99%) 指南针(5.21%) 东华软件(3.18%) 星环科技(2.96%) 新大陆(2.72%) 广电运通(2.44%) 财富趋势(2.44%)</td>
+    </tr><tr>
+      <td>20</td>
+      <td><span class="stock-code">sh563570</span><br><span class="stock-name">金融科技ETF兴业</span></td>
+      <td>0.11亿</td>
+      <td>0.83亿</td>
+      <td class="up">+0.13%</td>
+      <td class="up">+8.78%</td>
+      <td class="flat">暂无</td>
+      <td class="up">+2.06%</td>
+      <td class="down">-24.65%</td>
+      <td class="holdings-cell">暂无持仓数据</td>
+    </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tecscore-box">
+    <strong>TecScore 技术评分说明：</strong>TecScore 是综合资金评分、基本面评分、风险评分、技术评分计算的技术强度指标。本系统使用 TecScore >= 80 近似替代 RPS5/10/20 >= 90 的条件。TecScore 范围 0-100，分数越高表示技术面越强。
+  </div>
+  <div class="info-box" style="margin-top:12px">
+    <strong>条件实现映射：</strong><br>
+    年线之上 → ClosePrice > MA_250（精确）<br>
+    创半年新高 → ClosePrice >= MA_120 * 0.95（精确）<br>
+    突破2/3/4年线 → K线手动计算MA480/720/960并判断上穿（精确）<br>
+    RPS5/10/20≥90 → TecScore >= 80（近似）<br>
+    跳空缺口20日未回补 → rise_big_up策略 + K线验证（精确）<br>
+    当日成交额>5亿 → TurnoverValue > 500000000（精确）
+  </div>
+</div>
+<div class="footer">数据仅供参考，不构成投资建议</div>
+<script>
+function makeSortable(tableId) {
+  var table = document.getElementById(tableId);
+  if (!table) return;
+  var ths = table.querySelectorAll('th.sortable');
+  ths.forEach(function(th, colIdx) {
+    th.addEventListener('click', function() {
+      var tbody = table.querySelector('tbody');
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      var isAsc = th.classList.contains('asc');
+      ths.forEach(function(t) { t.classList.remove('asc'); t.classList.remove('desc'); });
+      th.classList.add(isAsc ? 'desc' : 'asc');
+      var dir = isAsc ? -1 : 1;
+      rows.sort(function(a, b) {
+        var va = a.cells[colIdx].textContent.trim().replace(/[^0-9.\-]/g, '');
+        var vb = b.cells[colIdx].textContent.trim().replace(/[^0-9.\-]/g, '');
+        var na = parseFloat(va), nb = parseFloat(vb);
+        if (!isNaN(na) && !isNaN(nb)) return (na - nb) * dir;
+        return a.cells[colIdx].textContent.trim().localeCompare(b.cells[colIdx].textContent.trim()) * dir;
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+    });
+  });
+}
+
+makeSortable('g1-table');
+makeSortable('g2-table');
+makeSortable('g3-table');
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

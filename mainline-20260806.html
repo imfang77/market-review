@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026-08-06 5-20日主线分析（按行业） | A股复盘选股中心</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+.header { background: #fff; border-bottom: 1px solid #e9ecef; padding: 20px 0; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; }
+.header a.back, .header a.back, .header .back { position: absolute; left: 12px; top: 12px; font-size: 13px; color: #4263eb; text-decoration: none; white-space: nowrap; }
+.header h1 { font-size: 20px; font-weight: 700; }
+.header .subtitle { margin-top: 4px; font-size: 13px; color: #868e96; }
+.container { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+.section { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.section-title { font-size: 18px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cmp-title { font-size: 13px; font-weight: 700; color: #4263eb; margin: 6px 0 4px; }
+.cmp-note { font-size: 11px; color: #868e96; margin-bottom: 2px; line-height: 1.5; }
+.section-title .badge { font-size: 12px; padding: 2px 10px; border-radius: 10px; background: #e3f2fd; color: #1976d2; font-weight: 600; }
+.section-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; line-height: 1.6; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: #f1f3f5; padding: 10px 8px; text-align: right; font-weight: 600; color: #495057; font-size: 12px; border-bottom: 2px solid #dee2e6; white-space: nowrap; }
+/* 文本列统一在下方“文本列居中”块中显式居中；此处不再对首/次列做全局 left */
+th.grp { border-left: 2px solid #adb5bd; }
+td.grp { border-left: 2px solid #e9ecef; }
+td { padding: 10px 8px; border-bottom: 1px solid #e9ecef; text-align: right; }
+tr:last-child td { border-bottom: none; }
+/* 文本列居中（覆盖数字列默认的居右）：行业名 / 股票名称 / 所属一级 等 */
+.summary-l1 td:nth-child(1), .summary-l1 th:nth-child(1),
+.summary-l2 td:nth-child(1), .summary-l2 th:nth-child(1),
+.summary-l2 td:nth-child(2), .summary-l2 th:nth-child(2),
+.leaders-table td:nth-child(2), .leaders-table th:nth-child(2),
+#sw1-table td:nth-child(1), #sw1-table th:nth-child(1),
+#sw2-table td:nth-child(1), #sw2-table th:nth-child(1),
+#cap-table td:nth-child(1), #cap-table th:nth-child(1) { text-align: center; }
+tr:hover td { background: #f8f9fa; }
+.stock-code { font-family: "SF Mono", Consolas, monospace; font-size: 11px; color: #868e96; display: block; margin-top: 2px; }
+.stock-name { font-weight: 600; }
+.up { color: #d63031; font-weight: 600; }
+.down { color: #00b894; font-weight: 600; }
+.flat { color: #495057; }
+.rank-cell { font-weight: 700; color: #1a1a2e; background: #fff8e1; }
+.muted { color: #adb5bd; }
+.info-box { background: #e3f2fd; border-left: 4px solid #1976d2; border-radius: 4px; padding: 16px; margin-top: 16px; font-size: 13px; color: #1565c0; line-height: 1.8; }
+.info-box strong { color: #0d47a1; }
+.footer { text-align: center; padding: 24px; font-size: 12px; color: #adb5bd; }
+@media (max-width: 600px) { .container { padding: 0 12px; } .section { padding: 16px; } table { font-size: 11px; } th, td { padding: 8px 4px; } .stock-code { font-size: 10px; } .section-title { font-size: 16px; } .leaders-table { font-size: 9.5px; } .leaders-table th, .leaders-table td { padding: 4px 2px; } .leaders-table .stock-code { font-size: 9px; } .theme-card { padding: 12px; } }
+.part-header { font-size: 20px; font-weight: 800; color: #1a1a2e; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #4263eb; }
+.part-header .date-range { font-size: 13px; color: #868e96; font-weight: 400; margin-left: 8px; }
+.theme-card { border-radius: 8px; padding: 16px; margin-bottom: 14px; border: 1px solid #e9ecef; }
+.theme-card .type-role-main { background: #f1f3f5; color: #495057; }
+.theme-card .theme-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+.theme-card .theme-type { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; margin-right: 6px; }
+.theme-card .type-main { background: #f1f3f5; color: #495057; }
+.theme-card .type-l1 { background: #f1f3f5; color: #495057; }
+.theme-card .theme-sub { font-size: 12px; color: #868e96; margin-bottom: 8px; }
+.overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.overview-card { background: #f8f9fa; border-radius: 8px; padding: 14px; text-align: center; }
+.overview-card .label { font-size: 12px; color: #868e96; margin-bottom: 4px; }
+.overview-card .value { font-size: 22px; font-weight: 700; }
+.overview-card .sub { font-size: 11px; color: #adb5bd; margin-top: 2px; }
+@media (max-width: 600px) { .overview-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; } .overview-card { padding: 10px 4px; } .overview-card .value { font-size: 18px; } .overview-card .label { font-size: 11px; } }
+.chart-box { width: 100%; margin: 12px 0; background: #fff; border: 1px solid #e9ecef; border-radius: 10px; padding: 8px 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.pie-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 8px 0; }
+.pie-box { width: 100%; height: 240px; }
+@media (max-width: 700px) { .pie-grid { grid-template-columns: 1fr; } .pie-box { height: 220px; } }
+.sub-header { font-size: 17px; font-weight: 700; margin: 18px 0 12px; padding-left: 10px; border-left: 4px solid #4263eb; color: #1a1a2e; }
+.summary-table { table-layout: auto; }
+.summary-table th, .summary-table td { text-align: right; padding: 10px 6px; }
+.summary-table .grp { border-left: 2px solid #ced4da; }
+.summary-table th { white-space: normal; line-height: 1.15; vertical-align: middle; cursor: pointer; position: relative; }
+.summary-table th:hover { background: #e7ebef; }
+.summary-table .stock-name { font-weight: 600; }
+@media (max-width: 600px) { .summary-table { font-size: 9.5px; } .summary-table th, .summary-table td { padding: 4px 2px; } }
+.data-basis-title { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.table-legend { font-size: 11px; color: #868e96; margin-top: 6px; line-height: 1.6; }
+.leaders-table { table-layout: auto; }
+.leaders-table th { white-space: normal; line-height: 1.15; vertical-align: middle; cursor: pointer; position: relative; }
+.leaders-table th:hover { background: #e7ebef; }
+/* 表头排序小箭头：默认 ⇅，升序 ↑，降序 ↓（与条件选股统一） */
+th.sortable { cursor: pointer; user-select: none; transition: background 0.15s; white-space: normal; }
+th.sortable:hover { background: #e7ebef; color: #1976d2; }
+th.sortable::after { content: " ⇅"; font-size: 10px; opacity: 0.35; font-weight: normal; }
+th.sortable.asc::after { content: " ↑"; opacity: 1; color: #1976d2; font-weight: 700; }
+th.sortable.desc::after { content: " ↓"; opacity: 1; color: #1976d2; font-weight: 700; }
+.leaders-table th.grp, .leaders-table td.grp { border-left: 2px solid #ced4da; }
+.leaders-table .rank-head { background: #ffe0b2; color: #e65100; }
+.leaders-table .rank-cell { font-weight: 700; color: #e65100; background: #fff8e1; text-align: center; }
+.leaders-table td { text-align: right; }
+.leaders-table .stock-code { font-size: 10px; display: block; margin-top: 2px; }
+/* 主线研判 */
+.ml-judgement { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 12px 0 18px; }
+.ml-block { border-radius: 8px; padding: 14px 16px; border: 1px solid #e9ecef; }
+.ml-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #1a1a2e; }
+.ml-list { margin: 0; padding-left: 18px; }
+.ml-list li { font-size: 13px; color: #495057; line-height: 1.7; margin-bottom: 6px; }
+.tag-l1 { font-size: 11px; padding: 1px 6px; border-radius: 4px; background: #f1f3f5; color: #495057; margin-left: 4px; }
+@media (max-width: 700px) { .ml-judgement { grid-template-columns: 1fr; } }
+/* 层级对应 */
+.hier-row { font-size: 13px; line-height: 1.9; padding: 6px 0; border-bottom: 1px dashed #e9ecef; }
+.hier-row:last-child { border-bottom: none; }
+.hier-l1 { font-weight: 700; color: #1a1a2e; }
+.hier-l1c { font-size: 12px; color: #c62828; font-weight: 600; }
+.hier-l2 { display: inline-block; background: #f1f3f5; border-radius: 4px; padding: 1px 8px; margin: 2px 4px 2px 0; font-size: 12px; color: #495057; }
+</style>
+</head>
+<body>
+<div class="header">
+  <a class="back" href="mainlines.html">&#8592; 返回</a>
+  <h1>5-20日主线分析（按行业） · 2026-08-06 周四</h1>
+  <div class="subtitle">行业分类口径：申万一级（概览）/ 申万二级（明细）| 5日 / 10日 / 20日 主线研判</div>
+</div>
+<div class="container">
+
+  <div class="section">
+    <div class="part-header">第一部分：主线汇总 <span class="date-range">申万一级 / 二级 TOP10（5日 / 10日 / 20日）</span></div>
+    <div class="section-title">按申万一级行业汇总（TOP10）</div>
+    <div class="table-wrap"><table class="summary-table summary-l1">
+    <colgroup><col style="width:18%"><col style="width:11%"><col style="width:17%"><col style="width:11%"><col style="width:17%"><col style="width:11%"><col style="width:15%"></colgroup>
+    <thead><tr>
+    <th class="sortable">申万一级行业</th>
+    <th class="sortable grp">5日<br>排名</th>
+    <th class="sortable">5日<br>涨跌幅</th>
+    <th class="sortable grp">10日<br>排名</th>
+    <th class="sortable">10日<br>涨跌幅</th>
+    <th class="sortable grp">20日<br>排名</th>
+    <th class="sortable">20日<br>涨跌幅</th>
+  </tr></thead>
+    <tbody><tr>
+      <td><span class="stock-name">电子</span></td>
+      <td class="grp">1</td>
+      <td><span class="up">+14.49%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">综合</span></td>
+      <td class="grp">2</td>
+      <td><span class="up">+12.90%</span></td>
+      <td class="grp">9</td>
+      <td><span class="up">+5.80%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">有色金属</span></td>
+      <td class="grp">3</td>
+      <td><span class="up">+11.66%</span></td>
+      <td class="grp">5</td>
+      <td><span class="up">+6.62%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">计算机</span></td>
+      <td class="grp">4</td>
+      <td><span class="up">+11.36%</span></td>
+      <td class="grp">4</td>
+      <td><span class="up">+6.96%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">通信</span></td>
+      <td class="grp">5</td>
+      <td><span class="up">+10.63%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">基础化工</span></td>
+      <td class="grp">6</td>
+      <td><span class="up">+8.63%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">环保</span></td>
+      <td class="grp">7</td>
+      <td><span class="up">+8.61%</span></td>
+      <td class="grp">8</td>
+      <td><span class="up">+6.04%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">传媒</span></td>
+      <td class="grp">8</td>
+      <td><span class="up">+8.00%</span></td>
+      <td class="grp">1</td>
+      <td><span class="up">+10.51%</span></td>
+      <td class="grp">4</td>
+      <td><span class="up">+7.03%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">机械设备</span></td>
+      <td class="grp">9</td>
+      <td><span class="up">+7.98%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">电力设备</span></td>
+      <td class="grp">10</td>
+      <td><span class="up">+7.44%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">社会服务</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">2</td>
+      <td><span class="up">+9.14%</span></td>
+      <td class="grp">7</td>
+      <td><span class="up">+6.34%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">纺织服饰</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">3</td>
+      <td><span class="up">+7.92%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">轻工制造</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">6</td>
+      <td><span class="up">+6.51%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">商贸零售</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">7</td>
+      <td><span class="up">+6.31%</span></td>
+      <td class="grp">5</td>
+      <td><span class="up">+6.99%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">房地产</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">10</td>
+      <td><span class="up">+4.98%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">石油石化</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">1</td>
+      <td><span class="up">+10.03%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">煤炭</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">2</td>
+      <td><span class="up">+9.84%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">农林牧渔</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">3</td>
+      <td><span class="up">+7.14%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">食品饮料</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">6</td>
+      <td><span class="up">+6.80%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">钢铁</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">8</td>
+      <td><span class="up">+6.10%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">交通运输</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">9</td>
+      <td><span class="up">+5.25%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">公用事业</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">10</td>
+      <td><span class="up">+5.15%</span></td>
+    </tr></tbody>
+  </table></div>
+  <div class="table-legend">行 = 申万一级行业（由各所属申万二级行业涨跌幅等权平均汇总）在 5日 / 10日 / 20日 各自涨跌幅 TOP10 的并集；同一行业在多个周期上榜时合并为一行（未上榜周期显示「-」）。列按「5日(排名+涨跌幅)」「10日(排名+涨跌幅)」「20日(排名+涨跌幅)」三组，组间以竖线分隔。点击任意表头可升/降序排序。</div>
+    <div class="section-title" style="margin-top:22px">按申万二级汇总（TOP10）</div>
+    <div class="table-wrap"><table class="summary-table summary-l2">
+    <colgroup><col style="width:16%"><col style="width:13%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:16%"></colgroup>
+    <thead><tr>
+    <th class="sortable">申万二级行业</th>
+    <th class="sortable">所属一级行业</th>
+    <th class="sortable grp">5日<br>排名</th>
+    <th class="sortable">5日<br>涨跌幅</th>
+    <th class="sortable grp">10日<br>排名</th>
+    <th class="sortable">10日<br>涨跌幅</th>
+    <th class="sortable grp">20日<br>排名</th>
+    <th class="sortable">20日<br>涨跌幅</th>
+  </tr></thead>
+    <tbody><tr>
+      <td><span class="stock-name">元件</span></td>
+      <td><span class="tag-l1">电子</span></td>
+      <td class="grp">1</td>
+      <td><span class="up">+22.67%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">小金属</span></td>
+      <td><span class="tag-l1">有色金属</span></td>
+      <td class="grp">2</td>
+      <td><span class="up">+19.07%</span></td>
+      <td class="grp">10</td>
+      <td><span class="up">+9.21%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">电子化学品Ⅱ</span></td>
+      <td><span class="tag-l1">电子</span></td>
+      <td class="grp">3</td>
+      <td><span class="up">+17.91%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">非金属材料Ⅱ</span></td>
+      <td><span class="tag-l1">基础化工</span></td>
+      <td class="grp">4</td>
+      <td><span class="up">+16.81%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">通用设备</span></td>
+      <td><span class="tag-l1">机械设备</span></td>
+      <td class="grp">5</td>
+      <td><span class="up">+16.26%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">通信设备</span></td>
+      <td><span class="tag-l1">通信</span></td>
+      <td class="grp">6</td>
+      <td><span class="up">+15.70%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">自动化设备</span></td>
+      <td><span class="tag-l1">机械设备</span></td>
+      <td class="grp">7</td>
+      <td><span class="up">+15.55%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">航天装备Ⅱ</span></td>
+      <td><span class="tag-l1">国防军工</span></td>
+      <td class="grp">8</td>
+      <td><span class="up">+15.53%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">塑料</span></td>
+      <td><span class="tag-l1">基础化工</span></td>
+      <td class="grp">9</td>
+      <td><span class="up">+15.06%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">金属新材料</span></td>
+      <td><span class="tag-l1">有色金属</span></td>
+      <td class="grp">10</td>
+      <td><span class="up">+14.27%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">教育</span></td>
+      <td><span class="tag-l1">社会服务</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">1</td>
+      <td><span class="up">+19.90%</span></td>
+      <td class="grp">3</td>
+      <td><span class="up">+15.99%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">广告营销</span></td>
+      <td><span class="tag-l1">传媒</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">2</td>
+      <td><span class="up">+16.26%</span></td>
+      <td class="grp">4</td>
+      <td><span class="up">+14.32%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">工程咨询服务Ⅱ</span></td>
+      <td><span class="tag-l1">建筑装饰</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">3</td>
+      <td><span class="up">+14.94%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">数字媒体</span></td>
+      <td><span class="tag-l1">传媒</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">4</td>
+      <td><span class="up">+12.69%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">电机Ⅱ</span></td>
+      <td><span class="tag-l1">电力设备</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">5</td>
+      <td><span class="up">+12.09%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">软件开发</span></td>
+      <td><span class="tag-l1">计算机</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">6</td>
+      <td><span class="up">+12.02%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">游戏Ⅱ</span></td>
+      <td><span class="tag-l1">传媒</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">7</td>
+      <td><span class="up">+11.60%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">贵金属</span></td>
+      <td><span class="tag-l1">有色金属</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">8</td>
+      <td><span class="up">+10.28%</span></td>
+      <td class="grp">1</td>
+      <td><span class="up">+22.62%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">装修装饰Ⅱ</span></td>
+      <td><span class="tag-l1">建筑装饰</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">9</td>
+      <td><span class="up">+9.33%</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+    </tr>
+<tr>
+      <td><span class="stock-name">工业金属</span></td>
+      <td><span class="tag-l1">有色金属</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">2</td>
+      <td><span class="up">+17.11%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">医疗服务</span></td>
+      <td><span class="tag-l1">医药生物</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">5</td>
+      <td><span class="up">+12.85%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">渔业</span></td>
+      <td><span class="tag-l1">农林牧渔</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">6</td>
+      <td><span class="up">+11.57%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">专业连锁Ⅱ</span></td>
+      <td><span class="tag-l1">商贸零售</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">7</td>
+      <td><span class="up">+11.56%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">白酒Ⅱ</span></td>
+      <td><span class="tag-l1">食品饮料</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">8</td>
+      <td><span class="up">+10.62%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">焦炭Ⅱ</span></td>
+      <td><span class="tag-l1">煤炭</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">9</td>
+      <td><span class="up">+10.52%</span></td>
+    </tr>
+<tr>
+      <td><span class="stock-name">农产品加工</span></td>
+      <td><span class="tag-l1">农林牧渔</span></td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">-</td>
+      <td>-</td>
+      <td class="grp">10</td>
+      <td><span class="up">+10.39%</span></td>
+    </tr></tbody>
+  </table></div>
+  <div class="table-legend">行 = 申万二级行业在 5日 / 10日 / 20日 各自涨跌幅 TOP10 的并集；同一行业在多个周期上榜时合并为一行（未上榜周期显示「-」）。列按「5日(排名+涨跌幅)」「10日(排名+涨跌幅)」「20日(排名+涨跌幅)」三组，组间以竖线分隔。点击任意表头可升/降序排序。</div>
+  </div>
+
+  <div class="section">
+    <div class="part-header">第二部分：主线分析</div>
+    <div class="sub-header">1、5日主线分析</div>
+    <div id="chart-5d-l1" class="chart-box" style="height:600px"></div>
+  <div id="chart-5d-l2" class="chart-box" style="height:400px; margin-top:18px"></div>
+  <div class="table-legend">柱状图按5日日涨跌幅排序；二级行业名后括号标注其所属申万一级行业，体现「一级 ↔ 二级」的层级关联。</div>
+    <div class="ml-judgement">
+    <div class="ml-block ml-main"><div class="ml-title">主线（确定方向）</div><ol class="ml-list"><li><b>元件</b> <span class="tag-l1">电子</span>（5日 +22.67%｜10日 +3.88%｜20日 -18.19%）— 近5日领涨且更长周期（10日）同步为正，趋势延续性强</li><li><b>小金属</b> <span class="tag-l1">有色金属</span>（5日 +19.07%｜10日 +9.21%｜20日 -5.56%）— 近5日领涨且更长周期（10日）同步为正，趋势延续性强</li><li><b>电子化学品Ⅱ</b> <span class="tag-l1">电子</span>（5日 +17.91%｜10日 +6.34%｜20日 -26.09%）— 近5日领涨且更长周期（10日）同步为正，趋势延续性强</li></ol></div>
+  </div>
+    <div class="theme-card card-main">
+      <div class="theme-name"><span class="theme-type type-role-main">主线</span> 元件 <span class="theme-type type-main">申万二级</span> <span class="theme-type type-l1">电子</span></div>
+      <div class="theme-sub">所属申万一级：<b>电子</b></div>
+      <div class="table-wrap"><table class="leaders-table">
+    <colgroup><col style="width:9%"><col style="width:22%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:13%"><col style="width:9%"><col style="width:15%"></colgroup>
+    <thead><tr>
+    <th class="sortable rank-head">总排名</th>
+    <th class="sortable sort-text">股票<br>名称/代码</th>
+    <th class="sortable grp">市值<br>排名</th>
+    <th class="sortable">总市值<br>(亿)</th>
+    <th class="sortable grp">涨幅<br>排名</th>
+    <th class="sortable">5日<br>涨幅</th>
+    <th class="sortable grp">成交<br>排名</th>
+    <th class="sortable">成交额<br>(亿)</th>
+  </tr></thead>
+    <tbody><tr>
+      <td class="rank-cell">1</td>
+      <td class="name-cell"><div class="stock-name">胜宏科技</div><div class="stock-code">sz300476</div></td>
+      <td class="grp">4</td>
+      <td class="flat">2458</td>
+      <td class="grp">4</td>
+      <td class="up">+38.69%</td>
+      <td class="grp">3</td>
+      <td class="flat">557.82</td>
+    </tr>
+<tr>
+      <td class="rank-cell">2</td>
+      <td class="name-cell"><div class="stock-name">C嘉立创</div><div class="stock-code">sz001232</div></td>
+      <td class="grp"></td>
+      <td class="flat">982</td>
+      <td class="grp">1</td>
+      <td class="up">+109.34%</td>
+      <td class="grp"></td>
+      <td class="flat">153.56</td>
+    </tr>
+<tr>
+      <td class="rank-cell">3</td>
+      <td class="name-cell"><div class="stock-name">生益科技</div><div class="stock-code">sh600183</div></td>
+      <td class="grp">2</td>
+      <td class="flat">3091</td>
+      <td class="grp"></td>
+      <td class="up">+27.15%</td>
+      <td class="grp">5</td>
+      <td class="flat">410.55</td>
+    </tr>
+<tr>
+      <td class="rank-cell">4</td>
+      <td class="name-cell"><div class="stock-name">东山精密</div><div class="stock-code">sz002384</div></td>
+      <td class="grp">1</td>
+      <td class="flat">3438</td>
+      <td class="grp"></td>
+      <td class="up">+16.00%</td>
+      <td class="grp">1</td>
+      <td class="flat">907.26</td>
+    </tr>
+<tr>
+      <td class="rank-cell">5</td>
+      <td class="name-cell"><div class="stock-name">三环集团</div><div class="stock-code">sz300408</div></td>
+      <td class="grp">3</td>
+      <td class="flat">2525</td>
+      <td class="grp"></td>
+      <td class="up">+20.61%</td>
+      <td class="grp">4</td>
+      <td class="flat">493.76</td>
+    </tr>
+<tr>
+      <td class="rank-cell">6</td>
+      <td class="name-cell"><div class="stock-name">深南电路</div><div class="stock-code">sz002916</div></td>
+      <td class="grp">5</td>
+      <td class="flat">2411</td>
+      <td class="grp"></td>
+      <td class="up">+24.43%</td>
+      <td class="grp"></td>
+      <td class="flat">197.01</td>
+    </tr>
+<tr>
+      <td class="rank-cell">7</td>
+      <td class="name-cell"><div class="stock-name">科翔股份</div><div class="stock-code">sz300903</div></td>
+      <td class="grp"></td>
+      <td class="flat">280</td>
+      <td class="grp">3</td>
+      <td class="up">+42.08%</td>
+      <td class="grp"></td>
+      <td class="flat">83.51</td>
+    </tr>
+<tr>
+      <td class="rank-cell">8</td>
+      <td class="name-cell"><div class="stock-name">风华高科</div><div class="stock-code">sz000636</div></td>
+      <td class="grp"></td>
+      <td class="flat">674</td>
+      <td class="grp"></td>
+      <td class="up">+15.41%</td>
+      <td class="grp">2</td>
+      <td class="flat">582.00</td>
+    </tr>
+<tr>
+      <td class="rank-cell">9</td>
+      <td class="name-cell"><div class="stock-name">宝鼎科技</div><div class="stock-code">sz002552</div></td>
+      <td class="grp"></td>
+      <td class="flat">168</td>
+      <td class="grp">5</td>
+      <td class="up">+35.81%</td>
+      <td class="grp"></td>
+      <td class="flat">31.05</td>
+    </tr>
+<tr>
+      <td class="rank-cell">10</td>
+      <td class="name-cell"><div class="stock-name">威尔高</div><div class="stock-code">sz301251</div></td>
+      <td class="grp"></td>
+      <td class="flat">75</td>
+      <td class="grp">2</td>
+      <td class="up">+49.57%</td>
+      <td class="grp"></td>
+      <td class="flat">13.70</td>
+    </tr></tbody>
+  </table></div>
+  <div class="table-legend">列1「总排名」= 市值/涨幅/成交额三项排名均值（权重各1/3），最小者排第1；列2 为「股票名称（代码在其下方）」；列3-4 为「总市值（排名+数值）」、列5-6 为「涨跌幅」、列7-8 为「成交金额」（各含排名+数值）。市值/涨幅/成交三列仅显示排名前5，其余留空。点击任意表头可升/降序排序。</div>
+      <div style="margin-top:8px;font-size:13px"><strong>相关ETF（十大持仓含3只及以上板块成分）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333;font-size:12px">• sh515050 通信ETF华夏（含东山精密、生益科技、沪电股份）</div>
+      </div><div class="theme-card card-main">
+      <div class="theme-name"><span class="theme-type type-role-main">主线</span> 小金属 <span class="theme-type type-main">申万二级</span> <span class="theme-type type-l1">有色金属</span></div>
+      <div class="theme-sub">所属申万一级：<b>有色金属</b></div>
+      <div class="table-wrap"><table class="leaders-table">
+    <colgroup><col style="width:9%"><col style="width:22%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:13%"><col style="width:9%"><col style="width:15%"></colgroup>
+    <thead><tr>
+    <th class="sortable rank-head">总排名</th>
+    <th class="sortable sort-text">股票<br>名称/代码</th>
+    <th class="sortable grp">市值<br>排名</th>
+    <th class="sortable">总市值<br>(亿)</th>
+    <th class="sortable grp">涨幅<br>排名</th>
+    <th class="sortable">5日<br>涨幅</th>
+    <th class="sortable grp">成交<br>排名</th>
+    <th class="sortable">成交额<br>(亿)</th>
+  </tr></thead>
+    <tbody><tr>
+      <td class="rank-cell">1</td>
+      <td class="name-cell"><div class="stock-name">中钨高新</div><div class="stock-code">sz000657</div></td>
+      <td class="grp">2</td>
+      <td class="flat">1424</td>
+      <td class="grp">4</td>
+      <td class="up">+29.13%</td>
+      <td class="grp">1</td>
+      <td class="flat">249.59</td>
+    </tr>
+<tr>
+      <td class="rank-cell">2</td>
+      <td class="name-cell"><div class="stock-name">云南锗业</div><div class="stock-code">sz002428</div></td>
+      <td class="grp"></td>
+      <td class="flat">594</td>
+      <td class="grp">1</td>
+      <td class="up">+47.22%</td>
+      <td class="grp">3</td>
+      <td class="flat">216.26</td>
+    </tr>
+<tr>
+      <td class="rank-cell">3</td>
+      <td class="name-cell"><div class="stock-name">厦门钨业</div><div class="stock-code">sh600549</div></td>
+      <td class="grp">4</td>
+      <td class="flat">912</td>
+      <td class="grp"></td>
+      <td class="up">+27.71%</td>
+      <td class="grp">2</td>
+      <td class="flat">220.67</td>
+    </tr>
+<tr>
+      <td class="rank-cell">4</td>
+      <td class="name-cell"><div class="stock-name">锡业股份</div><div class="stock-code">sz000960</div></td>
+      <td class="grp"></td>
+      <td class="flat">646</td>
+      <td class="grp"></td>
+      <td class="up">+24.76%</td>
+      <td class="grp">5</td>
+      <td class="flat">134.01</td>
+    </tr>
+<tr>
+      <td class="rank-cell">5</td>
+      <td class="name-cell"><div class="stock-name">北方稀土</div><div class="stock-code">sh600111</div></td>
+      <td class="grp">1</td>
+      <td class="flat">1515</td>
+      <td class="grp"></td>
+      <td class="up">+7.05%</td>
+      <td class="grp">4</td>
+      <td class="flat">143.01</td>
+    </tr>
+<tr>
+      <td class="rank-cell">6</td>
+      <td class="name-cell"><div class="stock-name">东方钽业</div><div class="stock-code">sz000962</div></td>
+      <td class="grp"></td>
+      <td class="flat">284</td>
+      <td class="grp">3</td>
+      <td class="up">+31.21%</td>
+      <td class="grp"></td>
+      <td class="flat">74.08</td>
+    </tr>
+<tr>
+      <td class="rank-cell">7</td>
+      <td class="name-cell"><div class="stock-name">XD金钼股</div><div class="stock-code">sh601958</div></td>
+      <td class="grp">5</td>
+      <td class="flat">738</td>
+      <td class="grp"></td>
+      <td class="up">+13.78%</td>
+      <td class="grp"></td>
+      <td class="flat">59.02</td>
+    </tr>
+<tr>
+      <td class="rank-cell">8</td>
+      <td class="name-cell"><div class="stock-name">翔鹭钨业</div><div class="stock-code">sz002842</div></td>
+      <td class="grp"></td>
+      <td class="flat">121</td>
+      <td class="grp">5</td>
+      <td class="up">+28.49%</td>
+      <td class="grp"></td>
+      <td class="flat">66.34</td>
+    </tr>
+<tr>
+      <td class="rank-cell">9</td>
+      <td class="name-cell"><div class="stock-name">中国铀业</div><div class="stock-code">sz001280</div></td>
+      <td class="grp">3</td>
+      <td class="flat">1340</td>
+      <td class="grp"></td>
+      <td class="up">+8.44%</td>
+      <td class="grp"></td>
+      <td class="flat">30.84</td>
+    </tr>
+<tr>
+      <td class="rank-cell">10</td>
+      <td class="name-cell"><div class="stock-name">浩通科技</div><div class="stock-code">sz301026</div></td>
+      <td class="grp"></td>
+      <td class="flat">50</td>
+      <td class="grp">2</td>
+      <td class="up">+33.89%</td>
+      <td class="grp"></td>
+      <td class="flat">15.68</td>
+    </tr></tbody>
+  </table></div>
+  <div class="table-legend">列1「总排名」= 市值/涨幅/成交额三项排名均值（权重各1/3），最小者排第1；列2 为「股票名称（代码在其下方）」；列3-4 为「总市值（排名+数值）」、列5-6 为「涨跌幅」、列7-8 为「成交金额」（各含排名+数值）。市值/涨幅/成交三列仅显示排名前5，其余留空。点击任意表头可升/降序排序。</div>
+      <div style="margin-top:8px;font-size:13px"><strong>相关ETF（十大持仓含3只及以上板块成分）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333;font-size:12px">暂无匹配ETF</div>
+      </div><div class="theme-card card-main">
+      <div class="theme-name"><span class="theme-type type-role-main">主线</span> 电子化学品Ⅱ <span class="theme-type type-main">申万二级</span> <span class="theme-type type-l1">电子</span></div>
+      <div class="theme-sub">所属申万一级：<b>电子</b></div>
+      <div class="table-wrap"><table class="leaders-table">
+    <colgroup><col style="width:9%"><col style="width:22%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:13%"><col style="width:9%"><col style="width:15%"></colgroup>
+    <thead><tr>
+    <th class="sortable rank-head">总排名</th>
+    <th class="sortable sort-text">股票<br>名称/代码</th>
+    <th class="sortable grp">市值<br>排名</th>
+    <th class="sortable">总市值<br>(亿)</th>
+    <th class="sortable grp">涨幅<br>排名</th>
+    <th class="sortable">5日<br>涨幅</th>
+    <th class="sortable grp">成交<br>排名</th>
+    <th class="sortable">成交额<br>(亿)</th>
+  </tr></thead>
+    <tbody><tr>
+      <td class="rank-cell">1</td>
+      <td class="name-cell"><div class="stock-name">中巨芯-U</div><div class="stock-code">sh688549</div></td>
+      <td class="grp">5</td>
+      <td class="flat">411</td>
+      <td class="grp">1</td>
+      <td class="up">+41.37%</td>
+      <td class="grp">4</td>
+      <td class="flat">120.53</td>
+    </tr>
+<tr>
+      <td class="rank-cell">2</td>
+      <td class="name-cell"><div class="stock-name">天通股份</div><div class="stock-code">sh600330</div></td>
+      <td class="grp"></td>
+      <td class="flat">267</td>
+      <td class="grp">3</td>
+      <td class="up">+32.09%</td>
+      <td class="grp"></td>
+      <td class="flat">105.67</td>
+    </tr>
+<tr>
+      <td class="rank-cell">3</td>
+      <td class="name-cell"><div class="stock-name">鼎龙股份</div><div class="stock-code">sz300054</div></td>
+      <td class="grp">1</td>
+      <td class="flat">733</td>
+      <td class="grp"></td>
+      <td class="up">+17.20%</td>
+      <td class="grp">2</td>
+      <td class="flat">161.54</td>
+    </tr>
+<tr>
+      <td class="rank-cell">4</td>
+      <td class="name-cell"><div class="stock-name">唯特偶</div><div class="stock-code">sz301319</div></td>
+      <td class="grp"></td>
+      <td class="flat">198</td>
+      <td class="grp">2</td>
+      <td class="up">+36.35%</td>
+      <td class="grp"></td>
+      <td class="flat">64.88</td>
+    </tr>
+<tr>
+      <td class="rank-cell">5</td>
+      <td class="name-cell"><div class="stock-name">国瓷材料</div><div class="stock-code">sz300285</div></td>
+      <td class="grp">2</td>
+      <td class="flat">693</td>
+      <td class="grp"></td>
+      <td class="up">+13.46%</td>
+      <td class="grp">1</td>
+      <td class="flat">517.20</td>
+    </tr>
+<tr>
+      <td class="rank-cell">6</td>
+      <td class="name-cell"><div class="stock-name">南大光电</div><div class="stock-code">sz300346</div></td>
+      <td class="grp"></td>
+      <td class="flat">386</td>
+      <td class="grp"></td>
+      <td class="up">+17.41%</td>
+      <td class="grp">3</td>
+      <td class="flat">154.33</td>
+    </tr>
+<tr>
+      <td class="rank-cell">7</td>
+      <td class="name-cell"><div class="stock-name">广钢气体</div><div class="stock-code">sh688548</div></td>
+      <td class="grp">4</td>
+      <td class="flat">490</td>
+      <td class="grp"></td>
+      <td class="up">+20.34%</td>
+      <td class="grp"></td>
+      <td class="flat">58.95</td>
+    </tr>
+<tr>
+      <td class="rank-cell">8</td>
+      <td class="name-cell"><div class="stock-name">安集科技</div><div class="stock-code">sh688019</div></td>
+      <td class="grp">3</td>
+      <td class="flat">556</td>
+      <td class="grp"></td>
+      <td class="up">+6.52%</td>
+      <td class="grp">5</td>
+      <td class="flat">113.21</td>
+    </tr>
+<tr>
+      <td class="rank-cell">9</td>
+      <td class="name-cell"><div class="stock-name">天承科技</div><div class="stock-code">sh688603</div></td>
+      <td class="grp"></td>
+      <td class="flat">132</td>
+      <td class="grp">4</td>
+      <td class="up">+30.47%</td>
+      <td class="grp"></td>
+      <td class="flat">27.42</td>
+    </tr>
+<tr>
+      <td class="rank-cell">10</td>
+      <td class="name-cell"><div class="stock-name">菲沃泰</div><div class="stock-code">sh688371</div></td>
+      <td class="grp"></td>
+      <td class="flat">91</td>
+      <td class="grp">5</td>
+      <td class="up">+29.71%</td>
+      <td class="grp"></td>
+      <td class="flat">12.47</td>
+    </tr></tbody>
+  </table></div>
+  <div class="table-legend">列1「总排名」= 市值/涨幅/成交额三项排名均值（权重各1/3），最小者排第1；列2 为「股票名称（代码在其下方）」；列3-4 为「总市值（排名+数值）」、列5-6 为「涨跌幅」、列7-8 为「成交金额」（各含排名+数值）。市值/涨幅/成交三列仅显示排名前5，其余留空。点击任意表头可升/降序排序。</div>
+      <div style="margin-top:8px;font-size:13px"><strong>相关ETF（十大持仓含3只及以上板块成分）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333;font-size:12px">暂无匹配ETF</div>
+      </div>
+    <div class="sub-header">2、10日主线分析</div>
+    <div id="chart-10d-l1" class="chart-box" style="height:600px"></div>
+  <div id="chart-10d-l2" class="chart-box" style="height:400px; margin-top:18px"></div>
+  <div class="table-legend">柱状图按10日日涨跌幅排序；二级行业名后括号标注其所属申万一级行业，体现「一级 ↔ 二级」的层级关联。</div>
+    <div class="ml-judgement">
+    <div class="ml-block ml-main"><div class="ml-title">主线（确定方向）</div><ol class="ml-list"><li><b>教育</b> <span class="tag-l1">社会服务</span>（10日 +19.90%｜10日 +19.90%｜20日 +15.99%）— 近10日领涨且更长周期（20日）同步为正，趋势延续性强</li><li><b>广告营销</b> <span class="tag-l1">传媒</span>（10日 +16.26%｜10日 +16.26%｜20日 +14.32%）— 近10日领涨且更长周期（20日）同步为正，趋势延续性强</li><li><b>数字媒体</b> <span class="tag-l1">传媒</span>（10日 +12.69%｜10日 +12.69%｜20日 +8.89%）— 近10日领涨且更长周期（20日）同步为正，趋势延续性强</li></ol></div>
+  </div>
+    <div class="theme-card card-main">
+      <div class="theme-name"><span class="theme-type type-role-main">主线</span> 教育 <span class="theme-type type-main">申万二级</span> <span class="theme-type type-l1">社会服务</span></div>
+      <div class="theme-sub">所属申万一级：<b>社会服务</b></div>
+      <div class="table-wrap"><table class="leaders-table">
+    <colgroup><col style="width:9%"><col style="width:22%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:13%"><col style="width:9%"><col style="width:15%"></colgroup>
+    <thead><tr>
+    <th class="sortable rank-head">总排名</th>
+    <th class="sortable sort-text">股票<br>名称/代码</th>
+    <th class="sortable grp">市值<br>排名</th>
+    <th class="sortable">总市值<br>(亿)</th>
+    <th class="sortable grp">涨幅<br>排名</th>
+    <th class="sortable">10日<br>涨幅</th>
+    <th class="sortable grp">成交<br>排名</th>
+    <th class="sortable">成交额<br>(亿)</th>
+  </tr></thead>
+    <tbody><tr>
+      <td class="rank-cell">1</td>
+      <td class="name-cell"><div class="stock-name">中公教育</div><div class="stock-code">sz002607</div></td>
+      <td class="grp">1</td>
+      <td class="flat">134</td>
+      <td class="grp"></td>
+      <td class="up">+19.89%</td>
+      <td class="grp">1</td>
+      <td class="flat">69.42</td>
+    </tr>
+<tr>
+      <td class="rank-cell">2</td>
+      <td class="name-cell"><div class="stock-name">科德教育</div><div class="stock-code">sz300192</div></td>
+      <td class="grp"></td>
+      <td class="flat">61</td>
+      <td class="grp">3</td>
+      <td class="up">+23.99%</td>
+      <td class="grp">4</td>
+      <td class="flat">22.28</td>
+    </tr>
+<tr>
+      <td class="rank-cell">3</td>
+      <td class="name-cell"><div class="stock-name">创业黑马</div><div class="stock-code">sz300688</div></td>
+      <td class="grp"></td>
+      <td class="flat">53</td>
+      <td class="grp">5</td>
+      <td class="up">+20.59%</td>
+      <td class="grp">2</td>
+      <td class="flat">59.55</td>
+    </tr>
+<tr>
+      <td class="rank-cell">4</td>
+      <td class="name-cell"><div class="stock-name">传智教育</div><div class="stock-code">sz003032</div></td>
+      <td class="grp"></td>
+      <td class="flat">44</td>
+      <td class="grp">1</td>
+      <td class="up">+95.54%</td>
+      <td class="grp">3</td>
+      <td class="flat">32.39</td>
+    </tr>
+<tr>
+      <td class="rank-cell">5</td>
+      <td class="name-cell"><div class="stock-name">*ST高科</div><div class="stock-code">sh600730</div></td>
+      <td class="grp">4</td>
+      <td class="flat">68</td>
+      <td class="grp">2</td>
+      <td class="up">+44.03%</td>
+      <td class="grp"></td>
+      <td class="flat">12.24</td>
+    </tr>
+<tr>
+      <td class="rank-cell">6</td>
+      <td class="name-cell"><div class="stock-name">华图山鼎</div><div class="stock-code">sz300492</div></td>
+      <td class="grp">3</td>
+      <td class="flat">71</td>
+      <td class="grp"></td>
+      <td class="up">+17.56%</td>
+      <td class="grp"></td>
+      <td class="flat">20.41</td>
+    </tr>
+<tr>
+      <td class="rank-cell">7</td>
+      <td class="name-cell"><div class="stock-name">全通教育</div><div class="stock-code">sz300359</div></td>
+      <td class="grp"></td>
+      <td class="flat">27</td>
+      <td class="grp">4</td>
+      <td class="up">+20.74%</td>
+      <td class="grp"></td>
+      <td class="flat">20.23</td>
+    </tr>
+<tr>
+      <td class="rank-cell">8</td>
+      <td class="name-cell"><div class="stock-name">国脉科技</div><div class="stock-code">sz002093</div></td>
+      <td class="grp">2</td>
+      <td class="flat">71</td>
+      <td class="grp"></td>
+      <td class="up">+8.60%</td>
+      <td class="grp"></td>
+      <td class="flat">11.45</td>
+    </tr>
+<tr>
+      <td class="rank-cell">9</td>
+      <td class="name-cell"><div class="stock-name">学大教育</div><div class="stock-code">sz000526</div></td>
+      <td class="grp"></td>
+      <td class="flat">43</td>
+      <td class="grp"></td>
+      <td class="up">+7.75%</td>
+      <td class="grp">5</td>
+      <td class="flat">21.92</td>
+    </tr>
+<tr>
+      <td class="rank-cell">10</td>
+      <td class="name-cell"><div class="stock-name">行动教育</div><div class="stock-code">sh605098</div></td>
+      <td class="grp">5</td>
+      <td class="flat">68</td>
+      <td class="grp"></td>
+      <td class="up">+2.05%</td>
+      <td class="grp"></td>
+      <td class="flat">9.09</td>
+    </tr></tbody>
+  </table></div>
+  <div class="table-legend">列1「总排名」= 市值/涨幅/成交额三项排名均值（权重各1/3），最小者排第1；列2 为「股票名称（代码在其下方）」；列3-4 为「总市值（排名+数值）」、列5-6 为「涨跌幅」、列7-8 为「成交金额」（各含排名+数值）。市值/涨幅/成交三列仅显示排名前5，其余留空。点击任意表头可升/降序排序。</div>
+      <div style="margin-top:8px;font-size:13px"><strong>相关ETF（十大持仓含3只及以上板块成分）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333;font-size:12px">暂无匹配ETF</div>
+      </div><div class="theme-card card-main">
+      <div class="theme-name"><span class="theme-type type-role-main">主线</span> 广告营销 <span class="theme-type type-main">申万二级</span> <span class="theme-type type-l1">传媒</span></div>
+      <div class="theme-sub">所属申万一级：<b>传媒</b></div>
+      <div class="table-wrap"><table class="leaders-table">
+    <colgroup><col style="width:9%"><col style="width:22%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:13%"><col style="width:9%"><col style="width:15%"></colgroup>
+    <thead><tr>
+    <th class="sortable rank-head">总排名</th>
+    <th class="sortable sort-text">股票<br>名称/代码</th>
+    <th class="sortable grp">市值<br>排名</th>
+    <th class="sortable">总市值<br>(亿)</th>
+    <th class="sortable grp">涨幅<br>排名</th>
+    <th class="sortable">10日<br>涨幅</th>
+    <th class="sortable grp">成交<br>排名</th>
+    <th class="sortable">成交额<br>(亿)</th>
+  </tr></thead>
+    <tbody><tr>
+      <td class="rank-cell">1</td>
+      <td class="name-cell"><div class="stock-name">蓝色光标</div><div class="stock-code">sz300058</div></td>
+      <td class="grp">2</td>
+      <td class="flat">551</td>
+      <td class="grp">3</td>
+      <td class="up">+28.37%</td>
+      <td class="grp">1</td>
+      <td class="flat">668.35</td>
+    </tr>
+<tr>
+      <td class="rank-cell">2</td>
+      <td class="name-cell"><div class="stock-name">易点天下</div><div class="stock-code">sz301171</div></td>
+      <td class="grp">3</td>
+      <td class="flat">238</td>
+      <td class="grp">1</td>
+      <td class="up">+44.38%</td>
+      <td class="grp">2</td>
+      <td class="flat">224.09</td>
+    </tr>
+<tr>
+      <td class="rank-cell">3</td>
+      <td class="name-cell"><div class="stock-name">天娱数科</div><div class="stock-code">sz002354</div></td>
+      <td class="grp">4</td>
+      <td class="flat">134</td>
+      <td class="grp">2</td>
+      <td class="up">+29.19%</td>
+      <td class="grp">3</td>
+      <td class="flat">190.22</td>
+    </tr>
+<tr>
+      <td class="rank-cell">4</td>
+      <td class="name-cell"><div class="stock-name">天下秀</div><div class="stock-code">sh600556</div></td>
+      <td class="grp"></td>
+      <td class="flat">94</td>
+      <td class="grp">4</td>
+      <td class="up">+22.01%</td>
+      <td class="grp"></td>
+      <td class="flat">38.04</td>
+    </tr>
+<tr>
+      <td class="rank-cell">5</td>
+      <td class="name-cell"><div class="stock-name">天龙集团</div><div class="stock-code">sz300063</div></td>
+      <td class="grp"></td>
+      <td class="flat">72</td>
+      <td class="grp">5</td>
+      <td class="up">+21.47%</td>
+      <td class="grp"></td>
+      <td class="flat">64.05</td>
+    </tr>
+<tr>
+      <td class="rank-cell">6</td>
+      <td class="name-cell"><div class="stock-name">分众传媒</div><div class="stock-code">sz002027</div></td>
+      <td class="grp">1</td>
+      <td class="flat">742</td>
+      <td class="grp"></td>
+      <td class="down">-0.19%</td>
+      <td class="grp">5</td>
+      <td class="flat">109.03</td>
+    </tr>
+<tr>
+      <td class="rank-cell">7</td>
+      <td class="name-cell"><div class="stock-name">省广集团</div><div class="stock-code">sz002400</div></td>
+      <td class="grp">5</td>
+      <td class="flat">121</td>
+      <td class="grp"></td>
+      <td class="up">+14.17%</td>
+      <td class="grp"></td>
+      <td class="flat">76.93</td>
+    </tr>
+<tr>
+      <td class="rank-cell">8</td>
+      <td class="name-cell"><div class="stock-name">智度股份</div><div class="stock-code">sz000676</div></td>
+      <td class="grp"></td>
+      <td class="flat">94</td>
+      <td class="grp"></td>
+      <td class="up">+8.70%</td>
+      <td class="grp">4</td>
+      <td class="flat">130.08</td>
+    </tr></tbody>
+  </table></div>
+  <div class="table-legend">列1「总排名」= 市值/涨幅/成交额三项排名均值（权重各1/3），最小者排第1；列2 为「股票名称（代码在其下方）」；列3-4 为「总市值（排名+数值）」、列5-6 为「涨跌幅」、列7-8 为「成交金额」（各含排名+数值）。市值/涨幅/成交三列仅显示排名前5，其余留空。点击任意表头可升/降序排序。</div>
+      <div style="margin-top:8px;font-size:13px"><strong>相关ETF（十大持仓含3只及以上板块成分）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333;font-size:12px">暂无匹配ETF</div>
+      </div><div class="theme-card card-main">
+      <div class="theme-name"><span class="theme-type type-role-main">主线</span> 数字媒体 <span class="theme-type type-main">申万二级</span> <span class="theme-type type-l1">传媒</span></div>
+      <div class="theme-sub">所属申万一级：<b>传媒</b></div>
+      <div class="table-wrap"><table class="leaders-table">
+    <colgroup><col style="width:9%"><col style="width:22%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:13%"><col style="width:9%"><col style="width:15%"></colgroup>
+    <thead><tr>
+    <th class="sortable rank-head">总排名</th>
+    <th class="sortable sort-text">股票<br>名称/代码</th>
+    <th class="sortable grp">市值<br>排名</th>
+    <th class="sortable">总市值<br>(亿)</th>
+    <th class="sortable grp">涨幅<br>排名</th>
+    <th class="sortable">10日<br>涨幅</th>
+    <th class="sortable grp">成交<br>排名</th>
+    <th class="sortable">成交额<br>(亿)</th>
+  </tr></thead>
+    <tbody><tr>
+      <td class="rank-cell">1</td>
+      <td class="name-cell"><div class="stock-name">掌阅科技</div><div class="stock-code">sh603533</div></td>
+      <td class="grp">5</td>
+      <td class="flat">101</td>
+      <td class="grp">2</td>
+      <td class="up">+22.47%</td>
+      <td class="grp">2</td>
+      <td class="flat">67.49</td>
+    </tr>
+<tr>
+      <td class="rank-cell">2</td>
+      <td class="name-cell"><div class="stock-name">视觉中国</div><div class="stock-code">sz000681</div></td>
+      <td class="grp">3</td>
+      <td class="flat">130</td>
+      <td class="grp"></td>
+      <td class="up">+13.74%</td>
+      <td class="grp">1</td>
+      <td class="flat">71.46</td>
+    </tr>
+<tr>
+      <td class="rank-cell">3</td>
+      <td class="name-cell"><div class="stock-name">值得买</div><div class="stock-code">sz300785</div></td>
+      <td class="grp"></td>
+      <td class="flat">81</td>
+      <td class="grp">4</td>
+      <td class="up">+20.08%</td>
+      <td class="grp">4</td>
+      <td class="flat">50.41</td>
+    </tr>
+<tr>
+      <td class="rank-cell">4</td>
+      <td class="name-cell"><div class="stock-name">人民网</div><div class="stock-code">sh603000</div></td>
+      <td class="grp">2</td>
+      <td class="flat">191</td>
+      <td class="grp"></td>
+      <td class="up">+10.41%</td>
+      <td class="grp"></td>
+      <td class="flat">34.36</td>
+    </tr>
+<tr>
+      <td class="rank-cell">5</td>
+      <td class="name-cell"><div class="stock-name">返利科技</div><div class="stock-code">sh600228</div></td>
+      <td class="grp"></td>
+      <td class="flat">32</td>
+      <td class="grp">1</td>
+      <td class="up">+33.28%</td>
+      <td class="grp"></td>
+      <td class="flat">30.05</td>
+    </tr>
+<tr>
+      <td class="rank-cell">6</td>
+      <td class="name-cell"><div class="stock-name">芒果超媒</div><div class="stock-code">sz300413</div></td>
+      <td class="grp">1</td>
+      <td class="flat">301</td>
+      <td class="grp"></td>
+      <td class="up">+5.78%</td>
+      <td class="grp">5</td>
+      <td class="flat">35.21</td>
+    </tr>
+<tr>
+      <td class="rank-cell">7</td>
+      <td class="name-cell"><div class="stock-name">风语筑</div><div class="stock-code">sh603466</div></td>
+      <td class="grp"></td>
+      <td class="flat">68</td>
+      <td class="grp"></td>
+      <td class="up">+8.57%</td>
+      <td class="grp">3</td>
+      <td class="flat">60.29</td>
+    </tr>
+<tr>
+      <td class="rank-cell">8</td>
+      <td class="name-cell"><div class="stock-name">新华网</div><div class="stock-code">sh603888</div></td>
+      <td class="grp">4</td>
+      <td class="flat">127</td>
+      <td class="grp"></td>
+      <td class="up">+9.13%</td>
+      <td class="grp"></td>
+      <td class="flat">18.61</td>
+    </tr>
+<tr>
+      <td class="rank-cell">9</td>
+      <td class="name-cell"><div class="stock-name">卓创资讯</div><div class="stock-code">sz301299</div></td>
+      <td class="grp"></td>
+      <td class="flat">27</td>
+      <td class="grp">5</td>
+      <td class="up">+14.33%</td>
+      <td class="grp"></td>
+      <td class="flat">5.13</td>
+    </tr>
+<tr>
+      <td class="rank-cell">10</td>
+      <td class="name-cell"><div class="stock-name">*ST三六五</div><div class="stock-code">sz300295</div></td>
+      <td class="grp"></td>
+      <td class="flat">23</td>
+      <td class="grp">3</td>
+      <td class="up">+21.70%</td>
+      <td class="grp"></td>
+      <td class="flat">4.01</td>
+    </tr></tbody>
+  </table></div>
+  <div class="table-legend">列1「总排名」= 市值/涨幅/成交额三项排名均值（权重各1/3），最小者排第1；列2 为「股票名称（代码在其下方）」；列3-4 为「总市值（排名+数值）」、列5-6 为「涨跌幅」、列7-8 为「成交金额」（各含排名+数值）。市值/涨幅/成交三列仅显示排名前5，其余留空。点击任意表头可升/降序排序。</div>
+      <div style="margin-top:8px;font-size:13px"><strong>相关ETF（十大持仓含3只及以上板块成分）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333;font-size:12px">暂无匹配ETF</div>
+      </div>
+    <div class="sub-header">3、20日主线分析</div>
+    <div id="chart-20d-l1" class="chart-box" style="height:600px"></div>
+  <div id="chart-20d-l2" class="chart-box" style="height:400px; margin-top:18px"></div>
+  <div class="table-legend">柱状图按20日日涨跌幅排序；二级行业名后括号标注其所属申万一级行业，体现「一级 ↔ 二级」的层级关联。</div>
+    <div class="ml-judgement">
+    <div class="ml-block ml-main"><div class="ml-title">主线（确定方向）</div><ol class="ml-list"><li><b>贵金属</b> <span class="tag-l1">有色金属</span>（20日 +22.62%｜10日 +10.28%｜20日 +22.62%）— 中期维度持续正收益，确定性较高</li><li><b>工业金属</b> <span class="tag-l1">有色金属</span>（20日 +17.11%｜10日 +3.79%｜20日 +17.11%）— 中期维度持续正收益，确定性较高</li><li><b>教育</b> <span class="tag-l1">社会服务</span>（20日 +15.99%｜10日 +19.90%｜20日 +15.99%）— 中期维度持续正收益，确定性较高</li></ol></div>
+  </div>
+    <div class="theme-card card-main">
+      <div class="theme-name"><span class="theme-type type-role-main">主线</span> 贵金属 <span class="theme-type type-main">申万二级</span> <span class="theme-type type-l1">有色金属</span></div>
+      <div class="theme-sub">所属申万一级：<b>有色金属</b></div>
+      <div class="table-wrap"><table class="leaders-table">
+    <colgroup><col style="width:9%"><col style="width:22%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:13%"><col style="width:9%"><col style="width:15%"></colgroup>
+    <thead><tr>
+    <th class="sortable rank-head">总排名</th>
+    <th class="sortable sort-text">股票<br>名称/代码</th>
+    <th class="sortable grp">市值<br>排名</th>
+    <th class="sortable">总市值<br>(亿)</th>
+    <th class="sortable grp">涨幅<br>排名</th>
+    <th class="sortable">20日<br>涨幅</th>
+    <th class="sortable grp">成交<br>排名</th>
+    <th class="sortable">成交额<br>(亿)</th>
+  </tr></thead>
+    <tbody><tr>
+      <td class="rank-cell">1</td>
+      <td class="name-cell"><div class="stock-name">赤峰黄金</div><div class="stock-code">sh600988</div></td>
+      <td class="grp">3</td>
+      <td class="flat">785</td>
+      <td class="grp">2</td>
+      <td class="up">+31.74%</td>
+      <td class="grp">1</td>
+      <td class="flat">559.93</td>
+    </tr>
+<tr>
+      <td class="rank-cell">2</td>
+      <td class="name-cell"><div class="stock-name">中金黄金</div><div class="stock-code">sh600489</div></td>
+      <td class="grp">2</td>
+      <td class="flat">1217</td>
+      <td class="grp">3</td>
+      <td class="up">+25.86%</td>
+      <td class="grp">2</td>
+      <td class="flat">406.41</td>
+    </tr>
+<tr>
+      <td class="rank-cell">3</td>
+      <td class="name-cell"><div class="stock-name">山东黄金</div><div class="stock-code">sh600547</div></td>
+      <td class="grp">1</td>
+      <td class="flat">1381</td>
+      <td class="grp">5</td>
+      <td class="up">+23.39%</td>
+      <td class="grp">3</td>
+      <td class="flat">405.72</td>
+    </tr>
+<tr>
+      <td class="rank-cell">4</td>
+      <td class="name-cell"><div class="stock-name">山金国际</div><div class="stock-code">sz000975</div></td>
+      <td class="grp">4</td>
+      <td class="flat">706</td>
+      <td class="grp">1</td>
+      <td class="up">+32.47%</td>
+      <td class="grp">4</td>
+      <td class="flat">309.70</td>
+    </tr>
+<tr>
+      <td class="rank-cell">5</td>
+      <td class="name-cell"><div class="stock-name">晓程科技</div><div class="stock-code">sz300139</div></td>
+      <td class="grp"></td>
+      <td class="flat">126</td>
+      <td class="grp">4</td>
+      <td class="up">+23.96%</td>
+      <td class="grp">5</td>
+      <td class="flat">302.72</td>
+    </tr>
+<tr>
+      <td class="rank-cell">6</td>
+      <td class="name-cell"><div class="stock-name">湖南黄金</div><div class="stock-code">sz002155</div></td>
+      <td class="grp">5</td>
+      <td class="flat">393</td>
+      <td class="grp"></td>
+      <td class="up">+3.67%</td>
+      <td class="grp"></td>
+      <td class="flat">232.86</td>
+    </tr></tbody>
+  </table></div>
+  <div class="table-legend">列1「总排名」= 市值/涨幅/成交额三项排名均值（权重各1/3），最小者排第1；列2 为「股票名称（代码在其下方）」；列3-4 为「总市值（排名+数值）」、列5-6 为「涨跌幅」、列7-8 为「成交金额」（各含排名+数值）。市值/涨幅/成交三列仅显示排名前5，其余留空。点击任意表头可升/降序排序。</div>
+      <div style="margin-top:8px;font-size:13px"><strong>相关ETF（十大持仓含3只及以上板块成分）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333;font-size:12px">暂无匹配ETF</div>
+      </div><div class="theme-card card-main">
+      <div class="theme-name"><span class="theme-type type-role-main">主线</span> 工业金属 <span class="theme-type type-main">申万二级</span> <span class="theme-type type-l1">有色金属</span></div>
+      <div class="theme-sub">所属申万一级：<b>有色金属</b></div>
+      <div class="table-wrap"><table class="leaders-table">
+    <colgroup><col style="width:9%"><col style="width:22%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:13%"><col style="width:9%"><col style="width:15%"></colgroup>
+    <thead><tr>
+    <th class="sortable rank-head">总排名</th>
+    <th class="sortable sort-text">股票<br>名称/代码</th>
+    <th class="sortable grp">市值<br>排名</th>
+    <th class="sortable">总市值<br>(亿)</th>
+    <th class="sortable grp">涨幅<br>排名</th>
+    <th class="sortable">20日<br>涨幅</th>
+    <th class="sortable grp">成交<br>排名</th>
+    <th class="sortable">成交额<br>(亿)</th>
+  </tr></thead>
+    <tbody><tr>
+      <td class="rank-cell">1</td>
+      <td class="name-cell"><div class="stock-name">紫金矿业</div><div class="stock-code">sh601899</div></td>
+      <td class="grp">1</td>
+      <td class="flat">9174</td>
+      <td class="grp"></td>
+      <td class="up">+24.91%</td>
+      <td class="grp">1</td>
+      <td class="flat">1907.21</td>
+    </tr>
+<tr>
+      <td class="rank-cell">2</td>
+      <td class="name-cell"><div class="stock-name">西部矿业</div><div class="stock-code">sh601168</div></td>
+      <td class="grp"></td>
+      <td class="flat">947</td>
+      <td class="grp">2</td>
+      <td class="up">+37.05%</td>
+      <td class="grp">4</td>
+      <td class="flat">551.23</td>
+    </tr>
+<tr>
+      <td class="rank-cell">3</td>
+      <td class="name-cell"><div class="stock-name">洛阳钼业</div><div class="stock-code">sh603993</div></td>
+      <td class="grp">2</td>
+      <td class="flat">4358</td>
+      <td class="grp"></td>
+      <td class="up">+18.50%</td>
+      <td class="grp">2</td>
+      <td class="flat">980.40</td>
+    </tr>
+<tr>
+      <td class="rank-cell">4</td>
+      <td class="name-cell"><div class="stock-name">宏桥控股</div><div class="stock-code">sz002379</div></td>
+      <td class="grp">3</td>
+      <td class="flat">2458</td>
+      <td class="grp">3</td>
+      <td class="up">+33.29%</td>
+      <td class="grp"></td>
+      <td class="flat">306.39</td>
+    </tr>
+<tr>
+      <td class="rank-cell">5</td>
+      <td class="name-cell"><div class="stock-name">中国铝业</div><div class="stock-code">sh601600</div></td>
+      <td class="grp">4</td>
+      <td class="flat">1649</td>
+      <td class="grp"></td>
+      <td class="up">+18.64%</td>
+      <td class="grp">3</td>
+      <td class="flat">557.61</td>
+    </tr>
+<tr>
+      <td class="rank-cell">6</td>
+      <td class="name-cell"><div class="stock-name">云铝股份</div><div class="stock-code">sz000807</div></td>
+      <td class="grp"></td>
+      <td class="flat">925</td>
+      <td class="grp"></td>
+      <td class="up">+21.79%</td>
+      <td class="grp">5</td>
+      <td class="flat">528.16</td>
+    </tr>
+<tr>
+      <td class="rank-cell">7</td>
+      <td class="name-cell"><div class="stock-name">江西铜业</div><div class="stock-code">sh600362</div></td>
+      <td class="grp">5</td>
+      <td class="flat">1602</td>
+      <td class="grp"></td>
+      <td class="up">+15.22%</td>
+      <td class="grp"></td>
+      <td class="flat">513.63</td>
+    </tr>
+<tr>
+      <td class="rank-cell">8</td>
+      <td class="name-cell"><div class="stock-name">天山铝业</div><div class="stock-code">sz002532</div></td>
+      <td class="grp"></td>
+      <td class="flat">620</td>
+      <td class="grp">5</td>
+      <td class="up">+25.59%</td>
+      <td class="grp"></td>
+      <td class="flat">326.97</td>
+    </tr>
+<tr>
+      <td class="rank-cell">9</td>
+      <td class="name-cell"><div class="stock-name">盛达资源</div><div class="stock-code">sz000603</div></td>
+      <td class="grp"></td>
+      <td class="flat">216</td>
+      <td class="grp">1</td>
+      <td class="up">+42.86%</td>
+      <td class="grp"></td>
+      <td class="flat">249.11</td>
+    </tr>
+<tr>
+      <td class="rank-cell">10</td>
+      <td class="name-cell"><div class="stock-name">金徽股份</div><div class="stock-code">sh603132</div></td>
+      <td class="grp"></td>
+      <td class="flat">188</td>
+      <td class="grp">4</td>
+      <td class="up">+27.81%</td>
+      <td class="grp"></td>
+      <td class="flat">21.95</td>
+    </tr></tbody>
+  </table></div>
+  <div class="table-legend">列1「总排名」= 市值/涨幅/成交额三项排名均值（权重各1/3），最小者排第1；列2 为「股票名称（代码在其下方）」；列3-4 为「总市值（排名+数值）」、列5-6 为「涨跌幅」、列7-8 为「成交金额」（各含排名+数值）。市值/涨幅/成交三列仅显示排名前5，其余留空。点击任意表头可升/降序排序。</div>
+      <div style="margin-top:8px;font-size:13px"><strong>相关ETF（十大持仓含3只及以上板块成分）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333;font-size:12px">• sh512400（含紫金矿业、洛阳钼业、中国铝业、西部矿业）</div>
+      </div><div class="theme-card card-main">
+      <div class="theme-name"><span class="theme-type type-role-main">主线</span> 教育 <span class="theme-type type-main">申万二级</span> <span class="theme-type type-l1">社会服务</span></div>
+      <div class="theme-sub">所属申万一级：<b>社会服务</b></div>
+      <div class="table-wrap"><table class="leaders-table">
+    <colgroup><col style="width:9%"><col style="width:22%"><col style="width:9%"><col style="width:14%"><col style="width:9%"><col style="width:13%"><col style="width:9%"><col style="width:15%"></colgroup>
+    <thead><tr>
+    <th class="sortable rank-head">总排名</th>
+    <th class="sortable sort-text">股票<br>名称/代码</th>
+    <th class="sortable grp">市值<br>排名</th>
+    <th class="sortable">总市值<br>(亿)</th>
+    <th class="sortable grp">涨幅<br>排名</th>
+    <th class="sortable">20日<br>涨幅</th>
+    <th class="sortable grp">成交<br>排名</th>
+    <th class="sortable">成交额<br>(亿)</th>
+  </tr></thead>
+    <tbody><tr>
+      <td class="rank-cell">1</td>
+      <td class="name-cell"><div class="stock-name">中公教育</div><div class="stock-code">sz002607</div></td>
+      <td class="grp">1</td>
+      <td class="flat">134</td>
+      <td class="grp"></td>
+      <td class="up">+15.43%</td>
+      <td class="grp">1</td>
+      <td class="flat">98.94</td>
+    </tr>
+<tr>
+      <td class="rank-cell">2</td>
+      <td class="name-cell"><div class="stock-name">传智教育</div><div class="stock-code">sz003032</div></td>
+      <td class="grp"></td>
+      <td class="flat">44</td>
+      <td class="grp">1</td>
+      <td class="up">+114.71%</td>
+      <td class="grp">3</td>
+      <td class="flat">42.66</td>
+    </tr>
+<tr>
+      <td class="rank-cell">3</td>
+      <td class="name-cell"><div class="stock-name">创业黑马</div><div class="stock-code">sz300688</div></td>
+      <td class="grp"></td>
+      <td class="flat">53</td>
+      <td class="grp"></td>
+      <td class="up">+19.86%</td>
+      <td class="grp">2</td>
+      <td class="flat">86.45</td>
+    </tr>
+<tr>
+      <td class="rank-cell">4</td>
+      <td class="name-cell"><div class="stock-name">学大教育</div><div class="stock-code">sz000526</div></td>
+      <td class="grp"></td>
+      <td class="flat">43</td>
+      <td class="grp">2</td>
+      <td class="up">+37.44%</td>
+      <td class="grp">4</td>
+      <td class="flat">37.73</td>
+    </tr>
+<tr>
+      <td class="rank-cell">5</td>
+      <td class="name-cell"><div class="stock-name">科德教育</div><div class="stock-code">sz300192</div></td>
+      <td class="grp"></td>
+      <td class="flat">61</td>
+      <td class="grp"></td>
+      <td class="up">+14.91%</td>
+      <td class="grp">5</td>
+      <td class="flat">34.07</td>
+    </tr>
+<tr>
+      <td class="rank-cell">6</td>
+      <td class="name-cell"><div class="stock-name">华图山鼎</div><div class="stock-code">sz300492</div></td>
+      <td class="grp">3</td>
+      <td class="flat">71</td>
+      <td class="grp"></td>
+      <td class="up">+8.46%</td>
+      <td class="grp"></td>
+      <td class="flat">30.00</td>
+    </tr>
+<tr>
+      <td class="rank-cell">7</td>
+      <td class="name-cell"><div class="stock-name">国脉科技</div><div class="stock-code">sz002093</div></td>
+      <td class="grp">2</td>
+      <td class="flat">71</td>
+      <td class="grp"></td>
+      <td class="up">+8.94%</td>
+      <td class="grp"></td>
+      <td class="flat">23.25</td>
+    </tr>
+<tr>
+      <td class="rank-cell">8</td>
+      <td class="name-cell"><div class="stock-name">凯文教育</div><div class="stock-code">sz002659</div></td>
+      <td class="grp"></td>
+      <td class="flat">28</td>
+      <td class="grp">4</td>
+      <td class="up">+23.28%</td>
+      <td class="grp"></td>
+      <td class="flat">26.50</td>
+    </tr>
+<tr>
+      <td class="rank-cell">9</td>
+      <td class="name-cell"><div class="stock-name">*ST高科</div><div class="stock-code">sh600730</div></td>
+      <td class="grp">4</td>
+      <td class="flat">68</td>
+      <td class="grp"></td>
+      <td class="up">+9.14%</td>
+      <td class="grp"></td>
+      <td class="flat">22.92</td>
+    </tr>
+<tr>
+      <td class="rank-cell">10</td>
+      <td class="name-cell"><div class="stock-name">全通教育</div><div class="stock-code">sz300359</div></td>
+      <td class="grp"></td>
+      <td class="flat">27</td>
+      <td class="grp">5</td>
+      <td class="up">+22.48%</td>
+      <td class="grp"></td>
+      <td class="flat">25.89</td>
+    </tr>
+<tr>
+      <td class="rank-cell">11</td>
+      <td class="name-cell"><div class="stock-name">昂立教育</div><div class="stock-code">sh600661</div></td>
+      <td class="grp"></td>
+      <td class="flat">27</td>
+      <td class="grp">3</td>
+      <td class="up">+30.86%</td>
+      <td class="grp"></td>
+      <td class="flat">20.44</td>
+    </tr>
+<tr>
+      <td class="rank-cell">12</td>
+      <td class="name-cell"><div class="stock-name">行动教育</div><div class="stock-code">sh605098</div></td>
+      <td class="grp">5</td>
+      <td class="flat">68</td>
+      <td class="grp"></td>
+      <td class="up">+6.93%</td>
+      <td class="grp"></td>
+      <td class="flat">14.65</td>
+    </tr></tbody>
+  </table></div>
+  <div class="table-legend">列1「总排名」= 市值/涨幅/成交额三项排名均值（权重各1/3），最小者排第1；列2 为「股票名称（代码在其下方）」；列3-4 为「总市值（排名+数值）」、列5-6 为「涨跌幅」、列7-8 为「成交金额」（各含排名+数值）。市值/涨幅/成交三列仅显示排名前5，其余留空。点击任意表头可升/降序排序。</div>
+      <div style="margin-top:8px;font-size:13px"><strong>相关ETF（十大持仓含3只及以上板块成分）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333;font-size:12px">暂无匹配ETF</div>
+      </div>
+  </div>
+
+  <div class="section">
+    <div class="data-basis-title">附录：完整数据依据</div>
+    <div class="data-basis-title" style="margin-top:12px;font-size:14px">申万一级行业概览（全31个，含5/10/20日涨幅） <span class="badge">L1 概览</span></div>
+    <div class="table-wrap">
+      <table id="sw1-table">
+        <thead><tr><th class="sortable">申万一级行业</th><th class="sortable">5日涨幅</th><th class="sortable">10日涨幅</th><th class="sortable">20日涨幅</th></tr></thead>
+        <tbody><tr><td><span class="stock-name">通信</span></td><td class="up">+14.22%</td><td class="down">-4.85%</td><td class="down">-17.76%</td></tr><tr><td><span class="stock-name">综合</span></td><td class="up">+12.90%</td><td class="up">+5.80%</td><td class="down">-7.46%</td></tr><tr><td><span class="stock-name">电子</span></td><td class="up">+12.62%</td><td class="down">-1.52%</td><td class="down">-24.28%</td></tr><tr><td><span class="stock-name">计算机</span></td><td class="up">+11.45%</td><td class="up">+7.40%</td><td class="up">+1.96%</td></tr><tr><td><span class="stock-name">机械设备</span></td><td class="up">+11.29%</td><td class="up">+4.39%</td><td class="down">-11.73%</td></tr><tr><td><span class="stock-name">有色金属</span></td><td class="up">+9.64%</td><td class="up">+5.56%</td><td class="up">+7.51%</td></tr><tr><td><span class="stock-name">传媒</span></td><td class="up">+8.73%</td><td class="up">+11.60%</td><td class="up">+5.99%</td></tr><tr><td><span class="stock-name">国防军工</span></td><td class="up">+6.72%</td><td class="up">+4.40%</td><td class="down">-8.23%</td></tr><tr><td><span class="stock-name">环保</span></td><td class="up">+6.71%</td><td class="up">+4.95%</td><td class="down">-1.13%</td></tr><tr><td><span class="stock-name">建筑材料</span></td><td class="up">+6.65%</td><td class="up">+5.21%</td><td class="down">-12.79%</td></tr><tr><td><span class="stock-name">基础化工</span></td><td class="up">+6.13%</td><td class="up">+4.38%</td><td class="down">-2.08%</td></tr><tr><td><span class="stock-name">轻工制造</span></td><td class="up">+5.89%</td><td class="up">+6.78%</td><td class="up">+0.76%</td></tr><tr><td><span class="stock-name">社会服务</span></td><td class="up">+4.78%</td><td class="up">+8.40%</td><td class="up">+3.38%</td></tr><tr><td><span class="stock-name">纺织服饰</span></td><td class="up">+4.48%</td><td class="up">+8.29%</td><td class="up">+1.93%</td></tr><tr><td><span class="stock-name">建筑装饰</span></td><td class="up">+3.94%</td><td class="up">+2.94%</td><td class="down">-1.07%</td></tr><tr><td><span class="stock-name">电力设备</span></td><td class="up">+3.72%</td><td class="up">+1.98%</td><td class="down">-4.03%</td></tr><tr><td><span class="stock-name">房地产</span></td><td class="up">+3.63%</td><td class="up">+4.80%</td><td class="up">+1.09%</td></tr><tr><td><span class="stock-name">汽车</span></td><td class="up">+2.88%</td><td class="up">+3.55%</td><td class="down">-0.91%</td></tr><tr><td><span class="stock-name">医药生物</span></td><td class="up">+2.78%</td><td class="up">+0.41%</td><td class="up">+3.89%</td></tr><tr><td><span class="stock-name">煤炭</span></td><td class="up">+1.66%</td><td class="down">-0.40%</td><td class="up">+9.24%</td></tr><tr><td><span class="stock-name">商贸零售</span></td><td class="up">+1.05%</td><td class="up">+5.48%</td><td class="up">+7.16%</td></tr><tr><td><span class="stock-name">农林牧渔</span></td><td class="up">+0.81%</td><td class="up">+1.83%</td><td class="up">+5.24%</td></tr><tr><td><span class="stock-name">石油石化</span></td><td class="down">-0.11%</td><td class="down">-0.22%</td><td class="up">+9.30%</td></tr><tr><td><span class="stock-name">钢铁</span></td><td class="down">-0.17%</td><td class="up">+1.21%</td><td class="up">+6.81%</td></tr><tr><td><span class="stock-name">公用事业</span></td><td class="down">-0.37%</td><td class="down">-2.57%</td><td class="up">+3.15%</td></tr><tr><td><span class="stock-name">交通运输</span></td><td class="down">-0.47%</td><td class="up">+1.88%</td><td class="up">+5.57%</td></tr><tr><td><span class="stock-name">家用电器</span></td><td class="down">-1.17%</td><td class="up">+2.01%</td><td class="up">+2.71%</td></tr><tr><td><span class="stock-name">美容护理</span></td><td class="down">-1.23%</td><td class="up">+2.23%</td><td class="up">+6.58%</td></tr><tr><td><span class="stock-name">非银金融</span></td><td class="down">-1.78%</td><td class="down">-2.46%</td><td class="down">-0.31%</td></tr><tr><td><span class="stock-name">食品饮料</span></td><td class="down">-3.50%</td><td class="up">+1.47%</td><td class="up">+8.69%</td></tr><tr><td><span class="stock-name">银行</span></td><td class="down">-4.40%</td><td class="down">-0.07%</td><td class="up">+4.19%</td></tr></tbody>
+      </table>
+    </div>
+    <div class="data-basis-title" style="margin-top:16px;font-size:14px">申万二级行业明细（按5日涨幅TOP40） <span class="badge">L2 明细</span></div>
+    <div class="table-wrap">
+      <table id="sw2-table">
+        <thead><tr><th class="sortable">申万二级行业</th><th class="sortable">5日涨幅</th><th class="sortable">10日涨幅</th><th class="sortable">20日涨幅</th></tr></thead>
+        <tbody><tr><td><span class="stock-name">元件</span></td><td class="up">+22.67%</td><td class="up">+3.88%</td><td class="down">-18.19%</td></tr><tr><td><span class="stock-name">小金属</span></td><td class="up">+19.07%</td><td class="up">+9.21%</td><td class="down">-5.56%</td></tr><tr><td><span class="stock-name">电子化学品Ⅱ</span></td><td class="up">+17.91%</td><td class="up">+6.34%</td><td class="down">-26.09%</td></tr><tr><td><span class="stock-name">非金属材料Ⅱ</span></td><td class="up">+16.81%</td><td class="up">+3.50%</td><td class="down">-24.41%</td></tr><tr><td><span class="stock-name">通用设备</span></td><td class="up">+16.26%</td><td class="up">+6.04%</td><td class="down">-14.38%</td></tr><tr><td><span class="stock-name">通信设备</span></td><td class="up">+15.70%</td><td class="down">-6.12%</td><td class="down">-20.36%</td></tr><tr><td><span class="stock-name">自动化设备</span></td><td class="up">+15.55%</td><td class="up">+4.44%</td><td class="down">-16.60%</td></tr><tr><td><span class="stock-name">航天装备Ⅱ</span></td><td class="up">+15.53%</td><td class="up">+5.05%</td><td class="down">-19.36%</td></tr><tr><td><span class="stock-name">塑料</span></td><td class="up">+15.06%</td><td class="up">+8.12%</td><td class="down">-12.41%</td></tr><tr><td><span class="stock-name">金属新材料</span></td><td class="up">+14.27%</td><td class="up">+6.80%</td><td class="down">-13.29%</td></tr><tr><td><span class="stock-name">IT服务Ⅱ</span></td><td class="up">+13.52%</td><td class="up">+7.29%</td><td class="up">+2.34%</td></tr><tr><td><span class="stock-name">光学光电子</span></td><td class="up">+13.43%</td><td class="up">+3.62%</td><td class="down">-19.96%</td></tr><tr><td><span class="stock-name">广告营销</span></td><td class="up">+13.35%</td><td class="up">+16.26%</td><td class="up">+14.32%</td></tr><tr><td><span class="stock-name">综合Ⅱ</span></td><td class="up">+12.90%</td><td class="up">+5.80%</td><td class="down">-7.46%</td></tr><tr><td><span class="stock-name">其他电源设备Ⅱ</span></td><td class="up">+12.72%</td><td class="up">+1.38%</td><td class="down">-12.78%</td></tr><tr><td><span class="stock-name">电机Ⅱ</span></td><td class="up">+12.71%</td><td class="up">+12.09%</td><td class="up">+1.07%</td></tr><tr><td><span class="stock-name">玻璃玻纤</span></td><td class="up">+12.71%</td><td class="up">+6.95%</td><td class="down">-24.89%</td></tr><tr><td><span class="stock-name">其他电子Ⅱ</span></td><td class="up">+12.58%</td><td class="up">+2.32%</td><td class="down">-24.71%</td></tr><tr><td><span class="stock-name">贵金属</span></td><td class="up">+12.36%</td><td class="up">+10.28%</td><td class="up">+22.62%</td></tr><tr><td><span class="stock-name">橡胶</span></td><td class="up">+12.35%</td><td class="up">+6.03%</td><td class="down">-15.98%</td></tr><tr><td><span class="stock-name">工程咨询服务Ⅱ</span></td><td class="up">+12.34%</td><td class="up">+14.94%</td><td class="down">-3.88%</td></tr><tr><td><span class="stock-name">环保设备Ⅱ</span></td><td class="up">+11.79%</td><td class="up">+7.89%</td><td class="down">-6.77%</td></tr><tr><td><span class="stock-name">专用设备</span></td><td class="up">+11.52%</td><td class="up">+5.58%</td><td class="down">-11.54%</td></tr><tr><td><span class="stock-name">软件开发</span></td><td class="up">+11.26%</td><td class="up">+12.02%</td><td class="up">+6.70%</td></tr><tr><td><span class="stock-name">照明设备Ⅱ</span></td><td class="up">+11.14%</td><td class="up">+8.32%</td><td class="down">-4.21%</td></tr><tr><td><span class="stock-name">军工电子Ⅱ</span></td><td class="up">+10.99%</td><td class="up">+4.89%</td><td class="down">-13.15%</td></tr><tr><td><span class="stock-name">装修装饰Ⅱ</span></td><td class="up">+10.81%</td><td class="up">+9.33%</td><td class="down">-3.64%</td></tr><tr><td><span class="stock-name">消费电子</span></td><td class="up">+10.40%</td><td class="up">+1.15%</td><td class="down">-12.85%</td></tr><tr><td><span class="stock-name">半导体</span></td><td class="up">+9.97%</td><td class="down">-5.12%</td><td class="down">-28.79%</td></tr><tr><td><span class="stock-name">医疗服务</span></td><td class="up">+9.72%</td><td class="up">+6.58%</td><td class="up">+12.85%</td></tr><tr><td><span class="stock-name">数字媒体</span></td><td class="up">+9.65%</td><td class="up">+12.69%</td><td class="up">+8.89%</td></tr><tr><td><span class="stock-name">包装印刷</span></td><td class="up">+9.42%</td><td class="up">+8.73%</td><td class="down">-1.24%</td></tr><tr><td><span class="stock-name">计算机设备</span></td><td class="up">+9.31%</td><td class="up">+1.56%</td><td class="down">-4.48%</td></tr><tr><td><span class="stock-name">家电零部件Ⅱ</span></td><td class="up">+9.31%</td><td class="up">+5.65%</td><td class="down">-8.73%</td></tr><tr><td><span class="stock-name">教育</span></td><td class="up">+8.71%</td><td class="up">+19.90%</td><td class="up">+15.99%</td></tr><tr><td><span class="stock-name">影视院线</span></td><td class="up">+8.66%</td><td class="up">+7.40%</td><td class="up">+1.88%</td></tr><tr><td><span class="stock-name">风电设备</span></td><td class="up">+8.12%</td><td class="up">+7.91%</td><td class="down">-2.10%</td></tr><tr><td><span class="stock-name">游戏Ⅱ</span></td><td class="up">+7.84%</td><td class="up">+11.60%</td><td class="up">+1.31%</td></tr><tr><td><span class="stock-name">互联网电商</span></td><td class="up">+7.83%</td><td class="up">+7.74%</td><td class="up">+4.88%</td></tr><tr><td><span class="stock-name">文娱用品</span></td><td class="up">+7.46%</td><td class="up">+6.80%</td><td class="up">+3.67%</td></tr></tbody>
+      </table>
+    </div>
+    <div class="data-basis-title" style="margin-top:16px;font-size:14px">申万一级 ↔ 二级 层级对应（本次分析板块） <span class="badge">L1 → L2</span></div>
+    <div class="hier-wrap"><div class="hier-row"><span class="hier-l1">通信</span> <span class="hier-l1c">+14.22%</span> ： <span class="hier-l2">通信设备</span></div><div class="hier-row"><span class="hier-l1">电子</span> <span class="hier-l1c">+12.62%</span> ： <span class="hier-l2">元件</span>、<span class="hier-l2">电子化学品Ⅱ</span>、<span class="hier-l2">光学光电子</span></div><div class="hier-row"><span class="hier-l1">计算机</span> <span class="hier-l1c">+11.45%</span> ： <span class="hier-l2">IT服务Ⅱ</span>、<span class="hier-l2">软件开发</span></div><div class="hier-row"><span class="hier-l1">机械设备</span> <span class="hier-l1c">+11.29%</span> ： <span class="hier-l2">通用设备</span>、<span class="hier-l2">自动化设备</span></div><div class="hier-row"><span class="hier-l1">有色金属</span> <span class="hier-l1c">+9.64%</span> ： <span class="hier-l2">小金属</span>、<span class="hier-l2">金属新材料</span>、<span class="hier-l2">贵金属</span>、<span class="hier-l2">工业金属</span></div><div class="hier-row"><span class="hier-l1">传媒</span> <span class="hier-l1c">+8.73%</span> ： <span class="hier-l2">广告营销</span>、<span class="hier-l2">数字媒体</span>、<span class="hier-l2">游戏Ⅱ</span>、<span class="hier-l2">出版</span></div><div class="hier-row"><span class="hier-l1">国防军工</span> <span class="hier-l1c">+6.72%</span> ： <span class="hier-l2">航天装备Ⅱ</span></div><div class="hier-row"><span class="hier-l1">基础化工</span> <span class="hier-l1c">+6.13%</span> ： <span class="hier-l2">非金属材料Ⅱ</span>、<span class="hier-l2">塑料</span>、<span class="hier-l2">农化制品</span></div><div class="hier-row"><span class="hier-l1">社会服务</span> <span class="hier-l1c">+4.78%</span> ： <span class="hier-l2">教育</span></div><div class="hier-row"><span class="hier-l1">纺织服饰</span> <span class="hier-l1c">+4.48%</span> ： <span class="hier-l2">服装家纺</span></div><div class="hier-row"><span class="hier-l1">建筑装饰</span> <span class="hier-l1c">+3.94%</span> ： <span class="hier-l2">工程咨询服务Ⅱ</span>、<span class="hier-l2">装修装饰Ⅱ</span></div><div class="hier-row"><span class="hier-l1">电力设备</span> <span class="hier-l1c">+3.72%</span> ： <span class="hier-l2">电机Ⅱ</span></div><div class="hier-row"><span class="hier-l1">医药生物</span> <span class="hier-l1c">+2.78%</span> ： <span class="hier-l2">医疗服务</span></div><div class="hier-row"><span class="hier-l1">煤炭</span> <span class="hier-l1c">+1.66%</span> ： <span class="hier-l2">焦炭Ⅱ</span></div><div class="hier-row"><span class="hier-l1">商贸零售</span> <span class="hier-l1c">+1.05%</span> ： <span class="hier-l2">专业连锁Ⅱ</span></div><div class="hier-row"><span class="hier-l1">农林牧渔</span> <span class="hier-l1c">+0.81%</span> ： <span class="hier-l2">农产品加工</span>、<span class="hier-l2">渔业</span></div><div class="hier-row"><span class="hier-l1">石油石化</span> <span class="hier-l1c">-0.11%</span> ： <span class="hier-l2">油服工程</span></div><div class="hier-row"><span class="hier-l1">食品饮料</span> <span class="hier-l1c">-3.50%</span> ： <span class="hier-l2">白酒Ⅱ</span></div></div>
+    <div class="data-basis-title" style="margin-top:16px;font-size:14px">主力资金净流入TOP20 <span class="badge">5日/10日/20日主力净流入</span></div>
+    <div class="table-wrap">
+      <table id="cap-table">
+        <thead><tr><th class="sortable">股票</th><th class="sortable">今日涨幅</th><th class="sortable">5日涨幅</th><th class="sortable">10日涨幅</th><th class="sortable">20日涨幅</th></tr></thead>
+        <tbody><tr><td><span class="stock-code">sz001232</span><br><span class="stock-name">C嘉立创</span></td><td class="down">-11.56%</td><td class="up">+109.34%</td><td class="up">+109.34%</td><td class="up">+109.34%</td></tr><tr><td><span class="stock-code">sz300489</span><br><span class="stock-name">光智科技</span></td><td class="up">+10.72%</td><td class="up">+60.82%</td><td class="up">+14.77%</td><td class="down">-24.63%</td></tr><tr><td><span class="stock-code">sz301396</span><br><span class="stock-name">宏景科技</span></td><td class="up">+0.35%</td><td class="up">+53.39%</td><td class="up">+4.50%</td><td class="down">-29.96%</td></tr><tr><td><span class="stock-code">sz002428</span><br><span class="stock-name">云南锗业</span></td><td class="up">+10.00%</td><td class="up">+47.22%</td><td class="up">+18.80%</td><td class="down">-11.65%</td></tr><tr><td><span class="stock-code">sz300620</span><br><span class="stock-name">光库科技</span></td><td class="up">+5.63%</td><td class="up">+44.19%</td><td class="up">+20.16%</td><td class="down">-12.61%</td></tr><tr><td><span class="stock-code">sh688313</span><br><span class="stock-name">仕佳光子</span></td><td class="up">+3.61%</td><td class="up">+41.42%</td><td class="up">+3.98%</td><td class="down">-23.17%</td></tr><tr><td><span class="stock-code">sz300394</span><br><span class="stock-name">天孚通信</span></td><td class="up">+3.89%</td><td class="up">+40.71%</td><td class="up">+6.22%</td><td class="down">-17.02%</td></tr><tr><td><span class="stock-code">sh603629</span><br><span class="stock-name">利通电子</span></td><td class="up">+8.76%</td><td class="up">+40.38%</td><td class="up">+1.52%</td><td class="down">-0.67%</td></tr><tr><td><span class="stock-code">sz300476</span><br><span class="stock-name">胜宏科技</span></td><td class="up">+5.84%</td><td class="up">+38.69%</td><td class="up">+4.70%</td><td class="down">-15.69%</td></tr><tr><td><span class="stock-code">sh600601</span><br><span class="stock-name">方正科技</span></td><td class="up">+9.96%</td><td class="up">+34.79%</td><td class="up">+11.11%</td><td class="down">-15.71%</td></tr><tr><td><span class="stock-code">sz300548</span><br><span class="stock-name">长芯博创</span></td><td class="up">+7.26%</td><td class="up">+34.37%</td><td class="up">+1.14%</td><td class="down">-26.42%</td></tr><tr><td><span class="stock-code">sz300857</span><br><span class="stock-name">协创数据</span></td><td class="down">-0.69%</td><td class="up">+33.40%</td><td class="up">+3.83%</td><td class="down">-14.45%</td></tr><tr><td><span class="stock-code">sz002361</span><br><span class="stock-name">神剑股份</span></td><td class="up">+2.54%</td><td class="up">+32.95%</td><td class="up">+22.51%</td><td class="up">+1.12%</td></tr><tr><td><span class="stock-code">sz300757</span><br><span class="stock-name">罗博特科</span></td><td class="down">-0.86%</td><td class="up">+31.53%</td><td class="up">+11.93%</td><td class="down">-9.66%</td></tr><tr><td><span class="stock-code">sz300570</span><br><span class="stock-name">太辰光</span></td><td class="up">+4.22%</td><td class="up">+30.17%</td><td class="down">-2.21%</td><td class="down">-34.60%</td></tr><tr><td><span class="stock-code">sz000657</span><br><span class="stock-name">中钨高新</span></td><td class="up">+8.83%</td><td class="up">+29.13%</td><td class="up">+8.23%</td><td class="down">-17.75%</td></tr><tr><td><span class="stock-code">sz301377</span><br><span class="stock-name">鼎泰高科</span></td><td class="up">+2.87%</td><td class="up">+28.53%</td><td class="up">+6.44%</td><td class="down">-11.58%</td></tr><tr><td><span class="stock-code">sh601138</span><br><span class="stock-name">工业富联</span></td><td class="up">+3.56%</td><td class="up">+28.45%</td><td class="up">+9.71%</td><td class="down">-0.89%</td></tr><tr><td><span class="stock-code">sh600549</span><br><span class="stock-name">厦门钨业</span></td><td class="up">+6.98%</td><td class="up">+27.71%</td><td class="up">+14.32%</td><td class="down">-11.19%</td></tr><tr><td><span class="stock-code">sh688521</span><br><span class="stock-name">芯原股份</span></td><td class="up">+0.93%</td><td class="up">+27.59%</td><td class="down">-2.61%</td><td class="down">-33.90%</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<div class="footer">行业分类采用申万宏源2021版（一级31 / 二级134 / 三级346）。数据仅供参考，不构成投资建议</div>
+<script>
+(function(){
+  const upColor = '#d63031', downColor = '#00b894';
+  const UP_COLOR = upColor, DOWN_COLOR = downColor;
+  const chartOption = function chartOption(title, data) {
+  const UP = UP_COLOR, DOWN = DOWN_COLOR;
+  return {
+    title: { text: title, left: 'center', textStyle: { fontSize: 14, color: '#2d3436' } },
+    tooltip: { trigger: 'axis', formatter: '{b}: {c}%' },
+    grid: { left: '3%', right: '8%', bottom: '3%', top: '12%', containLabel: true },
+    xAxis: { type: 'value', axisLabel: { formatter: '{value}%' }, splitLine: { lineStyle: { color: '#eef1f4' } } },
+    yAxis: { type: 'category', data: data.map(i => i.name).reverse(), axisLabel: { fontSize: 12 }, splitLine: { show: false } },
+    series: [{ type: 'bar', data: data.map(i => ({ value: i.value, itemStyle: { color: i.value >= 0 ? UP : DOWN } })).reverse(), label: { show: true, position: 'right', formatter: '{c}%', color: '#2d3436', fontSize: 11 } }]
+  };
+};
+  // 第二部分：每周期申万一级全部 + 二级TOP10（标注所属一级）
+  echarts.init(document.getElementById('chart-5d-l1')).setOption(chartOption('5日 申万一级行业涨跌幅（全部31个行业）', [{"name":"通信","value":14.22},{"name":"综合","value":12.9},{"name":"电子","value":12.62},{"name":"计算机","value":11.45},{"name":"机械设备","value":11.29},{"name":"有色金属","value":9.64},{"name":"传媒","value":8.73},{"name":"国防军工","value":6.72},{"name":"环保","value":6.71},{"name":"建筑材料","value":6.65},{"name":"基础化工","value":6.13},{"name":"轻工制造","value":5.89},{"name":"社会服务","value":4.78},{"name":"纺织服饰","value":4.48},{"name":"建筑装饰","value":3.94},{"name":"电力设备","value":3.72},{"name":"房地产","value":3.63},{"name":"汽车","value":2.88},{"name":"医药生物","value":2.78},{"name":"煤炭","value":1.66},{"name":"商贸零售","value":1.05},{"name":"农林牧渔","value":0.81},{"name":"石油石化","value":-0.11},{"name":"钢铁","value":-0.17},{"name":"公用事业","value":-0.37},{"name":"交通运输","value":-0.47},{"name":"家用电器","value":-1.17},{"name":"美容护理","value":-1.23},{"name":"非银金融","value":-1.78},{"name":"食品饮料","value":-3.5},{"name":"银行","value":-4.4}]));
+  echarts.init(document.getElementById('chart-5d-l2')).setOption(chartOption('5日 申万二级行业涨跌幅 TOP10', [{"name":"元件（电子）","value":22.67},{"name":"小金属（有色金属）","value":19.07},{"name":"电子化学品Ⅱ（电子）","value":17.91},{"name":"非金属材料Ⅱ（基础化工）","value":16.81},{"name":"通用设备（机械设备）","value":16.26},{"name":"通信设备（通信）","value":15.7},{"name":"自动化设备（机械设备）","value":15.55},{"name":"航天装备Ⅱ（国防军工）","value":15.53},{"name":"塑料（基础化工）","value":15.06},{"name":"金属新材料（有色金属）","value":14.27}]));
+  echarts.init(document.getElementById('chart-10d-l1')).setOption(chartOption('10日 申万一级行业涨跌幅（全部31个行业）', [{"name":"传媒","value":11.6},{"name":"社会服务","value":8.4},{"name":"纺织服饰","value":8.29},{"name":"计算机","value":7.4},{"name":"轻工制造","value":6.78},{"name":"综合","value":5.8},{"name":"有色金属","value":5.56},{"name":"商贸零售","value":5.48},{"name":"建筑材料","value":5.21},{"name":"环保","value":4.95},{"name":"房地产","value":4.8},{"name":"国防军工","value":4.4},{"name":"机械设备","value":4.39},{"name":"基础化工","value":4.38},{"name":"汽车","value":3.55},{"name":"建筑装饰","value":2.94},{"name":"美容护理","value":2.23},{"name":"家用电器","value":2.01},{"name":"电力设备","value":1.98},{"name":"交通运输","value":1.88},{"name":"农林牧渔","value":1.83},{"name":"食品饮料","value":1.47},{"name":"钢铁","value":1.21},{"name":"医药生物","value":0.41},{"name":"银行","value":-0.07},{"name":"石油石化","value":-0.22},{"name":"煤炭","value":-0.4},{"name":"电子","value":-1.52},{"name":"非银金融","value":-2.46},{"name":"公用事业","value":-2.57},{"name":"通信","value":-4.85}]));
+  echarts.init(document.getElementById('chart-10d-l2')).setOption(chartOption('10日 申万二级行业涨跌幅 TOP10', [{"name":"教育（社会服务）","value":19.9},{"name":"广告营销（传媒）","value":16.26},{"name":"工程咨询服务Ⅱ（建筑装饰）","value":14.94},{"name":"数字媒体（传媒）","value":12.69},{"name":"电机Ⅱ（电力设备）","value":12.09},{"name":"软件开发（计算机）","value":12.02},{"name":"游戏Ⅱ（传媒）","value":11.6},{"name":"贵金属（有色金属）","value":10.28},{"name":"装修装饰Ⅱ（建筑装饰）","value":9.33},{"name":"小金属（有色金属）","value":9.21}]));
+  echarts.init(document.getElementById('chart-20d-l1')).setOption(chartOption('20日 申万一级行业涨跌幅（全部31个行业）', [{"name":"石油石化","value":9.3},{"name":"煤炭","value":9.24},{"name":"食品饮料","value":8.69},{"name":"有色金属","value":7.51},{"name":"商贸零售","value":7.16},{"name":"钢铁","value":6.81},{"name":"美容护理","value":6.58},{"name":"传媒","value":5.99},{"name":"交通运输","value":5.57},{"name":"农林牧渔","value":5.24},{"name":"银行","value":4.19},{"name":"医药生物","value":3.89},{"name":"社会服务","value":3.38},{"name":"公用事业","value":3.15},{"name":"家用电器","value":2.71},{"name":"计算机","value":1.96},{"name":"纺织服饰","value":1.93},{"name":"房地产","value":1.09},{"name":"轻工制造","value":0.76},{"name":"非银金融","value":-0.31},{"name":"汽车","value":-0.91},{"name":"建筑装饰","value":-1.07},{"name":"环保","value":-1.13},{"name":"基础化工","value":-2.08},{"name":"电力设备","value":-4.03},{"name":"综合","value":-7.46},{"name":"国防军工","value":-8.23},{"name":"机械设备","value":-11.73},{"name":"建筑材料","value":-12.79},{"name":"通信","value":-17.76},{"name":"电子","value":-24.28}]));
+  echarts.init(document.getElementById('chart-20d-l2')).setOption(chartOption('20日 申万二级行业涨跌幅 TOP10', [{"name":"贵金属（有色金属）","value":22.62},{"name":"工业金属（有色金属）","value":17.11},{"name":"教育（社会服务）","value":15.99},{"name":"广告营销（传媒）","value":14.32},{"name":"医疗服务（医药生物）","value":12.85},{"name":"渔业（农林牧渔）","value":11.57},{"name":"专业连锁Ⅱ（商贸零售）","value":11.56},{"name":"白酒Ⅱ（食品饮料）","value":10.62},{"name":"焦炭Ⅱ（煤炭）","value":10.52},{"name":"农产品加工（农林牧渔）","value":10.39}]));
+  window.addEventListener('resize', function() {
+    ['chart-5d-l1','chart-5d-l2','chart-10d-l1','chart-10d-l2','chart-20d-l1','chart-20d-l2'].forEach(function(id) {
+      const chart = echarts.getInstanceByDom(document.getElementById(id)); if (chart) chart.resize();
+    });
+  });
+})();
+function attachSort(table) {
+  var ths = table.querySelectorAll('th.sortable');
+  ths.forEach(function(th) {
+    th.addEventListener('click', function() {
+      var actualIdx = Array.prototype.indexOf.call(th.parentNode.children, th);
+      var tbody = table.querySelector('tbody'); var rows = Array.from(tbody.querySelectorAll('tr'));
+      var isAsc = th.classList.contains('asc');
+      var forceText = th.classList.contains('sort-text');
+      ths.forEach(function(t) { t.classList.remove('asc'); t.classList.remove('desc'); });
+      th.classList.add(isAsc ? 'desc' : 'asc');
+      var dir = isAsc ? -1 : 1;
+      rows.sort(function(a, b) {
+        var ta = a.cells[actualIdx].textContent.trim();
+        var tb = b.cells[actualIdx].textContent.trim();
+        if (!forceText) {
+          var aMiss = (ta === '-' || ta === ''), bMiss = (tb === '-' || tb === '');
+          if (aMiss || bMiss) {
+            // 缺失值“-”始终排到表格末尾，不受升/降序方向影响
+            if (aMiss && bMiss) return 0;
+            if (aMiss) return 1;
+            return -1;
+          }
+          var na = parseFloat(ta.replace(/[^0-9.\-]/g, '')), nb = parseFloat(tb.replace(/[^0-9.\-]/g, ''));
+          if (!isNaN(na) && !isNaN(nb)) return (na - nb) * dir;
+        }
+        return ta.localeCompare(tb) * dir;
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+    });
+  });
+}
+document.querySelectorAll('table').forEach(function(t) { if (t.querySelector('th.sortable')) attachSort(t); });
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

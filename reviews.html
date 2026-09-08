@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日复盘报告 | A股复盘选股中心</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e9ecef;
+      padding: 20px 0;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    .header a.back, .header a.back, .header .back { position: absolute; left: 12px; top: 12px; font-size: 13px; color: #4263eb; text-decoration: none; white-space: nowrap; }
+    .header h1 { font-size: 20px; font-weight: 700; }
+    .header .subtitle { margin-top: 4px; font-size: 13px; color: #868e96; }
+
+    .container {
+      max-width: 720px;
+      margin: 32px auto;
+      padding: 0 16px;
+    }
+    .section-title {
+      font-size: 13px; color: #868e96; text-transform: uppercase;
+      letter-spacing: 1.5px; font-weight: 600; margin-bottom: 16px; padding-left: 4px;
+    }
+    .report-list { display: flex; flex-direction: column; gap: 12px; }
+    .report-card {
+      display: block; background: #fff; border: 1px solid #e9ecef; border-radius: 10px;
+      padding: 20px 24px; text-decoration: none; color: inherit; transition: all 0.2s ease;
+      position: relative;
+    }
+    .report-card:hover {
+      border-color: #4263eb; box-shadow: 0 4px 12px rgba(66, 99, 235, 0.12); transform: translateY(-1px);
+    }
+    .report-card .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .report-card .date-text { font-size: 18px; font-weight: 700; }
+    .report-card .weekday-text { font-size: 14px; color: #868e96; }
+    .report-card .fg-index { font-size: 12px; padding: 2px 8px; border-radius: 8px; background:#eef1f8; color:#495057; font-weight:600; white-space:nowrap; }
+    .report-card .fg-index.fg-up { background:#fdecea; color:#c62828; }
+    .report-card .fg-index.fg-down { background:#e8f5e9; color:#2e7d32; }
+    .report-card .today-tag {
+      font-size: 11px; padding: 2px 8px; border-radius: 8px;
+      background: #38d9a9; color: #fff; font-weight: 600;
+    }
+    .report-card .arrow { margin-left: auto; color: #ced4da; font-size: 18px; }
+    .report-card:hover .arrow { color: #4263eb; }
+    .report-card .summary { font-size: 14px; color: #495057; line-height: 1.6; }
+    .empty-state { text-align: center; padding: 60px 20px; color: #adb5bd; }
+    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+    .footer { text-align: center; padding: 24px; font-size: 12px; color: #adb5bd; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a class="back" href="index.html">&#8592; 返回</a>
+    <h1>每日复盘报告</h1>
+    <div class="subtitle">每个交易日 15:10 自动生成 | 点击日期查看</div>
+  </div>
+
+  <div class="container">
+    <div class="section-title">交易日历</div>
+    <div class="report-list" id="report-list"></div>
+  </div>
+
+  <div class="container">
+    <div class="section-title">代理恐贪指数（自建）</div>
+    <a class="report-card" href="fear_greed.html?v=11">
+      <div class="card-header">
+        <span class="date-text" id="fg-card-title">市场情绪指数</span>
+        <span class="fg-index" id="fg-card-badge">—</span>
+        <span class="arrow">&#8599;</span>
+      </div>
+      <div class="summary">基于沪深300历史K线合成的多因子代理恐贪指数（0-100），支持自选时间段查看走势｜点击查看</div>
+    </a>
+  </div>
+
+  <div class="footer">数据仅供参考，不构成投资建议</div>
+
+  <script>document.write('<script src="manifest.js?v=' + Date.now() + '"><\/script>');</script>
+  <script src="fear_greed_index.js?v=2"></script>
+  <script>
+    (function() {
+      var reports = (window.REPORTS || []).slice().sort(function(a, b) {
+        return b.date.localeCompare(a.date);
+      });
+      var todayStr = new Date().toISOString().slice(0, 10);
+      var listEl = document.getElementById('report-list');
+
+      if (reports.length === 0) {
+        listEl.innerHTML = '<div class="empty-state"><div class="icon">📊</div><div>暂无报告，等待自动生成</div></div>';
+        return;
+      }
+
+      reports.filter(function(r) { return r.reviewFile && r.reviewFile.length > 0; }).forEach(function(r) {
+        var a = document.createElement('a');
+        a.className = 'report-card';
+        a.href = r.reviewFile;
+
+        var header = '<div class="card-header">' +
+          '<span class="date-text">' + r.date + '</span>' +
+          '<span class="weekday-text">' + r.weekday + '</span>';
+        var fg = window.FEAR_GREED_INDEX && window.FEAR_GREED_INDEX[r.date];
+        if (fg != null) {
+          var fgCls = fg >= 75 ? 'fg-up' : (fg <= 25 ? 'fg-down' : '');
+          header += '<span class="fg-index ' + fgCls + '">恐贪 ' + fg + '</span>';
+        }
+        if (r.date === todayStr) {
+          header += '<span class="today-tag">今日</span>';
+        }
+        header += '<span class="arrow">&#8599;</span></div>';
+
+        a.innerHTML = header + '<div class="summary">' + (r.reviewSummary || '') + '</div>';
+        listEl.appendChild(a);
+      });
+
+      // 填充恐贪指数卡片最新值
+      var fgMap = window.FEAR_GREED_INDEX || {};
+      var fgDates = Object.keys(fgMap).filter(function(d){ return /^\d{4}-\d{2}-\d{2}$/.test(d); });
+      if (fgDates.length) {
+        fgDates.sort();
+        var latest = fgDates[fgDates.length - 1];
+        var val = fgMap[latest];
+        var badge = document.getElementById('fg-card-badge');
+        var title = document.getElementById('fg-card-title');
+        if (title) title.textContent = '最新 ' + latest;
+        if (badge) {
+          badge.textContent = '恐贪 ' + val;
+          badge.className = 'fg-index ' + (val >= 75 ? 'fg-up' : (val <= 25 ? 'fg-down' : ''));
+        }
+      }
+    })();
+  </script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5-10日主线分析（按概念/题材）· 2026-08-04 | A股复盘选股中心</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+.header { background: #fff; border-bottom: 1px solid #e9ecef; padding: 20px 0; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; }
+.header a.back, .header a.back, .header .back { position: absolute; left: 12px; top: 12px; font-size: 13px; color: #4263eb; text-decoration: none; white-space: nowrap; }
+.header h1 { font-size: 20px; font-weight: 700; }
+.header .subtitle { margin-top: 4px; font-size: 13px; color: #868e96; }
+.container { max-width: 900px; margin: 24px auto; padding: 0 16px; }
+.section { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.section-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.section-title .badge { font-size: 12px; padding: 2px 10px; border-radius: 10px; background: #e3f2fd; color: #1976d2; font-weight: 600; }
+.section-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; line-height: 1.6; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { background: #f1f3f5; padding: 10px 12px; text-align: left; font-weight: 600; color: #495057; font-size: 13px; border-bottom: 2px solid #dee2e6; white-space: nowrap; }
+th.sortable { cursor: pointer; user-select: none; transition: background 0.15s; }
+th.sortable:hover { background: #dbeafe; color: #1976d2; }
+th.sortable::after { content: " \21C5"; font-size: 10px; opacity: 0.35; font-weight: normal; }
+th.sortable.asc::after { content: " \2191"; opacity: 1; color: #1976d2; font-weight: 700; }
+th.sortable.desc::after { content: " \2193"; opacity: 1; color: #1976d2; font-weight: 700; }
+td { padding: 10px 12px; border-bottom: 1px solid #e9ecef; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8f9fa; }
+.stock-code { font-family: "SF Mono", Consolas, monospace; font-size: 13px; color: #868e96; }
+.stock-name { font-weight: 600; }
+.up { color: #d63031; font-weight: 600; }
+.down { color: #00b894; font-weight: 600; }
+.flat { color: #868e96; }
+.info-box { background: #e3f2fd; border-left: 4px solid #1976d2; border-radius: 4px; padding: 16px; margin-top: 16px; font-size: 13px; color: #1565c0; line-height: 1.8; }
+.info-box strong { color: #0d47a1; }
+.footer { text-align: center; padding: 24px; font-size: 12px; color: #adb5bd; }
+@media (max-width: 600px) {
+  .container { padding: 0 12px; }
+  .section { padding: 16px; }
+  table { font-size: 12px; }
+  th, td { padding: 8px 4px; }
+  .stock-code { font-size: 11px; }
+  .section-title { font-size: 16px; }
+}
+
+.part-header { font-size: 20px; font-weight: 800; color: #1a1a2e; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #4263eb; }
+.part-header .date-range { font-size: 13px; color: #868e96; font-weight: 400; margin-left: 8px; }
+.analysis-text { font-size: 14px; color: #495057; line-height: 1.8; margin-bottom: 16px; }
+.analysis-text strong { color: #1a1a2e; }
+.theme-card { background: #f8f9fa; border-radius: 8px; padding: 16px; margin-bottom: 12px; border-left: 4px solid #4263eb; }
+.theme-card .theme-name { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+.theme-card .theme-type { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; margin-left: 8px; }
+.theme-card .type-main { background: #fce4ec; color: #c62828; }
+.theme-card .type-cand { background: #e3f2fd; color: #1565c0; }
+.theme-card .theme-data { font-size: 13px; color: #495057; line-height: 1.8; margin-top: 8px; }
+.theme-card .theme-data .data-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.theme-card .theme-data .data-item { background: #fff; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin: 2px 0; }
+
+.overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.overview-card { background: #f8f9fa; border-radius: 8px; padding: 14px; text-align: center; }
+.overview-card .label { font-size: 12px; color: #868e96; margin-bottom: 4px; }
+.overview-card .value { font-size: 22px; font-weight: 700; }
+.overview-card .sub { font-size: 11px; color: #adb5bd; margin-top: 2px; }
+@media (max-width: 600px) { .overview-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; } .overview-card { padding: 10px 4px; } .overview-card .value { font-size: 18px; } .overview-card .label { font-size: 11px; } }
+.chart-box { width: 100%; margin: 12px 0; }
+</style>
+</head>
+<body>
+<div class="header">
+  <a class="back" href="mainlines_concept.html">&#8592; 返回</a>
+  <h1>5-10日主线分析（按概念/题材）· 2026-08-04 周二</h1>
+  <div class="subtitle">概念/题材（跨行业主题）分类口径 | 5日与10日主线及候选主线研判 | 含市场概览、板块涨跌、资金流向等数据依据</div>
+</div>
+<div class="container">
+
+  <!-- Part 1: 5-Day Mainline -->
+  <div class="section">
+    <div class="part-header">第一部分：5日主线分析 <span class="date-range">（7/30 - 8/4，含当日5个交易日）</span></div>
+
+    <!-- 5-Day Market Overview -->
+    <div class="section-title">5日市场概览 <span class="badge">含当日5个交易日</span></div>
+    <div class="overview-grid">
+      <div class="overview-card"><div class="label">上涨家数</div><div class="value up">4276</div><div class="sub">占比85.8%</div></div>
+      <div class="overview-card"><div class="label">下跌家数</div><div class="value down">706</div><div class="sub">占比14.2%</div></div>
+      <div class="overview-card"><div class="label">涨跌比</div><div class="value" style="color:#d63031">6.1:1</div><div class="sub">普涨格局</div></div>
+    </div>
+
+    <div id="chart-5d-index" class="chart-box" style="height:320px;"></div>
+    <div id="chart-5d-stocks" class="chart-box" style="height:220px;"></div>
+
+    <div class="analysis-text" style="margin-top:16px">
+      <strong>5日市场环境：</strong>震荡修复 → 进攻型。8/4创指大涨5.64%，科技成长全线反攻，涨停141只，情绪转为狂热。
+      5日维度来看，中证全指+2.08%，创业板指+4.87%领涨，科创50-4.55%唯一收跌。全市场4276只个股上涨（占比85.8%），呈普涨格局。
+      资金从银行/白酒等权重板块流出，流入CPO/算力/创新药等科技方向，呈结构性反弹特征。
+    </div>
+
+    <!-- 5-Day Theme Cards -->
+    <div class="theme-card" style="border-left-color:#d63031">
+      <div class="theme-name">主线：算力/光通信（CPO） <span class="theme-type type-main">确认主线</span></div>
+      <div class="theme-data">
+        <div class="data-row">
+          <span class="data-item">通信设备 5日 +8.05%</span>
+          <span class="data-item">光芯片 5日 +7.04%</span>
+          <span class="data-item">博通概念 5日 +5.84%</span>
+          <span class="data-item">CPO概念 今日 +6.90%</span>
+        </div>
+        <div class="data-row" style="margin-top:6px">
+          <span class="data-item">资金流入Top：中际旭创 5日主力净流入45.19亿</span>
+          <span class="data-item">新易盛 40.73亿</span>
+          <span class="data-item">东山精密 40.09亿</span>
+          <span class="data-item">天孚通信 32.78亿</span>
+        </div>
+        <div style="margin-top:8px">
+          <strong>催化：</strong>英伟达宣布CPO进入量产阶段，Spectrum-X CPO交换机开始出货；博通51.2T Bailly持续小量出货。TrendForce预估CPO/NPO市场2030年突破390亿美元。<br>
+          <strong>龙头梯队：</strong>中际旭创（龙头）、新易盛/天孚通信（中军）、永鼎股份/光库科技（补涨）<br>
+          <strong>持续性评估：较强。</strong>产业逻辑扎实（CPO量产），事件催化明确（英伟达出货），资金合力显著（5日主力净流入前列）。但需注意多数个股10日仍为负，属于超跌反弹性质。
+        </div>
+      </div>
+    </div>
+
+    <div class="theme-card" style="border-left-color:#1976d2">
+      <div class="theme-name">候选主线1：CRO/医疗服务 <span class="theme-type type-cand">候选主线</span></div>
+      <div class="theme-data">
+        <div class="data-row">
+          <span class="data-item">医疗服务 5日 +8.73%</span>
+          <span class="data-item">医疗服务 今日 +7.44%</span>
+          <span class="data-item">药明康德 5日 +14.90%</span>
+        </div>
+        <div style="margin-top:8px">
+          <strong>催化：</strong>药明康德半年报净利润首破百亿（+29.43%），全面上调全年业绩指引（收入增速18-22%→35-39%）。CRO龙头业绩超预期，带动板块估值修复。<br>
+          <strong>龙头：</strong>药明康德（涨停，市值4200亿）、凯莱英、康龙化成<br>
+          <strong>持续性评估：较强。</strong>基本面支撑扎实（业绩兑现+指引上调），且5日/10日/20日全周期正收益，持续性优于算力/光通信。
+        </div>
+      </div>
+    </div>
+
+    <div class="theme-card" style="border-left-color:#7b1fa2">
+      <div class="theme-name">候选主线2：算力租赁 <span class="theme-type type-cand">候选主线</span></div>
+      <div class="theme-data">
+        <div class="data-row">
+          <span class="data-item">算力租赁 今日 +5.16%</span>
+          <span class="data-item">AI-PIN 5日 +5.90%</span>
+        </div>
+        <div style="margin-top:8px">
+          <strong>催化：</strong>中国信通院数据Q1 AI算力需求同比+417%，供给仅+128%，供需缺口持续拉大。国家发改委披露"十五五"算力网建设新增投资4万亿元。<br>
+          <strong>龙头：</strong>美利云（3连板）、宏景科技（3天2板）、利通电子（3天2板）<br>
+          <strong>持续性评估：一般。</strong>逻辑长期利好但短期题材性强，连板高度待验证。
+        </div>
+      </div>
+    </div>
+
+    <div class="theme-card" style="border-left-color:#00897b">
+      <div class="theme-name">候选主线3：AI应用/传媒 <span class="theme-type type-cand">候选主线</span></div>
+      <div class="theme-data">
+        <div class="data-row">
+          <span class="data-item">AI应用 今日 +4.27%</span>
+          <span class="data-item">传媒ETF 5日 +11.5%</span>
+          <span class="data-item">教育ETF 5日 +11.08%</span>
+        </div>
+        <div style="margin-top:8px">
+          <strong>催化：</strong>隔夜美股Palantir Q2营收+93%超预期，Snap营收超预期。传智教育发布AI具身智能机器人新学科。<br>
+          <strong>龙头：</strong>传智教育（7连板）、中国科传（5天3板）、蓝色光标<br>
+          <strong>持续性评估：一般。</strong>海外催化为主，国内基本面待验证，传媒ETF 5日涨幅领先但需观察回调风险。
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis-text" style="margin-top:16px">
+      <strong>5日情绪周期：</strong>修复 → 主升初期。8/3市场调整后8/4强势反弹，涨停141只创近期新高，情绪从冰点快速修复至狂热。
+      但需注意这是超跌反弹性质（多数科技股10日仍为负），后续需观察量能持续性和龙头分歧承接。
+    </div>
+  </div>
+
+  <!-- Part 2: 10-Day Mainline -->
+  <div class="section">
+    <div class="part-header">第二部分：10日主线分析 <span class="date-range">（7/23 - 8/4，含当日10个交易日）</span></div>
+
+    <!-- 10-Day Market Overview -->
+    <div class="section-title">10日市场概览 <span class="badge">含当日10个交易日</span></div>
+    <div class="overview-grid">
+      <div class="overview-card"><div class="label">上涨家数</div><div class="value up">3960</div><div class="sub">占比79.5%</div></div>
+      <div class="overview-card"><div class="label">下跌家数</div><div class="value down">1021</div><div class="sub">占比20.5%</div></div>
+      <div class="overview-card"><div class="label">涨跌比</div><div class="value" style="color:#d63031">3.9:1</div><div class="sub">涨多跌少</div></div>
+    </div>
+
+    <div id="chart-10d-index" class="chart-box" style="height:320px;"></div>
+    <div id="chart-10d-stocks" class="chart-box" style="height:220px;"></div>
+
+    <div class="analysis-text" style="margin-top:16px">
+      <strong>10日市场环境：</strong>先跌后涨 → 震荡修复。10个交易日内市场经历先调整后反弹，沪指10日-1.09%，中证全指-1.16%。
+      全市场3960只个股上涨（占比79.5%），涨多跌少但分化明显。多数科技个股10日收益仍为负，仅CRO/医疗服务板块实现全周期正收益，10日维度主线清晰度低于5日。
+    </div>
+
+    <!-- 10-Day Theme Cards -->
+    <div class="theme-card" style="border-left-color:#d63031">
+      <div class="theme-name">主线：CRO/医疗服务 <span class="theme-type type-main">确认主线</span></div>
+      <div class="theme-data">
+        <div class="data-row">
+          <span class="data-item">药明康德 10日 +11.78%</span>
+          <span class="data-item">药明康德 20日 +19.48%</span>
+          <span class="data-item">三环集团 10日 +12.50%</span>
+          <span class="data-item">医疗服务 5日 +8.73%</span>
+        </div>
+        <div style="margin-top:8px">
+          <strong>核心逻辑：</strong>在10日维度中，CRO/医疗服务是唯一实现全周期正收益的板块。药明康德半年报净利润首破百亿并上调指引，
+          产业需求内外共振推动新一轮复苏周期。与算力/光通信的"超跌反弹"不同，CRO是基本面驱动的持续性主线。<br>
+          <strong>持续性评估：强。</strong>基本面扎实、业绩兑现、全周期正收益、资金持续流入（药明康德5日主力净流入35.57亿）。
+        </div>
+      </div>
+    </div>
+
+    <div class="theme-card" style="border-left-color:#1976d2">
+      <div class="theme-name">候选主线1：算力/光通信（CPO） <span class="theme-type type-cand">超跌反弹型</span></div>
+      <div class="theme-data">
+        <div class="data-row">
+          <span class="data-item">中际旭创 10日 -10.08%</span>
+          <span class="data-item">新易盛 10日 -18.81%</span>
+          <span class="data-item">天孚通信 10日 -8.23%</span>
+          <span class="data-item">东山精密 10日 -22.47%</span>
+        </div>
+        <div style="margin-top:8px">
+          <strong>核心逻辑：</strong>10日维度内算力/光通信板块经历了显著下跌后近5日强势反弹。中际旭创、新易盛等龙头10日收益仍为负，
+          说明当前行情性质为超跌反弹而非趋势性上涨。CPO量产消息提供了反弹催化剂，但能否转化为持续主线需观察10日收益转正。<br>
+          <strong>持续性评估：待观察。</strong>5日强势但10日仍负，需观察后续量能持续性和龙头能否创新高。
+        </div>
+      </div>
+    </div>
+
+    <div class="theme-card" style="border-left-color:#00897b">
+      <div class="theme-name">候选主线2：传媒/AI应用 <span class="theme-type type-cand">候选主线</span></div>
+      <div class="theme-data">
+        <div class="data-row">
+          <span class="data-item">传媒ETF 5日 +11.5%</span>
+          <span class="data-item">传媒ETF 10日 +9.55%</span>
+          <span class="data-item">教育ETF 5日 +11.08%</span>
+        </div>
+        <div style="margin-top:8px">
+          <strong>核心逻辑：</strong>传媒/教育ETF在5日和10日维度均表现强势，传智教育7连板显示题材热度。海外AI应用股（Palantir/Snap）业绩超预期提供催化。
+          但板块整体10日涨幅不如CRO稳健，且以题材炒作为主。<br>
+          <strong>持续性评估：一般。</strong>题材驱动型，需关注连板高度和扩散效应。
+        </div>
+      </div>
+    </div>
+
+    <div class="analysis-text" style="margin-top:16px">
+      <strong>10日主线总结：</strong>CRO/医疗服务为10日维度的确定性主线（全周期正收益+基本面驱动），算力/光通信为超跌反弹型候选（5日强但10日仍负），
+      传媒/AI应用为题材型候选。主线清晰度低于5日维度，建议以CRO为核心持仓，算力/光通信关注10日收益转正的确认信号。
+    </div>
+  </div>
+
+  <!-- Data Tables -->
+  <div class="section">
+    <div class="section-title">数据依据：板块涨跌排行 <span class="badge">5日 / 20日</span></div>
+    <div class="table-wrap">
+      <table id="sector-table">
+        <thead><tr>
+          <th class="sortable">板块</th>
+          <th class="sortable">今日涨幅</th>
+          <th class="sortable">5日涨幅</th>
+          <th class="sortable">20日涨幅</th>
+          <th>领涨股</th>
+        </tr></thead>
+        <tbody><tr>
+      <td><span class="stock-name">通信设备</span></td>
+      <td class="up">+10.74%</td>
+      <td class="up">+8.05%</td>
+      <td class="down">-15.47%</td>
+      <td>欣天科技(20.04)</td>
+    </tr><tr>
+      <td><span class="stock-name">元件</span></td>
+      <td class="up">+8.47%</td>
+      <td class="up">+2.31%</td>
+      <td class="down">-22.31%</td>
+      <td>南亚新材(14.59)</td>
+    </tr><tr>
+      <td><span class="stock-name">医疗服务</span></td>
+      <td class="up">+7.44%</td>
+      <td class="up">+8.73%</td>
+      <td class="up">+13.33%</td>
+      <td>成都先导(14.67)</td>
+    </tr><tr>
+      <td><span class="stock-name">电子化学品Ⅱ</span></td>
+      <td class="up">+7.05%</td>
+      <td class="down">-3.97%</td>
+      <td class="down">-32.53%</td>
+      <td>唯特偶(13.43)</td>
+    </tr><tr>
+      <td><span class="stock-name">玻璃玻纤</span></td>
+      <td class="up">+6.19%</td>
+      <td class="down">-2.67%</td>
+      <td class="down">-34.16%</td>
+      <td>中材科技(9.99)</td>
+    </tr><tr>
+      <td><span class="stock-name">光芯片</span></td>
+      <td class="up">+10.26%</td>
+      <td class="up">+7.04%</td>
+      <td class="down">-19.32%</td>
+      <td>光库科技(20.00)</td>
+    </tr><tr>
+      <td><span class="stock-name">博通概念</span></td>
+      <td class="up">+9.60%</td>
+      <td class="up">+5.84%</td>
+      <td class="down">-19.23%</td>
+      <td>胜蓝股份(17.88)</td>
+    </tr><tr>
+      <td><span class="stock-name">谷歌概念</span></td>
+      <td class="up">+9.42%</td>
+      <td class="up">+10.97%</td>
+      <td class="down">-8.44%</td>
+      <td>光库科技(20.00)</td>
+    </tr><tr>
+      <td><span class="stock-name">靶材</span></td>
+      <td class="up">+9.08%</td>
+      <td class="down">-6.88%</td>
+      <td class="down">-37.64%</td>
+      <td>欧莱新材(17.04)</td>
+    </tr><tr>
+      <td><span class="stock-name">锗镓概念</span></td>
+      <td class="up">+7.34%</td>
+      <td class="up">+8.84%</td>
+      <td class="down">-15.55%</td>
+      <td>光智科技(20.00)</td>
+    </tr><tr>
+      <td><span class="stock-name">AI-PIN</span></td>
+      <td class="up">+7.19%</td>
+      <td class="up">+5.90%</td>
+      <td class="down">-7.17%</td>
+      <td>华凯易佰(19.97)</td>
+    </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">数据依据：5日主力资金流入Top10 <span class="badge">含多周期涨跌</span></div>
+    <div class="table-wrap">
+      <table id="cap-table">
+        <thead><tr>
+          <th class="sortable">排名</th>
+          <th class="sortable">股票</th>
+          <th class="sortable">5日主力净流入</th>
+          <th class="sortable">今日涨幅</th>
+          <th class="sortable">5日涨幅</th>
+          <th class="sortable">10日涨幅</th>
+          <th class="sortable">20日涨幅</th>
+        </tr></thead>
+        <tbody><tr>
+      <td>1</td>
+      <td><span class="stock-code">sz300308</span><br><span class="stock-name">中际旭创</span></td>
+      <td class="up">45.19亿</td>
+      <td class="up">+13.24%</td>
+      <td class="up">+12.55%</td>
+      <td class="down">-10.08%</td>
+      <td class="down">-8.91%</td>
+    </tr><tr>
+      <td>2</td>
+      <td><span class="stock-code">sz300502</span><br><span class="stock-name">新易盛</span></td>
+      <td class="up">40.73亿</td>
+      <td class="up">+13.68%</td>
+      <td class="up">+10.10%</td>
+      <td class="down">-18.81%</td>
+      <td class="down">-12.17%</td>
+    </tr><tr>
+      <td>3</td>
+      <td><span class="stock-code">sz002384</span><br><span class="stock-name">东山精密</span></td>
+      <td class="up">40.09亿</td>
+      <td class="up">+10.00%</td>
+      <td class="down">-6.09%</td>
+      <td class="down">-22.47%</td>
+      <td class="down">-24.39%</td>
+    </tr><tr>
+      <td>4</td>
+      <td><span class="stock-code">sh603259</span><br><span class="stock-name">药明康德</span></td>
+      <td class="up">35.57亿</td>
+      <td class="up">+10.00%</td>
+      <td class="up">+14.90%</td>
+      <td class="up">+11.78%</td>
+      <td class="up">+19.48%</td>
+    </tr><tr>
+      <td>5</td>
+      <td><span class="stock-code">sz300408</span><br><span class="stock-name">三环集团</span></td>
+      <td class="up">34.67亿</td>
+      <td class="up">+6.12%</td>
+      <td class="up">+19.98%</td>
+      <td class="up">+12.50%</td>
+      <td class="down">-13.59%</td>
+    </tr><tr>
+      <td>6</td>
+      <td><span class="stock-code">sz300394</span><br><span class="stock-name">天孚通信</span></td>
+      <td class="up">32.78亿</td>
+      <td class="up">+17.45%</td>
+      <td class="up">+16.77%</td>
+      <td class="down">-8.23%</td>
+      <td class="down">-13.15%</td>
+    </tr><tr>
+      <td>7</td>
+      <td><span class="stock-code">sh688825</span><br><span class="stock-name">长鑫科技</span></td>
+      <td class="up">26.80亿</td>
+      <td class="up">+0.02%</td>
+      <td class="up">+17.02%</td>
+      <td class="up">+535.10%</td>
+      <td class="up">+535.10%</td>
+    </tr><tr>
+      <td>8</td>
+      <td><span class="stock-code">sh688766</span><br><span class="stock-name">普冉股份</span></td>
+      <td class="up">25.18亿</td>
+      <td class="up">+7.31%</td>
+      <td class="up">+8.31%</td>
+      <td class="down">-28.56%</td>
+      <td class="down">-52.71%</td>
+    </tr><tr>
+      <td>9</td>
+      <td><span class="stock-code">sh600105</span><br><span class="stock-name">永鼎股份</span></td>
+      <td class="up">21.98亿</td>
+      <td class="up">+10.01%</td>
+      <td class="up">+8.24%</td>
+      <td class="down">-10.42%</td>
+      <td class="down">-30.09%</td>
+    </tr><tr>
+      <td>10</td>
+      <td><span class="stock-code">sz002131</span><br><span class="stock-name">利欧股份</span></td>
+      <td class="up">16.30亿</td>
+      <td class="up">+5.85%</td>
+      <td class="up">-</td>
+      <td class="up">-</td>
+      <td class="up">-</td>
+    </tr></tbody>
+      </table>
+    </div>
+    <div class="info-box" style="margin-top:12px">
+      <strong>关键发现：</strong>5日主力资金流入Top10中，8只为算力/光通信/半导体个股，但其中7只10日收益为负。
+      仅药明康德（10日+11.78%）和三环集团（10日+12.50%）实现全周期正收益，印证CRO为10日持续主线。
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">数据依据：热门板块排行 <span class="badge">今日热度</span></div>
+    <div class="table-wrap">
+      <table id="board-table">
+        <thead><tr>
+          <th class="sortable">热度排名</th>
+          <th class="sortable">板块名称</th>
+          <th class="sortable">今日涨幅</th>
+        </tr></thead>
+        <tbody><tr><td>1</td><td><span class="stock-name">通信设备</span></td><td class="up">+10.74%</td></tr><tr><td>2</td><td><span class="stock-name">CPO(共封装光模块)</span></td><td class="up">+6.90%</td></tr><tr><td>3</td><td><span class="stock-name">半导体</span></td><td class="up">+5.39%</td></tr><tr><td>4</td><td><span class="stock-name">电脑硬件</span></td><td class="up">+5.13%</td></tr><tr><td>5</td><td><span class="stock-name">AI应用</span></td><td class="up">+4.27%</td></tr><tr><td>6</td><td><span class="stock-name">元件</span></td><td class="up">+8.47%</td></tr><tr><td>9</td><td><span class="stock-name">医疗服务</span></td><td class="up">+7.44%</td></tr><tr><td>10</td><td><span class="stock-name">算力租赁</span></td><td class="up">+5.16%</td></tr><tr><td>12</td><td><span class="stock-name">光通信</span></td><td class="up">+6.99%</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<div class="footer">数据仅供参考，不构成投资建议</div>
+<script>
+(function(){
+  const upColor = '#d63031', downColor = '#00b894';
+
+  // 5-Day Index Chart
+  const idx5d = [{"name":"上证指数","value":0.24},{"name":"深证成指","value":2.78},{"name":"创业板指","value":4.87},{"name":"沪深300","value":0.69},{"name":"科创50","value":-4.55},{"name":"中证1000","value":3.6},{"name":"中证500","value":2.2},{"name":"北证50","value":3.62},{"name":"中证全指","value":2.08}];
+  const chart5d = echarts.init(document.getElementById('chart-5d-index'));
+  chart5d.setOption({
+    title: { text: '5日主要指数涨跌幅', left: 'center', textStyle: { fontSize: 14, color: '#2d3436' } },
+    tooltip: { trigger: 'axis', formatter: '{b}: {c}%' },
+    grid: { left: '3%', right: '8%', bottom: '3%', top: '12%', containLabel: true },
+    xAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
+    yAxis: { type: 'category', data: idx5d.map(i => i.name).reverse(), axisLabel: { fontSize: 12 } },
+    series: [{
+      type: 'bar',
+      data: idx5d.map(i => ({ value: i.value, itemStyle: { color: i.value >= 0 ? upColor : downColor } })).reverse(),
+      label: { show: true, position: 'right', formatter: '{c}%', color: '#2d3436', fontSize: 11 }
+    }]
+  });
+
+  // 5-Day Stock Up/Down Chart
+  const chart5dStocks = echarts.init(document.getElementById('chart-5d-stocks'));
+  chart5dStocks.setOption({
+    title: { text: '5日个股涨跌家数', left: 'center', textStyle: { fontSize: 14, color: '#2d3436' } },
+    tooltip: { trigger: 'item', formatter: '{b}: {c}只 ({d}%)' },
+    legend: { bottom: 0, textStyle: { fontSize: 12 } },
+    series: [{
+      type: 'pie',
+      radius: ['35%', '60%'],
+      center: ['50%', '45%'],
+      label: { show: true, formatter: '{b}\n{c}只', fontSize: 12 },
+      data: [
+        { value: 4276, name: '上涨', itemStyle: { color: upColor } },
+        { value: 706, name: '下跌', itemStyle: { color: downColor } }
+      ]
+    }]
+  });
+
+  // 10-Day Index Chart
+  const idx10d = [{"name":"上证指数","value":-1.09},{"name":"深证成指","value":-2.65},{"name":"创业板指","value":-5.34},{"name":"沪深300","value":-2.92},{"name":"科创50","value":-15.07},{"name":"中证1000","value":0.27},{"name":"中证500","value":-2.48},{"name":"北证50","value":1.34},{"name":"中证全指","value":-1.16}];
+  const chart10d = echarts.init(document.getElementById('chart-10d-index'));
+  chart10d.setOption({
+    title: { text: '10日主要指数涨跌幅', left: 'center', textStyle: { fontSize: 14, color: '#2d3436' } },
+    tooltip: { trigger: 'axis', formatter: '{b}: {c}%' },
+    grid: { left: '3%', right: '8%', bottom: '3%', top: '12%', containLabel: true },
+    xAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
+    yAxis: { type: 'category', data: idx10d.map(i => i.name).reverse(), axisLabel: { fontSize: 12 } },
+    series: [{
+      type: 'bar',
+      data: idx10d.map(i => ({ value: i.value, itemStyle: { color: i.value >= 0 ? upColor : downColor } })).reverse(),
+      label: { show: true, position: 'right', formatter: '{c}%', color: '#2d3436', fontSize: 11 }
+    }]
+  });
+
+  // 10-Day Stock Up/Down Chart
+  const chart10dStocks = echarts.init(document.getElementById('chart-10d-stocks'));
+  chart10dStocks.setOption({
+    title: { text: '10日个股涨跌家数', left: 'center', textStyle: { fontSize: 14, color: '#2d3436' } },
+    tooltip: { trigger: 'item', formatter: '{b}: {c}只 ({d}%)' },
+    legend: { bottom: 0, textStyle: { fontSize: 12 } },
+    series: [{
+      type: 'pie',
+      radius: ['35%', '60%'],
+      center: ['50%', '45%'],
+      label: { show: true, formatter: '{b}\n{c}只', fontSize: 12 },
+      data: [
+        { value: 3960, name: '上涨', itemStyle: { color: upColor } },
+        { value: 1021, name: '下跌', itemStyle: { color: downColor } }
+      ]
+    }]
+  });
+
+  window.addEventListener('resize', () => { chart5d.resize(); chart5dStocks.resize(); chart10d.resize(); chart10dStocks.resize(); });
+})();
+
+function makeSortable(tableId) {
+  var table = document.getElementById(tableId);
+  if (!table) return;
+  var ths = table.querySelectorAll('th.sortable');
+  ths.forEach(function(th, colIdx) {
+    th.addEventListener('click', function() {
+      var tbody = table.querySelector('tbody');
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      var isAsc = th.classList.contains('asc');
+      ths.forEach(function(t) { t.classList.remove('asc'); t.classList.remove('desc'); });
+      th.classList.add(isAsc ? 'desc' : 'asc');
+      var dir = isAsc ? -1 : 1;
+      rows.sort(function(a, b) {
+        var va = a.cells[colIdx].textContent.trim().replace(/[^0-9.\-]/g, '');
+        var vb = b.cells[colIdx].textContent.trim().replace(/[^0-9.\-]/g, '');
+        var na = parseFloat(va), nb = parseFloat(vb);
+        if (!isNaN(na) && !isNaN(nb)) return (na - nb) * dir;
+        return a.cells[colIdx].textContent.trim().localeCompare(b.cells[colIdx].textContent.trim()) * dir;
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+    });
+  });
+}
+
+makeSortable('sector-table');
+makeSortable('cap-table');
+makeSortable('board-table');
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

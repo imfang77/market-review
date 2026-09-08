@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股收盘复盘 | 2026年8月3日</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #2d3436; line-height: 1.7; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 20px 60px; }
+
+  /* Header */
+  .header { text-align: center; padding: 32px 0 24px; border-bottom: 2px solid #e8ecf0; margin-bottom: 28px; }
+  .header h1 { font-size: 26px; font-weight: 700; color: #1a1a2e; letter-spacing: 1px; }
+  .header .subtitle { font-size: 14px; color: #636e72; margin-top: 8px; }
+  .header .date-tag { display: inline-block; background: #0984e3; color: #fff; font-size: 12px; padding: 3px 12px; border-radius: 12px; margin-top: 10px; }
+
+  /* TL;DR Card */
+  .tldr { background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%); border: 1px solid #dfe6e9; border-radius: 12px; padding: 24px; margin-bottom: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .tldr h2 { font-size: 16px; color: #0984e3; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .tldr h2::before { content: ""; display: inline-block; width: 4px; height: 18px; background: #0984e3; border-radius: 2px; }
+  .tldr ul { list-style: none; }
+  .tldr li { padding: 6px 0 6px 20px; position: relative; font-size: 14px; color: #2d3436; }
+  .tldr li::before { content: "▸"; position: absolute; left: 0; color: #0984e3; font-weight: bold; }
+  .tldr .highlight { color: #d63031; font-weight: 600; }
+  .tldr .highlight-green { color: #00b894; font-weight: 600; }
+
+  /* Section */
+  .section { background: #fff; border: 1px solid #e8ecf0; border-radius: 10px; padding: 22px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.03); }
+  .section h2 { font-size: 17px; color: #1a1a2e; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 8px; }
+  .section h2 .icon { font-size: 20px; }
+  .section h3 { font-size: 14px; color: #2d3436; margin: 14px 0 8px; font-weight: 600; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
+  th { background: #f8f9fa; color: #636e72; font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 2px solid #e8ecf0; white-space: nowrap; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; }
+  tr:hover td { background: #f8f9fb; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .up { color: #d63031; font-weight: 600; }
+  .down { color: #00b894; font-weight: 600; }
+  .flat { color: #636e72; }
+
+  /* Chart containers */
+  .chart-box { width: 100%; margin: 12px 0; }
+  .chart-title { font-size: 13px; color: #636e72; margin-bottom: 6px; font-weight: 500; }
+
+  /* Tags */
+  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-right: 4px; }
+  .tag-up { background: #fadbd8; color: #c0392b; }
+  .tag-down { background: #d5f5e3; color: #27ae60; }
+  .tag-neutral { background: #dfe6e9; color: #636e72; }
+
+  /* Theme cards */
+  .theme-card { border-left: 3px solid #0984e3; padding: 12px 16px; margin: 10px 0; background: #f8f9fb; border-radius: 0 8px 8px 0; }
+  .theme-card.nuclear { border-left-color: #d63031; }
+  .theme-card.pv { border-left-color: #f39c12; }
+  .theme-card.ai { border-left-color: #6c5ce7; }
+  .theme-card.chip { border-left-color: #00b894; }
+  .theme-card h4 { font-size: 14px; margin-bottom: 6px; }
+  .theme-card .meta { font-size: 12px; color: #636e72; margin-bottom: 4px; }
+  .theme-card p { font-size: 13px; color: #2d3436; }
+
+  /* News items */
+  .news-item { padding: 10px 0; border-bottom: 1px dashed #e8ecf0; }
+  .news-item:last-child { border-bottom: none; }
+  .news-item .news-title { font-size: 13px; font-weight: 600; color: #2d3436; }
+  .news-item .news-desc { font-size: 12px; color: #636e72; margin-top: 3px; }
+  .news-item .news-source { font-size: 11px; color: #b2bec3; margin-top: 2px; }
+
+  /* Market state badge */
+  .state-badge { display: inline-block; font-size: 13px; font-weight: 600; padding: 4px 14px; border-radius: 20px; }
+  .state-volatile { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+
+  /* Source */
+  .source-note { font-size: 11px; color: #b2bec3; margin-top: 6px; text-align: right; }
+  .disclaimer { font-size: 12px; color: #b2bec3; margin-top: 24px; padding: 16px; background: #f8f9fa; border-radius: 8px; line-height: 1.8; }
+
+  /* Summary grid */
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0; }
+  .summary-card { text-align: center; padding: 14px 8px; border-radius: 8px; background: #f8f9fa; }
+  .summary-card .label { font-size: 11px; color: #636e72; margin-bottom: 4px; }
+  .summary-card .value { font-size: 20px; font-weight: 700; }
+  .summary-card .change { font-size: 12px; margin-top: 2px; }
+
+  /* Observation list */
+  .obs-list { list-style: none; }
+  .obs-list li { padding: 6px 0 6px 22px; position: relative; font-size: 13px; }
+  .obs-list li::before { content: "→"; position: absolute; left: 0; color: #0984e3; font-weight: bold; }
+
+  /* Mobile responsive */
+  @media (max-width: 600px) {
+    .container { padding: 16px 12px 40px; }
+    .header { padding: 20px 0 16px; margin-bottom: 20px; }
+    .header h1 { font-size: 20px; }
+    .header .subtitle { font-size: 12px; }
+    .section { padding: 14px; margin-bottom: 14px; }
+    .section h2 { font-size: 15px; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .summary-card { padding: 10px 6px; }
+    .summary-card .value { font-size: 16px; }
+    .summary-card .label { font-size: 10px; }
+    .summary-card .change { font-size: 11px; }
+    table { font-size: 12px; }
+    th, td { padding: 6px 6px; }
+    .tldr { padding: 16px; }
+    .tldr li { font-size: 13px; }
+    .theme-card { padding: 10px 12px; }
+    .theme-card p { font-size: 12px; }
+    #chart-index { height: 320px !important; }
+    #chart-sector { height: 360px !important; }
+    #chart-fund { height: 280px !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>A股收盘复盘报告</h1>
+    <div class="subtitle">缩量调整中的结构性分化 | 核电爆发 存储重挫</div>
+    <span class="date-tag">2026-08-03 周一 收盘</span>
+  </div>
+
+  <!-- TL;DR -->
+  <div class="tldr">
+    <h2>核心结论</h2>
+    <ul>
+      <li>三大指数集体收跌，沪指 <span class="highlight-green">-0.59%</span>、深成指 <span class="highlight-green">-0.96%</span>、创业板指 <span class="highlight-green">-1.24%</span>，但全市场 <span class="highlight">超4000只个股上涨</span>，呈现"权重拖累指数、中小盘普涨"的典型分化格局</li>
+      <li>两市成交约 <span class="highlight">2.0万亿</span>，较上日缩量约5446亿，量能仍处高位但边际收敛</li>
+      <li><span class="highlight">核电板块</span>逆势爆发，主力净流入26.42亿居全市场第一，18只涨停，国务院核准8台核电机组构成强催化，具备候选主线条件</li>
+      <li><span class="highlight-green">存储芯片/半导体</span>大幅调整，兆易创新跌停，科创50重挫-5.08%，机构定性为"再平衡"而非趋势切换</li>
+      <li>光伏板块迎来超跌反弹修复，多晶硅期货涨停形成共振催化</li>
+      <li>AI应用方向持续活跃，传智教育6连板，阿里发布Qwen3.8（2.4万亿参数）提供新催化</li>
+      <li>市场状态判断：<span class="state-badge state-volatile">震荡分化 · 结构性行情</span>，适合精选个股而非追涨杀跌</li>
+    </ul>
+  </div>
+
+  <!-- 1. 市场概览 -->
+  <div class="section">
+    <h2><span class="icon">📊</span> 一、市场概览</h2>
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="label">上证指数</div>
+        <div class="value down" style="color:#d63031">3809.66</div>
+        <div class="change down" style="color:#00b894">-0.59%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">深证成指</div>
+        <div class="value" style="color:#d63031">13448.29</div>
+        <div class="change" style="color:#00b894">-0.96%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">创业板指</div>
+        <div class="value" style="color:#d63031">3302.55</div>
+        <div class="change" style="color:#00b894">-1.24%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">科创50</div>
+        <div class="value" style="color:#d63031">1552.89</div>
+        <div class="change" style="color:#00b894">-5.08%</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>指数</th>
+          <th class="num">收盘价</th>
+          <th class="num">涨跌幅</th>
+          <th class="num">成交额(亿)</th>
+          <th class="num">振幅</th>
+          <th class="num">上涨/下跌</th>
+          <th class="num">年初至今</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>上证指数</td><td class="num">3809.66</td><td class="num down" style="color:#00b894">-0.59%</td><td class="num">9,523</td><td class="num">0.78%</td><td class="num">1629 / 657</td><td class="num down" style="color:#00b894">-4.01%</td></tr>
+        <tr><td>深证成指</td><td class="num">13448.29</td><td class="num down" style="color:#00b894">-0.96%</td><td class="num">10,451</td><td class="num">1.20%</td><td class="num">2237 / 622</td><td class="num down" style="color:#00b894">—</td></tr>
+        <tr><td>创业板指</td><td class="num">3302.55</td><td class="num down" style="color:#00b894">-1.24%</td><td class="num">4,865</td><td class="num">1.83%</td><td class="num">987 / 351</td><td class="num down" style="color:#00b894">—</td></tr>
+        <tr><td>沪深300</td><td class="num">4543.18</td><td class="num down" style="color:#00b894">-0.98%</td><td class="num">6,158</td><td class="num">0.95%</td><td class="num">139 / 157</td><td class="num down" style="color:#00b894">—</td></tr>
+        <tr><td>科创50</td><td class="num">1552.89</td><td class="num down" style="color:#00b894">-5.08%</td><td class="num">1,245</td><td class="num">4.42%</td><td class="num">18 / 32</td><td class="num down" style="color:#00b894">—</td></tr>
+        <tr><td>中证1000</td><td class="num">7079.78</td><td class="num up" style="color:#d63031">+0.06%</td><td class="num">3,912</td><td class="num">1.06%</td><td class="num">717 / 270</td><td class="num down" style="color:#00b894">—</td></tr>
+        <tr><td>中证500</td><td class="num">7414.52</td><td class="num down" style="color:#00b894">-1.06%</td><td class="num">4,096</td><td class="num">1.36%</td><td class="num">307 / 188</td><td class="num down" style="color:#00b894">—</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="source-note">数据来源：腾讯自选股 / neodata | 截至 2026-08-03 15:00</div>
+
+    <div id="chart-index" style="width:100%;height:380px;margin-top:16px;"></div>
+
+    <h3>盘面解读</h3>
+    <p style="font-size:13px; color:#2d3436;">
+      今日市场最显著的特征是<strong>"指数跌而个股涨"</strong>的极致分化：上证跌0.59%但上涨家数1629 vs 下跌657，深证上涨2237 vs 下跌622，全市场超4000只个股飘红。这种背离的核心原因是<strong>科创50重挫5.08%</strong>——半导体/存储芯片权重股集体暴跌拖累指数，而中小盘题材股表现活跃。中证1000微涨0.06%进一步印证了"大盘权重弱、小盘个股强"的结构。两市成交2万亿虽缩量5446亿，但仍处流动性充裕区间，市场并非缺钱而是缺方向。
+    </p>
+  </div>
+
+  <!-- 2. 板块涨跌 -->
+  <div class="section">
+    <h2><span class="icon">🔄</span> 二、板块涨跌排行</h2>
+
+    <div id="chart-sector" style="width:100%;height:420px;"></div>
+
+    <h3>涨幅居前概念板块</h3>
+    <table>
+      <thead><tr><th>板块</th><th class="num">涨跌幅</th><th>催化/逻辑</th></tr></thead>
+      <tbody>
+        <tr><td>共享单车</td><td class="num up" style="color:#d63031">+3.97%</td><td>低估值修复</td></tr>
+        <tr><td>光热发电</td><td class="num up" style="color:#d63031">+3.21%</td><td>新能源发电延伸</td></tr>
+        <tr><td>柔性直流输电</td><td class="num up" style="color:#d63031">+2.99%</td><td>电网投资提速</td></tr>
+        <tr><td>地下管网</td><td class="num up" style="color:#d63031">+2.82%</td><td>基建预期</td></tr>
+        <tr><td>抽水蓄能</td><td class="num up" style="color:#d63031">+2.78%</td><td>电网调峰需求</td></tr>
+        <tr><td>可控核聚变</td><td class="num up" style="color:#d63031">+2.88%</td><td>核电核准催化扩散</td></tr>
+        <tr><td>核电</td><td class="num up" style="color:#d63031">+2.68%</td><td>国务院核准8台机组</td></tr>
+        <tr><td>航空发动机</td><td class="num up" style="color:#d63031">+2.67%</td><td>军工景气延续</td></tr>
+      </tbody>
+    </table>
+
+    <h3>跌幅居前概念板块</h3>
+    <table>
+      <thead><tr><th>板块</th><th class="num">涨跌幅</th><th>调整原因</th></tr></thead>
+      <tbody>
+        <tr><td>国家大基金持股</td><td class="num down" style="color:#00b894">-4.49%</td><td>前期涨幅过大，获利兑现</td></tr>
+        <tr><td>中芯国际概念</td><td class="num down" style="color:#00b894">-3.81%</td><td>中芯国际-6.04%拖累</td></tr>
+        <tr><td>存储芯片</td><td class="num down" style="color:#00b894">-3.15%</td><td>兆易创新跌停，板块拥挤度过高</td></tr>
+        <tr><td>光刻机</td><td class="num down" style="color:#00b894">-2.67%</td><td>半导体链条联动调整</td></tr>
+        <tr><td>先进封装</td><td class="num down" style="color:#00b894">-2.29%</td><td>同上</td></tr>
+        <tr><td>玻璃基板</td><td class="num down" style="color:#00b894">-1.75%</td><td>技术面回调</td></tr>
+        <tr><td>汽车芯片</td><td class="num down" style="color:#00b894">-1.28%</td><td>半导体整体退潮</td></tr>
+      </tbody>
+    </table>
+    <div class="source-note">数据来源：证券时报·数据宝 / neodata | 2026-08-03</div>
+
+    <p style="font-size:13px; margin-top:10px;">
+      <strong>板块结构特征：</strong>涨幅榜被<strong>电力/能源装备</strong>方向包揽（核电、光热、柔性直流、抽水蓄能、可控核聚变），本质上是"电网投资+核电核准"的产业链扩散；跌幅榜则清一色<strong>半导体产业链</strong>（大基金、中芯、存储、光刻机、封装），反映科技赛道拥挤后的集中获利了结。
+    </p>
+  </div>
+
+  <!-- 3. 主线研判 -->
+  <div class="section">
+    <h2><span class="icon">🎯</span> 三、主线与候选主线研判</h2>
+
+    <!-- 核电 -->
+    <div class="theme-card nuclear">
+      <h4>🔴 候选主线：核电 / 能源装备 — 强度：较强</h4>
+      <div class="meta">板块涨幅 +2.68% | 主力净流入 26.42亿（全市场第一）| 18只涨停 | 299只上涨</div>
+      <p><strong>催化：</strong>7月31日国务院常务会议核准8台核电机组，为2026年度首次核准、"十五五"首批项目。中国银河证券测算8台机组投资超1700亿元，带动产业链总产出约5000亿元。</p>
+      <p><strong>龙头梯队：</strong>久盛电气（20%涨停）、瑞迪智驱（20%涨停）领涨；中国核建、融发核电、长城电工、百利电气等涨停跟涨；国电南瑞（主力净流入2.4亿）为中军锚点。</p>
+      <p><strong>持续性评估：</strong>政策核准→投资落地→产业链订单的传导逻辑扎实，且核电核准具有持续性预期（"十五五"期间常态化），产业逻辑非一日脉冲。资金合力明确（主力净流入全市场第一），涨停扩散至18只。具备候选主线条件，明日关注龙头能否弱转强继续封板。</p>
+    </div>
+
+    <!-- 光伏 -->
+    <div class="theme-card pv">
+      <h4>🟡 次级热点：光伏 — 超跌反弹修复</h4>
+      <div class="meta">光伏概念 +1.63% | 通威股份、福莱特涨停 | 多晶硅期货涨停 +8.99%</div>
+      <p><strong>催化：</strong>多晶硅期货主力合约午后涨停（+8.99%），对A股光伏板块形成共振催化。通威股份涨停获主力净流入3.8亿，福莱特涨停流入1.04亿。</p>
+      <p><strong>判断：</strong>光伏板块整体处于底部区域，今日反弹更偏向超跌修复而非趋势反转。注意光伏概念板块整体主力资金仍净流出84.3亿（权重股如阳光电源、德业股份资金流出拖累），板块内部结构分化明显，需观察持续性。</p>
+    </div>
+
+    <!-- AI应用 -->
+    <div class="theme-card ai">
+      <h4>🟣 持续活跃：AI应用 / 人形机器人</h4>
+      <div class="meta">传智教育6连板 | 天娱数科2连板 | 中大力德2连板 | 机器人ETF +2.42%</div>
+      <p><strong>催化：</strong>①阿里发布Qwen3.8大模型（2.4万亿参数），编程与办公协作能力大幅跃升；②国产大模型霸榜OpenRouter——小米MiMo-V2.5第一、DeepSeek第二第五、腾讯混元3第三（环比暴涨999%）；③特斯拉Optimus产能目标上调至1000万台/年，弗里蒙特产线2026年底启动。</p>
+      <p><strong>判断：</strong>AI应用方向具备持续催化，传智教育6连板显示资金抱团意愿强。但需注意高位连板股的分歧风险，明日若传智教育开板可能引发板块情绪波动。人形机器人方向受特斯拉催化独立走强，中大力德2连板。</p>
+    </div>
+
+    <!-- 半导体调整 -->
+    <div class="theme-card chip">
+      <h4>🟢 调整方向：存储芯片 / 半导体 — 阶段性"再平衡"</h4>
+      <div class="meta">存储芯片 -3.15% | 兆易创新跌停 | 科创50 -5.08% | 主力净流出 -232亿</div>
+      <p><strong>核心事件：</strong>兆易创新（存储芯片龙头，市值超2400亿）尾盘跌停，北方华创-6.65%、中芯国际-6.04%、长电科技-7.17%、通富微电-9.50%等半导体权重股集体回调。</p>
+      <p><strong>机构定性：</strong>德邦证券首席经济学家程强认为，本轮调整为上涨过程中的阶段性调整，当前风格切换是战术性的"再平衡"——科技主线回调后资金寻找新方向，科技主线反弹后市场风格有望重新回归。</p>
+      <p><strong>判断：</strong>存储芯片板块主力净流出232亿为全市场最大，短期仍有调整压力。但半导体产业周期向上的逻辑未变，调整后可能提供中期布局机会。关注兆易创新能否止跌企稳作为板块风向标。</p>
+    </div>
+  </div>
+
+  <!-- 4. 资金流向 -->
+  <div class="section">
+    <h2><span class="icon">💰</span> 四、资金流向</h2>
+
+    <div id="chart-fund" style="width:100%;height:320px;"></div>
+
+    <h3>主力资金净流入板块 TOP5</h3>
+    <table>
+      <thead><tr><th>板块</th><th class="num">主力净流入(亿)</th><th class="num">涨停数</th><th class="num">上涨数</th></tr></thead>
+      <tbody>
+        <tr><td>核电</td><td class="num up" style="color:#d63031">+26.21</td><td class="num">18</td><td class="num">299</td></tr>
+        <tr><td>海工装备</td><td class="num up" style="color:#d63031">+18.01</td><td class="num">11</td><td class="num">222</td></tr>
+        <tr><td>超超临界发电</td><td class="num up" style="color:#d63031">+16.43</td><td class="num">4</td><td class="num">77</td></tr>
+        <tr><td>可控核聚变</td><td class="num up" style="color:#d63031">+12.53</td><td class="num">10</td><td class="num">88</td></tr>
+        <tr><td>电力</td><td class="num up" style="color:#d63031">+8.5（估）</td><td class="num">—</td><td class="num">—</td></tr>
+      </tbody>
+    </table>
+
+    <h3>个股资金净流入 TOP10</h3>
+    <table>
+      <thead><tr><th>股票</th><th class="num">净流入(亿)</th><th>所属方向</th></tr></thead>
+      <tbody>
+        <tr><td>天孚通信</td><td class="num up" style="color:#d63031">+10.0+</td><td>光通信</td></tr>
+        <tr><td>华电辽能</td><td class="num up" style="color:#d63031">流入居前</td><td>电力</td></tr>
+        <tr><td>绿的谐波</td><td class="num up" style="color:#d63031">流入居前</td><td>人形机器人</td></tr>
+        <tr><td>三环集团</td><td class="num up" style="color:#d63031">流入居前</td><td>电子元件</td></tr>
+        <tr><td>通威股份</td><td class="num up" style="color:#d63031">+3.8</td><td>光伏</td></tr>
+        <tr><td>风华高科</td><td class="num up" style="color:#d63031">流入居前</td><td>被动元件</td></tr>
+        <tr><td>光库科技</td><td class="num up" style="color:#d63031">流入居前</td><td>光通信</td></tr>
+      </tbody>
+    </table>
+    <div class="source-note">数据来源：Choice / 每日经济新闻 / 证券时报 | 2026-08-03</div>
+
+    <p style="font-size:13px; margin-top:10px;">
+      <strong>资金面信号：</strong>主力资金呈现明显的"从半导体撤出、向能源装备涌入"的再平衡特征。核电方向净流入26亿+海工装备18亿+超超临界发电16亿+可控核聚变12.5亿，合计超70亿主力资金集中流向能源装备产业链，信号明确。
+    </p>
+  </div>
+
+  <!-- 5. 重要消息面 -->
+  <div class="section">
+    <h2><span class="icon">📰</span> 五、重要消息面</h2>
+
+    <div class="news-item">
+      <div class="news-title">国务院常务会议核准8台核电机组</div>
+      <div class="news-desc">7月31日国常会决定核准8台核电机组，为2026年度首次核准、"十五五"首批项目。中国银河证券测算投资额超1700亿元，带动产业链总产出约5000亿元。</div>
+      <div class="news-source">来源：新闻联播 / 中国银河证券 | 2026-08-03</div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-title">阿里发布Qwen3.8大模型（2.4万亿参数）</div>
+      <div class="news-desc">正式发布新一代基座大模型Qwen3.8，编程能力与专业办公协作维度实现大幅跃升。同时阿里云与吉宏股份达成深度合作，搭建面向全行业的标准化Token出海服务体系。</div>
+      <div class="news-source">来源：每日经济新闻 | 2026-08-03</div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-title">国产大模型霸榜OpenRouter周调用排行</div>
+      <div class="news-desc">小米MiMo-V2.5拿下榜首（单周调用量10.5万亿Token），DeepSeek两款模型分别位列第二、第五，腾讯混元3位列第三（环比暴涨999%）。榜单前五全部被国产模型占据。</div>
+      <div class="news-source">来源：每日经济新闻 | 2026-08-03</div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-title">特斯拉Optimus产能目标上调至1000万台/年</div>
+      <div class="news-desc">特斯拉Optimus项目负责人官宣将远期年产能目标从100万台上调至1000万台，达到原规划的十倍。弗里蒙特产线将在2026年底正式启动生产。</div>
+      <div class="news-source">来源：每日经济新闻 | 2026-08-03</div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-title">多晶硅期货主力合约涨停</div>
+      <div class="news-desc">8月3日，多晶硅期货主力合约午后涨停，涨幅+8.99%。对A股光伏板块形成共振催化，通威股份、福莱特等涨停。</div>
+      <div class="news-source">来源：上海证券报 / Choice | 2026-08-03</div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-title">德邦证券：当前科技调整是"再平衡"而非"大切换"</div>
+      <div class="news-desc">德邦证券首席经济学家程强表示，本轮调整为上涨过程中的阶段性调整，当前风格切换是战术性的"再平衡"，驱动因素是科技主线回调后资金寻找新方向，科技主线反弹后市场风格有望重新回到这一主线。</div>
+      <div class="news-source">来源：上海证券报 | 2026-08-03</div>
+    </div>
+  </div>
+
+  <!-- 6. 后市研判 -->
+  <div class="section">
+    <h2><span class="icon">🔮</span> 六、后市研判与策略</h2>
+
+    <h3>市场状态判断</h3>
+    <p style="font-size:13px;">
+      当前市场处于<strong>"震荡分化"</strong>阶段。指数层面偏弱（三大指数收跌、科创50重挫5%），但市场广度偏暖（4000+个股上涨），本质是<strong>科技拥挤赛道的结构性出清</strong>与<strong>能源装备方向的资金再配置</strong>同步发生。成交2万亿仍处高位，流动性不构成系统性风险。
+    </p>
+
+    <h3>明日观察重点</h3>
+    <ul class="obs-list">
+      <li><strong>核电板块龙头承接：</strong>久盛电气、瑞迪智驱（20%涨停）明日能否继续封板或弱转强，中国核建能否连板——决定核电能否从"候选主线"升级为"确认主线"</li>
+      <li><strong>兆易创新止跌信号：</strong>作为存储芯片龙头+科创50权重，其能否止跌企稳是半导体链条情绪风向标</li>
+      <li><strong>传智教育6连板分歧：</strong>AI应用方向最高标，若明日开板分歧将影响整个AI题材情绪</li>
+      <li><strong>成交量变化：</strong>今日缩量5446亿，若明日继续大幅缩量则需警惕情绪退潮；若放量则结构性行情可延续</li>
+    </ul>
+
+    <h3>策略框架</h3>
+    <ul class="obs-list">
+      <li><strong>短期（T+1~T+5）：</strong>核电方向若龙头继续封板可适度跟随，但不宜追高后排跟风股；半导体调整方向暂不抄底，等兆易创新止跌信号</li>
+      <li><strong>中期（1~3月）：</strong>关注核电核准常态化带来的产业链订单兑现（核电设备、阀门、电缆）；科技主线调整后关注中期布局窗口</li>
+      <li><strong>风格配置：</strong>当前适合"精选个股+控制仓位"，避免在风格切换期重仓单一方向；能源装备（核电/电网/光伏）vs 科技（半导体/AI）保持均衡</li>
+    </ul>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <strong>免责声明：</strong>以上内容基于公开数据和量化分析，仅供参考，不构成投资建议。市场有风险，投资需谨慎。任何投资决策应结合个人风险承受能力、资金状况和投资目标独立判断，必要时咨询持牌专业机构。过往表现不预示未来收益。
+  </div>
+
+  <div style="text-align:center; margin-top:20px; font-size:11px; color:#b2bec3;">
+    数据来源：腾讯自选股 · neodata · 上海证券报 · 每日经济新闻 · 证券时报 · 证券时报·数据宝<br>
+    报告生成时间：2026-08-03 | 自动生成，仅供参考
+  </div>
+
+</div>
+
+<script>
+// Index Performance Chart - Horizontal bars for mobile readability
+var chartIndex = echarts.init(document.getElementById('chart-index'));
+var indexData = [
+  { name: '上证指数', value: -0.59 },
+  { name: '深证成指', value: -0.96 },
+  { name: '创业板指', value: -1.24 },
+  { name: '沪深300', value: -0.98 },
+  { name: '科创50', value: -5.08 },
+  { name: '中证1000', value: 0.06 },
+  { name: '中证500', value: -1.06 },
+  { name: '中证A50', value: -0.70 }
+];
+chartIndex.setOption({
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  legend: { data: ['涨跌幅(%)'], top: 5 },
+  grid: { left: '3%', right: '8%', bottom: '3%', top: '15%', containLabel: true },
+  xAxis: {
+    type: 'value',
+    name: '涨跌幅(%)',
+    axisLabel: { formatter: '{value}%', fontSize: 11 }
+  },
+  yAxis: {
+    type: 'category',
+    data: indexData.map(function(d) { return d.name; }).reverse(),
+    axisLabel: { fontSize: 12 }
+  },
+  series: [{
+    name: '涨跌幅(%)',
+    type: 'bar',
+    data: indexData.map(function(d) {
+      return { value: d.value, itemStyle: { color: d.value > 0 ? '#d63031' : '#00b894' } };
+    }).reverse(),
+    barWidth: '55%',
+    label: {
+      show: true,
+      position: 'right',
+      formatter: function(params) {
+        return (params.value > 0 ? '+' : '') + params.value + '%';
+      },
+      fontSize: 11
+    }
+  }]
+});
+
+// Sector Chart - Top gainers vs losers
+var chartSector = echarts.init(document.getElementById('chart-sector'));
+chartSector.setOption({
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  legend: { data: ['涨幅居前', '跌幅居前'], top: 5 },
+  grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+  xAxis: { type: 'value', name: '涨跌幅(%)', axisLabel: { formatter: '{value}%' } },
+  yAxis: {
+    type: 'category',
+    data: ['共享单车','光热发电','柔性直流输电','可控核聚变','抽水蓄能','核电','航空发动机','AI PC','汽车芯片','光刻机','存储芯片','中芯国际概念','国家大基金持股'].reverse(),
+    axisLabel: { fontSize: 11 }
+  },
+  series: [
+    {
+      name: '涨幅居前',
+      type: 'bar',
+      stack: 'total',
+      data: [3.97, 3.21, 2.99, 2.88, 2.78, 2.68, 2.67, 0, 0, 0, 0, 0, 0].reverse(),
+      itemStyle: { color: '#d63031' },
+      label: { show: true, position: 'right', formatter: '+{c}%', fontSize: 10 }
+    },
+    {
+      name: '跌幅居前',
+      type: 'bar',
+      stack: 'total',
+      data: [0, 0, 0, 0, 0, 0, 0, -1.07, -1.28, -2.67, -3.15, -3.81, -4.49].reverse(),
+      itemStyle: { color: '#00b894' },
+      label: { show: true, position: 'left', formatter: '{c}%', fontSize: 10 }
+    }
+  ]
+});
+
+// Fund Flow Chart
+var chartFund = echarts.init(document.getElementById('chart-fund'));
+chartFund.setOption({
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  legend: { data: ['主力净流入(亿元)'], top: 5 },
+  grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+  xAxis: {
+    type: 'category',
+    data: ['核电', '海工装备', '超超临界发电', '可控核聚变', '存储芯片'],
+    axisLabel: { fontSize: 11 }
+  },
+  yAxis: { type: 'value', name: '净流入(亿)' },
+  series: [{
+    name: '主力净流入(亿元)',
+    type: 'bar',
+    data: [
+      { value: 26.21, itemStyle: { color: '#d63031' } },
+      { value: 18.01, itemStyle: { color: '#d63031' } },
+      { value: 16.43, itemStyle: { color: '#d63031' } },
+      { value: 12.53, itemStyle: { color: '#d63031' } },
+      { value: -232, itemStyle: { color: '#00b894' } }
+    ],
+    label: {
+      show: true,
+      position: 'top',
+      formatter: function(params) {
+        return (params.value > 0 ? '+' : '') + params.value + '亿';
+      },
+      fontSize: 11
+    }
+  }]
+});
+
+// Responsive
+window.addEventListener('resize', function() {
+  chartIndex.resize();
+  chartSector.resize();
+  chartFund.resize();
+});
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

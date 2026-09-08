@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>概念/题材分类总览（28个）</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;margin:0;background:#f5f6f8;color:#222}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:8px 0 4px}
+.sub{color:#777;font-size:13px;margin-bottom:12px;line-height:1.7}
+.sub b{color:#1565c0}
+.chip{border:1px solid var(--c);color:var(--c);background:#fff;border-radius:20px;padding:5px 12px;font-size:13px;cursor:pointer;transition:.15s}
+.chip b{margin-left:4px}
+.chip.active{background:var(--c);color:#fff}
+.chip.dim{opacity:.32}
+.hint{color:#666;font-size:12px;line-height:1.7;margin:8px 2px;min-height:17px}
+.hint:empty{margin:0}
+.tbl-scroll{overflow-x:auto;background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #eee;white-space:nowrap}
+th{background:#fafafa;position:sticky;top:0;cursor:pointer;user-select:none;font-weight:600}
+th .ar{color:#bbb;font-size:11px}
+th.sorted .ar{color:#1565c0}
+td.idx{color:#999;width:48px}
+td.kw{font-weight:600;white-space:nowrap}
+td.board{font-variant-numeric:tabular-nums;color:#333;white-space:nowrap}
+td.note{white-space:normal;min-width:200px;color:#555;line-height:1.5}
+.tag{color:#fff;border-radius:6px;padding:2px 8px;font-size:12px}
+.count-info{color:#777;font-size:12px;margin:6px 2px}
+@media(max-width:600px){body{font-size:12px}h1{font-size:17px}th,td{padding:7px 8px}td.note{min-width:140px}}
+</style></head><body>
+<div class="wrap">
+  <h1>概念 / 题材分类总览（28 个）</h1>
+  <div class="sub">共 <b>28</b> 个跨行业题材（来源：主线分析 <code>_ml_concept.js</code> 的 THEMES 清单，数据截至 20260807）。<br>
+  说明：这 28 个题材均为<b>业务与赛道</b>性质，直接服务于「5-20日概念/题材主线分析」，比东方财富 504 个细分概念更聚焦。点击上方彩色标签可按<b>赛道分类</b>筛选，表头可点击排序。</div>
+  <div class="filt-block">
+    <div class="filt-label" style="font-size:13px;color:#666;margin-bottom:6px">赛道分类（共 9 类，点击标签查看说明）</div>
+    <div class="stat-top" style="display:flex;flex-wrap:wrap;gap:8px"><button class="chip cat-chip" data-cat="AI与算力基础设施" style="--c:#1565c0">AI与算力基础设施 <b>7</b></button><button class="chip cat-chip" data-cat="半导体与电子" style="--c:#0277bd">半导体与电子 <b>3</b></button><button class="chip cat-chip" data-cat="科技主题/国产替代" style="--c:#6a1b9a">科技主题/国产替代 <b>3</b></button><button class="chip cat-chip" data-cat="机器人与高端制造" style="--c:#00838f">机器人与高端制造 <b>2</b></button><button class="chip cat-chip" data-cat="医药生物" style="--c:#ad1457">医药生物 <b>4</b></button><button class="chip cat-chip" data-cat="新能源与电池" style="--c:#2e7d32">新能源与电池 <b>4</b></button><button class="chip cat-chip" data-cat="军工与航天" style="--c:#4a148c">军工与航天 <b>2</b></button><button class="chip cat-chip" data-cat="资源材料" style="--c:#e65100">资源材料 <b>2</b></button><button class="chip cat-chip" data-cat="传媒消费" style="--c:#00695c">传媒消费 <b>1</b></button></div>
+  </div>
+  <div class="hint" id="hint"></div>
+  <div class="count-info" id="ci"></div>
+  <div class="tbl-scroll">
+    <table id="t">
+      <thead><tr>
+        <th data-k="idx" style="width:48px">序号<span class="ar">▲</span></th>
+        <th data-k="kw">题材名称<span class="ar"></span></th>
+        <th data-k="cat">赛道分类<span class="ar"></span></th>
+        <th data-k="board">对应东财板块（代码 / 名称）<span class="ar"></span></th>
+        <th data-k="note">覆盖说明<span class="ar"></span></th>
+      </tr></thead>
+      <tbody><tr data-cat="AI与算力基础设施" data-kw="人工智能" data-name="人工智能" data-note="AI算法、大模型及基础设施">
+    <td class="idx">1</td>
+    <td class="kw">人工智能</td>
+    <td><span class="tag" style="background:#1565c0">AI与算力基础设施</span></td>
+    <td class="board">pt02003800　人工智能</td>
+    <td class="note">AI算法、大模型及基础设施</td>
+  </tr><tr data-cat="AI与算力基础设施" data-kw="数据要素" data-name="数据要素" data-note="数据资产化与流通交易">
+    <td class="idx">2</td>
+    <td class="kw">数据要素</td>
+    <td><span class="tag" style="background:#1565c0">AI与算力基础设施</span></td>
+    <td class="board">pt02GN2200　数据要素</td>
+    <td class="note">数据资产化与流通交易</td>
+  </tr><tr data-cat="AI与算力基础设施" data-kw="数字经济" data-name="数字经济" data-note="数字化产业与产业数字化">
+    <td class="idx">3</td>
+    <td class="kw">数字经济</td>
+    <td><span class="tag" style="background:#1565c0">AI与算力基础设施</span></td>
+    <td class="board">pt02GN2071　数字经济</td>
+    <td class="note">数字化产业与产业数字化</td>
+  </tr><tr data-cat="AI与算力基础设施" data-kw="算力租赁" data-name="算力租赁" data-note="智算中心 / GPU 算力出租">
+    <td class="idx">4</td>
+    <td class="kw">算力租赁</td>
+    <td><span class="tag" style="background:#1565c0">AI与算力基础设施</span></td>
+    <td class="board">pt02GN2234　算力租赁</td>
+    <td class="note">智算中心 / GPU 算力出租</td>
+  </tr><tr data-cat="AI与算力基础设施" data-kw="液冷" data-name="液冷概念" data-note="数据中心液冷散热">
+    <td class="idx">5</td>
+    <td class="kw">液冷</td>
+    <td><span class="tag" style="background:#1565c0">AI与算力基础设施</span></td>
+    <td class="board">pt02GN2224　液冷概念</td>
+    <td class="note">数据中心液冷散热</td>
+  </tr><tr data-cat="AI与算力基础设施" data-kw="AI应用" data-name="AI应用" data-note="人工智能在各行业的落地应用">
+    <td class="idx">6</td>
+    <td class="kw">AI应用</td>
+    <td><span class="tag" style="background:#1565c0">AI与算力基础设施</span></td>
+    <td class="board">pt02GN2343　AI应用</td>
+    <td class="note">人工智能在各行业的落地应用</td>
+  </tr><tr data-cat="AI与算力基础设施" data-kw="CPO" data-name="共封装光模块(CPO)" data-note="AI算力数据中心高速互联核心环节">
+    <td class="idx">7</td>
+    <td class="kw">CPO</td>
+    <td><span class="tag" style="background:#1565c0">AI与算力基础设施</span></td>
+    <td class="board">pt02GN2211　共封装光模块(CPO)</td>
+    <td class="note">AI算力数据中心高速互联核心环节</td>
+  </tr><tr data-cat="半导体与电子" data-kw="5G" data-name="5G概念" data-note="5G通信网络建设与应用">
+    <td class="idx">8</td>
+    <td class="kw">5G</td>
+    <td><span class="tag" style="background:#0277bd">半导体与电子</span></td>
+    <td class="board">pt02003714　5G概念</td>
+    <td class="note">5G通信网络建设与应用</td>
+  </tr><tr data-cat="半导体与电子" data-kw="半导体" data-name="半导体" data-note="芯片设计/制造/设备/材料全链条">
+    <td class="idx">9</td>
+    <td class="kw">半导体</td>
+    <td><span class="tag" style="background:#0277bd">半导体与电子</span></td>
+    <td class="board">pt01801081　半导体</td>
+    <td class="note">芯片设计/制造/设备/材料全链条</td>
+  </tr><tr data-cat="半导体与电子" data-kw="消费电子" data-name="消费电子" data-note="手机/PC/可穿戴等终端">
+    <td class="idx">10</td>
+    <td class="kw">消费电子</td>
+    <td><span class="tag" style="background:#0277bd">半导体与电子</span></td>
+    <td class="board">pt01801085　消费电子</td>
+    <td class="note">手机/PC/可穿戴等终端</td>
+  </tr><tr data-cat="科技主题/国产替代" data-kw="华为概念" data-name="华为概念" data-note="华为产业链合作厂商">
+    <td class="idx">11</td>
+    <td class="kw">华为概念</td>
+    <td><span class="tag" style="background:#6a1b9a">科技主题/国产替代</span></td>
+    <td class="board">pt02021291　华为概念</td>
+    <td class="note">华为产业链合作厂商</td>
+  </tr><tr data-cat="科技主题/国产替代" data-kw="苹果概念" data-name="苹果概念" data-note="苹果供应链厂商">
+    <td class="idx">12</td>
+    <td class="kw">苹果概念</td>
+    <td><span class="tag" style="background:#6a1b9a">科技主题/国产替代</span></td>
+    <td class="board">pt02003666　苹果概念</td>
+    <td class="note">苹果供应链厂商</td>
+  </tr><tr data-cat="科技主题/国产替代" data-kw="信创" data-name="信创" data-note="信息技术应用创新（国产软硬件替代）">
+    <td class="idx">13</td>
+    <td class="kw">信创</td>
+    <td><span class="tag" style="background:#6a1b9a">科技主题/国产替代</span></td>
+    <td class="board">pt02GN2043　信创</td>
+    <td class="note">信息技术应用创新（国产软硬件替代）</td>
+  </tr><tr data-cat="机器人与高端制造" data-kw="低空经济" data-name="低空经济" data-note="无人机/eVTOL 等低空飞行经济">
+    <td class="idx">14</td>
+    <td class="kw">低空经济</td>
+    <td><span class="tag" style="background:#00838f">机器人与高端制造</span></td>
+    <td class="board">pt02GN2294　低空经济</td>
+    <td class="note">无人机/eVTOL 等低空飞行经济</td>
+  </tr><tr data-cat="机器人与高端制造" data-kw="机器人" data-name="机器人概念" data-note="工业/人形机器人及核心零部件">
+    <td class="idx">15</td>
+    <td class="kw">机器人</td>
+    <td><span class="tag" style="background:#00838f">机器人与高端制造</span></td>
+    <td class="board">pt01850781　机器人概念</td>
+    <td class="note">工业/人形机器人及核心零部件</td>
+  </tr><tr data-cat="医药生物" data-kw="创新药" data-name="创新药" data-note="原研新药研发与商业化">
+    <td class="idx">16</td>
+    <td class="kw">创新药</td>
+    <td><span class="tag" style="background:#ad1457">医药生物</span></td>
+    <td class="board">pt02131362　创新药</td>
+    <td class="note">原研新药研发与商业化</td>
+  </tr><tr data-cat="医药生物" data-kw="减肥药" data-name="减肥药" data-note="GLP-1 等减重药物">
+    <td class="idx">17</td>
+    <td class="kw">减肥药</td>
+    <td><span class="tag" style="background:#ad1457">医药生物</span></td>
+    <td class="board">pt02GN2250　减肥药</td>
+    <td class="note">GLP-1 等减重药物</td>
+  </tr><tr data-cat="医药生物" data-kw="医疗器械" data-name="医疗器械" data-note="医疗设备与耗材">
+    <td class="idx">18</td>
+    <td class="kw">医疗器械</td>
+    <td><span class="tag" style="background:#ad1457">医药生物</span></td>
+    <td class="board">pt01801153　医疗器械</td>
+    <td class="note">医疗设备与耗材</td>
+  </tr><tr data-cat="医药生物" data-kw="CRO" data-name="CRO" data-note="医药研发外包服务">
+    <td class="idx">19</td>
+    <td class="kw">CRO</td>
+    <td><span class="tag" style="background:#ad1457">医药生物</span></td>
+    <td class="board">pt02251441　CRO</td>
+    <td class="note">医药研发外包服务</td>
+  </tr><tr data-cat="新能源与电池" data-kw="储能" data-name="储能概念" data-note="锂电/抽水蓄能等储能系统">
+    <td class="idx">20</td>
+    <td class="kw">储能</td>
+    <td><span class="tag" style="background:#2e7d32">新能源与电池</span></td>
+    <td class="board">pt02011424　储能概念</td>
+    <td class="note">锂电/抽水蓄能等储能系统</td>
+  </tr><tr data-cat="新能源与电池" data-kw="固态电池" data-name="固态电池" data-note="固态电解质电池技术">
+    <td class="idx">21</td>
+    <td class="kw">固态电池</td>
+    <td><span class="tag" style="background:#2e7d32">新能源与电池</span></td>
+    <td class="board">pt02081407　固态电池</td>
+    <td class="note">固态电解质电池技术</td>
+  </tr><tr data-cat="新能源与电池" data-kw="光伏" data-name="光伏概念" data-note="光伏发电产业链（硅料/组件/逆变器）">
+    <td class="idx">22</td>
+    <td class="kw">光伏</td>
+    <td><span class="tag" style="background:#2e7d32">新能源与电池</span></td>
+    <td class="board">pt02010005　光伏概念</td>
+    <td class="note">光伏发电产业链（硅料/组件/逆变器）</td>
+  </tr><tr data-cat="新能源与电池" data-kw="锂电池" data-name="锂电池" data-note="动力电池及储能电池">
+    <td class="idx">23</td>
+    <td class="kw">锂电池</td>
+    <td><span class="tag" style="background:#2e7d32">新能源与电池</span></td>
+    <td class="board">pt01857371　锂电池</td>
+    <td class="note">动力电池及储能电池</td>
+  </tr><tr data-cat="军工与航天" data-kw="国防军工" data-name="国防军工" data-note="武器装备与军工电子">
+    <td class="idx">24</td>
+    <td class="kw">国防军工</td>
+    <td><span class="tag" style="background:#4a148c">军工与航天</span></td>
+    <td class="board">pt01801740　国防军工</td>
+    <td class="note">武器装备与军工电子</td>
+  </tr><tr data-cat="军工与航天" data-kw="商业航天" data-name="商业航天" data-note="民营火箭卫星星座">
+    <td class="idx">25</td>
+    <td class="kw">商业航天</td>
+    <td><span class="tag" style="background:#4a148c">军工与航天</span></td>
+    <td class="board">pt02GN2306　商业航天</td>
+    <td class="note">民营火箭卫星星座</td>
+  </tr><tr data-cat="资源材料" data-kw="黄金" data-name="黄金" data-note="黄金采选冶炼及黄金资产">
+    <td class="idx">26</td>
+    <td class="kw">黄金</td>
+    <td><span class="tag" style="background:#e65100">资源材料</span></td>
+    <td class="board">pt01850531　黄金</td>
+    <td class="note">黄金采选冶炼及黄金资产</td>
+  </tr><tr data-cat="资源材料" data-kw="稀土永磁" data-name="稀土永磁" data-note="稀土开采冶炼及永磁材料">
+    <td class="idx">27</td>
+    <td class="kw">稀土永磁</td>
+    <td><span class="tag" style="background:#e65100">资源材料</span></td>
+    <td class="board">pt02003578　稀土永磁</td>
+    <td class="note">稀土开采冶炼及永磁材料</td>
+  </tr><tr data-cat="传媒消费" data-kw="游戏" data-name="网络游戏" data-note="网络游戏研发与运营">
+    <td class="idx">28</td>
+    <td class="kw">游戏</td>
+    <td><span class="tag" style="background:#00695c">传媒消费</span></td>
+    <td class="board">pt02003509　网络游戏</td>
+    <td class="note">网络游戏研发与运营</td>
+  </tr></tbody>
+    </table>
+  </div>
+</div>
+<script>
+const t=document.getElementById('t'),tbody=t.querySelector('tbody'),ci=document.getElementById('ci'),hint=document.getElementById('hint');
+const CAT_DESC={"AI与算力基础设施":"AI 大模型训练/推理相关的算力、互联、散热与数据底座","半导体与电子":"芯片设计制造设备及电子终端产业链","科技主题/国产替代":"以龙头厂商链（华为/苹果）与自主可控（信创）为代表","机器人与高端制造":"机器人、低空飞行器等高端制造新方向","医药生物":"创新药、器械、研发外包与减重药物","新能源与电池":"光伏、储能、动力电池及下一代电池技术","军工与航天":"国防装备、军工电子与商业航天","资源材料":"稀土永磁、黄金等战略资源与材料","传媒消费":"网络游戏等文化消费"};
+const CAT_COLOR={"AI与算力基础设施":"#1565c0","半导体与电子":"#0277bd","科技主题/国产替代":"#6a1b9a","机器人与高端制造":"#00838f","医药生物":"#ad1457","新能源与电池":"#2e7d32","军工与航天":"#4a148c","资源材料":"#e65100","传媒消费":"#00695c"};
+const all=[...tbody.querySelectorAll('tr')];
+let curCat='',curKey='idx',curAsc=true;
+function render(){
+  let list=all.filter(r=>{
+    const okCat=!curCat||r.dataset.cat===curCat;
+    return okCat;
+  });
+  const k=curKey;
+  list.sort((a,b)=>{
+    let va,vb;
+    if(k==='idx'){va=+a.children[0].textContent;vb=+b.children[0].textContent;}
+    else if(k==='kw'){va=a.dataset.kw;vb=b.dataset.kw;return curAsc?va.localeCompare(vb,'zh'):vb.localeCompare(va,'zh');}
+    else if(k==='cat'){va=a.dataset.cat;vb=b.dataset.cat;return curAsc?va.localeCompare(vb,'zh'):vb.localeCompare(va,'zh');}
+    else if(k==='board'){va=a.dataset.name;vb=b.dataset.name;return curAsc?va.localeCompare(vb,'zh'):vb.localeCompare(va,'zh');}
+    else {va=a.dataset.note;vb=b.dataset.note;return curAsc?va.localeCompare(vb,'zh'):vb.localeCompare(va,'zh');}
+    return curAsc?va-vb:vb-va;
+  });
+  tbody.innerHTML='';
+  if(list.length===0){
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td colspan="5" style="text-align:center;color:#999;padding:26px">当前赛道下暂无题材'+(curCat?('（赛道「'+curCat+'」）'):'')+'</td>';
+    tbody.appendChild(tr);
+  } else { list.forEach(r=>tbody.appendChild(r)); }
+  ci.textContent='当前显示 '+list.length+' / '+all.length+' 个题材'+(curCat?'（赛道：'+curCat+'）':'');
+  hint.innerHTML = curCat ? ('▸ <b style="color:'+(CAT_COLOR[curCat]||'#666')+'">'+curCat+'</b>：'+(CAT_DESC[curCat]||'')) : '';
+  t.querySelectorAll('th').forEach(th=>{th.classList.toggle('sorted',th.dataset.k===k);const ar=th.querySelector('.ar');ar.textContent=th.dataset.k===k?(curAsc?'▲':'▼'):'';});
+  document.querySelectorAll('.cat-chip').forEach(c=>{c.classList.remove('active','dim');if(c.dataset.cat===curCat)c.classList.add('active');});
+}
+document.querySelectorAll('.chip[data-cat]').forEach(el=>el.onclick=()=>{curCat=(curCat===el.dataset.cat)?'':el.dataset.cat;render();});
+t.querySelectorAll('th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(curKey===k)curAsc=!curAsc;else{curKey=k;curAsc=true;}render();});
+render();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body></html>

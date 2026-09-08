@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股收盘复盘 | 2026年8月4日</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #2d3436; line-height: 1.7; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 20px 60px; }
+  .header { text-align: center; padding: 32px 0 24px; border-bottom: 2px solid #e8ecf0; margin-bottom: 28px; }
+  .header h1 { font-size: 26px; font-weight: 700; color: #1a1a2e; letter-spacing: 1px; }
+  .header .subtitle { font-size: 14px; color: #636e72; margin-top: 8px; }
+  .header .date-tag { display: inline-block; background: #0984e3; color: #fff; font-size: 12px; padding: 3px 12px; border-radius: 12px; margin-top: 10px; }
+  .tldr { background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%); border: 1px solid #dfe6e9; border-radius: 12px; padding: 24px; margin-bottom: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .tldr h2 { font-size: 16px; color: #0984e3; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .tldr h2::before { content: ""; display: inline-block; width: 4px; height: 18px; background: #0984e3; border-radius: 2px; }
+  .tldr ul { list-style: none; }
+  .tldr li { padding: 6px 0 6px 20px; position: relative; font-size: 14px; color: #2d3436; }
+  .tldr li::before { content: "▸"; position: absolute; left: 0; color: #0984e3; font-weight: bold; }
+  .tldr .highlight { color: #d63031; font-weight: 600; }
+  .tldr .highlight-green { color: #00b894; font-weight: 600; }
+  .section { background: #fff; border: 1px solid #e8ecf0; border-radius: 10px; padding: 22px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.03); }
+  .section h2 { font-size: 17px; color: #1a1a2e; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 8px; }
+  .section h2 .icon { font-size: 20px; }
+  .section h3 { font-size: 14px; color: #2d3436; margin: 14px 0 8px; font-weight: 600; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
+  th { background: #f8f9fa; color: #636e72; font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 2px solid #e8ecf0; white-space: nowrap; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; }
+  tr:hover td { background: #f8f9fb; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .up { color: #d63031; font-weight: 600; }
+  .down { color: #00b894; font-weight: 600; }
+  .flat { color: #636e72; }
+  .chart-box { width: 100%; margin: 12px 0; }
+  .chart-title { font-size: 13px; color: #636e72; margin-bottom: 6px; font-weight: 500; }
+  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-right: 4px; }
+  .tag-up { background: #fadbd8; color: #c0392b; }
+  .tag-down { background: #d5f5e3; color: #27ae60; }
+  .tag-neutral { background: #dfe6e9; color: #636e72; }
+  .theme-card { border-left: 3px solid #0984e3; padding: 12px 16px; margin: 10px 0; background: #f8f9fb; border-radius: 0 8px 8px 0; }
+  .theme-card.nuclear { border-left-color: #d63031; }
+  .theme-card.pv { border-left-color: #f39c12; }
+  .theme-card.ai { border-left-color: #6c5ce7; }
+  .theme-card.chip { border-left-color: #00b894; }
+  .theme-card h4 { font-size: 14px; margin-bottom: 6px; }
+  .theme-card .meta { font-size: 12px; color: #636e72; margin-bottom: 4px; }
+  .theme-card p { font-size: 13px; color: #2d3436; }
+  .news-item { padding: 10px 0; border-bottom: 1px dashed #e8ecf0; }
+  .news-item:last-child { border-bottom: none; }
+  .news-item .news-title { font-size: 13px; font-weight: 600; color: #2d3436; }
+  .news-item .news-desc { font-size: 12px; color: #636e72; margin-top: 3px; }
+  .news-item .news-source { font-size: 11px; color: #b2bec3; margin-top: 2px; }
+  .state-badge { display: inline-block; font-size: 13px; font-weight: 600; padding: 4px 14px; border-radius: 20px; }
+  .state-bull { background: #fadbd8; color: #c0392b; border: 1px solid #f5b7b1; }
+  .source-note { font-size: 11px; color: #b2bec3; margin-top: 6px; text-align: right; }
+  .disclaimer { font-size: 12px; color: #b2bec3; margin-top: 24px; padding: 16px; background: #f8f9fa; border-radius: 8px; line-height: 1.8; }
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0; }
+  .summary-card { text-align: center; padding: 14px 8px; border-radius: 8px; background: #f8f9fa; }
+  .summary-card .label { font-size: 11px; color: #636e72; margin-bottom: 4px; }
+  .summary-card .value { font-size: 20px; font-weight: 700; }
+  .summary-card .change { font-size: 12px; margin-top: 2px; }
+  .obs-list { list-style: none; }
+  .obs-list li { padding: 6px 0 6px 22px; position: relative; font-size: 13px; }
+  .obs-list li::before { content: "→"; position: absolute; left: 0; color: #0984e3; font-weight: bold; }
+  @media (max-width: 600px) {
+    .container { padding: 16px 12px 40px; }
+    .header { padding: 20px 0 16px; margin-bottom: 20px; }
+    .header h1 { font-size: 20px; }
+    .header .subtitle { font-size: 12px; }
+    .section { padding: 14px; margin-bottom: 14px; }
+    .section h2 { font-size: 15px; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .summary-card { padding: 10px 6px; }
+    .summary-card .value { font-size: 16px; }
+    .summary-card .label { font-size: 10px; }
+    .summary-card .change { font-size: 11px; }
+    table { font-size: 12px; }
+    th, td { padding: 6px 6px; }
+    .tldr { padding: 16px; }
+    .tldr li { font-size: 13px; }
+    .theme-card { padding: 10px 12px; }
+    .theme-card p { font-size: 12px; }
+    #chart-index { height: 320px !important; }
+    #chart-sector { height: 360px !important; }
+    #chart-fund { height: 280px !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>A股收盘复盘报告</h1>
+    <div class="subtitle">创指大涨5.64% 科技成长全线反攻 | 银行逆势回调</div>
+    <span class="date-tag">2026-08-04 周二 收盘</span>
+  </div>
+
+  <div class="tldr">
+    <h2>核心结论</h2>
+    <ul>
+      <li>三大指数集体收涨，沪指 <span class="highlight">+0.33%</span>、深成指 <span class="highlight">+3.25%</span>、创业板指 <span class="highlight">+5.64%</span>，科创50 <span class="highlight">+4.09%</span>，全市场 <span class="highlight">3642只个股上涨</span>、1747只下跌，情绪显著回暖</li>
+      <li>两市成交额约 <span class="highlight">2.21万亿</span>，较上日放量约2162亿，流动性充沛支撑成长股反弹</li>
+      <li><span class="highlight">通信设备/CPO/半导体/元件</span>等算力硬件产业链全线大涨，通信设备板块涨幅达10.74%，光库科技、天孚通信、中际旭创等领涨</li>
+      <li><span class="highlight">CRO概念</span>强势反弹，药明康德、凯莱英涨停，医疗服务板块涨7.44%</li>
+      <li><span class="highlight-green">银行板块</span>逆势回调，国有大型银行跌3.49%，农业银行、工商银行等跌超3%；白酒、乘用车、电力等板块亦走弱</li>
+      <li>市场状态判断：<span class="state-badge state-bull">震荡修复 · 成长占优</span>，短期风格偏向科技成长，但需关注量能持续性及上方均线压力</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">📊</span> 一、市场概览</h2>
+
+    <div class="summary-grid">
+      
+      <div class="summary-card">
+        <div class="label">上证指数</div>
+        <div class="value" style="color:#d63031">3822.28</div>
+        <div class="change" style="color:#d63031">+0.33%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">深证成指</div>
+        <div class="value" style="color:#d63031">13885.71</div>
+        <div class="change" style="color:#d63031">+3.25%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">创业板指</div>
+        <div class="value" style="color:#d63031">3488.97</div>
+        <div class="change" style="color:#d63031">+5.64%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">沪深300</div>
+        <div class="value" style="color:#d63031">4600.93</div>
+        <div class="change" style="color:#d63031">+1.27%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">中证全指</div>
+        <div class="value" style="color:#d63031">5766.33</div>
+        <div class="change" style="color:#d63031">+2.01%</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>指数</th>
+          <th class="num">收盘价</th>
+          <th class="num">涨跌幅</th>
+          <th class="num">成交额(亿)</th>
+          <th class="num">振幅</th>
+          <th class="num">年初至今</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>上证指数</td>
+          <td class="num">3822.28</td>
+          <td class="num up" style="color:#d63031">+0.33%</td>
+          <td class="num">10083.83</td>
+          <td class="num">0.85%</td>
+          <td class="num down" style="color:#00b894">-3.69%</td>
+        </tr>
+        <tr>
+          <td>深证成指</td>
+          <td class="num">13885.71</td>
+          <td class="num up" style="color:#d63031">+3.25%</td>
+          <td class="num">12052.09</td>
+          <td class="num">2.97%</td>
+          <td class="num up" style="color:#d63031">+2.67%</td>
+        </tr>
+        <tr>
+          <td>创业板指</td>
+          <td class="num">3488.97</td>
+          <td class="num up" style="color:#d63031">+5.64%</td>
+          <td class="num">6016.13</td>
+          <td class="num">5.09%</td>
+          <td class="num up" style="color:#d63031">+8.92%</td>
+        </tr>
+        <tr>
+          <td>沪深300</td>
+          <td class="num">4600.93</td>
+          <td class="num up" style="color:#d63031">+1.27%</td>
+          <td class="num">6988.18</td>
+          <td class="num">1.29%</td>
+          <td class="num down" style="color:#00b894">-0.63%</td>
+        </tr>
+        <tr>
+          <td>科创50</td>
+          <td class="num">1616.36</td>
+          <td class="num up" style="color:#d63031">+4.09%</td>
+          <td class="num">1264.88</td>
+          <td class="num">4.82%</td>
+          <td class="num up" style="color:#d63031">+20.25%</td>
+        </tr>
+        <tr>
+          <td>中证1000</td>
+          <td class="num">7279.19</td>
+          <td class="num up" style="color:#d63031">+2.82%</td>
+          <td class="num">4343.10</td>
+          <td class="num">2.89%</td>
+          <td class="num down" style="color:#00b894">-4.16%</td>
+        </tr>
+        <tr>
+          <td>中证500</td>
+          <td class="num">7607.49</td>
+          <td class="num up" style="color:#d63031">+2.60%</td>
+          <td class="num">4437.92</td>
+          <td class="num">2.63%</td>
+          <td class="num up" style="color:#d63031">+1.90%</td>
+        </tr>
+        <tr>
+          <td>北证50</td>
+          <td class="num">1093.49</td>
+          <td class="num up" style="color:#d63031">+1.62%</td>
+          <td class="num">150.70</td>
+          <td class="num">1.40%</td>
+          <td class="num down" style="color:#00b894">-24.09%</td>
+        </tr>
+        <tr>
+          <td>中证全指</td>
+          <td class="num">5766.33</td>
+          <td class="num up" style="color:#d63031">+2.01%</td>
+          <td class="num">21374.92</td>
+          <td class="num">1.94%</td>
+          <td class="num down" style="color:#00b894">-2.58%</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="source-note">数据来源：腾讯自选股 / neodata | 截至 2026-08-04 15:00</div>
+
+    <div id="chart-index" style="width:100%;height:380px;margin-top:16px;"></div>
+
+    <h3>盘面解读</h3>
+    <p style="font-size:13px; color:#2d3436;">
+      今日市场呈现<strong>"成长反攻、价值休整"</strong>的鲜明格局。创业板指大涨5.64%领跑主要指数，深证成指涨3.25%，科创50涨4.09%，显示资金大幅回流科技成长板块。上证指数仅涨0.33%，主要受银行、白酒等权重板块拖累。全市场3642只个股上涨，上涨占比65%，141只个股涨停，赚钱效应显著回暖。两市成交2.21万亿，较上日放量2162亿，量能重回2万亿上方，为反弹提供有力支撑。值得注意的是，近期持续强势的银行板块今日大幅回调，资金从高股息防御板块向超跌成长股切换的迹象明显。
+    </p>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">📈</span> 二、板块涨跌</h2>
+    <div id="chart-sector" style="width:100%;height:400px;margin-bottom:16px;"></div>
+
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>板块</th><th class="num">涨跌幅</th><th>状态</th></tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>通信设备</td>
+          <td class="num up" style="color:#d63031">+10.74%</td>
+          <td><span class="tag tag-up">领涨</span></td>
+        </tr>
+        <tr>
+          <td>元件</td>
+          <td class="num up" style="color:#d63031">+8.47%</td>
+          <td><span class="tag tag-up">领涨</span></td>
+        </tr>
+        <tr>
+          <td>医疗服务</td>
+          <td class="num up" style="color:#d63031">+7.44%</td>
+          <td><span class="tag tag-up">领涨</span></td>
+        </tr>
+        <tr>
+          <td>CRO概念</td>
+          <td class="num up" style="color:#d63031">+7.13%</td>
+          <td><span class="tag tag-up">领涨</span></td>
+        </tr>
+        <tr>
+          <td>CPO概念</td>
+          <td class="num up" style="color:#d63031">+6.90%</td>
+          <td><span class="tag tag-up">领涨</span></td>
+        </tr>
+        <tr>
+          <td>玻璃玻纤</td>
+          <td class="num up" style="color:#d63031">+6.19%</td>
+          <td><span class="tag tag-up">领涨</span></td>
+        </tr>
+        <tr>
+          <td>半导体</td>
+          <td class="num up" style="color:#d63031">+5.39%</td>
+          <td><span class="tag tag-up">领涨</span></td>
+        </tr>
+        <tr>
+          <td>算力租赁</td>
+          <td class="num up" style="color:#d63031">+5.16%</td>
+          <td><span class="tag tag-up">领涨</span></td>
+        </tr>
+        <tr>
+          <td>广告营销</td>
+          <td class="num up" style="color:#d63031">+4.68%</td>
+          <td><span class="tag tag-up">领涨</span></td>
+        </tr>
+        <tr>
+          <td>白酒</td>
+          <td class="num down" style="color:#00b894">-1.97%</td>
+          <td><span class="tag tag-down">领跌</span></td>
+        </tr>
+        <tr>
+          <td>银行</td>
+          <td class="num down" style="color:#00b894">-2.75%</td>
+          <td><span class="tag tag-down">领跌</span></td>
+        </tr>
+        <tr>
+          <td>乘用车</td>
+          <td class="num down" style="color:#00b894">-3.09%</td>
+          <td><span class="tag tag-down">领跌</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="source-note">数据来源：腾讯自选股 | 截至 2026-08-04 15:00</div>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🎯</span> 三、主线研判</h2>
+
+    <div class="theme-card chip">
+      <h4>算力硬件产业链（CPO/PCB/半导体/元件）</h4>
+      <div class="meta">通信设备 +10.74% · 元件 +8.47% · 半导体 +5.39% · CPO +6.90%</div>
+      <p>今日最强主线。光库科技、天孚通信、中际旭创、新易盛等CPO龙头大涨，东山精密、沪电股份、深南电路等PCB个股掀涨停潮，半导体板块超60股涨停或涨超10%。催化因素包括AI算力需求持续高增、海外科技股反弹映射，以及前期深度回调后的超跌修复。通信设备板块主力净流入居首，资金认可度极高。</p>
+    </div>
+
+    <div class="theme-card nuclear">
+      <h4>CRO/医疗服务</h4>
+      <div class="meta">医疗服务 +7.44% · CRO概念 +7.13%</div>
+      <p>药明康德、凯莱英涨停，带动CRO板块强势反弹。市场对创新药政策支持预期升温，叠加板块经历长期调整后估值吸引力提升，资金抄底意愿较强。医疗服务板块5日涨幅8.73%、20日涨幅13.33%，呈现趋势性修复特征。</p>
+    </div>
+
+    <div class="theme-card ai">
+      <h4>算力租赁/多模态AI</h4>
+      <div class="meta">算力租赁 +5.16% · 广告营销 +4.68%</div>
+      <p>美利云3连板，算力租赁概念延续活跃；AI应用端蓝色光标、易点天下等大涨。随着AI大模型迭代加速，算力租赁需求和AI营销应用场景持续受到资金关注。</p>
+    </div>
+
+    <div class="theme-card pv">
+      <h4>银行/高股息防御板块</h4>
+      <div class="meta">银行 -2.75% · 国有大型银行 -3.49%</div>
+      <p>今日明显承压。工商银行、农业银行、中国银行等跌超3%，资金从防御性高股息板块流出，转向超跌成长股。这属于典型的市场风格再平衡，不代表银行板块长期逻辑逆转，但短期需注意风格切换节奏。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">💰</span> 四、资金流向与情绪</h2>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="label">上涨家数</div>
+        <div class="value up" style="color:#d63031">3642</div>
+        <div class="change up" style="color:#d63031">占比65%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">下跌家数</div>
+        <div class="value down" style="color:#00b894">1747</div>
+        <div class="change down" style="color:#00b894">—</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">涨停/跌停</div>
+        <div class="value up" style="color:#d63031">141/1</div>
+        <div class="change up" style="color:#d63031">情绪活跃</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">两市成交额</div>
+        <div class="value up" style="color:#d63031">2.21</div>
+        <div class="change up" style="color:#d63031">+0.216万亿</div>
+      </div>
+    </div>
+
+    <h3>资金动向</h3>
+    <ul class="obs-list">
+      <li>通信设备板块主力净流入约223亿，元件净流入约119亿，半导体净流入约116亿，科技成长成为资金主攻方向</li>
+      <li>银行板块逆势下跌，资金从高股息板块流出迹象明显</li>
+      <li>两市成交额放量至2.21万亿，较5日均值（约2.24万亿）基本持平，量能维持在高位</li>
+      <li>融资余额数据暂无更新，但涨停家数达141家，显示短线情绪较为亢奋</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">📰</span> 五、消息面</h2>
+    <div class="news-item">
+      <div class="news-title">创业板指大涨5.64% CPO板块强势反弹</div>
+      <div class="news-desc">8月4日A股三大指数集体上涨，CPO板块强势反弹，光迅科技、剑桥科技、光库科技等十余股涨停；PCB概念掀涨停潮，东山精密、沪电股份、深南电路等二十余股涨停。</div>
+      <div class="news-source">来源：腾讯新闻 / 2026-08-04</div>
+    </div>
+    <div class="news-item">
+      <div class="news-title">A股午后走高，创指大涨5.64%：算力硬件产业链大幅反弹</div>
+      <div class="news-desc">通信股大幅上攻，超20股涨停或涨超10%；电子板块超60股涨停或涨超10%；机械设备震荡走高。银行股深度调整，工农中建等跌超3%。</div>
+      <div class="news-source">来源：腾讯新闻 / 2026-08-04</div>
+    </div>
+    <div class="news-item">
+      <div class="news-title">CRO概念强势，药明康德、凯莱英涨停</div>
+      <div class="news-desc">创新药政策预期升温，CRO板块经历长期调整后估值修复，医疗服务板块5日涨幅8.73%，20日涨幅13.33%。</div>
+      <div class="news-source">来源：市场整理 / 2026-08-04</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="icon">🔭</span> 六、后市研判</h2>
+    <ul class="obs-list">
+      <li><strong>短期：</strong>市场完成风格再平衡，科技成长股引领反弹，创业板放量大涨显示风险偏好快速修复。明日需关注科技板块分化及承接力度，避免追高短期涨幅过大个股。</li>
+      <li><strong>中期：</strong>沪指仍处于20日均线（3882）与250日均线（3961）下方，中长期趋势尚未完全扭转；创业板突破5日、10日均线后，上方20日均线压力值得观察。</li>
+      <li><strong>策略：</strong>维持"震荡中精选结构性机会"的思路，重点关注算力硬件（CPO/PCB/半导体）、CRO/创新药等景气方向，同时留意银行高股息回调后的配置价值。</li>
+      <li><strong>风险：</strong>外围市场波动、量能能否持续在2万亿以上、银行等高股息板块资金流出是否引发阶段性扰动。</li>
+    </ul>
+  </div>
+
+  <div class="disclaimer">
+    <strong>免责声明：</strong>本报告基于公开数据整理，仅供复盘参考，不构成任何投资建议。股市有风险，投资需谨慎。报告中的分析观点仅代表作者基于当前数据的判断，不构成对未来走势的承诺。
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const upColor = '#d63031', downColor = '#00b894';
+  const idxData = [{"name":"上证指数","value":0.33},{"name":"深证成指","value":3.25},{"name":"创业板指","value":5.64},{"name":"沪深300","value":1.27},{"name":"科创50","value":4.09},{"name":"中证1000","value":2.82},{"name":"中证500","value":2.6},{"name":"北证50","value":1.62},{"name":"中证全指","value":2.01}];
+
+  // Chart 1: Index horizontal bar
+  const chartIndex = echarts.init(document.getElementById('chart-index'));
+  chartIndex.setOption({
+    title: { text: '主要指数涨跌幅', left: 'center', textStyle: { fontSize: 14, color: '#2d3436' } },
+    tooltip: { trigger: 'axis', formatter: '{b}: {c}%' },
+    grid: { left: '3%', right: '8%', bottom: '3%', top: '12%', containLabel: true },
+    xAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
+    yAxis: { type: 'category', data: idxData.map(i => i.name).reverse(), axisLabel: { fontSize: 12 } },
+    series: [{
+      type: 'bar',
+      data: idxData.map(i => ({ value: i.value, itemStyle: { color: i.value >= 0 ? upColor : downColor } })).reverse(),
+      label: { show: true, position: 'right', formatter: '{c}%', color: '#2d3436' }
+    }]
+  });
+
+  // Chart 2: Sector stacked bar (split up/down)
+  const sectorData = [{"name":"通信设备","chg":10.74},{"name":"元件","chg":8.47},{"name":"医疗服务","chg":7.44},{"name":"CRO概念","chg":7.13},{"name":"CPO概念","chg":6.9},{"name":"玻璃玻纤","chg":6.19},{"name":"半导体","chg":5.39},{"name":"算力租赁","chg":5.16},{"name":"广告营销","chg":4.68},{"name":"白酒","chg":-1.97},{"name":"银行","chg":-2.75},{"name":"乘用车","chg":-3.09}];
+  const upSectors = sectorData.filter(s => s.chg >= 0).sort((a, b) => b.chg - a.chg);
+  const downSectors = sectorData.filter(s => s.chg < 0).sort((a, b) => a.chg - b.chg);
+  const chartSector = echarts.init(document.getElementById('chart-sector'));
+  chartSector.setOption({
+    title: { text: '重点板块涨跌幅', left: 'center', textStyle: { fontSize: 14, color: '#2d3436' } },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}: {c}%' },
+    grid: { left: '3%', right: '8%', bottom: '3%', top: '12%', containLabel: true },
+    xAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
+    yAxis: { type: 'category', data: [...upSectors.map(s => s.name), ...downSectors.map(s => s.name)].reverse(), axisLabel: { fontSize: 11 } },
+    series: [{
+      type: 'bar',
+      data: [...upSectors.map(s => ({ value: s.chg, itemStyle: { color: upColor } })), ...downSectors.map(s => ({ value: s.chg, itemStyle: { color: downColor } }))].reverse(),
+      label: { show: true, position: 'right', formatter: '{c}%', color: '#2d3436', fontSize: 11 }
+    }]
+  });
+
+  window.addEventListener('resize', () => { chartIndex.resize(); chartSector.resize(); });
+})();
+</script>
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

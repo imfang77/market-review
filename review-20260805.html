@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股收盘复盘 | 2026年8月5日</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #2d3436; line-height: 1.7; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 20px 60px; }
+
+  /* Header */
+  .header { text-align: center; padding: 32px 0 24px; border-bottom: 2px solid #e8ecf0; margin-bottom: 28px; }
+  .header h1 { font-size: 26px; font-weight: 700; color: #1a1a2e; letter-spacing: 1px; }
+  .header .subtitle { font-size: 14px; color: #636e72; margin-top: 8px; }
+  .header .date-tag { display: inline-block; background: #0984e3; color: #fff; font-size: 12px; padding: 3px 12px; border-radius: 12px; margin-top: 10px; }
+
+  /* TL;DR Card */
+  .tldr { background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%); border: 1px solid #dfe6e9; border-radius: 12px; padding: 24px; margin-bottom: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .tldr h2 { font-size: 16px; color: #0984e3; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .tldr h2::before { content: ""; display: inline-block; width: 4px; height: 18px; background: #0984e3; border-radius: 2px; }
+  .tldr ul { list-style: none; }
+  .tldr li { padding: 6px 0 6px 20px; position: relative; font-size: 14px; color: #2d3436; }
+  .tldr li::before { content: "▸"; position: absolute; left: 0; color: #0984e3; font-weight: bold; }
+  .tldr .highlight { color: #d63031; font-weight: 600; }
+  .tldr .highlight-green { color: #00b894; font-weight: 600; }
+
+  /* Section */
+  .section { background: #fff; border: 1px solid #e8ecf0; border-radius: 10px; padding: 22px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.03); }
+  .section h2 { font-size: 17px; color: #1a1a2e; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 8px; }
+  .section h2 .icon { font-size: 20px; }
+  .section h3 { font-size: 14px; color: #2d3436; margin: 14px 0 8px; font-weight: 600; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
+  th { background: #f8f9fa; color: #636e72; font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 2px solid #e8ecf0; white-space: nowrap; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; }
+  tr:hover td { background: #f8f9fb; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .up { color: #d63031; font-weight: 600; }
+  .down { color: #00b894; font-weight: 600; }
+  .flat { color: #636e72; }
+
+  /* Chart containers */
+  .chart-box { width: 100%; margin: 12px 0; }
+  .chart-title { font-size: 13px; color: #636e72; margin-bottom: 6px; font-weight: 500; }
+
+  /* Tags */
+  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-right: 4px; }
+  .tag-up { background: #fadbd8; color: #c0392b; }
+  .tag-down { background: #d5f5e3; color: #27ae60; }
+  .tag-neutral { background: #dfe6e9; color: #636e72; }
+
+  /* Theme cards */
+  .theme-card { border-left: 3px solid #0984e3; padding: 12px 16px; margin: 10px 0; background: #f8f9fb; border-radius: 0 8px 8px 0; }
+  .theme-card.nuclear { border-left-color: #d63031; }
+  .theme-card.pv { border-left-color: #f39c12; }
+  .theme-card.ai { border-left-color: #6c5ce7; }
+  .theme-card.chip { border-left-color: #00b894; }
+  .theme-card h4 { font-size: 14px; margin-bottom: 6px; }
+  .theme-card .meta { font-size: 12px; color: #636e72; margin-bottom: 4px; }
+  .theme-card p { font-size: 13px; color: #2d3436; }
+
+  /* News items */
+  .news-item { padding: 10px 0; border-bottom: 1px dashed #e8ecf0; }
+  .news-item:last-child { border-bottom: none; }
+  .news-item .news-title { font-size: 13px; font-weight: 600; color: #2d3436; }
+  .news-item .news-desc { font-size: 12px; color: #636e72; margin-top: 3px; }
+  .news-item .news-source { font-size: 11px; color: #b2bec3; margin-top: 2px; }
+
+  /* Market state badge */
+  .state-badge { display: inline-block; font-size: 13px; font-weight: 600; padding: 4px 14px; border-radius: 20px; }
+  .state-strong { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+  /* Source */
+  .source-note { font-size: 11px; color: #b2bec3; margin-top: 6px; text-align: right; }
+  .disclaimer { font-size: 12px; color: #b2bec3; margin-top: 24px; padding: 16px; background: #f8f9fa; border-radius: 8px; line-height: 1.8; }
+
+  /* Summary grid */
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0; }
+  .summary-card { text-align: center; padding: 14px 8px; border-radius: 8px; background: #f8f9fa; }
+  .summary-card .label { font-size: 11px; color: #636e72; margin-bottom: 4px; }
+  .summary-card .value { font-size: 20px; font-weight: 700; }
+  .summary-card .change { font-size: 12px; margin-top: 2px; }
+
+  /* Observation list */
+  .obs-list { list-style: none; }
+  .obs-list li { padding: 6px 0 6px 22px; position: relative; font-size: 13px; }
+  .obs-list li::before { content: "→"; position: absolute; left: 0; color: #0984e3; font-weight: bold; }
+
+  /* Mobile responsive */
+  @media (max-width: 600px) {
+    .container { padding: 16px 12px 40px; }
+    .header { padding: 20px 0 16px; margin-bottom: 20px; }
+    .header h1 { font-size: 20px; }
+    .header .subtitle { font-size: 12px; }
+    .section { padding: 14px; margin-bottom: 14px; }
+    .section h2 { font-size: 15px; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .summary-card { padding: 10px 6px; }
+    .summary-card .value { font-size: 16px; }
+    .summary-card .label { font-size: 10px; }
+    .summary-card .change { font-size: 11px; }
+    table { font-size: 12px; }
+    th, td { padding: 6px 6px; }
+    .tldr { padding: 16px; }
+    .tldr li { font-size: 13px; }
+    .theme-card { padding: 10px 12px; }
+    .theme-card p { font-size: 12px; }
+    #chart-index { height: 320px !important; }
+    #chart-sector { height: 360px !important; }
+    #chart-fund { height: 280px !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>A股收盘复盘报告</h1>
+    <div class="subtitle">科技股强势反攻 半导体掀涨停潮 两市放量近2.68万亿</div>
+    <span class="date-tag">2026-08-05 周三 收盘</span>
+  </div>
+
+  <!-- TL;DR -->
+  <div class="tldr">
+    <h2>核心结论</h2>
+    <ul>
+      <li>三大指数集体上涨，沪指 <span class="highlight">+1.47%</span>、深成指 <span class="highlight">+1.86%</span>、创业板指 <span class="highlight">+1.32%</span>，科创50大涨 <span class="highlight">+4.78%</span>，全市场约 <span class="highlight">3700只个股上涨</span></li>
+      <li>两市成交额约 <span class="highlight">2.68万亿</span>，较上日放量约4514亿，量能充沛</li>
+      <li><span class="highlight">半导体/存储芯片</span>掀起涨停潮，中巨芯、正帆科技20%涨停，十余只个股涨停，板块大涨5.80%，隔夜美股费城半导体指数涨超6%形成共振</li>
+      <li><span class="highlight">算力硬件</span>强势反弹，中际旭创主力净流入50.68亿居首，但早盘CPO概念一度大幅低开（中际旭创低开近14%），呈现"先抑后扬"格局</li>
+      <li><span class="highlight-green">银行、白酒</span>逆势调整，资金从防御板块向成长赛道切换</li>
+      <li>市场状态判断：<span class="state-badge state-strong">强势反弹 · 科技主线回归</span>，适合积极参与科技成长方向</li>
+    </ul>
+  </div>
+
+  <!-- 1. 市场概览 -->
+  <div class="section">
+    <h2><span class="icon">📊</span> 一、市场概览</h2>
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="label">上证指数</div>
+        <div class="value up" style="color:#d63031">3878.43</div>
+        <div class="change up" style="color:#d63031">+1.47%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">深证成指</div>
+        <div class="value" style="color:#d63031">14144.20</div>
+        <div class="change" style="color:#d63031">+1.86%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">创业板指</div>
+        <div class="value" style="color:#d63031">3535.14</div>
+        <div class="change" style="color:#d63031">+1.32%</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">科创50</div>
+        <div class="value" style="color:#d63031">1693.67</div>
+        <div class="change" style="color:#d63031">+4.78%</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>指数</th>
+          <th class="num">收盘价</th>
+          <th class="num">涨跌幅</th>
+          <th class="num">成交额(亿)</th>
+          <th class="num">振幅</th>
+          <th class="num">上涨/下跌</th>
+          <th class="num">年初至今</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>上证指数</td><td class="num">3878.43</td><td class="num up" style="color:#d63031">+1.47%</td><td class="num">12,087</td><td class="num">1.81%</td><td class="num">1369 / 881</td><td class="num down" style="color:#00b894">-2.28%</td></tr>
+        <tr><td>深证成指</td><td class="num">14144.20</td><td class="num up" style="color:#d63031">+1.86%</td><td class="num">14,509</td><td class="num">4.33%</td><td class="num">2037 / 783</td><td class="num down" style="color:#00b894">—</td></tr>
+        <tr><td>创业板指</td><td class="num">3535.14</td><td class="num up" style="color:#d63031">+1.32%</td><td class="num">7,205</td><td class="num">6.08%</td><td class="num">1148 / 185</td><td class="num down" style="color:#00b894">—</td></tr>
+        <tr><td>沪深300</td><td class="num">4658.15</td><td class="num up" style="color:#d63031">+1.24%</td><td class="num">8,792</td><td class="num">2.82%</td><td class="num">117 / 179</td><td class="num down" style="color:#00b894">—</td></tr>
+        <tr><td>科创50</td><td class="num">1693.67</td><td class="num up" style="color:#d63031">+4.78%</td><td class="num">1,543</td><td class="num">6.19%</td><td class="num">36 / 13</td><td class="num down" style="color:#00b894">—</td></tr>
+        <tr><td>中证1000</td><td class="num">7493.05</td><td class="num up" style="color:#d63031">+2.94%</td><td class="num">5,116</td><td class="num">3.71%</td><td class="num">604 / 383</td><td class="num down" style="color:#00b894">—</td></tr>
+        <tr><td>中证500</td><td class="num">7809.21</td><td class="num up" style="color:#d63031">+2.65%</td><td class="num">5,269</td><td class="num">3.65%</td><td class="num">267 / 227</td><td class="num down" style="color:#00b894">—</td></tr>
+        <tr><td>中证A50</td><td class="num">1812.62</td><td class="num up" style="color:#d63031">+0.64%</td><td class="num">2,762</td><td class="num">2.35%</td><td class="num">—</td><td class="num down" style="color:#00b894">—</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="source-note">数据来源：腾讯自选股 / neodata | 截至 2026-08-05 15:00</div>
+
+    <div id="chart-index" style="width:100%;height:380px;margin-top:16px;"></div>
+
+    <h3>盘面解读</h3>
+    <p style="font-size:13px; color:#2d3436;">
+      今日市场呈现<strong>"科技成长强势回归、指数共振上行"</strong>的格局。上证指数涨1.47%站上3878点，深证成指涨1.86%，科创50大涨4.78%领涨全市场。全市场约3700只个股上涨，104只涨停仅1只跌停，市场广度极佳。成交额约2.68万亿，较上日放量4514亿，量能充沛支撑反弹。结构上，中证1000涨2.94%、中证500涨2.65%，中小盘股弹性显著强于大盘蓝筹（中证A50仅涨0.64%），显示<strong>风险偏好明显提升</strong>，资金从防御板块（银行-1.14%、白酒-1.53%）向科技成长切换。
+    </p>
+  </div>
+
+  <!-- 2. 板块涨跌 -->
+  <div class="section">
+    <h2><span class="icon">🔄</span> 二、板块涨跌排行</h2>
+
+    <div id="chart-sector" style="width:100%;height:420px;"></div>
+
+    <h3>涨幅居前概念板块</h3>
+    <table>
+      <thead><tr><th>板块</th><th class="num">涨跌幅</th><th>催化/逻辑</th></tr></thead>
+      <tbody>
+        <tr><td>靶材</td><td class="num up" style="color:#d63031">+9.75%</td><td>半导体材料国产化</td></tr>
+        <tr><td>玻璃玻纤</td><td class="num up" style="color:#d63031">+7.90%</td><td>电子布需求旺盛</td></tr>
+        <tr><td>电子化学品</td><td class="num up" style="color:#d63031">+7.86%</td><td>光刻胶/电子特气国产替代</td></tr>
+        <tr><td>贵金属</td><td class="num up" style="color:#d63031">+7.72%</td><td>黄金避险+美元走弱</td></tr>
+        <tr><td>半导体</td><td class="num up" style="color:#d63031">+5.80%</td><td>存储芯片涨价+AI需求</td></tr>
+        <tr><td>元件</td><td class="num up" style="color:#d63031">+6.57%</td><td>MLCC涨价+消费电子复苏</td></tr>
+        <tr><td>小金属</td><td class="num up" style="color:#d63031">+6.43%</td><td>锗、镓等战略金属</td></tr>
+        <tr><td>MLCC</td><td class="num up" style="color:#d63031">+6.05%</td><td>被动元件景气回升</td></tr>
+      </tbody>
+    </table>
+
+    <h3>跌幅居前板块</h3>
+    <table>
+      <thead><tr><th>板块</th><th class="num">涨跌幅</th><th>调整原因</th></tr></thead>
+      <tbody>
+        <tr><td>白酒</td><td class="num down" style="color:#00b894">-1.53%</td><td>消费复苏预期偏弱</td></tr>
+        <tr><td>国有大型银行</td><td class="num down" style="color:#00b894">-1.67%</td><td>资金从防御向成长切换</td></tr>
+        <tr><td>银行</td><td class="num down" style="color:#00b894">-1.14%</td><td>同上</td></tr>
+        <tr><td>中药</td><td class="num down" style="color:#00b894">-1.01%</td><td>医药板块内部分化</td></tr>
+        <tr><td>油服工程</td><td class="num down" style="color:#00b894">跌幅居前</td><td>油价波动</td></tr>
+        <tr><td>高速公路</td><td class="num down" style="color:#00b894">跌幅居前</td><td>防御属性资金流出</td></tr>
+      </tbody>
+    </table>
+    <div class="source-note">数据来源：证券时报·数据宝 / neodata | 2026-08-05</div>
+
+    <p style="font-size:13px; margin-top:10px;">
+      <strong>板块结构特征：</strong>涨幅榜被<strong>半导体产业链</strong>全面包揽（靶材、电子化学品、半导体、元件、MLCC、光刻机），核心驱动是存储芯片涨价预期+AI算力需求+隔夜美股半导体大涨共振。跌幅榜则是<strong>防御性板块</strong>（银行、白酒、中药、高速公路），反映市场风险偏好提升，资金从高股息防御向科技成长切换。
+    </p>
+  </div>
+
+  <!-- 3. 主线研判 -->
+  <div class="section">
+    <h2><span class="icon">🎯</span> 三、主线与候选主线研判</h2>
+
+    <!-- 半导体 -->
+    <div class="theme-card nuclear">
+      <h4>🔴 确认主线：半导体 / 存储芯片 — 强度：强</h4>
+      <div class="meta">半导体 +5.80% | 存储芯片掀涨停潮 | 中际旭创主力净流入50.68亿 | 科创50 +4.78%</div>
+      <p><strong>催化：</strong>①全球AI算力部署提速，DRAM供不应求格局延续至2027年；②隔夜美股费城半导体指数涨超6%，SK海力士涨超6%，美光涨超7%，形成全球共振；③TrendForce指出2026-2027年DRAM供需缺口扩大，价格走势偏强；④中微公司半年度业绩超预期（营收+34.89%，净利润+282%~311%）。</p>
+      <p><strong>涨停梯队：</strong>中巨芯-U、正帆科技20%涨停；江化微、有研新材、时空科技、博杰股份、中京电子、沃格光电、大为股份、康强电子、金海通等10%涨停；中微公司涨超13%，兆易创新涨8.26%，长电科技涨5.44%。</p>
+      <p><strong>持续性评估：</strong>产业逻辑扎实（AI需求+供给缺口），全球共振（美股+韩股+A股），业绩验证（中微公司超预期），资金合力明确（主力净流入集中）。具备<strong>确认主线</strong>条件，短期仍有 momentum。</p>
+    </div>
+
+    <!-- 算力硬件 -->
+    <div class="theme-card ai">
+      <h4>🟣 强势方向：算力硬件 / CPO — 强度：较强</h4>
+      <div class="meta">中际旭创+6.04%（早盘低开近14%后反弹）| 新易盛-5.29% | 天孚通信+2.29% | 主力净流入集中</div>
+      <p><strong>催化：</strong>全球AI算力部署持续，光模块需求景气。但今日早盘CPO概念大幅低开（中际旭创低开近14%，新易盛跌超10%），随后拉升反弹，呈现剧烈波动。</p>
+      <p><strong>判断：</strong>算力硬件方向资金分歧大，主力净流入TOP3均为光模块/PCB（中际旭创50.68亿、新易盛45.49亿、东山精密43.64亿），显示机构资金在逢低吸纳。但早盘大幅低开说明市场对短期估值仍有担忧。需观察后续能否稳住反弹势头。</p>
+    </div>
+
+    <!-- 贵金属/有色 -->
+    <div class="theme-card pv">
+      <h4>🟡 次级热点：贵金属 / 小金属 — 强度：一般</h4>
+      <div class="meta">贵金属 +7.72% | 小金属 +6.43% | 工业金属 +5.03%</div>
+      <p><strong>催化：</strong>①黄金避险属性+美元走弱；②战略金属（锗、镓）出口管制预期；③工业金属受益全球制造业复苏。</p>
+      <p><strong>判断：</strong>贵金属方向受全球宏观因素影响，与半导体方向形成"双轮驱动"。但独立性较弱，更多是半导体行情的资金溢出效应。持续性需观察黄金价格走势和出口政策变化。</p>
+    </div>
+
+    <!-- 银行白酒调整 -->
+    <div class="theme-card chip">
+      <h4>🟢 调整方向：银行 / 白酒 — 资金流出</h4>
+      <div class="meta">银行 -1.14% | 白酒 -1.53% | 国有大型银行 -1.67%</div>
+      <p><strong>核心逻辑：</strong>市场风险偏好提升，资金从高股息防御板块向科技成长切换。银行板块作为前期避险资金聚集地，在反弹日出现资金流出属于正常再平衡。</p>
+      <p><strong>判断：</strong>银行/白酒的调整为阶段性资金切换，不代表趋势反转。若科技板块持续强势，防御板块可能继续承压；若科技板块出现回调，资金可能回流防御。</p>
+    </div>
+  </div>
+
+  <!-- 4. 资金流向 -->
+  <div class="section">
+    <h2><span class="icon">💰</span> 四、资金流向</h2>
+
+    <div id="chart-fund" style="width:100%;height:320px;"></div>
+
+    <h3>主力资金净流入个股 TOP10</h3>
+    <table>
+      <thead><tr><th>股票</th><th class="num">净流入(亿)</th><th>所属方向</th></tr></thead>
+      <tbody>
+        <tr><td>中际旭创</td><td class="num up" style="color:#d63031">+50.68</td><td>光模块/CPO</td></tr>
+        <tr><td>新易盛</td><td class="num up" style="color:#d63031">+45.49</td><td>光模块/CPO</td></tr>
+        <tr><td>东山精密</td><td class="num up" style="color:#d63031">+43.64</td><td>PCB/消费电子</td></tr>
+        <tr><td>C嘉立创</td><td class="num up" style="color:#d63031">+30.69</td><td>电子元件</td></tr>
+        <tr><td>天孚通信</td><td class="num up" style="color:#d63031">+29.86</td><td>光通信</td></tr>
+        <tr><td>药明康德</td><td class="num up" style="color:#d63031">+18.33</td><td>CRO</td></tr>
+        <tr><td>永鼎股份</td><td class="num up" style="color:#d63031">+16.69</td><td>光通信</td></tr>
+        <tr><td>兆易创新</td><td class="num up" style="color:#d63031">+15.95</td><td>存储芯片</td></tr>
+        <tr><td>工业富联</td><td class="num up" style="color:#d63031">+14.11</td><td>算力/服务器</td></tr>
+        <tr><td>光迅科技</td><td class="num up" style="color:#d63031">+13.94</td><td>光通信</td></tr>
+      </tbody>
+    </table>
+    <div class="source-note">数据来源：WeStock / 腾讯自选股 | 2026-08-05</div>
+
+    <p style="font-size:13px; margin-top:10px;">
+      <strong>资金面信号：</strong>主力资金高度集中在<strong>光模块/光通信</strong>（中际旭创+新易盛+天孚通信+永鼎股份+光迅科技合计净流入超160亿）和<strong>半导体</strong>（兆易创新+工业富联），显示机构资金对AI算力产业链的共识度极高。CRO方向药明康德净流入18.33亿，显示医药方向也有资金关注。
+    </p>
+  </div>
+
+  <!-- 5. 重要消息面 -->
+  <div class="section">
+    <h2><span class="icon">📰</span> 五、重要消息面</h2>
+
+    <div class="news-item">
+      <div class="news-title">全球AI算力部署提速，DRAM供不应求延续至2027年</div>
+      <div class="news-desc">TrendForce集邦咨询最新研究指出，2027年存储器需求仍由AI应用主导，DRAM因HBM持续排挤产能、AI Server需求强劲，供需缺口将进一步扩大。隔夜美股费城半导体指数涨超6%，SK海力士涨超6%，美光涨超7%。</div>
+      <div class="news-source">来源：TrendForce / 证券时报 | 2026-08-05</div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-title">存储芯片概念掀涨停潮，十余股涨停</div>
+      <div class="news-desc">中巨芯-U、正帆科技20%涨停；江化微、有研新材、时空科技、博杰股份、中京电子、沃格光电、大为股份、康强电子、金海通等10%涨停。存储芯片板块整体涨幅超6%。</div>
+      <div class="news-source">来源：证券时报 / 每日经济新闻 | 2026-08-05</div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-title">中微公司半年度业绩超预期</div>
+      <div class="news-desc">中微公司发布业绩预告，预计2026年半年度营业收入约66.91亿元，同比增长约34.89%；归母净利润27-29亿元，同比增长282.48%-310.81%。公司已开发出54种高端半导体设备。</div>
+      <div class="news-source">来源：中微公司公告 / 腾讯新闻 | 2026-08-05</div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-title">CPO概念早盘大跌后拉升，资金分歧显著</div>
+      <div class="news-desc">中际旭创早盘低开近14%，新易盛跌超10%，天孚通信跌超5%。随后CPO概念大幅拉升反弹，星网锐捷、沃格光电、科瑞技术等涨停。中际旭创全天主力净流入50.68亿居首。</div>
+      <div class="news-source">来源：21世纪经济报道 / 腾讯新闻 | 2026-08-05</div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-title">CRO概念延续强势，药明康德大涨</div>
+      <div class="news-desc">CRO概念延续强势，百花医药2连板，义翘神州涨超10%，药明康德、凯莱英、昭衍新药、康龙化成、益诺思跟涨。药明康德主力净流入18.33亿。</div>
+      <div class="news-source">来源：证券时报 | 2026-08-05</div>
+    </div>
+
+    <div class="news-item">
+      <div class="news-title">中银证券：科技行情是调整而非结束</div>
+      <div class="news-desc">中银证券认为，当前市场整体对未来的判断进入混沌状态。该机构判断AI产业趋势仍在，科技行情是调整而非结束；资金面负反馈接近尾声，超跌应乐观。</div>
+      <div class="news-source">来源：中银证券 / 21世纪经济报道 | 2026-08-05</div>
+    </div>
+  </div>
+
+  <!-- 6. 后市研判 -->
+  <div class="section">
+    <h2><span class="icon">🔮</span> 六、后市研判与策略</h2>
+
+    <h3>市场状态判断</h3>
+    <p style="font-size:13px;">
+      当前市场处于<strong>"强势反弹"</strong>阶段。三大指数集体上涨，科创50大涨4.78%，全市场约3700只个股上涨，104涨停仅1跌停，市场广度极佳。成交额2.68万亿放量4514亿，流动性充沛。核心特征是<strong>科技成长主线回归</strong>，资金从防御板块（银行、白酒）向半导体、光通信、消费电子等成长赛道集中切换。
+    </p>
+
+    <h3>明日观察重点</h3>
+    <ul class="obs-list">
+      <li><strong>半导体龙头持续性：</strong>中巨芯、正帆科技（20%涨停）明日能否继续强势，兆易创新能否延续反弹——决定半导体主线能否从"一日游"升级为"持续主线"</li>
+      <li><strong>CPO概念分歧：</strong>中际旭创今日低开近14%后反弹，显示资金分歧巨大。明日若不能稳住，可能引发算力硬件方向集体回调</li>
+      <li><strong>成交量变化：</strong>今日放量4514亿至2.68万亿，若明日继续放量则反弹可延续；若大幅缩量则需警惕冲高回落</li>
+      <li><strong>银行白酒止跌：</strong>防御板块今日调整，若明日继续大跌可能引发系统性风险；若止跌企稳则科技反弹更健康</li>
+    </ul>
+
+    <h3>策略框架</h3>
+    <ul class="obs-list">
+      <li><strong>短期（T+1~T+5）：</strong>半导体方向若龙头继续强势可适度参与，但不宜追高已涨停个股；CPO方向波动大，适合有经验的投资者短线操作</li>
+      <li><strong>中期（1~3月）：</strong>关注AI算力产业链（光模块、存储芯片、半导体设备）的业绩兑现；中微公司业绩预告超预期是积极信号</li>
+      <li><strong>风格配置：</strong>当前适合"科技成长为主、防御为辅"的配置。科技方向关注半导体、光通信、消费电子；防御方向保留银行、高股息作为对冲</li>
+    </ul>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <strong>免责声明：</strong>以上内容基于公开数据和量化分析，仅供参考，不构成投资建议。市场有风险，投资需谨慎。任何投资决策应结合个人风险承受能力、资金状况和投资目标独立判断，必要时咨询持牌专业机构。过往表现不预示未来收益。
+  </div>
+
+  <div style="text-align:center; margin-top:20px; font-size:11px; color:#b2bec3;">
+    数据来源：腾讯自选股 · neodata · 上海证券报 · 每日经济新闻 · 证券时报 · 证券时报·数据宝<br>
+    报告生成时间：2026-08-05 | 自动生成，仅供参考
+  </div>
+
+</div>
+
+<script>
+// Index Performance Chart - Horizontal bars for mobile readability
+var chartIndex = echarts.init(document.getElementById('chart-index'));
+var indexData = [
+  { name: '上证指数', value: 1.47 },
+  { name: '深证成指', value: 1.86 },
+  { name: '创业板指', value: 1.32 },
+  { name: '沪深300', value: 1.24 },
+  { name: '科创50', value: 4.78 },
+  { name: '中证1000', value: 2.94 },
+  { name: '中证500', value: 2.65 },
+  { name: '中证A50', value: 0.64 }
+];
+chartIndex.setOption({
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  legend: { data: ['涨跌幅(%)'], top: 5 },
+  grid: { left: '3%', right: '8%', bottom: '3%', top: '15%', containLabel: true },
+  xAxis: {
+    type: 'value',
+    name: '涨跌幅(%)',
+    axisLabel: { formatter: '{value}%', fontSize: 11 }
+  },
+  yAxis: {
+    type: 'category',
+    data: indexData.map(function(d) { return d.name; }).reverse(),
+    axisLabel: { fontSize: 12 }
+  },
+  series: [{
+    name: '涨跌幅(%)',
+    type: 'bar',
+    data: indexData.map(function(d) {
+      return { value: d.value, itemStyle: { color: d.value > 0 ? '#d63031' : '#00b894' } };
+    }).reverse(),
+    barWidth: '55%',
+    label: {
+      show: true,
+      position: 'right',
+      formatter: function(params) {
+        return (params.value > 0 ? '+' : '') + params.value + '%';
+      },
+      fontSize: 11
+    }
+  }]
+});
+
+// Sector Chart - Top gainers vs losers
+var chartSector = echarts.init(document.getElementById('chart-sector'));
+chartSector.setOption({
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  legend: { data: ['涨幅居前', '跌幅居前'], top: 5 },
+  grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+  xAxis: { type: 'value', name: '涨跌幅(%)', axisLabel: { formatter: '{value}%' } },
+  yAxis: {
+    type: 'category',
+    data: ['靶材','玻璃玻纤','电子化学品','贵金属','半导体','元件','小金属','MLCC','白酒','国有大型银行','银行','中药'].reverse(),
+    axisLabel: { fontSize: 11 }
+  },
+  series: [
+    {
+      name: '涨幅居前',
+      type: 'bar',
+      stack: 'total',
+      data: [9.75, 7.90, 7.86, 7.72, 5.80, 6.57, 6.43, 6.05, 0, 0, 0, 0].reverse(),
+      itemStyle: { color: '#d63031' },
+      label: { show: true, position: 'right', formatter: '+{c}%', fontSize: 10 }
+    },
+    {
+      name: '跌幅居前',
+      type: 'bar',
+      stack: 'total',
+      data: [0, 0, 0, 0, 0, 0, 0, 0, -1.53, -1.67, -1.14, -1.01].reverse(),
+      itemStyle: { color: '#00b894' },
+      label: { show: true, position: 'left', formatter: '{c}%', fontSize: 10 }
+    }
+  ]
+});
+
+// Fund Flow Chart
+var chartFund = echarts.init(document.getElementById('chart-fund'));
+chartFund.setOption({
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  legend: { data: ['主力净流入(亿元)'], top: 5 },
+  grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+  xAxis: {
+    type: 'category',
+    data: ['中际旭创', '新易盛', '东山精密', 'C嘉立创', '天孚通信', '药明康德'],
+    axisLabel: { fontSize: 11 }
+  },
+  yAxis: { type: 'value', name: '净流入(亿)' },
+  series: [{
+    name: '主力净流入(亿元)',
+    type: 'bar',
+    data: [
+      { value: 50.68, itemStyle: { color: '#d63031' } },
+      { value: 45.49, itemStyle: { color: '#d63031' } },
+      { value: 43.64, itemStyle: { color: '#d63031' } },
+      { value: 30.69, itemStyle: { color: '#d63031' } },
+      { value: 29.86, itemStyle: { color: '#d63031' } },
+      { value: 18.33, itemStyle: { color: '#d63031' } }
+    ],
+    label: {
+      show: true,
+      position: 'top',
+      formatter: function(params) {
+        return (params.value > 0 ? '+' : '') + params.value + '亿';
+      },
+      fontSize: 11
+    }
+  }]
+});
+
+// Responsive
+window.addEventListener('resize', function() {
+  chartIndex.resize();
+  chartSector.resize();
+  chartFund.resize();
+});
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

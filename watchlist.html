@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自选股跟踪 · 技术面/基本面</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+.header { background: #fff; border-bottom: 1px solid #e9ecef; padding: 18px 96px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; display: flex; align-items: center; justify-content: center; }
+.header a.back { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 14px; color: #4263eb; text-decoration: none; z-index: 2; }
+.header h1 { font-size: 20px; font-weight: 700; }
+.header .subtitle { margin-top: 4px; font-size: 12px; color: #868e96; white-space: nowrap; }
+.header .h-center { flex: 1; min-width: 0; text-align: center; padding: 0 60px; }
+.sync-box { margin-top: 12px; }
+.sync-row { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; }
+.sync-btn { padding: 6px 12px; border: 1px solid #4263eb; border-radius: 6px; background: #4263eb; color: #fff; cursor: pointer; font-size: 13px; }
+.sync-btn:hover { background: #3651c9; }
+.track-btn { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; border: 1px solid #e03131; border-radius: 6px; background: #fff; color: #e03131; cursor: pointer; font-size: 13px; text-decoration: none; }
+.track-btn:hover { background: #fff0f0; }
+.track-star { color: #e03131; font-size: 16px; font-weight: 700; }
+.container { max-width: 1180px; margin: 24px auto; padding: 0 16px; }
+.section { background: #fff; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.section-title { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.section-desc { font-size: 13px; color: #868e96; margin: 6px 0 14px; line-height: 1.6; }
+.demo-banner { margin: 0 0 14px; padding: 10px 14px; background: #fff8e1; border: 1px solid #ffe08a; border-radius: 8px; font-size: 13px; color: #8a6d00; line-height: 1.6; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { background: #f1f3f5; padding: 10px 12px; text-align: center; font-weight: 600; color: #495057; font-size: 13px; border-bottom: 2px solid #dee2e6; white-space: nowrap; vertical-align: middle; }
+td { padding: 10px 12px; border-bottom: 1px solid #e9ecef; text-align: center; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.up { color: #d63031; font-weight: 600; } .down { color: #00b894; font-weight: 600; } .flat { color: #868e96; }
+tr:last-child td { border-bottom: none; } tr:hover td { background: #f8f9fa; }
+.stock-code { font-size: 12px; color: #868e96; } .stock-name { font-weight: 600; white-space: nowrap; }
+.src-badge { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 11px; font-weight: 700; vertical-align: middle; }
+.src-basic { background: #e7f0ff; color: #1c5fd6; }
+.src-tech { background: #ffeaea; color: #c62828; }
+.demo-tag { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 10px; font-size: 11px; background: #fff3cd; color: #8a6d00; }
+.cancel-btn { display: inline-block; padding: 4px 12px; border: 1px solid #adb5bd; border-radius: 6px; color: #868e96; background: #fff; cursor: pointer; font-size: 12px; white-space: nowrap; }
+.cancel-btn:hover { background: #f1f3f5; }
+.empty-result { text-align: center; color: #868e96; padding: 30px 0; }
+.note { font-size: 12px; color: #999; margin-top: 8px; line-height: 1.6; }
+@media (max-width: 560px){ .header{ display: block; padding: 16px 60px 12px; } .header a.back { top: 16px; transform: none; } .header .h-center { text-align: center; padding: 0; } .sync-box { position: static; transform: none; text-align: center; margin-top: 10px; } .sync-row { justify-content: center; } table{ font-size: 11px; } th,td{ padding: 6px 5px; } }
+</style>
+</head>
+<body>
+<div class="header">
+  <a class="back" href="screening.html">← 返回</a>
+  <div class="h-center">
+    <h1>自选股跟踪</h1>
+    <div class="subtitle">来源：技术面选股 / 基本面选股（点★加入，本页统一跟踪）</div>
+    <div class="sync-box">
+      <div class="sync-row">
+        <button type="button" class="sync-btn" id="sync-tdx">一键同步至通达信</button>
+        <span class="track-btn" id="export-txt" style="cursor:pointer"><span class="track-star">★</span> 导出</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="section">
+    <div class="section-title">自选股清单</div>
+    <div class="section-desc">「自选来源」标明该股票是从技术面还是基本面选股页加入的（基本面=蓝 / 技术面=红）；「涨跌幅(至今)」= (当日价 − 加入日收盘价) / 加入日收盘价。当日价取数据更新日（2026-08-11）收盘价。</div>
+    <div id="demo-banner" class="demo-banner" style="display:none"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>代码</th><th>名称</th><th>加入日期</th><th class="num">加入日收盘价</th><th class="num">当日价</th><th class="num">涨跌幅(至今)</th><th>自选来源</th><th>操作</th>
+        </tr></thead>
+        <tbody id="wl-body"></tbody>
+      </table>
+    </div>
+    <div class="note">当日价来自腾讯行情接口（取最新收盘，即 2026-08-11 收盘价）；若浏览器拦截跨域行情，当日价/涨跌幅将显示「—」。旧版加入、未记录加入日收盘价的个股，已用当前收盘价回填（涨跌幅显示为 0%）。</div>
+  </div>
+</div>
+<script>
+var FAV_KEY = "ashare_screening_fav_v1";
+function loadFavMap(){ try{ var p=JSON.parse(localStorage.getItem(FAV_KEY)||"{}"); if(Array.isArray(p)){ var o={}; p.forEach(function(c){ o[c]={added:null,price:null}; }); return o; } return (p&&typeof p==="object")?p:{}; }catch(e){ return {}; } }
+var FAV_MAP = loadFavMap();
+var FAV = new Set(Object.keys(FAV_MAP));
+var NAME_MAP = {};
+var PRICES = {};
+
+function todayStr(){ var d=new Date(); function p2(n){ return (n<10?"0":"")+n; } return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate()); }
+function pcls(v){ if(v==null||isNaN(v)) return "flat"; return v>0?"up":(v<0?"down":"flat"); }
+function fmtPct(v){ if(v==null||isNaN(v)) return "—"; return (v>0?"+":"")+v.toFixed(2)+"%"; }
+function fmtPrice(v){ if(v==null||isNaN(v)) return "—"; return v.toFixed(2); }
+
+function prefix(code){ code=(""+code).replace(/^(sh|sz|bj)/,''); if(/^[69]/.test(code)) return "sh"+code; if(/^(8|4|92)/.test(code)) return "bj"+code; return "sz"+code; }
+
+// 演示数据：无真实自选时展示效果
+var DEMO = {};
+var isDemo = false;
+if(FAV.size===0){
+  isDemo = true;
+  DEMO = { "600519": { added: "2026-08-11", price: 1400.00, cur: 1346.50, name: "贵州茅台(演示)", source: "基本面", demo: true } };
+  var b=document.getElementById("demo-banner");
+  b.style.display="block";
+  b.innerHTML = "<b>【演示】自选来源示例</b>：你还没有真实自选股，下面用一条演示数据展示「自选来源」列与「涨跌幅(至今)」的计算效果。真实使用：在「技术面选股」或「基本面选股」页点 ★ 加入，再回本页即可看到对应来源（技术面=红 / 基本面=蓝）。";
+}
+
+function getRows(){
+  var rows=[];
+  FAV.forEach(function(c){ rows.push({ code:c, rec:FAV_MAP[c] }); });
+  Object.keys(DEMO).forEach(function(c){ rows.push({ code:c, rec:DEMO[c] }); });
+  return rows;
+}
+
+function srcBadge(source){
+  if(source==="基本面") return '<span class="src-badge src-basic">基本面</span>';
+  if(source==="技术面") return '<span class="src-badge src-tech">技术面</span>';
+  return '<span class="src-badge" style="background:#eef1f8;color:#777">未知</span>';
+}
+
+function render(){
+  var rows=getRows();
+  var tb=document.getElementById("wl-body");
+  if(rows.length===0){ tb.innerHTML='<tr><td colspan="8" class="empty-result">暂无自选股</td></tr>'; return; }
+  var h="";
+  rows.forEach(function(r){
+    var c=r.code, rec=r.rec;
+    var name = (rec.name!=null&&rec.name!=="")?rec.name : (NAME_MAP[c]||c);
+    var added = rec.added||"—";
+    var addPrice = (rec.price!=null)?rec.price:null;
+    var cur = (PRICES[c]!=null)?PRICES[c]:((rec.cur!=null)?rec.cur:null);
+    var chg = (addPrice!=null && cur!=null && addPrice!==0)? (cur-addPrice)/addPrice*100 : null;
+    var demoTag = rec.demo? '<span class="demo-tag">演示</span>' : "";
+    h += '<tr>'
+      + '<td class="stock-code">'+c+'</td>'
+      + '<td><span class="stock-name">'+name+'</span>'+demoTag+'</td>'
+      + '<td>'+added+'</td>'
+      + '<td class="num">'+fmtPrice(addPrice)+'</td>'
+      + '<td class="num">'+fmtPrice(cur)+'</td>'
+      + '<td class="num '+pcls(chg)+'">'+fmtPct(chg)+'</td>'
+      + '<td>'+srcBadge(rec.source)+'</td>'
+      + '<td>'+(rec.demo?'<span style="color:#999">—</span>':'<span class="cancel-btn" data-code="'+c+'">取消收藏</span>')+'</td>'
+      + '</tr>';
+  });
+  tb.innerHTML=h;
+  tb.querySelectorAll(".cancel-btn").forEach(function(el){
+    el.addEventListener("click", function(){
+      var c=el.getAttribute("data-code");
+      FAV.delete(c); delete FAV_MAP[c];
+      try{ localStorage.setItem(FAV_KEY, JSON.stringify(FAV_MAP)); }catch(e){}
+      render();
+    });
+  });
+}
+
+// 实时价：通过脚本注入腾讯行情（绕过跨域）
+function fetchPrices(codes, cb){
+  var list=codes.map(prefix).filter(Boolean);
+  if(list.length===0){ cb({}); return; }
+  var q=list.join(",");
+  var s=document.createElement("script");
+  s.src="https://qt.gtimg.cn/q="+q;
+  s.onload=function(){
+    var out={};
+    list.forEach(function(pc){ var v=window["v_"+pc]; if(v){ var f=(""+v).split("~"); var price=parseFloat(f[3]); if(!isNaN(price)) out[pc.replace(/^(sh|sz|bj)/,"")]=price; } });
+    cb(out);
+  };
+  s.onerror=function(){ cb({}); };
+  document.body.appendChild(s);
+}
+
+// 旧版加入、未记录加入日收盘价的个股：回填当前收盘价（涨跌幅记为 0%）
+function backfillLegacy(){
+  var changed=false;
+  FAV.forEach(function(c){
+    var rec=FAV_MAP[c];
+    if(rec && (rec.price==null) && PRICES[c]!=null){ rec.price=PRICES[c]; changed=true; }
+  });
+  if(changed){ try{ localStorage.setItem(FAV_KEY, JSON.stringify(FAV_MAP)); }catch(e){} }
+}
+
+// ===== 同步 / 导出（与选股页一致）=====
+function toTdx7(code){ var m=/^(sh|sz|bj)([0-9]{6})$/.exec(code); if(!m) return null; return (m[1]==="sh"?"1":"0")+m[2]; }
+function allCodes(){ var codes=[]; FAV.forEach(function(c){ codes.push(c); }); return codes; }
+function syncToTdx(){
+  var codes=allCodes();
+  if(!codes.length){ alert("没有可同步的股票（请先点★加入自选）"); return; }
+  function fallback(){ var CRLF=String.fromCharCode(13,10); var txt=codes.map(toTdx7).filter(Boolean).join(CRLF)+CRLF; var blob=new Blob([txt],{type:"text/plain"}); var a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="_tdx_自选股.blk"; a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); },1000); alert("未检测到本机同步服务，已改为下载 _tdx_自选股.blk，请手动放入通达信 blocknew 目录"); }
+  try{ fetch("http://127.0.0.1:18765/sync",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({codes:codes})}).then(function(r){ return r.json(); }).then(function(j){ if(j&&j.ok){ alert("已同步到通达信（"+j.count+" 只）"); } else { fallback(); } }).catch(function(){ fallback(); }); }catch(e){ fallback(); }
+}
+function exportTxt(){
+  if(!FAV.size){ alert("暂无收藏（红星）股票，无法导出"); return; }
+  var lines=[];
+  FAV.forEach(function(c){ var c6=(c.length>6)?c.slice(2):c; var nm=NAME_MAP[c]||(FAV_MAP[c]&&FAV_MAP[c].name)||""; lines.push(c6+(nm?"\t"+nm:"")); });
+  var txt=lines.join(String.fromCharCode(10))+String.fromCharCode(10);
+  var blob=new Blob([txt],{type:"text/plain;charset=utf-8"});
+  var a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="自选股_代码名称.txt"; a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); },1000);
+}
+document.getElementById("sync-tdx").addEventListener("click", syncToTdx);
+document.getElementById("export-txt").addEventListener("click", exportTxt);
+
+// 加载名称表
+try{
+  fetch("name_map.json").then(function(r){ return r.json(); }).then(function(m){ NAME_MAP=m; render(); }).catch(function(){ render(); });
+}catch(e){ render(); }
+
+// 拉取实时价并渲染（回填旧数据）
+var codes=[]; getRows().forEach(function(r){ codes.push(r.code); });
+fetchPrices(codes, function(p){ PRICES=p; backfillLegacy(); render(); });
+render();
+
+// 多页同步
+window.addEventListener("storage", function(e){ if(e&&e.key===FAV_KEY){ FAV_MAP=loadFavMap(); FAV=new Set(Object.keys(FAV_MAP)); render(); } });
+</script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>条件选股 · A股复盘选股中心</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+.header { background: #fff; border-bottom: 1px solid #e9ecef; padding: 18px 16px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; }
+.header a.back { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 14px; color: #4263eb; text-decoration: none; }
+.header h1 { font-size: 20px; font-weight: 700; }
+.header .subtitle { margin-top: 4px; font-size: 12px; color: #868e96; }
+.container { max-width: 880px; margin: 28px auto; padding: 0 16px; }
+.tip { text-align:center; font-size:13px; color:#868e96; margin-bottom:18px; }
+.card { display: block; text-decoration: none; color: inherit; background: #fff; border-radius: 14px; padding: 24px 22px; margin-bottom: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); position: relative; border: 1px solid #eef1f8; transition: transform .12s, box-shadow .12s; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.10); }
+.card .top { display: flex; align-items: center; gap: 12px; }
+.card .ico { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.card.tech .ico { background: #e3f2fd; }
+.card.fund .ico { background: #ede7f6; }
+.card.rps .ico { background: #ffe3e3; }
+.card .title { font-size: 18px; font-weight: 700; }
+.card .desc { font-size: 13px; color: #868e96; margin-top: 6px; line-height: 1.6; }
+.card .meta { margin-top: 14px; font-size: 12px; color: #495057; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.badge-date { background: #f1f3f5; border-radius: 10px; padding: 3px 10px; font-weight: 600; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: #e03131; display: inline-block; box-shadow: 0 0 0 3px rgba(224,49,49,0.18); }
+.dot.hide { display: none; }
+.dot-text { color: #e03131; font-weight: 700; font-size: 12px; }
+.arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 22px; color: #adb5bd; }
+@media (max-width: 600px) { .header { padding: 14px 12px; } .card { padding: 18px 16px; } .card .title { font-size: 16px; } .arrow { right: 14px; } }
+</style>
+</head>
+<body>
+<div class="header"><a class="back" href="index.html">&#8592; 返回</a>
+<h1>条件选股</h1>
+<div class="subtitle">技术面 / 基本面 / RPS · 三入口</div>
+</div>
+<div class="container">
+
+<a class="card tech" href="screening_tech.html?v=20260812" id="card-tech">
+  <div class="top"><div class="ico">&#128200;</div><div><div class="title">技术面选股</div></div></div>
+  <div class="desc">趋势突破 / 净利润断层 / ETF 5日最强。<br>累计全交易日结果，同一股票按「命中日期」分行显示。</div>
+  <div class="meta">
+    <span class="badge-date" id="tech-date">更新于 —</span>
+    <span class="dot hide" id="tech-dot"></span>
+  </div>
+  <div class="arrow">&#8250;</div>
+</a>
+
+<a class="card fund" href="screening_fund.html?v=20260811" id="card-fund">
+  <div class="top"><div class="ico">&#128721;</div><div><div class="title">基本面选股</div></div></div>
+  <div class="desc">高盈利/高成长/高股息。<br>每日刷新同一页面，可按三维度灵活筛选。</div>
+  <div class="meta">
+    <span class="badge-date" id="fund-date">更新于 —</span>
+    <span class="dot hide" id="fund-dot"></span>
+  </div>
+  <div class="arrow">&#8250;</div>
+</a>
+
+<a class="card rps" href="https://f8b621e42fbf44deb06edc02bd4ea962.app.workbuddy.link" target="_blank" rel="noopener" id="card-rps">
+  <div class="top"><div class="ico">&#128202;</div><div><div class="title">RPS选股</div></div></div>
+  <div class="desc">欧奈尔相对价格强度 RPS（5 / 20 / 50 / 120 / 250）。<br>全市场历史 · 拼音搜索 · 三线转红筛选，已与通达信核对。</div>
+  <div class="meta">
+    <span class="badge-date" id="rps-date">更新于 —</span>
+    <span class="dot hide" id="rps-dot"></span>
+  </div>
+  <div class="arrow">&#8250;</div>
+</a>
+
+<div class="tip">红色圆点表示技术面 / 基本面 / RPS 有新数据更新。</div>
+
+</div>
+
+<script>
+var TECH_DATE = "20260812";
+var FUND_DATE = "20260813";
+var RPS_DATE = "20260828";
+var META_KEY = "ashare_screening_meta_read_v1";
+function loadRead(){ try { return JSON.parse(localStorage.getItem(META_KEY) || "{}"); } catch(e){ return {}; } }
+function saveRead(o){ try { localStorage.setItem(META_KEY, JSON.stringify(o)); } catch(e){} }
+function fmtDate(d){ if(!d) return "—"; return d.replace(/^(\d{4})(\d{2})(\d{2})$/, "$1-$2-$3"); }
+var read = loadRead();
+function setupCard(prefix, dateStr){
+  var dEl = document.getElementById(prefix + "-date");
+  var dot = document.getElementById(prefix + "-dot");
+  dEl.textContent = "更新于 " + fmtDate(dateStr);
+  var seen = read[prefix] || "";
+  var hasNew = dateStr && dateStr > seen;
+  dot.classList.toggle("hide", !hasNew);
+}
+setupCard("tech", TECH_DATE);
+setupCard("fund", FUND_DATE);
+setupCard("rps", RPS_DATE);
+function markRead(prefix, dateStr){
+  var r = loadRead(); r[prefix] = dateStr || ""; saveRead(r);
+  var dot = document.getElementById(prefix + "-dot");
+  dot.classList.add("hide");
+}
+document.getElementById("card-tech").addEventListener("click", function(){ markRead("tech", TECH_DATE); });
+document.getElementById("card-fund").addEventListener("click", function(){ markRead("fund", FUND_DATE); });
+document.getElementById("card-rps").addEventListener("click", function(){ markRead("rps", RPS_DATE); });
+
+// 自动从 screening_meta.json 同步最新日期与缓存版本号（防止漏改硬编码日期）
+(function(){
+  try {
+    fetch('screening_meta.json?t=' + Date.now()).then(function(r){ return r.json(); }).then(function(m){
+      if (!m) return;
+      if (m.techDate){ TECH_DATE = m.techDate; setupCard("tech", TECH_DATE); var ct = document.getElementById("card-tech"); if (ct) ct.href = "screening_tech.html?v=" + TECH_DATE; }
+      if (m.fundDate){ FUND_DATE = m.fundDate; setupCard("fund", FUND_DATE); var cf = document.getElementById("card-fund"); if (cf) cf.href = "screening_fund.html?v=" + FUND_DATE; }
+      if (m.rpsDate){ RPS_DATE = m.rpsDate; setupCard("rps", RPS_DATE); }
+    }).catch(function(e){ console.log("screening_meta load fail", e); });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

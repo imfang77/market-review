@@ -1,0 +1,328 @@
+/**
+ * A股每日复盘+选股+主线分析清单
+ * 每条记录: { date, weekday, reviewFile, reviewSummary, screeningFile, screeningSummary, mainlineFile, mainlineSummary }
+ * reviews.html 读取 reviewFile/reviewSummary 渲染日期列表
+ * screening.html 读取 screeningFile/screeningSummary 渲染日期列表
+ * mainlines.html 读取 mainlineFile/mainlineSummary 渲染日期列表
+ */
+window.REPORTS = [
+  {
+    "date": "2026-09-08",
+    "weekday": "周二",
+    "reviewFile": "review-20260908.html",
+    "reviewSummary": "上证+0.36% 创业板指+0.50% 成交1.45万亿放量;恐贪指数55(中性偏贪婪);新增G1突破6只,G2业绩缺口4只;ETF5日最强:有色/半导体/医药;20日主线:人形机器人/CPO/创新药",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面页最新20260908: G1趋势突破6只,G2跳空缺口4只,G3 ETF 5日最强,G4基本面双季扣非;基本面页数据截至2026中报",
+    "mainlineFile": "mainline_concept-20260908.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260908.html",
+    "conceptSummary": "5日主线:网络游戏/数字经济｜10日主线:网络游戏/液冷概念/消费电子｜20日主线:共封装光模块(CPO)/液冷概念/消费电子"
+  },
+  {
+    "date": "2026-09-07",
+    "weekday": "周一",
+    "reviewFile": "review-20260907.html",
+    "reviewSummary": "沪指+0.07% 创业板+3.41% 涨跌3040/1987 涨停95只 成交1.95万亿",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口：技术面(趋势突破G1-1只/跳空缺口G2-0只/ETF五日均强20只)+基本面(高盈利/高成长/高股息三维度)",
+    "mainlineFile": "mainline_concept-20260907.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260907.html",
+    "conceptSummary": "5日主线:网络游戏/AI应用/国防军工｜10日主线:网络游戏/信创/数字经济｜20日主线:黄金/消费电子/液冷概念"
+  },
+  {
+    "date": "2026-09-04",
+    "weekday": "周五",
+    "reviewFile": "review-20260904.html",
+    "reviewSummary": "沪指-0.30% 创业板-0.78% 涨跌2249/2773 涨停41只 成交2.03万亿 消费+2.99%/传媒+2.41%/计算机+1.87%领涨",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口:技术面(G1趋势突破8只/G2跳空缺口候选池69只/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
+    "mainlineFile": "mainline_concept-20260904.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260904.html",
+    "conceptSummary": "5日主线:网络游戏/AI应用/国防军工｜10日主线:液冷概念/消费电子/国防军工｜20日主线:黄金/液冷概念/消费电子"
+  },
+  {
+    "date": "2026-09-03",
+    "weekday": "周四",
+    "reviewFile": "review-20260903.html",
+    "reviewSummary": "沪指+0.02% 创业板+0.01% 涨跌1805/3275 涨停46只 成交1.76万亿",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面页:趋势突破G1+净利润断层G2+ETF五日强;基本面页:高盈利/高成长/高股息",
+    "mainlineFile": "mainline-20260903.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260903.html",
+    "conceptSummary": "5日主线:国防军工/网络游戏/AI应用｜10日主线:消费电子/液冷概念/网络游戏｜20日主线:黄金/共封装光模块(CPO)/消费电子"
+  },
+  {
+    "date": "2026-09-02",
+    "weekday": "周三",
+    "reviewFile": "review-20260902.html",
+    "reviewSummary": "沪指-0.97% 创指-2.39% 中证全指-1.32% 恐贪21.5极度恐惧",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口:技术面(趋势突破G1/净利润断层G2/ETF五日均强) + 基本面(高盈利/高成长/高股息)",
+    "mainlineFile": "mainline_concept-20260902.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260902.html",
+    "conceptSummary": "5日主线:网络游戏/信创/数字经济｜10日主线:黄金/网络游戏/数字经济｜20日主线:黄金/共封装光模块(CPO)/消费电子"
+  },
+  {
+    "date": "2026-09-01",
+    "weekday": "周二",
+    "reviewFile": "review-20260901.html",
+    "reviewSummary": "沪指+1.71%报3979.89 创业板-1.32% 科创50-5.97% 中证全指+0.06% 恐贪38.3恐惧 5日主线:机械设备/电子/电力设备",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面页更新20260901(G1突破12只:金一文化/苏垦农发等;G2池0只;ETF5日最强20只) 基本面页数据截至最新季报",
+    "mainlineFile": "mainline_concept-20260901.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260901.html",
+    "conceptSummary": "5日主线:｜10日主线:黄金｜20日主线:共封装光模块(CPO)/黄金/半导体"
+  },
+  {
+    "date": "2026-08-31",
+    "weekday": "周一",
+    "reviewFile": "review-20260831.html",
+    "reviewSummary": "沪指+0.86%报3986 创业板+0.42% 成交2.13万亿 上涨3000/下跌2071 涨停87 恐贪39.1·中性 种植业领涨",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口:技术面(G1突破7只:泸天化/黑芝麻/美格智能等,G2池364只,ETF5日均强20只)+基本面(高盈利/高成长/高股息三维度)",
+    "mainlineFile": "mainline_concept-20260831.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260831.html",
+    "conceptSummary": "5日主线:种业/林业/房产服务｜10日主线:种业/种植业/粮食概念｜20日主线:种业/CPO概念/复合铜箔"
+  },
+  {
+    "date": "2026-08-28",
+    "weekday": "周五",
+    "reviewFile": "review-20260828.html",
+    "reviewSummary": "沪指-0.11% 深成指-0.68% 创业板指-1.41% 成交约2.10万亿 上涨2796/下跌2270 涨停82只 黄金/CRO/CPO关注度较高",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面页最新20260828（趋势突破G1+净利润断层G2+ETF五日均强）+基本面页（高盈利/高成长/高股息）",
+    "mainlineFile": "mainline-20260828.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260828.html",
+    "conceptSummary": "5日主线:种业/林业｜10日主线:种业/粮食概念｜20日主线:种业/黄金/CPO概念",
+    "cardTag": "（自今日起按通达信401个板块更新）"
+  },
+  {
+    "date": "2026-08-27",
+    "weekday": "周四",
+    "reviewFile": "review-20260827.html",
+    "reviewSummary": "沪指-1.19% 深成指+1.50% 创业板+1.71% 中证全指+2.35% | 黄金/CRO/CPO领涨 涨停305只 成交活跃 指数分化结构性行情延续",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口:技术面(趋势突破G1+净利润断层G2+ETF5日均强20只 最新20260827) + 基本面(高盈利/高成长/高股息三维度 2026Q3季报)",
+    "mainlineFile": "mainline-20260827.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260827.html",
+    "conceptSummary": "5日主线:黄金/苹果概念｜10日主线:黄金/苹果概念｜20日主线:黄金/CRO/共封装光模块(CPO)"
+  },
+  {
+    "date": "2026-08-26",
+    "weekday": "周三",
+    "reviewFile": "review-20260826.html",
+    "reviewSummary": "沪指+0.59% 创业板+0.51% 涨跌2760/2310 涨停57只 成交1.81万亿 恐贪29.7(中性)",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面页最新20260826 G1趋势突破7只(中信建投/伊利股份/太阳纸业/康恩贝/汇金科技/中关村/兆日科技)/G2净利润断层池28只/ETF五日均强20只｜基本面页数据截至最新季报",
+    "mainlineFile": "mainline-20260826.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260826.html",
+    "conceptSummary": "5日主线:黄金｜10日主线:黄金/苹果概念/共封装光模块(CPO)｜20日主线:黄金/CRO/共封装光模块(CPO)"
+  },
+  {
+    "date": "2026-08-25",
+    "weekday": "周二",
+    "reviewFile": "review-20260825.html",
+    "reviewSummary": "沪指+0.19%创业板-1.00% 3967只上涨1176只下跌70只涨停成交1.83万亿",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面(趋势突破G1+净利润断层G2+ETF五日均强)基本面(高盈利/高成长/高股息)双入口；数据截至2026-08-25",
+    "mainlineFile": "mainline-20260825.html",
+    "mainlineSummary": "5日主线:贵金属/焦炭Ⅱ/其他家电Ⅱ｜10日主线:种植业/贵金属/房屋建设Ⅱ｜20日主线:贵金属/种植业/医疗服务",
+    "mainlineConceptFile": "mainline_concept-20260825.html",
+    "conceptSummary": "5日主线:黄金｜10日主线:黄金/共封装光模块(CPO)/苹果概念｜20日主线:黄金/CRO/苹果概念"
+  },
+  {
+    "date": "2026-08-24",
+    "weekday": "周一",
+    "reviewFile": "review-20260824.html",
+    "reviewSummary": "沪指-0.59% 创业板-3.21% 涨跌1384/3705 涨停49只 成交2.01万亿 恐贪13.2(恐惧)",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面页最新20260824 G1趋势突破2只(蓝盾光电/中关村)/G2净利润断层0只/ETF五日均强20只｜基本面页数据截至最新季报",
+    "mainlineFile": "mainline-20260824.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260824.html",
+    "conceptSummary": "5日主线:黄金/苹果概念｜10日主线:黄金/CRO/共封装光模块(CPO)｜20日主线:黄金/CRO/共封装光模块(CPO)"
+  },
+  {
+    "date": "2026-08-21",
+    "weekday": "周五",
+    "reviewFile": "review-20260821.html",
+    "reviewSummary": "中证全指+0.33% 成交1.88万亿 上涨2407/下跌2898/平237 涨停72只 恐贪21.7(恐惧) 赚钱效应约45%",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面页最新20260821 G1趋势突破0只(当日无大票新上穿年线)/G2净利润断层当日新增5只(全历史累计,严筛1只)/ETF五日均强20只｜基本面页数据截至最新季报",
+    "mainlineFile": "mainline-20260821.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260821.html",
+    "conceptSummary": "5日主线:黄金｜10日主线:CRO/黄金/减肥药｜20日主线:CRO/黄金/医疗器械"
+  },
+  {
+    "date": "2026-08-20",
+    "weekday": "周四",
+    "reviewFile": "review-20260820.html",
+    "reviewSummary": "沪指+0.24% 深成指+0.59% 创业板指+0.64% 中证全指+0.62% 科创50-0.87% 成交2.08万亿 上涨3916/下跌1204 涨停84只 恐贪15.8(恐惧)",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面页最新20260820 G1趋势突破11只(有效)/G2净利润断层当日新增27只(全历史129)/ETF五日均强20只｜基本面页数据截至最新季报",
+    "mainlineFile": "mainline-20260820.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260820.html",
+    "conceptSummary": "5日主线:｜10日主线:CRO/黄金/减肥药｜20日主线:CRO/黄金/医疗器械"
+  },
+  {
+    "date": "2026-08-19",
+    "weekday": "周三",
+    "reviewFile": "review-20260819.html",
+    "reviewSummary": "沪指-2.40%报3894.42 深成指-5.01% 创业板-6.26% 中证全指-4.12% 成交2.51万亿 上涨421/下跌4760/平370 涨停39只 恐贪14.1(恐惧)",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面页最新20260819 G1趋势突破5只/G2净利润断层0只/ETF五日均强20只｜基本面页数据截至最新季报",
+    "mainlineFile": "mainline-20260819.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260819.html",
+    "conceptSummary": "5日主线:共封装光模块(CPO)/半导体/苹果概念｜10日主线:CRO/共封装光模块(CPO)/半导体｜20日主线:CRO/黄金/机器人概念"
+  },
+  {
+    "date": "2026-08-18",
+    "weekday": "周二",
+    "reviewFile": "review-20260818.html",
+    "reviewSummary": "沪指+0.19%报3990.30 深成指-0.56% 创业板-0.92% 成交2.40万亿 上涨1838/下跌3242/平462 涨停102只 恐贪17.9(恐惧)",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面页最新20260818 G1趋势突破7只/G2净利润断层0只/ETF五日均强20只｜基本面页数据截至最新季报",
+    "mainlineFile": "mainline-20260818.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260818.html",
+    "conceptSummary": "5日主线:共封装光模块(CPO)/CRO/半导体｜10日主线:CRO/共封装光模块(CPO)/半导体｜20日主线:黄金/CRO/共封装光模块(CPO)"
+  },
+  {
+    "date": "2026-08-17",
+    "weekday": "周一",
+    "reviewFile": "review-20260817.html",
+    "reviewSummary": "沪指+1.41%创业板+3.14%沪强深弱成交2.4万亿涨跌4067/1000涨停110只",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面页最新20260817 G1突破0只G2断层候选池204池/严筛2只｜ETF五日均强20只｜基本面页数据截至2026Q3",
+    "mainlineFile": "mainline-20260817.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260817.html",
+    "conceptSummary": "5日主线:CRO/减肥药/创新药｜10日主线:CRO/共封装光模块(CPO)/减肥药｜20日主线:黄金/CRO/算力租赁"
+  },
+  {
+    "date": "2026-08-14",
+    "weekday": "周五",
+    "reviewFile": "review-20260814.html",
+    "reviewSummary": "沪指+0.01%报3927.18 深成指+0.45% 创业板+1.12% 中证全指+0.32% 成交2.14万亿 上涨2322/下跌2720 涨停63只 恐贪21(恐惧)",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面(趋势突破G1=16只累计·8/14当日新增0只/净利润断层G2=32只新增/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
+    "mainlineFile": "mainline-20260814.html",
+    "mainlineSummary": "5日主线:医疗服务/医药商业/装修装饰Ⅱ｜10日主线:医疗服务/元件/电子化学品Ⅱ｜20日主线:贵金属/医疗服务/教育",
+    "mainlineConceptFile": "mainline_concept-20260814.html",
+    "conceptSummary": "5日主线:CRO/减肥药/创新药｜10日主线:CRO/共封装光模块(CPO)/减肥药｜20日主线:黄金/CRO/算力租赁"
+  },
+  {
+    "date": "2026-08-13",
+    "weekday": "周四",
+    "reviewFile": "review-20260813.html",
+    "reviewSummary": "沪指-0.50%报3926.96 创业板-0.45% 中证全指-0.68% 成交2.55万亿 涨停62只 上涨1142/下跌4317 恐贪35.3",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面(趋势突破G1=8只/净利润断层G2=167只/ETF五日均强20只)+基本面(高盈利/高成长/高股息三维度)",
+    "mainlineFile": "mainline-20260813.html",
+    "mainlineSummary": "5日主线:医疗服务/生物制品/化学制药｜10日主线:医疗服务/通信设备/非金属材料Ⅱ｜20日主线:贵金属/教育/饮料乳品",
+    "mainlineConceptFile": "mainline_concept-20260813.html",
+    "conceptSummary": "5日主线:CRO/减肥药/创新药｜10日主线:CRO/减肥药/AI应用｜20日主线:黄金/CRO/算力租赁"
+  },
+  {
+    "date": "2026-08-12",
+    "weekday": "周三",
+    "reviewFile": "review-20260812.html",
+    "reviewSummary": "沪指+0.32%收3946.68 深成指+1.09% 创业板+1.49% 沪深300+0.58% 科创50+1.61% 中证全指+0.63% 成交2.15万亿；涨跌3972/1408 涨停138；恐贪35.1(中性偏谨慎)",
+    "screeningFile": "screening.html",
+    "screeningSummary": "条件选股已改为技术面/基本面双入口：技术面页(趋势突破/净利润断层/ETF5日最强·累计全交易日、按命中日期分行、样式冻结只更新内容)最新2026-08-12；基本面页(高盈利/高成长/高股息·三维度筛选)数据截至2026-08-11季度报",
+    "mainlineFile": "mainline-20260812.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260812.html",
+    "conceptSummary": "5日主线:CRO/减肥药/半导体｜10日主线:CRO/AI应用/减肥药｜20日主线:黄金/CRO/数据要素"
+  },
+  {
+    "date": "2026-08-11",
+    "weekday": "周二",
+    "reviewFile": "review-20260811.html",
+    "reviewSummary": "沪指-0.82% 创业板+0.34% 沪深300-0.81%；涨跌1666/3699 涨停90 成交2.32万亿；主线黄金(+22.8%)/CRO(+16.9%)/数字经济/数据要素；恐贪21.7(恐惧)",
+    "screeningFile": "screening-20260811.html",
+    "screeningSummary": "第一组2只(精确T-1→T上穿年线·前复权:华中数控[2/3/4年线]、花园生物[2年线]);第二组净利润断层36只(跳空日放量≥1.5+净利高增);第三组跳空缺口321只;第四组ETF五日均强20只",
+    "mainlineFile": "mainline-20260811.html",
+    "mainlineSummary": "5-20日主线:5日黄金/CRO/数字经济,10日黄金/数字经济/数据要素,20日黄金/CRO/医疗器械;行业电子化学品/贵金属/元件强势;市场宽度5日1666涨",
+    "mainlineConceptFile": "mainline_concept-20260811.html",
+    "conceptSummary": "5日主线:CRO/半导体/共封装光模块(CPO)｜10日主线:CRO/黄金/AI应用｜20日主线:CRO/黄金/数字经济"
+  },
+  {
+    "date": "2026-08-10",
+    "weekday": "周一",
+    "reviewFile": "review-20260810.html",
+    "reviewSummary": "沪指+0.67% 创业板-0.73% 涨跌3986/1444 涨停144只 成交2.60万亿",
+    "screeningFile": "screening-20260810.html?v=20260816",
+    "screeningSummary": "第一组4只(精确T-1上穿2/3/4年线·前复权:珈伟新能/信濠光电/万华化学/瑞康医药) 第二组(净利润断层·动态) 第三组(跳空缺口·动态) 第四组(ETF 5日最强·动态)",
+    "mainlineFile": "mainline-20260810.html",
+    "mainlineSummary": "5日主线:电子化学品Ⅱ/电子、元件/电子、贵金属/有色金属｜10日主线:贵金属/有色金属、教育/社会服务、小金属/有色金属｜20日主线:贵金属/有色金属、教育/社会服务、医疗服务/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260810.html",
+    "conceptSummary": "5日主线:CRO/半导体/共封装光模块(CPO)｜10日主线:CRO/黄金/AI应用｜20日主线:CRO/黄金/数字经济"
+  },
+  {
+    "date": "2026-08-07",
+    "weekday": "周五",
+    "reviewFile": "review-20260807.html",
+    "reviewSummary": "沪指+1.02% 深成指+1.42% 创业板+1.35% 创新药CRO与PCB双主线 成交2.66万亿",
+    "screeningFile": "screening-20260807.html?v=18",
+    "screeningSummary": "第一组2只(诺唯赞/药石科技) 第二组10只(景旺电子/云南锗业等跳空缺口未回补) 第三组20只ETF(科创成长领涨)",
+    "mainlineFile": "mainline-20260807.html",
+    "mainlineSummary": "5日主线:元件/电子、非金属材料Ⅱ/基础化工、小金属/有色金属｜10日主线:教育/社会服务、广告营销/传媒、贵金属/有色金属｜20日主线:贵金属/有色金属、工业金属/有色金属、医疗服务/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260807.html",
+    "conceptSummary": "5日主线:CRO/CPO光模块/苹果概念｜10日主线:CRO/黄金/数据要素｜20日主线:黄金/CRO/锂电池"
+  },
+  {
+    "date": "2026-08-06",
+    "weekday": "周四",
+    "reviewFile": "review-20260806.html",
+    "reviewSummary": "沪指+0.57%收3900 煤炭掀涨停潮 沪强深弱 成交2.53万亿",
+    "screeningFile": "screening-20260806.html",
+    "screeningSummary": "第一组2只(恒银科技/大晟文化) 第二组21只(8/4缺口未回补) 第三组20只ETF(软件/计算机领涨)",
+    "mainlineFile": "mainline-20260806.html",
+    "mainlineSummary": "5日主线:元件/小金属/电子化学品Ⅱ｜10日主线:教育/广告营销/数字媒体｜20日主线:贵金属/工业金属/教育",
+    "mainlineConceptFile": "mainline_concept-20260806.html",
+    "conceptSummary": "5日主线:CPO/机器人/AI应用｜10日主线:AI应用/数据要素/信创｜20日主线:黄金/CRO/数据要素"
+  },
+  {
+    "date": "2026-08-05",
+    "weekday": "周三",
+    "reviewFile": "review-20260805.html",
+    "reviewSummary": "沪指+1.47% 半导体掀涨停潮 科创50+4.78% 两市放量近2.68万亿",
+    "screeningFile": "screening-20260805.html",
+    "screeningSummary": "第一组2只(传智教育/泛微网络) 第二组0只 第三组20只ETF(传媒/游戏/软件领涨)",
+    "mainlineFile": "mainline-20260805.html",
+    "mainlineSummary": "确认主线:贵金属黄金/算力CPO/CRO医疗服务",
+    "mainlineConceptFile": "mainline_concept-20260805.html",
+    "conceptSummary": "5日主线:AI应用/机器人/算力租赁｜10日主线:数据要素/数字经济/AI应用｜20日主线:黄金/CRO/数据要素"
+  },
+  {
+    "date": "2026-08-04",
+    "weekday": "周二",
+    "reviewFile": "review-20260804.html",
+    "reviewSummary": "沪指+0.33% 创指+5.64% 科技成长全线反攻 银行逆势回调",
+    "screeningFile": "screening-20260804.html",
+    "screeningSummary": "第一组1只(米奥会展) 第二组0只(成交额不足5亿) 第三组20只ETF(传媒/游戏领涨)",
+    "mainlineConceptFile": "mainline-20260804.html",
+    "conceptSummary": "5日主线:算力光通信CPO｜10日主线:CRO医疗服务（原始8/4概念/题材思路，5-10日口径）"
+  },
+  {
+    "date": "2026-08-03",
+    "weekday": "周一",
+    "reviewFile": "review-20260803.html",
+    "reviewSummary": "沪指-0.59% 深成指-0.96% 创业板-1.24% | 核电板块领涨 主力净流入26亿 | 科创50重挫-5.08%",
+    "screeningFile": "screening-20260803.html",
+    "screeningSummary": "第一组9只(中国科传/传智教育/陆家嘴/神雾节能/兰州银行/紫金银行/瑞丰银行/大连热电/圣农发展) 第二组7只(美利云/锦和商管/富瀚微等) 第三组20只ETF(传媒/教育/游戏/软件/金融科技领涨)"
+  }
+];

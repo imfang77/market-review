@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日复盘报告</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+    .header {
+      background: #fff;
+      border-bottom: 1px solid #e9ecef;
+      padding: 24px 0;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .header h1 { font-size: 22px; font-weight: 700; }
+
+    .container {
+      max-width: 640px;
+      margin: 32px auto;
+      padding: 0 16px;
+    }
+    .section-title {
+      font-size: 13px; color: #868e96; text-transform: uppercase;
+      letter-spacing: 1.5px; font-weight: 600; margin-bottom: 16px; padding-left: 4px;
+    }
+    .report-list { display: flex; flex-direction: column; gap: 10px; }
+    .report-card {
+      display: flex; align-items: center; gap: 12px;
+      background: #fff; border: 1px solid #e9ecef; border-radius: 10px;
+      padding: 18px 24px; text-decoration: none; color: inherit; transition: all 0.2s ease;
+    }
+    .report-card:hover {
+      border-color: #4263eb; box-shadow: 0 4px 12px rgba(66, 99, 235, 0.12); transform: translateY(-1px);
+    }
+    .report-card:active { transform: translateY(0); }
+    .report-card .date-text { font-size: 18px; font-weight: 700; }
+    .report-card .weekday-text { font-size: 14px; color: #868e96; }
+    .report-card .today-tag {
+      font-size: 11px; padding: 2px 8px; border-radius: 8px;
+      background: #38d9a9; color: #fff; font-weight: 600;
+    }
+    .report-card .arrow { margin-left: auto; color: #ced4da; font-size: 18px; }
+    .report-card:hover .arrow { color: #4263eb; }
+    .empty-state { text-align: center; padding: 60px 20px; color: #adb5bd; }
+    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+    .footer { text-align: center; padding: 24px; font-size: 12px; color: #adb5bd; }
+    @media (max-width: 480px) {
+      .header h1 { font-size: 20px; }
+      .report-card { padding: 16px 18px; }
+      .report-card .date-text { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>每日复盘报告</h1>
+  </div>
+
+  <div class="container">
+    <div class="section-title">交易日历</div>
+    <div class="report-list" id="report-list"></div>
+  </div>
+
+  <div class="footer">数据仅供参考，不构成投资建议</div>
+
+  <script>document.write('<script src="manifest.js?v=' + Date.now() + '"><\/script>');</script>
+  <script>
+    (function() {
+      var reports = (window.REPORTS || []).slice().sort(function(a, b) {
+        return b.date.localeCompare(a.date);
+      });
+      var todayStr = new Date().toISOString().slice(0, 10);
+      var listEl = document.getElementById('report-list');
+
+      // 过滤出有复盘文件的记录
+      var reviewReports = reports.filter(function(r) {
+        return r.reviewFile && r.reviewFile.length > 0;
+      });
+
+      if (reviewReports.length === 0) {
+        listEl.innerHTML = '<div class="empty-state"><div class="icon">📊</div><div>暂无报告，等待自动生成</div></div>';
+        return;
+      }
+
+      reviewReports.forEach(function(r) {
+        var a = document.createElement('a');
+        a.className = 'report-card';
+        a.href = r.reviewFile;
+
+        var html = '<span class="date-text">' + r.date + '</span>' +
+          '<span class="weekday-text">' + r.weekday + '</span>';
+        if (r.date === todayStr) {
+          html += '<span class="today-tag">今日</span>';
+        }
+        html += '<span class="arrow">&#8599;</span>';
+
+        a.innerHTML = html;
+        listEl.appendChild(a);
+      });
+    })();
+  </script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

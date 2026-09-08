@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A股复盘选股中心</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1a1a2e;
+      letter-spacing: 1px;
+    }
+    .header .subtitle {
+      margin-top: 6px;
+      font-size: 13px;
+      color: #868e96;
+    }
+    .cards {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 800px;
+      width: 100%;
+    }
+    .card {
+      display: block;
+      width: 240px;
+      max-width: 100%;
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px 18px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      border: 2px solid transparent;
+      text-align: center;
+    }
+    .card:hover {
+      border-color: #4263eb;
+      box-shadow: 0 8px 28px rgba(66, 99, 235, 0.15);
+      transform: translateY(-3px);
+    }
+    .card:active {
+      transform: translateY(-1px);
+    }
+    .card .icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .card .title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+    }
+    .card .desc {
+      font-size: 12px;
+      color: #868e96;
+      line-height: 1.5;
+    }
+    .card .arrow {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #4263eb;
+    }
+    .footer {
+      text-align: center;
+      padding: 20px 0 4px;
+      font-size: 11px;
+      color: #adb5bd;
+    }
+    @media (max-width: 480px) {
+      body { padding: 12px; }
+      .header h1 { font-size: 20px; }
+      .header .subtitle { font-size: 12px; }
+      .header { margin-bottom: 14px; }
+      .cards { gap: 10px; }
+      .card { width: 100%; padding: 14px 16px; border-radius: 12px; }
+      .card .icon { font-size: 26px; margin-bottom: 4px; }
+      .card .title { font-size: 15px; }
+      .card .desc { font-size: 11px; }
+      .card .arrow { margin-top: 6px; font-size: 16px; }
+      .footer { padding: 12px 0 2px; font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>A股复盘选股中心</h1>
+    <div class="subtitle">每个交易日收盘后自动更新</div>
+  </div>
+
+  <div class="cards">
+    <a class="card" href="reviews.html?v=3">
+      <span class="icon">📊</span>
+      <div class="title">每日复盘报告</div>
+      <div class="desc">盘面整体情况、主线研判、资金流向、板块分析</div>
+      <div class="arrow">&#8599;</div>
+    </a>
+    <a class="card" href="mainlines_concept.html">
+      <span class="icon">&#127919;</span>
+      <div class="title">5-20日主线分析（按概念/题材）</div>
+      <div class="desc">概念/题材（跨行业主题）分类口径<br>5日 / 10日 / 20日 主线及候选主线研判</div>
+      <div class="arrow">&#8599;</div>
+    </a>
+    <a class="card" href="screening.html">
+      <span class="icon">🔍</span>
+      <div class="title">条件选股</div>
+      <div class="desc">技术面 / 基本面 双入口</div>
+      <div class="arrow">&#8599;</div>
+    </a>
+    <a class="card" href="fund_new.html?v=20260908">
+      <span class="icon">&#127974;</span>
+      <div class="title">基金新进/增持/减持</div>
+      <div class="desc">按概念/题材分类<br>最新报告期十大股东中新进/增持/减持梳理</div>
+      <div class="arrow">&#8599;</div>
+    </a>
+    <a class="card" href="all_stocks.html?v=20260812">
+      <span class="icon">&#128202;</span>
+      <div class="title">全部 A 股 · 个股大全</div>
+      <div class="desc">全部 A 股一行一只<br>列可勾选 · 股东关键词搜索 · 持股明细可展开</div>
+      <div class="arrow">&#8599;</div>
+    </a>
+  </div>
+
+  <div class="footer">数据仅供参考，不构成投资建议</div>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

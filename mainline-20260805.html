@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026-08-05 5-20日主线分析（按行业） | A股复盘选股中心</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+.header { background: #fff; border-bottom: 1px solid #e9ecef; padding: 20px 0; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; }
+.header a.back, .header a.back, .header .back { position: absolute; left: 12px; top: 12px; font-size: 13px; color: #4263eb; text-decoration: none; white-space: nowrap; }
+.header h1 { font-size: 20px; font-weight: 700; }
+.header .subtitle { margin-top: 4px; font-size: 13px; color: #868e96; }
+.container { max-width: 900px; margin: 24px auto; padding: 0 16px; }
+.section { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.section-title { font-size: 18px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.section-title .badge { font-size: 12px; padding: 2px 10px; border-radius: 10px; background: #e3f2fd; color: #1976d2; font-weight: 600; }
+.section-desc { font-size: 13px; color: #868e96; margin-bottom: 16px; line-height: 1.6; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: #f1f3f5; padding: 10px 8px; text-align: left; font-weight: 600; color: #495057; font-size: 12px; border-bottom: 2px solid #dee2e6; white-space: nowrap; }
+th.sortable { cursor: pointer; user-select: none; transition: background 0.15s; }
+th.sortable:hover { background: #dbeafe; color: #1976d2; }
+th.sortable::after { content: " \21C5"; font-size: 10px; opacity: 0.35; font-weight: normal; }
+th.sortable.asc::after { content: " \2191"; opacity: 1; color: #1976d2; font-weight: 700; }
+th.sortable.desc::after { content: " \2193"; opacity: 1; color: #1976d2; font-weight: 700; }
+td { padding: 10px 8px; border-bottom: 1px solid #e9ecef; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8f9fa; }
+.stock-code { font-family: "SF Mono", Consolas, monospace; font-size: 12px; color: #868e96; }
+.stock-name { font-weight: 600; }
+.up { color: #d63031; font-weight: 600; }
+.down { color: #00b894; font-weight: 600; }
+.flat { color: #868e96; }
+.info-box { background: #e3f2fd; border-left: 4px solid #1976d2; border-radius: 4px; padding: 16px; margin-top: 16px; font-size: 13px; color: #1565c0; line-height: 1.8; }
+.info-box strong { color: #0d47a1; }
+.footer { text-align: center; padding: 24px; font-size: 12px; color: #adb5bd; }
+@media (max-width: 600px) {
+  .container { padding: 0 12px; }
+  .section { padding: 16px; }
+  table { font-size: 11px; }
+  th, td { padding: 8px 4px; }
+  .stock-code { font-size: 10px; }
+  .section-title { font-size: 16px; }
+}
+.part-header { font-size: 20px; font-weight: 800; color: #1a1a2e; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #4263eb; }
+.part-header .date-range { font-size: 13px; color: #868e96; font-weight: 400; margin-left: 8px; }
+.analysis-text { font-size: 14px; color: #495057; line-height: 1.8; margin-bottom: 16px; }
+.analysis-text strong { color: #1a1a2e; }
+.theme-card { background: #f8f9fa; border-radius: 8px; padding: 16px; margin-bottom: 12px; border-left: 4px solid #4263eb; }
+.theme-card .theme-name { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+.theme-card .theme-type { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; margin-right: 8px; }
+.theme-card .type-main { background: #fce4ec; color: #c62828; }
+.theme-card .type-cand { background: #e3f2fd; color: #1565c0; }
+.theme-card .theme-data { font-size: 13px; color: #495057; line-height: 1.8; margin-top: 8px; }
+.overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.overview-card { background: #f8f9fa; border-radius: 8px; padding: 14px; text-align: center; }
+.overview-card .label { font-size: 12px; color: #868e96; margin-bottom: 4px; }
+.overview-card .value { font-size: 22px; font-weight: 700; }
+.overview-card .sub { font-size: 11px; color: #adb5bd; margin-top: 2px; }
+@media (max-width: 600px) { .overview-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; } .overview-card { padding: 10px 4px; } .overview-card .value { font-size: 18px; } .overview-card .label { font-size: 11px; } }
+.chart-box { width: 100%; margin: 12px 0; }
+.data-basis-title { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+</style>
+</head>
+<body>
+<div class="header">
+  <a class="back" href="mainlines.html">&#8592; 返回</a>
+  <h1>5-20日主线分析（按行业） · 2026-08-05 周三</h1>
+  <div class="subtitle">5日 / 10日 / 20日 主线及候选主线研判 | 含市场概览、板块涨跌、资金流向等数据依据</div>
+</div>
+<div class="container">
+
+  <div class="section">
+    <div class="part-header">第一部分：5日主线分析 <span class="date-range">（含当日共5个交易日）</span></div>
+    
+    <div class="section-title">5日市场概览 <span class="badge">含当日共5个交易日</span></div>
+    <div class="overview-grid">
+      <div class="overview-card"><div class="label">上涨家数</div><div class="value up">4315</div><div class="sub">86.9%</div></div>
+      <div class="overview-card"><div class="label">下跌家数</div><div class="value down">648</div><div class="sub">13.1%</div></div>
+      <div class="overview-card"><div class="label">涨跌比</div><div class="value" style="color:#d63031">6.7:1</div></div>
+    </div>
+    <div id="chart-5d-index" class="chart-box" style="height:320px;"></div>
+    <div id="chart-5d-stocks" class="chart-box" style="height:220px;"></div>
+    <div class="analysis-text" style="margin-top:16px">
+      <strong>5日市场环境：</strong>统计区间 7/30 - 8/5。全市场上涨4315只、下跌648只，涨跌比6.7:1。
+      主要指数表现见上图，中证全指5日涨跌幅 +3.33%。
+    </div>
+    <div class="analysis-text" style="margin-top:16px">
+      <strong>5日主线研判：</strong>5日维度资金集中涌向科技成长与资源方向。算力/光通信（CPO）、AI应用/传媒短线爆发力最强，贵金属/黄金延续强势，为当前最具持续性的确认主线；CRO/医疗服务稳健上行；电网/电力设备中线资金持续流入。
+    </div>
+    <div class="theme-card" style="border-left-color:#d63031">
+      <div class="theme-name"><span class="theme-type type-main">确认主线</span> 贵金属/黄金</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　紫金矿业 <span class="stock-code">sh601899</span>：<span class="up">+6.07%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　洛阳钼业 <span class="stock-code">sh603993</span>：<span class="up">+7.29%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　江西铜业 <span class="stock-code">sh600362</span>：<span class="up">+8.82%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　北方稀土 <span class="stock-code">sh600111</span>：<span class="up">+6.15%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　藏格矿业 <span class="stock-code">sz000408</span>：<span class="up">+8.76%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（5日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　浩通科技 <span class="stock-code">sz301026</span>：<span class="up">+25.31%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　云南锗业 <span class="stock-code">sz002428</span>：<span class="up">+23.48%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　招金黄金 <span class="stock-code">sz000506</span>：<span class="up">+22.90%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　锡业股份 <span class="stock-code">sz000960</span>：<span class="up">+20.63%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　金徽股份 <span class="stock-code">sh603132</span>：<span class="up">+18.71%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh512400 有色金属ETF南方（含紫金矿业、洛阳钼业、北方稀土、中金黄金、西部矿业、赤峰黄金、厦门钨业）</div>
+      </div>
+    </div><div class="theme-card" style="border-left-color:#d63031">
+      <div class="theme-name"><span class="theme-type type-main">确认主线</span> 算力/光通信（CPO）</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　工业富联 <span class="stock-code">sh601138</span>：<span class="up">+15.45%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　中际旭创 <span class="stock-code">sz300308</span>：<span class="down">-0.34%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　新易盛 <span class="stock-code">sz300502</span>：<span class="up">+0.74%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　立讯精密 <span class="stock-code">sz002475</span>：<span class="down">-10.39%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　东山精密 <span class="stock-code">sz002384</span>：<span class="up">+5.03%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（5日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　C嘉立创 <span class="stock-code">sz001232</span>：<span class="up">+136.69%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　欣天科技 <span class="stock-code">sz300615</span>：<span class="up">+72.84%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　蘅东光 <span class="stock-code">bj920045</span>：<span class="up">+30.83%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　通宇通讯 <span class="stock-code">sz002792</span>：<span class="up">+28.24%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　云南锗业 <span class="stock-code">sz002428</span>：<span class="up">+23.48%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh515880 通信ETF国泰（含新易盛、中际旭创、工业富联、天孚通信、中兴通讯、亨通光电、光迅科技、中天科技、剑桥科技）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh515050 通信ETF华夏（含新易盛、中际旭创、立讯精密、工业富联、东山精密、生益科技、沪电股份、天孚通信、中兴通讯）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159511 通信ETF南方（含中际旭创、新易盛、天孚通信、中兴通讯、中天科技、光迅科技、紫光股份）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh515980 人工智能ETF华富（含中际旭创、新易盛、协创数据、紫光股份、光迅科技）</div>
+      </div>
+    </div><div class="theme-card" style="border-left-color:#1976d2">
+      <div class="theme-name"><span class="theme-type type-cand">候选主线</span> AI应用/传媒/软件</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　同花顺 <span class="stock-code">sz300033</span>：<span class="up">+8.18%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　松发股份 <span class="stock-code">sh603268</span>：<span class="up">+16.03%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　金山办公 <span class="stock-code">sh688111</span>：<span class="up">+13.67%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　协创数据 <span class="stock-code">sz300857</span>：<span class="up">+22.86%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　科大讯飞 <span class="stock-code">sz002230</span>：<span class="up">+10.23%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（5日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　传智教育 <span class="stock-code">sz003032</span>：<span class="up">+61.13%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　易点天下 <span class="stock-code">sz301171</span>：<span class="up">+49.52%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　普联软件 <span class="stock-code">sz300996</span>：<span class="up">+48.49%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　泛微网络 <span class="stock-code">sh603039</span>：<span class="up">+44.33%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　星环科技-U <span class="stock-code">sh688031</span>：<span class="up">+43.55%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159035 软件ETF天弘（含科大讯飞、同花顺、金山办公、恒生电子、三六零、拓维信息、润和软件、深信服、指南针、软通动力）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159590 软件ETF汇添富（含科大讯飞、同花顺、金山办公、恒生电子、拓维信息、三六零、润和软件、深信服、指南针、中科创达）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh515230 软件ETF国泰（含科大讯飞、同花顺、金山办公、恒生电子、三六零、拓维信息、润和软件、指南针、深信服、合合信息）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159036 软件开发ETF华宝（含科大讯飞、同花顺、金山办公、达梦数据、指南针、恒生电子、三六零、拓维信息、润和软件、中科创达）</div>
+      </div>
+    </div><div class="theme-card" style="border-left-color:#d63031">
+      <div class="theme-name"><span class="theme-type type-main">确认主线</span> CRO/医疗服务</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　药明康德 <span class="stock-code">sh603259</span>：<span class="up">+16.60%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　百济神州 <span class="stock-code">sh688235</span>：<span class="up">+4.47%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　恒瑞医药 <span class="stock-code">sh600276</span>：<span class="down">-0.65%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　百利天恒 <span class="stock-code">sh688506</span>：<span class="down">-10.03%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　云南白药 <span class="stock-code">sz000538</span>：<span class="down">-1.91%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（5日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　义翘神州 <span class="stock-code">sz301047</span>：<span class="up">+31.82%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　哈药股份 <span class="stock-code">sh600664</span>：<span class="up">+26.31%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　百花医药 <span class="stock-code">sh600721</span>：<span class="up">+23.37%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　宏辉果蔬 <span class="stock-code">sh603336</span>：<span class="up">+20.15%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　迪安诊断 <span class="stock-code">sz300244</span>：<span class="up">+17.63%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh516080 创新药ETF易方达（含药明康德、恒瑞医药、科伦药业、凯莱英、康龙化成、荣昌生物、艾力斯、复星医药、华东医药）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159992 创新药ETF银华（含药明康德、恒瑞医药、科伦药业、荣昌生物、艾力斯、康龙化成、凯莱英、长春高新、泰格医药）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159828 医疗ETF国泰（含药明康德、康龙化成、爱尔眼科、凯莱英、泰格医药、昭衍新药）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh512170 医疗ETF华宝（含药明康德、爱尔眼科、凯莱英、康龙化成、泰格医药）</div>
+      </div>
+    </div><div class="theme-card" style="border-left-color:#1976d2">
+      <div class="theme-name"><span class="theme-type type-cand">候选主线</span> 电网/电力设备</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　紫金矿业 <span class="stock-code">sh601899</span>：<span class="up">+6.07%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　长江电力 <span class="stock-code">sh600900</span>：<span class="down">-4.04%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　洛阳钼业 <span class="stock-code">sh603993</span>：<span class="up">+7.29%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　宏桥控股 <span class="stock-code">sz002379</span>：<span class="down">-8.19%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　中国广核 <span class="stock-code">sz003816</span>：<span class="down">-2.21%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（5日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　久盛电气 <span class="stock-code">sz301082</span>：<span class="up">+37.53%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　风范股份 <span class="stock-code">sh601700</span>：<span class="up">+33.95%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　申昊科技 <span class="stock-code">sz300853</span>：<span class="up">+28.71%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　新能股份 <span class="stock-code">sz000595</span>：<span class="up">+24.44%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　昊创瑞通 <span class="stock-code">sz301668</span>：<span class="up">+22.48%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh561560 电力ETF华泰柏瑞（含长江电力、中国核电、三峡能源、国电电力、国投电力、永泰能源、中国广核、华能国际、川投能源、大唐发电）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159611 电力ETF广发（含长江电力、中国核电、三峡能源、国电电力、国投电力、永泰能源、中国广核、华能国际、川投能源、大唐发电）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh512400 有色金属ETF南方（含紫金矿业、洛阳钼业、中国铝业、西部矿业）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="part-header">第二部分：10日主线分析 <span class="date-range">（含当日共10个交易日）</span></div>
+    
+    <div class="section-title">10日市场概览 <span class="badge">含当日共10个交易日</span></div>
+    <div class="overview-grid">
+      <div class="overview-card"><div class="label">上涨家数</div><div class="value up">4235</div><div class="sub">85.0%</div></div>
+      <div class="overview-card"><div class="label">下跌家数</div><div class="value down">749</div><div class="sub">15.0%</div></div>
+      <div class="overview-card"><div class="label">涨跌比</div><div class="value" style="color:#d63031">5.7:1</div></div>
+    </div>
+    <div id="chart-10d-index" class="chart-box" style="height:320px;"></div>
+    <div id="chart-10d-stocks" class="chart-box" style="height:220px;"></div>
+    <div class="analysis-text" style="margin-top:16px">
+      <strong>10日市场环境：</strong>统计区间 7/23 - 8/5。全市场上涨4235只、下跌749只，涨跌比5.7:1。
+      主要指数表现见上图，中证全指10日涨跌幅 +1.57%。
+    </div>
+    <div class="analysis-text" style="margin-top:16px">
+      <strong>10日主线研判：</strong>10日维度观察全周期收益。贵金属/黄金、CRO/医疗服务、电网设备均录得正收益，主线特征明确；AI应用/传媒10日仍强；算力/光通信多数核心股10日仍承压，定性为超跌反弹型候选，需观察后续能否转正。
+    </div>
+    <div class="theme-card" style="border-left-color:#d63031">
+      <div class="theme-name"><span class="theme-type type-main">确认主线</span> 贵金属/黄金</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　紫金矿业 <span class="stock-code">sh601899</span>：<span class="up">+5.90%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　洛阳钼业 <span class="stock-code">sh603993</span>：<span class="up">+4.39%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　江西铜业 <span class="stock-code">sh600362</span>：<span class="up">+8.32%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　北方稀土 <span class="stock-code">sh600111</span>：<span class="up">+6.77%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　藏格矿业 <span class="stock-code">sz000408</span>：<span class="up">+13.07%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（10日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　中创环保 <span class="stock-code">sz300056</span>：<span class="up">+30.23%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　盛达资源 <span class="stock-code">sz000603</span>：<span class="up">+29.15%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　中国宝安 <span class="stock-code">sz000009</span>：<span class="up">+25.25%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　金徽股份 <span class="stock-code">sh603132</span>：<span class="up">+24.34%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　浩通科技 <span class="stock-code">sz301026</span>：<span class="up">+23.58%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh512400 有色金属ETF南方（含紫金矿业、洛阳钼业、北方稀土、中金黄金、西部矿业、赤峰黄金、厦门钨业）</div>
+      </div>
+    </div><div class="theme-card" style="border-left-color:#d63031">
+      <div class="theme-name"><span class="theme-type type-main">确认主线</span> 算力/光通信（CPO）</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　工业富联 <span class="stock-code">sh601138</span>：<span class="up">+9.76%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　中际旭创 <span class="stock-code">sz300308</span>：<span class="down">-10.66%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　新易盛 <span class="stock-code">sz300502</span>：<span class="down">-16.61%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　立讯精密 <span class="stock-code">sz002475</span>：<span class="down">-5.56%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　东山精密 <span class="stock-code">sz002384</span>：<span class="down">-13.18%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（10日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　C嘉立创 <span class="stock-code">sz001232</span>：<span class="up">+136.69%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　欣天科技 <span class="stock-code">sz300615</span>：<span class="up">+78.81%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　东晶电子 <span class="stock-code">sz002199</span>：<span class="up">+41.03%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　风华高科 <span class="stock-code">sz000636</span>：<span class="up">+39.95%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　迈信林 <span class="stock-code">sh688685</span>：<span class="up">+32.42%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh515880 通信ETF国泰（含新易盛、中际旭创、工业富联、天孚通信、中兴通讯、亨通光电、光迅科技、中天科技、剑桥科技）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh515050 通信ETF华夏（含新易盛、中际旭创、立讯精密、工业富联、东山精密、生益科技、沪电股份、天孚通信、中兴通讯）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159511 通信ETF南方（含中际旭创、新易盛、天孚通信、中兴通讯、中天科技、光迅科技、紫光股份）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh515980 人工智能ETF华富（含中际旭创、新易盛、协创数据、紫光股份、光迅科技）</div>
+      </div>
+    </div><div class="theme-card" style="border-left-color:#1976d2">
+      <div class="theme-name"><span class="theme-type type-cand">候选主线</span> AI应用/传媒/软件</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　同花顺 <span class="stock-code">sz300033</span>：<span class="up">+7.69%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　松发股份 <span class="stock-code">sh603268</span>：<span class="up">+10.43%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　金山办公 <span class="stock-code">sh688111</span>：<span class="up">+16.35%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　协创数据 <span class="stock-code">sz300857</span>：<span class="up">+0.37%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　科大讯飞 <span class="stock-code">sz002230</span>：<span class="up">+8.18%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（10日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　传智教育 <span class="stock-code">sz003032</span>：<span class="up">+119.66%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　普联软件 <span class="stock-code">sz300996</span>：<span class="up">+72.35%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　ST荣科 <span class="stock-code">sz300290</span>：<span class="up">+60.36%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　盈建科 <span class="stock-code">sz300935</span>：<span class="up">+52.09%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　泛微网络 <span class="stock-code">sh603039</span>：<span class="up">+49.80%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159035 软件ETF天弘（含科大讯飞、同花顺、金山办公、恒生电子、三六零、拓维信息、润和软件、深信服、指南针、软通动力）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159590 软件ETF汇添富（含科大讯飞、同花顺、金山办公、恒生电子、拓维信息、三六零、润和软件、深信服、指南针、中科创达）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh515230 软件ETF国泰（含科大讯飞、同花顺、金山办公、恒生电子、三六零、拓维信息、润和软件、指南针、深信服、合合信息）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159036 软件开发ETF华宝（含科大讯飞、同花顺、金山办公、达梦数据、指南针、恒生电子、三六零、拓维信息、润和软件、中科创达）</div>
+      </div>
+    </div><div class="theme-card" style="border-left-color:#d63031">
+      <div class="theme-name"><span class="theme-type type-main">确认主线</span> CRO/医疗服务</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　药明康德 <span class="stock-code">sh603259</span>：<span class="up">+17.16%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　百济神州 <span class="stock-code">sh688235</span>：<span class="up">+1.19%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　恒瑞医药 <span class="stock-code">sh600276</span>：<span class="down">-3.34%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　百利天恒 <span class="stock-code">sh688506</span>：<span class="down">-12.41%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　云南白药 <span class="stock-code">sz000538</span>：<span class="down">-1.64%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（10日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　百花医药 <span class="stock-code">sh600721</span>：<span class="up">+27.90%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　义翘神州 <span class="stock-code">sz301047</span>：<span class="up">+25.55%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　创新医疗 <span class="stock-code">sz002173</span>：<span class="up">+24.69%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　宏辉果蔬 <span class="stock-code">sh603336</span>：<span class="up">+20.88%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　塞力医疗 <span class="stock-code">sh603716</span>：<span class="up">+20.53%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh516080 创新药ETF易方达（含药明康德、恒瑞医药、科伦药业、凯莱英、康龙化成、荣昌生物、艾力斯、复星医药、华东医药）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159992 创新药ETF银华（含药明康德、恒瑞医药、科伦药业、荣昌生物、艾力斯、康龙化成、凯莱英、长春高新、泰格医药）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159828 医疗ETF国泰（含药明康德、康龙化成、爱尔眼科、凯莱英、泰格医药、昭衍新药）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh512170 医疗ETF华宝（含药明康德、爱尔眼科、凯莱英、康龙化成、泰格医药）</div>
+      </div>
+    </div><div class="theme-card" style="border-left-color:#1976d2">
+      <div class="theme-name"><span class="theme-type type-cand">候选主线</span> 电网/电力设备</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　紫金矿业 <span class="stock-code">sh601899</span>：<span class="up">+5.90%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　长江电力 <span class="stock-code">sh600900</span>：<span class="down">-4.57%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　洛阳钼业 <span class="stock-code">sh603993</span>：<span class="up">+4.39%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　宏桥控股 <span class="stock-code">sz002379</span>：<span class="up">+1.34%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　中国广核 <span class="stock-code">sz003816</span>：<span class="down">-2.92%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（10日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　顺钠股份 <span class="stock-code">sz000533</span>：<span class="up">+60.96%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　久盛电气 <span class="stock-code">sz301082</span>：<span class="up">+53.54%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　风范股份 <span class="stock-code">sh601700</span>：<span class="up">+44.67%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　益坤电气 <span class="stock-code">bj920222</span>：<span class="up">+41.00%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　江苏华辰 <span class="stock-code">sh603097</span>：<span class="up">+40.56%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh561560 电力ETF华泰柏瑞（含长江电力、中国核电、三峡能源、国电电力、国投电力、永泰能源、中国广核、华能国际、川投能源、大唐发电）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159611 电力ETF广发（含长江电力、中国核电、三峡能源、国电电力、国投电力、永泰能源、中国广核、华能国际、川投能源、大唐发电）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh512400 有色金属ETF南方（含紫金矿业、洛阳钼业、中国铝业、西部矿业）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="part-header">第三部分：20日主线分析 <span class="date-range">（含当日共20个交易日）</span></div>
+    
+    <div class="section-title">20日市场概览 <span class="badge">含当日共20个交易日</span></div>
+    <div class="overview-grid">
+      <div class="overview-card"><div class="label">上涨家数</div><div class="value up">2976</div><div class="sub">59.8%</div></div>
+      <div class="overview-card"><div class="label">下跌家数</div><div class="value down">2002</div><div class="sub">40.2%</div></div>
+      <div class="overview-card"><div class="label">涨跌比</div><div class="value" style="color:#d63031">1.5:1</div></div>
+    </div>
+    <div id="chart-20d-index" class="chart-box" style="height:320px;"></div>
+    <div id="chart-20d-stocks" class="chart-box" style="height:220px;"></div>
+    <div class="analysis-text" style="margin-top:16px">
+      <strong>20日市场环境：</strong>统计区间 7/7 - 8/5。全市场上涨2976只、下跌2002只，涨跌比1.5:1。
+      主要指数表现见上图，中证全指20日涨跌幅 -4.47%。
+    </div>
+    <div class="analysis-text" style="margin-top:16px">
+      <strong>20日主线研判：</strong>20日维度反映中期趋势。贵金属/黄金、CRO/医疗服务、电网设备保持中期正收益，是中期确定性最高的主线；算力/光通信20日仍为负，但近5日资金大幅回流，若后续10日、20日收益转正，有望从中期超跌反弹升级为新中期主线。
+    </div>
+    <div class="theme-card" style="border-left-color:#d63031">
+      <div class="theme-name"><span class="theme-type type-main">确认主线</span> 贵金属/黄金</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　紫金矿业 <span class="stock-code">sh601899</span>：<span class="up">+24.63%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　洛阳钼业 <span class="stock-code">sh603993</span>：<span class="up">+16.77%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　江西铜业 <span class="stock-code">sh600362</span>：<span class="up">+18.80%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　北方稀土 <span class="stock-code">sh600111</span>：<span class="down">-9.24%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　藏格矿业 <span class="stock-code">sz000408</span>：<span class="up">+22.69%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（20日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　西部矿业 <span class="stock-code">sh601168</span>：<span class="up">+45.56%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　盛达资源 <span class="stock-code">sz000603</span>：<span class="up">+32.08%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　赤峰黄金 <span class="stock-code">sh600988</span>：<span class="up">+30.40%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　紫金矿业 <span class="stock-code">sh601899</span>：<span class="up">+24.63%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　山金国际 <span class="stock-code">sz000975</span>：<span class="up">+24.52%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh512400 有色金属ETF南方（含紫金矿业、洛阳钼业、北方稀土、中金黄金、西部矿业、赤峰黄金、厦门钨业）</div>
+      </div>
+    </div><div class="theme-card" style="border-left-color:#d63031">
+      <div class="theme-name"><span class="theme-type type-main">确认主线</span> 算力/光通信（CPO）</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　工业富联 <span class="stock-code">sh601138</span>：<span class="up">+0.86%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　中际旭创 <span class="stock-code">sz300308</span>：<span class="down">-16.01%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　新易盛 <span class="stock-code">sz300502</span>：<span class="down">-16.94%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　立讯精密 <span class="stock-code">sz002475</span>：<span class="down">-10.37%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　东山精密 <span class="stock-code">sz002384</span>：<span class="down">-20.51%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（20日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　C嘉立创 <span class="stock-code">sz001232</span>：<span class="up">+136.69%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　欣天科技 <span class="stock-code">sz300615</span>：<span class="up">+59.45%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　中利集团 <span class="stock-code">sz002309</span>：<span class="up">+33.47%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　ST亚光 <span class="stock-code">sz300123</span>：<span class="up">+25.71%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　景旺电子 <span class="stock-code">sh603228</span>：<span class="up">+25.55%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh515880 通信ETF国泰（含新易盛、中际旭创、工业富联、天孚通信、中兴通讯、亨通光电、光迅科技、中天科技、剑桥科技）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh515050 通信ETF华夏（含新易盛、中际旭创、立讯精密、工业富联、东山精密、生益科技、沪电股份、天孚通信、中兴通讯）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159511 通信ETF南方（含中际旭创、新易盛、天孚通信、中兴通讯、中天科技、光迅科技、紫光股份）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh515980 人工智能ETF华富（含中际旭创、新易盛、协创数据、紫光股份、光迅科技）</div>
+      </div>
+    </div><div class="theme-card" style="border-left-color:#1976d2">
+      <div class="theme-name"><span class="theme-type type-cand">候选主线</span> AI应用/传媒/软件</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　同花顺 <span class="stock-code">sz300033</span>：<span class="up">+7.33%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　松发股份 <span class="stock-code">sh603268</span>：<span class="up">+3.04%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　金山办公 <span class="stock-code">sh688111</span>：<span class="up">+28.12%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　协创数据 <span class="stock-code">sz300857</span>：<span class="down">-10.37%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　科大讯飞 <span class="stock-code">sz002230</span>：<span class="up">+8.15%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（20日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　传智教育 <span class="stock-code">sz003032</span>：<span class="up">+125.14%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　普联软件 <span class="stock-code">sz300996</span>：<span class="up">+77.78%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　科蓝软件 <span class="stock-code">sz300663</span>：<span class="up">+60.19%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　中国科传 <span class="stock-code">sh601858</span>：<span class="up">+53.75%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　ST荣科 <span class="stock-code">sz300290</span>：<span class="up">+42.99%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159035 软件ETF天弘（含科大讯飞、同花顺、金山办公、恒生电子、三六零、拓维信息、润和软件、深信服、指南针、软通动力）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159590 软件ETF汇添富（含科大讯飞、同花顺、金山办公、恒生电子、拓维信息、三六零、润和软件、深信服、指南针、中科创达）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh515230 软件ETF国泰（含科大讯飞、同花顺、金山办公、恒生电子、三六零、拓维信息、润和软件、指南针、深信服、合合信息）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159036 软件开发ETF华宝（含科大讯飞、同花顺、金山办公、达梦数据、指南针、恒生电子、三六零、拓维信息、润和软件、中科创达）</div>
+      </div>
+    </div><div class="theme-card" style="border-left-color:#d63031">
+      <div class="theme-name"><span class="theme-type type-main">确认主线</span> CRO/医疗服务</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　药明康德 <span class="stock-code">sh603259</span>：<span class="up">+27.82%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　百济神州 <span class="stock-code">sh688235</span>：<span class="up">+9.34%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　恒瑞医药 <span class="stock-code">sh600276</span>：<span class="down">-0.87%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　百利天恒 <span class="stock-code">sh688506</span>：<span class="down">-4.63%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　云南白药 <span class="stock-code">sz000538</span>：<span class="up">+4.58%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（20日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　哈药股份 <span class="stock-code">sh600664</span>：<span class="up">+119.09%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　泰诺麦博-U <span class="stock-code">sh688806</span>：<span class="up">+84.65%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　陇神戎发 <span class="stock-code">sz300534</span>：<span class="up">+80.26%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　珍宝岛 <span class="stock-code">sh603567</span>：<span class="up">+41.33%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　宏辉果蔬 <span class="stock-code">sh603336</span>：<span class="up">+34.61%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh516080 创新药ETF易方达（含药明康德、恒瑞医药、科伦药业、凯莱英、康龙化成、荣昌生物、艾力斯、复星医药、华东医药）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159992 创新药ETF银华（含药明康德、恒瑞医药、科伦药业、荣昌生物、艾力斯、康龙化成、凯莱英、长春高新、泰格医药）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159828 医疗ETF国泰（含药明康德、康龙化成、爱尔眼科、凯莱英、泰格医药、昭衍新药）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh512170 医疗ETF华宝（含药明康德、爱尔眼科、凯莱英、康龙化成、泰格医药）</div>
+      </div>
+    </div><div class="theme-card" style="border-left-color:#1976d2">
+      <div class="theme-name"><span class="theme-type type-cand">候选主线</span> 电网/电力设备</div>
+      <div class="theme-data">
+        <div style="margin-top:6px"><strong>行业龙头（龙一到龙五，按总市值）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙一　紫金矿业 <span class="stock-code">sh601899</span>：<span class="up">+24.63%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙二　长江电力 <span class="stock-code">sh600900</span>：<span class="up">+2.66%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙三　洛阳钼业 <span class="stock-code">sh603993</span>：<span class="up">+16.77%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙四　宏桥控股 <span class="stock-code">sz002379</span>：<span class="up">+33.14%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">龙五　中国广核 <span class="stock-code">sz003816</span>：<span class="up">+5.17%</span></div>
+      <div style="margin-top:6px"><strong>涨幅榜龙头（20日维度 top1-5）：</strong></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">1　立新能源 <span class="stock-code">sz001258</span>：<span class="up">+105.62%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">2　华电辽能 <span class="stock-code">sh600396</span>：<span class="up">+49.32%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">3　风范股份 <span class="stock-code">sh601700</span>：<span class="up">+47.95%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">4　顺钠股份 <span class="stock-code">sz000533</span>：<span class="up">+47.50%</span></div>
+      <div style="margin-top:3px;padding-left:16px;color:#333">5　长缆科技 <span class="stock-code">sz002879</span>：<span class="up">+46.46%</span></div>
+        <div style="margin-top:6px"><strong>相关ETF（十大持仓含3只及以上板块龙头）：</strong></div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh561560 电力ETF华泰柏瑞（含长江电力、中国核电、三峡能源、国电电力、国投电力、永泰能源、中国广核、华能国际、川投能源、大唐发电）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sz159611 电力ETF广发（含长江电力、中国核电、三峡能源、国电电力、国投电力、永泰能源、中国广核、华能国际、川投能源、大唐发电）</div>
+      <div style="margin-top:4px;padding-left:16px;color:#333">• sh512400 有色金属ETF南方（含紫金矿业、洛阳钼业、中国铝业、西部矿业）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="data-basis-title">数据依据1：板块涨跌排行 <span class="badge">多周期涨幅 + 领涨股 + 龙头股</span></div>
+    <div class="table-wrap">
+      <table id="sector-table">
+        <thead><tr>
+          <th class="sortable">板块</th>
+          <th class="sortable">今日涨幅</th>
+          <th class="sortable">5日涨幅</th>
+          <th class="sortable">10日涨幅</th>
+          <th class="sortable">15日涨幅</th>
+          <th class="sortable">20日涨幅</th>
+          <th>领涨股</th>
+          <th>龙头股（龙一/龙二/龙三）</th>
+        </tr></thead>
+        <tbody><tr>
+      <td><span class="stock-name">玻璃玻纤</span></td>
+      <td class="up">+7.90%</td>
+      <td class="up">+5.43%</td>
+      <td class="up">+2.87%</td>
+      <td class="down">-20.56%</td>
+      <td class="down">-24.92%</td>
+      <td>国际复材(14.04)</td>
+      <td>再升科技(+14.50%)、国际复材(+13.21%)、中材科技(+11.90%)</td>
+    </tr><tr>
+      <td><span class="stock-name">电子化学品Ⅱ</span></td>
+      <td class="up">+7.86%</td>
+      <td class="up">+5.29%</td>
+      <td class="down">-0.36%</td>
+      <td class="down">-16.19%</td>
+      <td class="down">-24.77%</td>
+      <td>中巨芯-U(20.01)</td>
+      <td>国瓷材料(+13.79%)、菲沃泰(+12.14%)、兴福电子(+11.18%)</td>
+    </tr><tr>
+      <td><span class="stock-name">贵金属</span></td>
+      <td class="up">+7.72%</td>
+      <td class="up">+9.37%</td>
+      <td class="up">+8.94%</td>
+      <td class="up">+19.62%</td>
+      <td class="up">+19.65%</td>
+      <td>晓程科技(11.89)</td>
+      <td>招金黄金(+22.90%)、晓程科技(+14.35%)、湖南白银(+12.44%)</td>
+    </tr><tr>
+      <td><span class="stock-name">非金属材料Ⅱ</span></td>
+      <td class="up">+7.48%</td>
+      <td class="up">+6.70%</td>
+      <td class="up">+1.02%</td>
+      <td class="down">-16.67%</td>
+      <td class="down">-22.35%</td>
+      <td>联瑞新材(12.48)</td>
+      <td>坤彩科技(+13.24%)、联瑞新材(+7.91%)、石英股份(+6.75%)</td>
+    </tr><tr>
+      <td><span class="stock-name">元件</span></td>
+      <td class="up">+6.57%</td>
+      <td class="up">+10.33%</td>
+      <td class="up">+0.35%</td>
+      <td class="down">-14.74%</td>
+      <td class="down">-14.56%</td>
+      <td>胜宏科技(17.12)</td>
+      <td>C嘉立创(+136.69%)、风华高科(+21.66%)、一博科技(+21.34%)</td>
+    </tr><tr>
+      <td><span class="stock-name">小金属</span></td>
+      <td class="up">+6.43%</td>
+      <td class="up">+11.39%</td>
+      <td class="up">+8.43%</td>
+      <td class="down">-0.28%</td>
+      <td class="down">-8.39%</td>
+      <td>浩通科技(19.99)</td>
+      <td>浩通科技(+25.31%)、云南锗业(+23.48%)、锡业股份(+20.63%)</td>
+    </tr><tr>
+      <td><span class="stock-name">靶材</span></td>
+      <td class="up">+9.75%</td>
+      <td class="up">+6.40%</td>
+      <td class="down">-2.30%</td>
+      <td class="down">-18.69%</td>
+      <td class="down">-30.06%</td>
+      <td>欧莱新材(14.96)</td>
+      <td>欧莱新材(+15.87%)、隆华科技(+8.29%)、阿石创(+6.08%)</td>
+    </tr><tr>
+      <td><span class="stock-name">电子布</span></td>
+      <td class="up">+7.76%</td>
+      <td class="up">+6.65%</td>
+      <td class="up">+4.29%</td>
+      <td class="down">-15.95%</td>
+      <td class="down">-19.82%</td>
+      <td>国际复材(14.04)</td>
+      <td>国际复材(+13.21%)、中材科技(+11.90%)、长海股份(+8.67%)</td>
+    </tr><tr>
+      <td><span class="stock-name">有色(铋)</span></td>
+      <td class="up">+7.49%</td>
+      <td class="up">+9.47%</td>
+      <td class="up">+7.71%</td>
+      <td class="down">-0.95%</td>
+      <td class="down">-6.44%</td>
+      <td>中钨高新(10.00)</td>
+      <td>株冶集团(+17.65%)、驰宏锌锗(+13.00%)、兴业银锡(+12.21%)</td>
+    </tr><tr>
+      <td><span class="stock-name">大硅片</span></td>
+      <td class="up">+7.40%</td>
+      <td class="up">+4.24%</td>
+      <td class="down">-7.47%</td>
+      <td class="down">-14.75%</td>
+      <td class="down">-20.77%</td>
+      <td>有研硅(17.62)</td>
+      <td>智光电气(+12.87%)、西安奕材-U(+9.63%)、晶盛机电(+7.65%)</td>
+    </tr><tr>
+      <td><span class="stock-name">电子特气</span></td>
+      <td class="up">+6.90%</td>
+      <td class="up">+3.72%</td>
+      <td class="up">+5.43%</td>
+      <td class="down">-10.29%</td>
+      <td class="down">-19.23%</td>
+      <td>中巨芯-U(20.01)</td>
+      <td>巨化股份(+10.18%)、力合科创(+7.53%)、侨源股份(+7.45%)</td>
+    </tr><tr>
+      <td><span class="stock-name">中芯国际概念</span></td>
+      <td class="up">+6.87%</td>
+      <td class="up">+3.61%</td>
+      <td class="down">-1.08%</td>
+      <td class="down">-14.66%</td>
+      <td class="down">-23.32%</td>
+      <td>中巨芯-U(20.01)</td>
+      <td>芯朋微(+17.63%)、再升科技(+14.50%)、绿通科技(+13.15%)</td>
+    </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="data-basis-title">数据依据2：5-20日主力资金流入TOP10 <span class="badge">5日/10日/15日/20日主力净流入</span></div>
+    <div class="table-wrap">
+      <table id="cap-table">
+        <thead><tr>
+          <th class="sortable">排名</th>
+          <th class="sortable">股票</th>
+          <th class="sortable">5日主力净流入</th>
+          <th class="sortable">10日主力净流入</th>
+          <th class="sortable">15日主力净流入</th>
+          <th class="sortable">20日主力净流入</th>
+          <th class="sortable">今日涨幅</th>
+          <th class="sortable">5日涨幅</th>
+          <th class="sortable">10日涨幅</th>
+          <th class="sortable">15日涨幅</th>
+          <th class="sortable">20日涨幅</th>
+        </tr></thead>
+        <tbody><tr>
+      <td>1</td>
+      <td><span class="stock-code">sh601138</span><br><span class="stock-name">工业富联</span></td>
+      <td class="up">+46.04亿</td>
+      <td class="up">+25.15亿</td>
+      <td class="up">+10.37亿</td>
+      <td class="down">-13.27亿</td>
+      <td class="up">+9.99%</td>
+      <td class="up">+15.45%</td>
+      <td class="up">+9.76%</td>
+      <td class="up">+3.62%</td>
+      <td class="up">+0.86%</td>
+    </tr><tr>
+      <td>2</td>
+      <td><span class="stock-code">sz300394</span><br><span class="stock-name">天孚通信</span></td>
+      <td class="up">+38.89亿</td>
+      <td class="up">+3.13亿</td>
+      <td class="down">-30.22亿</td>
+      <td class="down">-19.44亿</td>
+      <td class="up">+2.29%</td>
+      <td class="up">+19.09%</td>
+      <td class="down">-0.36%</td>
+      <td class="down">-16.40%</td>
+      <td class="down">-11.73%</td>
+    </tr><tr>
+      <td>3</td>
+      <td><span class="stock-code">sz001232</span><br><span class="stock-name">C嘉立创</span></td>
+      <td class="up">+31.64亿</td>
+      <td class="up">+31.64亿</td>
+      <td class="up">+31.64亿</td>
+      <td class="up">+31.64亿</td>
+      <td class="down">-3.89%</td>
+      <td class="up">+136.69%</td>
+      <td class="up">+136.69%</td>
+      <td class="flat">-</td>
+      <td class="up">+136.69%</td>
+    </tr><tr>
+      <td>4</td>
+      <td><span class="stock-code">sz002384</span><br><span class="stock-name">东山精密</span></td>
+      <td class="up">+30.76亿</td>
+      <td class="down">-21.06亿</td>
+      <td class="down">-99.23亿</td>
+      <td class="down">-61.45亿</td>
+      <td class="up">+5.44%</td>
+      <td class="up">+5.03%</td>
+      <td class="down">-13.18%</td>
+      <td class="down">-28.06%</td>
+      <td class="down">-20.51%</td>
+    </tr><tr>
+      <td>5</td>
+      <td><span class="stock-code">sz300408</span><br><span class="stock-name">三环集团</span></td>
+      <td class="up">+29.99亿</td>
+      <td class="up">+48.67亿</td>
+      <td class="up">+48.20亿</td>
+      <td class="up">+29.82亿</td>
+      <td class="up">+5.96%</td>
+      <td class="up">+17.72%</td>
+      <td class="up">+24.48%</td>
+      <td class="up">+11.86%</td>
+      <td class="down">-1.72%</td>
+    </tr><tr>
+      <td>6</td>
+      <td><span class="stock-code">sh600183</span><br><span class="stock-name">生益科技</span></td>
+      <td class="up">+29.29亿</td>
+      <td class="up">+5.67亿</td>
+      <td class="up">+4.06亿</td>
+      <td class="up">+13.47亿</td>
+      <td class="up">+9.41%</td>
+      <td class="up">+13.51%</td>
+      <td class="down">-2.55%</td>
+      <td class="down">-19.44%</td>
+      <td class="down">-15.59%</td>
+    </tr><tr>
+      <td>7</td>
+      <td><span class="stock-code">sh601899</span><br><span class="stock-name">紫金矿业</span></td>
+      <td class="up">+24.43亿</td>
+      <td class="up">+20.35亿</td>
+      <td class="up">+50.06亿</td>
+      <td class="up">+69.89亿</td>
+      <td class="up">+6.16%</td>
+      <td class="up">+6.07%</td>
+      <td class="up">+5.90%</td>
+      <td class="up">+18.28%</td>
+      <td class="up">+24.63%</td>
+    </tr><tr>
+      <td>8</td>
+      <td><span class="stock-code">sh603259</span><br><span class="stock-name">药明康德</span></td>
+      <td class="up">+23.12亿</td>
+      <td class="up">+27.70亿</td>
+      <td class="up">+18.59亿</td>
+      <td class="up">+44.50亿</td>
+      <td class="up">+4.35%</td>
+      <td class="up">+16.60%</td>
+      <td class="up">+17.16%</td>
+      <td class="up">+12.17%</td>
+      <td class="up">+27.82%</td>
+    </tr><tr>
+      <td>9</td>
+      <td><span class="stock-code">sh688766</span><br><span class="stock-name">普冉股份</span></td>
+      <td class="up">+22.84亿</td>
+      <td class="up">+7.69亿</td>
+      <td class="down">-4.46亿</td>
+      <td class="down">-37.46亿</td>
+      <td class="up">+11.35%</td>
+      <td class="up">+10.45%</td>
+      <td class="down">-14.05%</td>
+      <td class="down">-35.31%</td>
+      <td class="down">-46.13%</td>
+    </tr><tr>
+      <td>10</td>
+      <td><span class="stock-code">sh600487</span><br><span class="stock-name">亨通光电</span></td>
+      <td class="up">+22.70亿</td>
+      <td class="up">+7.85亿</td>
+      <td class="down">-34.84亿</td>
+      <td class="down">-67.75亿</td>
+      <td class="up">+8.24%</td>
+      <td class="up">+9.37%</td>
+      <td class="down">-1.29%</td>
+      <td class="down">-23.42%</td>
+      <td class="down">-29.30%</td>
+    </tr><tr>
+      <td>11</td>
+      <td><span class="stock-code">sz002131</span><br><span class="stock-name">利欧股份</span></td>
+      <td class="up">+17.89亿</td>
+      <td class="up">+18.74亿</td>
+      <td class="up">+16.04亿</td>
+      <td class="up">+18.00亿</td>
+      <td class="up">+4.42%</td>
+      <td class="up">+38.63%</td>
+      <td class="up">+45.38%</td>
+      <td class="up">+35.32%</td>
+      <td class="up">+34.68%</td>
+    </tr><tr>
+      <td>12</td>
+      <td><span class="stock-code">sh600176</span><br><span class="stock-name">中国巨石</span></td>
+      <td class="up">+14.85亿</td>
+      <td class="up">+20.15亿</td>
+      <td class="down">-13.01亿</td>
+      <td class="down">-21.14亿</td>
+      <td class="up">+8.54%</td>
+      <td class="up">+2.32%</td>
+      <td class="up">+1.50%</td>
+      <td class="down">-25.89%</td>
+      <td class="down">-29.93%</td>
+    </tr><tr>
+      <td>13</td>
+      <td><span class="stock-code">sh600667</span><br><span class="stock-name">太极实业</span></td>
+      <td class="up">+13.42亿</td>
+      <td class="up">+18.41亿</td>
+      <td class="up">+11.89亿</td>
+      <td class="down">-5.21亿</td>
+      <td class="up">+7.58%</td>
+      <td class="up">+6.03%</td>
+      <td class="up">+10.55%</td>
+      <td class="down">-11.34%</td>
+      <td class="down">-22.74%</td>
+    </tr><tr>
+      <td>14</td>
+      <td><span class="stock-code">sz300857</span><br><span class="stock-name">协创数据</span></td>
+      <td class="up">+13.05亿</td>
+      <td class="up">+3.30亿</td>
+      <td class="up">+12.68亿</td>
+      <td class="up">+6.34亿</td>
+      <td class="up">+4.51%</td>
+      <td class="up">+22.86%</td>
+      <td class="up">+0.37%</td>
+      <td class="down">-0.10%</td>
+      <td class="down">-10.37%</td>
+    </tr><tr>
+      <td>15</td>
+      <td><span class="stock-code">sh603629</span><br><span class="stock-name">利通电子</span></td>
+      <td class="up">+11.40亿</td>
+      <td class="up">+1.52亿</td>
+      <td class="up">+12.90亿</td>
+      <td class="up">+11.15亿</td>
+      <td class="up">+10.00%</td>
+      <td class="up">+16.19%</td>
+      <td class="down">-4.81%</td>
+      <td class="up">+0.50%</td>
+      <td class="down">-2.36%</td>
+    </tr><tr>
+      <td>16</td>
+      <td><span class="stock-code">sh603993</span><br><span class="stock-name">洛阳钼业</span></td>
+      <td class="up">+10.44亿</td>
+      <td class="up">+12.61亿</td>
+      <td class="up">+31.91亿</td>
+      <td class="up">+34.88亿</td>
+      <td class="up">+6.67%</td>
+      <td class="up">+7.29%</td>
+      <td class="up">+4.39%</td>
+      <td class="up">+14.29%</td>
+      <td class="up">+16.77%</td>
+    </tr><tr>
+      <td>17</td>
+      <td><span class="stock-code">sh600036</span><br><span class="stock-name">招商银行</span></td>
+      <td class="up">+9.89亿</td>
+      <td class="up">+19.97亿</td>
+      <td class="up">+17.75亿</td>
+      <td class="up">+5.72亿</td>
+      <td class="down">-0.87%</td>
+      <td class="down">-1.82%</td>
+      <td class="up">+0.59%</td>
+      <td class="up">+3.13%</td>
+      <td class="up">+5.42%</td>
+    </tr><tr>
+      <td>18</td>
+      <td><span class="stock-code">sz301526</span><br><span class="stock-name">国际复材</span></td>
+      <td class="up">+9.25亿</td>
+      <td class="up">+20.45亿</td>
+      <td class="up">+7.46亿</td>
+      <td class="up">+0.09亿</td>
+      <td class="up">+14.04%</td>
+      <td class="up">+13.21%</td>
+      <td class="up">+25.28%</td>
+      <td class="down">-7.59%</td>
+      <td class="down">-7.99%</td>
+    </tr><tr>
+      <td>19</td>
+      <td><span class="stock-code">sz000981</span><br><span class="stock-name">山子高科</span></td>
+      <td class="up">+7.86亿</td>
+      <td class="up">+7.10亿</td>
+      <td class="up">+7.05亿</td>
+      <td class="up">+6.66亿</td>
+      <td class="up">+10.07%</td>
+      <td class="up">+23.35%</td>
+      <td class="up">+27.82%</td>
+      <td class="up">+23.83%</td>
+      <td class="up">+21.46%</td>
+    </tr><tr>
+      <td>20</td>
+      <td><span class="stock-code">sh688111</span><br><span class="stock-name">金山办公</span></td>
+      <td class="up">+7.66亿</td>
+      <td class="up">+5.67亿</td>
+      <td class="up">+5.17亿</td>
+      <td class="up">+8.46亿</td>
+      <td class="up">+1.71%</td>
+      <td class="up">+13.67%</td>
+      <td class="up">+16.35%</td>
+      <td class="up">+17.93%</td>
+      <td class="up">+28.12%</td>
+    </tr></tbody>
+      </table>
+    </div>
+    <div class="info-box" style="margin-top:12px">
+      <strong>说明：</strong>本表取5日/10日/15日/20日主力净流入各自Top10的并集；若某股票仅在10日/15日/20日榜单中而未出现在5日榜单，将以新增行展示。
+      15日主力净流入由最近15个交易日每日主力净流入加总得到（单位：元）。
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="data-basis-title">数据依据3：热门板块排行 <span class="badge">今日热度 + 多周期涨幅</span></div>
+    <div class="table-wrap">
+      <table id="board-table">
+        <thead><tr>
+          <th class="sortable">热度排名</th>
+          <th class="sortable">板块名称</th>
+          <th class="sortable">今日涨幅</th>
+          <th class="sortable">5日涨幅</th>
+          <th class="sortable">10日涨幅</th>
+          <th class="sortable">15日涨幅</th>
+          <th class="sortable">20日涨幅</th>
+        </tr></thead>
+        <tbody><tr>
+      <td>1</td>
+      <td><span class="stock-name">创新药</span></td>
+      <td class="up">+0.64%</td>
+      <td class="up">+2.85%</td>
+      <td class="up">+1.22%</td>
+      <td class="down">-5.72%</td>
+      <td class="up">+3.17%</td>
+    </tr><tr>
+      <td>2</td>
+      <td><span class="stock-name">贵金属</span></td>
+      <td class="up">+7.72%</td>
+      <td class="up">+9.37%</td>
+      <td class="up">+8.94%</td>
+      <td class="up">+19.62%</td>
+      <td class="up">+19.65%</td>
+    </tr><tr>
+      <td>3</td>
+      <td><span class="stock-name">小金属</span></td>
+      <td class="up">+6.43%</td>
+      <td class="up">+11.39%</td>
+      <td class="up">+8.43%</td>
+      <td class="down">-0.28%</td>
+      <td class="down">-8.39%</td>
+    </tr><tr>
+      <td>4</td>
+      <td><span class="stock-name">工业金属</span></td>
+      <td class="up">+5.03%</td>
+      <td class="up">+6.47%</td>
+      <td class="up">+7.49%</td>
+      <td class="up">+12.74%</td>
+      <td class="up">+16.84%</td>
+    </tr><tr>
+      <td>5</td>
+      <td><span class="stock-name">半导体</span></td>
+      <td class="up">+5.80%</td>
+      <td class="up">+1.24%</td>
+      <td class="down">-10.37%</td>
+      <td class="down">-17.78%</td>
+      <td class="down">-23.76%</td>
+    </tr><tr>
+      <td>6</td>
+      <td><span class="stock-name">共封装光模块(CPO）</span></td>
+      <td class="up">+4.36%</td>
+      <td class="up">+8.49%</td>
+      <td class="up">+2.11%</td>
+      <td class="down">-11.01%</td>
+      <td class="down">-16.16%</td>
+    </tr><tr>
+      <td>7</td>
+      <td><span class="stock-name">有色金属</span></td>
+      <td class="up">+5.34%</td>
+      <td class="up">+7.61%</td>
+      <td class="up">+8.01%</td>
+      <td class="up">+8.08%</td>
+      <td class="up">+6.12%</td>
+    </tr><tr>
+      <td>8</td>
+      <td><span class="stock-name">电网设备</span></td>
+      <td class="up">+1.03%</td>
+      <td class="up">+4.50%</td>
+      <td class="up">+10.07%</td>
+      <td class="up">+7.05%</td>
+      <td class="up">+3.34%</td>
+    </tr><tr>
+      <td>9</td>
+      <td><span class="stock-name">黄金概念</span></td>
+      <td class="up">+4.23%</td>
+      <td class="up">+7.81%</td>
+      <td class="up">+10.28%</td>
+      <td class="up">+8.62%</td>
+      <td class="up">+6.68%</td>
+    </tr><tr>
+      <td>10</td>
+      <td><span class="stock-name">元件</span></td>
+      <td class="up">+6.57%</td>
+      <td class="up">+10.33%</td>
+      <td class="up">+0.35%</td>
+      <td class="down">-14.74%</td>
+      <td class="down">-14.56%</td>
+    </tr><tr>
+      <td>11</td>
+      <td><span class="stock-name">电力</span></td>
+      <td class="down">-0.66%</td>
+      <td class="down">-0.51%</td>
+      <td class="down">-1.55%</td>
+      <td class="up">+2.25%</td>
+      <td class="up">+3.23%</td>
+    </tr><tr>
+      <td>12</td>
+      <td><span class="stock-name">AI应用</span></td>
+      <td class="up">+3.33%</td>
+      <td class="up">+13.24%</td>
+      <td class="up">+13.09%</td>
+      <td class="up">+3.81%</td>
+      <td class="up">+3.41%</td>
+    </tr><tr>
+      <td>13</td>
+      <td><span class="stock-name">自主可控</span></td>
+      <td class="up">+1.55%</td>
+      <td class="up">+2.96%</td>
+      <td class="up">+2.77%</td>
+      <td class="up">+1.21%</td>
+      <td class="up">+0.61%</td>
+    </tr><tr>
+      <td>14</td>
+      <td><span class="stock-name">通信设备</span></td>
+      <td class="down">-1.98%</td>
+      <td class="up">+4.23%</td>
+      <td class="down">-8.00%</td>
+      <td class="down">-18.41%</td>
+      <td class="down">-16.81%</td>
+    </tr><tr>
+      <td>15</td>
+      <td><span class="stock-name">靶材</span></td>
+      <td class="up">+9.75%</td>
+      <td class="up">+6.40%</td>
+      <td class="down">-2.30%</td>
+      <td class="down">-18.69%</td>
+      <td class="down">-30.06%</td>
+    </tr></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<div class="footer">数据仅供参考，不构成投资建议</div>
+<script>
+(function(){
+  const upColor = '#d63031', downColor = '#00b894';
+  const chartOption = function chartOption(title, data) {
+  const UP = '#d63031', DOWN = '#00b894';
+  return {
+    title: { text: title, left: 'center', textStyle: { fontSize: 14, color: '#2d3436' } },
+    tooltip: { trigger: 'axis', formatter: '{b}: {c}%' },
+    grid: { left: '3%', right: '8%', bottom: '3%', top: '12%', containLabel: true },
+    xAxis: { type: 'value', axisLabel: { formatter: '{value}%' } },
+    yAxis: { type: 'category', data: data.map(i => i.name).reverse(), axisLabel: { fontSize: 12 } },
+    series: [{
+      type: 'bar',
+      data: data.map(i => ({ value: i.value, itemStyle: { color: i.value >= 0 ? UP : DOWN } })).reverse(),
+      label: { show: true, position: 'right', formatter: '{c}%', color: '#2d3436', fontSize: 11 }
+    }]
+  };
+};
+  const pieOption = function pieOption(title, up, down) {
+  const UP = '#d63031', DOWN = '#00b894';
+  return {
+    title: { text: title, left: 'center', textStyle: { fontSize: 14, color: '#2d3436' } },
+    tooltip: { trigger: 'item', formatter: '{b}: {c}只 ({d}%)' },
+    legend: { bottom: 0, textStyle: { fontSize: 12 } },
+    series: [{
+      type: 'pie', radius: ['35%', '60%'], center: ['50%', '45%'],
+      label: { show: true, formatter: '{b}\n{c}只', fontSize: 12 },
+      data: [
+        { value: up, name: '上涨', itemStyle: { color: UP } },
+        { value: down, name: '下跌', itemStyle: { color: DOWN } }
+      ]
+    }]
+  };
+};
+
+  const idx5 = [{"name":"上证指数","value":1.3},{"name":"深证成指","value":3.56},{"name":"创业板指","value":4.63},{"name":"沪深300","value":1.26},{"name":"科创50","value":0.89},{"name":"中证1000","value":5.61},{"name":"中证500","value":3.78},{"name":"北证50","value":5.18},{"name":"中证全指","value":3.33}];
+  const idx10 = [{"name":"上证指数","value":0.29},{"name":"深证成指","value":0.59},{"name":"创业板指","value":-0.89},{"name":"沪深300","value":-1.25},{"name":"科创50","value":-8.95},{"name":"中证1000","value":4.67},{"name":"中证500","value":0.74},{"name":"北证50","value":4.19},{"name":"中证全指","value":1.57}];
+  const idx20 = [{"name":"上证指数","value":-2.33},{"name":"深证成指","value":-5.32},{"name":"创业板指","value":-8.07},{"name":"沪深300","value":-2.05},{"name":"科创50","value":-16},{"name":"中证1000","value":-7.7},{"name":"中证500","value":-6.92},{"name":"北证50","value":-7.02},{"name":"中证全指","value":-4.47}];
+
+  echarts.init(document.getElementById('chart-5d-index')).setOption(chartOption('5日主要指数涨跌幅', idx5));
+  echarts.init(document.getElementById('chart-5d-stocks')).setOption(pieOption('5日个股涨跌家数', 4315, 648));
+  echarts.init(document.getElementById('chart-10d-index')).setOption(chartOption('10日主要指数涨跌幅', idx10));
+  echarts.init(document.getElementById('chart-10d-stocks')).setOption(pieOption('10日个股涨跌家数', 4235, 749));
+  echarts.init(document.getElementById('chart-20d-index')).setOption(chartOption('20日主要指数涨跌幅', idx20));
+  echarts.init(document.getElementById('chart-20d-stocks')).setOption(pieOption('20日个股涨跌家数', 2976, 2002));
+
+  window.addEventListener('resize', function() {
+    ['chart-5d-index','chart-5d-stocks','chart-10d-index','chart-10d-stocks','chart-20d-index','chart-20d-stocks'].forEach(function(id) {
+      const chart = echarts.getInstanceByDom(document.getElementById(id));
+      if (chart) chart.resize();
+    });
+  });
+})();
+
+function makeSortable(tableId) {
+  var table = document.getElementById(tableId);
+  if (!table) return;
+  var ths = table.querySelectorAll('th.sortable');
+  ths.forEach(function(th, colIdx) {
+    th.addEventListener('click', function() {
+      var tbody = table.querySelector('tbody');
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      var isAsc = th.classList.contains('asc');
+      ths.forEach(function(t) { t.classList.remove('asc'); t.classList.remove('desc'); });
+      th.classList.add(isAsc ? 'desc' : 'asc');
+      var dir = isAsc ? -1 : 1;
+      rows.sort(function(a, b) {
+        var va = a.cells[colIdx].textContent.trim().replace(/[^0-9.\-]/g, '');
+        var vb = b.cells[colIdx].textContent.trim().replace(/[^0-9.\-]/g, '');
+        var na = parseFloat(va), nb = parseFloat(vb);
+        if (!isNaN(na) && !isNaN(nb)) return (na - nb) * dir;
+        return a.cells[colIdx].textContent.trim().localeCompare(b.cells[colIdx].textContent.trim()) * dir;
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+    });
+  });
+}
+makeSortable('sector-table');
+makeSortable('cap-table');
+makeSortable('board-table');
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>

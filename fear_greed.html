@@ -1,0 +1,223 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>自建代理恐贪指数（A股）</title>
+<style>
+*{box-sizing:border-box;}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f5f6f8;color:#1a1a2e;}
+.header{background:linear-gradient(135deg,#1a237e,#283593);color:#fff;padding:16px 18px;}
+.header h1{margin:0 0 4px;font-size:18px;}
+.header .sub{font-size:12px;opacity:.85;}
+.wrap{padding:14px 12px 30px;max-width:1040px;margin:0 auto;}
+.card{background:#fff;border:1px solid #e3e6ea;border-radius:10px;padding:14px;margin-bottom:14px;}
+.big{display:flex;align-items:baseline;gap:10px;}
+.big .v{font-size:42px;font-weight:700;color:#1a237e;}
+.big .d{font-size:13px;color:#777;}
+.big .tag{margin-left:auto;font-size:13px;padding:4px 12px;border-radius:20px;background:#eef1f8;color:#495057;}
+.up{color:#c62828;} .down{color:#2e7d32;}
+.note{font-size:12px;color:#555;line-height:1.7;}
+.note ul{margin:6px 0;padding-left:18px;}
+.note li{margin:2px 0;}
+table{border-collapse:collapse;width:100%;font-size:12px;}
+th,td{border:1px solid #e3e6ea;padding:5px 8px;}
+th{background:#eef1f8;text-align:center;}
+td{text-align:right;}
+td:first-child{text-align:center;}
+/* 题材恐贪指数 */
+.themed-fg{}
+.tf-head{margin-bottom:6px;cursor:pointer;}
+.tf-head h2{display:inline;margin:0;font-size:13px;font-weight:600;color:#1a237e;}
+.tf-sub{font-size:12px;color:#777;margin:0 0 6px;}
+.themed-fg>summary{list-style:none;cursor:pointer;display:block;}
+.themed-fg>summary::-webkit-details-marker{display:none;}
+.themed-fg>summary::before{content:"▾";display:inline-block;margin-right:6px;transition:transform .15s;color:#283593;}
+.themed-fg:not([open])>summary::before{transform:rotate(-90deg);}
+.tf-cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;margin:6px 0 14px;}
+.tf-cat{border:1px solid #e3e6ea;border-radius:10px;padding:10px;background:#fff;}
+.tf-cat.greed{border-color:#f1b8b8;} .tf-cat.fear{border-color:#b8e0c4;} .tf-cat.neutral{border-color:#e3e6ea;}
+.tf-cat-top{display:flex;justify-content:space-between;align-items:center;}
+.tf-cat-name{font-size:12.5px;font-weight:600;color:#1a1a2e;}
+.tf-cat-tag{font-size:11px;padding:2px 8px;border-radius:10px;}
+.tf-cat-tag.greed{background:#fdecea;color:#c62828;} .tf-cat-tag.fear{background:#e8f5e9;color:#2e7d32;} .tf-cat-tag.neutral{background:#eef1f8;color:#777;}
+.tf-cat-val{font-size:26px;font-weight:700;margin:2px 0;}
+.tf-cat-val.greed{color:#c62828;} .tf-cat-val.fear{color:#2e7d32;} .tf-cat-val.neutral{color:#555;}
+.gauge{height:7px;background:#eef1f8;border-radius:5px;overflow:hidden;margin:4px 0 5px;}
+.gauge-fill{height:100%;} .gauge-fill.greed{background:#c62828;} .gauge-fill.fear{background:#2e7d32;} .gauge-fill.neutral{background:#9aa0a6;}
+.tf-cat-n{font-size:11px;color:#999;}
+.tf-sec-title{font-size:13px;color:#495057;font-weight:600;margin:10px 0 6px;}
+.tf-table th,.tf-table td{padding:5px 7px;}
+.tf-name{text-align:center;font-weight:600;color:#1a1a2e;white-space:nowrap;}
+.tf-cat-cell{text-align:left !important;color:#555;white-space:nowrap;}
+.tf-idx{font-weight:700;}
+.tf-table td.tf-idx.greed{background:#fdecea;color:#c62828;}
+.tf-table td.tf-idx.fear{background:#e8f5e9;color:#2e7d32;}
+.tf-table td.tf-idx.neutral{background:#f4f6f8;color:#555;}
+.tf-groups details.tf-group{margin-bottom:6px;border:1px solid #e3e6ea;border-radius:8px;overflow:hidden;}
+.tf-group>summary{background:#f7f8fa;cursor:pointer;padding:9px 12px;font-size:13px;font-weight:600;color:#1a237e;list-style:none;}
+.tf-group>summary::-webkit-details-marker{display:none;}
+.tf-group>summary::before{content:"▸";display:inline-block;margin-right:6px;transition:transform .15s;color:#283593;}
+.tf-group[open]>summary::before{transform:rotate(90deg);}
+.tf-g-sum{color:#1a237e;}
+.tf-sub td{padding:4px 7px;}
+.tf-method{margin-top:12px;}
+.greed{color:#c62828;} .fear{color:#2e7d32;} .neutral{color:#777;}
+/* 通用方法论折叠 */
+.method-details{border:1px solid #e3e6ea;border-radius:8px;overflow:hidden;margin-top:12px;}
+.method-details>summary{background:#f7f8fa;cursor:pointer;padding:9px 12px;font-size:13px;font-weight:600;color:#1a237e;list-style:none;}
+.method-details>summary::-webkit-details-marker{display:none;}
+.method-details>summary::before{content:"▸";display:inline-block;margin-right:6px;transition:transform .15s;color:#283593;}
+.method-details[open]>summary::before{transform:rotate(90deg);}
+.method-details>div{padding:10px 12px;}
+/* 题材表：移动端横向滚动 + 冻结首两列 */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.tf-table{min-width:560px;}
+.tf-table th.col-rank,.tf-table td.col-rank{width:44px;background:#eef1f8;}
+.tf-table th.col-name,.tf-table td.col-name{position:sticky;left:0;z-index:3;background:#eef1f8;text-align:center;white-space:nowrap;}
+.tf-name-btn{color:#1a237e;cursor:pointer;border-bottom:1px dashed #9aa6e0;}
+.tf-name-btn:hover{color:#283593;}
+.tf-tip{font-size:12px;color:#777;margin:2px 0 6px;}
+/* 题材方法论折叠 */
+.tf-method-details{margin-top:12px;border:1px solid #e3e6ea;border-radius:8px;overflow:hidden;}
+.tf-method-details>summary{background:#f7f8fa;cursor:pointer;padding:9px 12px;font-size:13px;font-weight:600;color:#1a237e;list-style:none;}
+.tf-method-details>summary::-webkit-details-marker{display:none;}
+.tf-method-details>summary::before{content:"▸";display:inline-block;margin-right:6px;transition:transform .15s;color:#283593;}
+.tf-method-details[open]>summary::before{transform:rotate(90deg);}
+.tf-method-details .tf-method{margin-top:0;padding:10px 12px;}
+/* 题材走势弹窗 */
+.tf-modal{position:fixed;inset:0;background:rgba(20,24,40,.55);display:none;align-items:center;justify-content:center;z-index:50;padding:14px;}
+.tf-modal.show{display:flex;}
+.tf-modal-box{background:#fff;border-radius:12px;max-width:680px;width:100%;max-height:90vh;overflow:auto;padding:14px 16px;}
+.tf-modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.tf-modal-head .t{font-size:15px;font-weight:700;color:#1a237e;}
+.tf-modal-close{border:none;background:#eef1f8;color:#495057;font-size:20px;line-height:1;width:32px;height:32px;border-radius:8px;cursor:pointer;}
+.tf-modal-period{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px;}
+.tf-modal-period button{font-size:12px;padding:4px 10px;border:1px solid #d0d7de;border-radius:16px;background:#fff;color:#495057;cursor:pointer;}
+.tf-modal-period button.on{background:#1a237e;color:#fff;border-color:#1a237e;}
+.tf-modal-note{font-size:11px;color:#999;line-height:1.6;margin-top:8px;}
+@media (max-width:560px){
+  table{font-size:11px;}
+  th,td{padding:5px 5px;}
+  td:first-child,th:first-child{white-space:nowrap;}
+}
+</style></head><body>
+<div class="header"><h1>自建代理恐贪指数（A股）</h1>
+<div class="sub">数据源：东方财富 沪深300 历史日K线 · 多因子滚动百分位合成 · 仅供与韭研公社恐贪指数对比参考</div></div>
+<div class="wrap">
+<div class="card">
+  <div class="big"><span class="v">21.5</span><span class="d">最新 2026-09-02</span><span class="tag">恐惧</span></div>
+</div>
+<div class="card">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;">
+    <span style="font-size:13px;color:#495057;">走势图（红区=恐惧 &lt;25，绿区=贪婪 &gt;75）</span>
+    <select id="periodSel" style="margin-left:auto;font-size:13px;padding:4px 8px;border:1px solid #d0d7de;border-radius:8px;background:#fff;color:#1a1a2e;">
+      <option value="21">近1月</option>
+      <option value="63">近3月</option>
+      <option value="126" selected>近6月</option>
+      <option value="252">近1年</option>
+      <option value="756">近3年</option>
+      <option value="1260">近5年</option>
+      <option value="0">全部</option>
+    </select>
+  </div>
+  <div id="chart"></div>
+</div>
+<div class="card"><div style="font-size:13px;color:#495057;margin-bottom:8px;">近期数值</div>
+<table><thead><tr><th>日期</th><th>恐贪指数</th><th>20日动量</th><th>20日波动</th><th>均线偏离</th></tr></thead><tbody><tr><td>2026-09-02</td><td class="down">21.5</td><td>-2.37%</td><td>0.97%</td><td>-3.83%</td></tr><tr><td>2026-09-01</td><td class="">38.3</td><td>0.23%</td><td>0.97%</td><td>-2.58%</td></tr><tr><td>2026-08-31</td><td class="">39.1</td><td>1.80%</td><td>1.00%</td><td>-2.32%</td></tr><tr><td>2026-08-28</td><td class="">31.7</td><td>0.46%</td><td>1.02%</td><td>-2.73%</td></tr><tr><td>2026-08-27</td><td class="">39.7</td><td>1.77%</td><td>1.03%</td><td>-2.38%</td></tr><tr><td>2026-08-26</td><td class="">29.7</td><td>-0.21%</td><td>1.05%</td><td>-3.32%</td></tr><tr><td>2026-08-25</td><td class="down">21.5</td><td>-0.38%</td><td>1.04%</td><td>-4.25%</td></tr><tr><td>2026-08-24</td><td class="down">13.2</td><td>-2.96%</td><td>1.21%</td><td>-4.11%</td></tr><tr><td>2026-08-21</td><td class="down">21.7</td><td>-0.65%</td><td>1.21%</td><td>-3.05%</td></tr><tr><td>2026-08-20</td><td class="down">15.8</td><td>-2.86%</td><td>1.26%</td><td>-3.70%</td></tr><tr><td>2026-08-19</td><td class="down">14.1</td><td>-2.72%</td><td>1.26%</td><td>-3.89%</td></tr><tr><td>2026-08-18</td><td class="">32.1</td><td>-0.28%</td><td>1.09%</td><td>-1.14%</td></tr><tr><td>2026-08-17</td><td class="">35.4</td><td>3.11%</td><td>1.28%</td><td>-0.89%</td></tr><tr><td>2026-08-14</td><td class="">25.3</td><td>3.02%</td><td>1.27%</td><td>-2.50%</td></tr><tr><td>2026-08-13</td><td class="down">23.9</td><td>-0.73%</td><td>1.51%</td><td>-2.58%</td></tr></tbody></table></div>
+<details class="method-details"><summary>全市场恐贪指数 · 方法论</summary>
+<div class="note" style="padding:10px 2px;">
+<b>方法论：</b>取沪深300近 250 交易日为滚动窗口，对每个因子计算当日值在该窗口内的百分位（0~100）：
+<ul><li><b>动量·5日</b>：最近5个交易日累计涨幅，百分位越高越贪婪</li><li><b>动量·20日</b>：最近20日累计涨幅</li><li><b>动量·60日</b>：最近60日累计涨幅</li><li><b>波动率(反向)</b>：20日收益率标准差，波动越大越恐惧（已反向）</li><li><b>均线偏离</b>：(收盘价−60日均线)/60日均线，偏离越高越贪婪</li><li><b>量能活跃度</b>：当日成交额/20日均额，放量活跃偏贪婪</li></ul>
+各因子等权平均得到 0~100 的恐贪指数；波动率因子做反向处理（波动越大分数越低=越恐惧）。
+<br><b>与韭研公社的区别：</b>韭研公社恐贪指数由股价动量/强度、看涨看跌期权比、市场波动率、避险需求、垃圾债需求、个股离均线距离等子指数合成，数据口径与权重均未公开。本指数为<b>自建代理指标</b>，仅用宽基指数历史K线可复现的因子近似，走势与中枢可能存在系统性差异，仅用于对比观察，不构成投资建议。
+</div></details>
+<details class="method-details themed-fg">
+    <summary class="tf-head"><h2>概念 / 题材恐贪指数</h2></summary>
+    <div class="tf-sub">28 个题材 · 题材间相对分位（中心 50 = 题材均值）· 数据截至 20260908 收盘</div>
+    <div class="tf-tip">点击任意「题材」名称，查看该题材恐贪指数走势图（可切换时间周期）</div>
+    <div class="tf-sec-title">全部 28 个题材（按恐贪指数排序）</div>
+    <div class="table-wrap"><table class="tf-table"><thead><tr><th class="col-rank">排名</th><th class="col-name">题材</th><th>恐贪指数</th><th>状态</th><th>5日</th><th>10日</th><th>20日</th></tr></thead><tbody><tr><td class="col-rank">1</td><td class="tf-name"><span class="tf-name-btn" data-idx="83">网络游戏</span></td><td class="tf-idx greed">83</td><td class="greed">贪婪</td><td class="up">+2.40%</td><td class="up">+8.64%</td><td class="up">+1.86%</td></tr><tr><td class="col-rank">2</td><td class="tf-name"><span class="tf-name-btn" data-idx="70">液冷概念</span></td><td class="tf-idx neutral">70</td><td class="neutral">中性</td><td class="down">-0.75%</td><td class="up">+6.42%</td><td class="up">+5.31%</td></tr><tr><td class="col-rank">3</td><td class="tf-name"><span class="tf-name-btn" data-idx="68">共封装光模块(CPO)</span></td><td class="tf-idx neutral">68</td><td class="neutral">中性</td><td class="down">-1.09%</td><td class="up">+5.34%</td><td class="up">+6.58%</td></tr><tr><td class="col-rank">4</td><td class="tf-name"><span class="tf-name-btn" data-idx="66">消费电子</span></td><td class="tf-idx neutral">66</td><td class="neutral">中性</td><td class="down">-1.08%</td><td class="up">+5.82%</td><td class="up">+4.41%</td></tr><tr><td class="col-rank">5</td><td class="tf-name"><span class="tf-name-btn" data-idx="65">数字经济</span></td><td class="tf-idx neutral">65</td><td class="neutral">中性</td><td class="up">+0.49%</td><td class="up">+5.36%</td><td class="up">+0.55%</td></tr><tr><td class="col-rank">6</td><td class="tf-name"><span class="tf-name-btn" data-idx="61">5G概念</span></td><td class="tf-idx neutral">61</td><td class="neutral">中性</td><td class="down">-1.14%</td><td class="up">+4.75%</td><td class="up">+3.10%</td></tr><tr><td class="col-rank">7</td><td class="tf-name"><span class="tf-name-btn" data-idx="59">信创</span></td><td class="tf-idx neutral">59</td><td class="neutral">中性</td><td class="down">-0.53%</td><td class="up">+5.38%</td><td class="down">-0.18%</td></tr><tr><td class="col-rank">8</td><td class="tf-name"><span class="tf-name-btn" data-idx="59">数据要素</span></td><td class="tf-idx neutral">59</td><td class="neutral">中性</td><td class="down">-0.09%</td><td class="up">+4.75%</td><td class="down">-0.39%</td></tr><tr><td class="col-rank">9</td><td class="tf-name"><span class="tf-name-btn" data-idx="58">人工智能</span></td><td class="tf-idx neutral">58</td><td class="neutral">中性</td><td class="down">-0.24%</td><td class="up">+4.36%</td><td class="down">-0.37%</td></tr><tr><td class="col-rank">10</td><td class="tf-name"><span class="tf-name-btn" data-idx="56">华为概念</span></td><td class="tf-idx neutral">56</td><td class="neutral">中性</td><td class="down">-0.87%</td><td class="up">+4.15%</td><td class="up">+0.69%</td></tr><tr><td class="col-rank">11</td><td class="tf-name"><span class="tf-name-btn" data-idx="56">低空经济</span></td><td class="tf-idx neutral">56</td><td class="neutral">中性</td><td class="down">-0.43%</td><td class="up">+3.78%</td><td class="up">+0.09%</td></tr><tr><td class="col-rank">12</td><td class="tf-name"><span class="tf-name-btn" data-idx="56">苹果概念</span></td><td class="tf-idx neutral">56</td><td class="neutral">中性</td><td class="down">-1.68%</td><td class="up">+3.21%</td><td class="up">+3.78%</td></tr><tr><td class="col-rank">13</td><td class="tf-name"><span class="tf-name-btn" data-idx="55">算力租赁</span></td><td class="tf-idx neutral">55</td><td class="neutral">中性</td><td class="down">-0.86%</td><td class="up">+4.77%</td><td class="down">-0.97%</td></tr><tr><td class="col-rank">14</td><td class="tf-name"><span class="tf-name-btn" data-idx="54">国防军工</span></td><td class="tf-idx neutral">54</td><td class="neutral">中性</td><td class="down">-0.34%</td><td class="up">+4.85%</td><td class="down">-2.92%</td></tr><tr><td class="col-rank">15</td><td class="tf-name"><span class="tf-name-btn" data-idx="52">AI应用</span></td><td class="tf-idx neutral">52</td><td class="neutral">中性</td><td class="down">-0.51%</td><td class="up">+4.48%</td><td class="down">-3.16%</td></tr><tr><td class="col-rank">16</td><td class="tf-name"><span class="tf-name-btn" data-idx="52">储能概念</span></td><td class="tf-idx neutral">52</td><td class="neutral">中性</td><td class="down">-0.82%</td><td class="up">+2.51%</td><td class="up">+0.03%</td></tr><tr><td class="col-rank">17</td><td class="tf-name"><span class="tf-name-btn" data-idx="49">医疗器械</span></td><td class="tf-idx neutral">49</td><td class="neutral">中性</td><td class="down">-0.49%</td><td class="up">+1.81%</td><td class="down">-1.26%</td></tr><tr><td class="col-rank">18</td><td class="tf-name"><span class="tf-name-btn" data-idx="48">商业航天</span></td><td class="tf-idx neutral">48</td><td class="neutral">中性</td><td class="down">-1.22%</td><td class="up">+3.32%</td><td class="down">-2.28%</td></tr><tr><td class="col-rank">19</td><td class="tf-name"><span class="tf-name-btn" data-idx="46">光伏概念</span></td><td class="tf-idx neutral">46</td><td class="neutral">中性</td><td class="down">-1.31%</td><td class="up">+1.76%</td><td class="down">-0.83%</td></tr><tr><td class="col-rank">20</td><td class="tf-name"><span class="tf-name-btn" data-idx="42">机器人概念</span></td><td class="tf-idx neutral">42</td><td class="neutral">中性</td><td class="down">-1.49%</td><td class="up">+2.20%</td><td class="down">-3.76%</td></tr><tr><td class="col-rank">21</td><td class="tf-name"><span class="tf-name-btn" data-idx="40">锂电池</span></td><td class="tf-idx neutral">40</td><td class="neutral">中性</td><td class="down">-1.40%</td><td class="down">-0.16%</td><td class="down">-1.86%</td></tr><tr><td class="col-rank">22</td><td class="tf-name"><span class="tf-name-btn" data-idx="38">创新药</span></td><td class="tf-idx neutral">38</td><td class="neutral">中性</td><td class="down">-0.96%</td><td class="down">-0.25%</td><td class="down">-4.05%</td></tr><tr><td class="col-rank">23</td><td class="tf-name"><span class="tf-name-btn" data-idx="34">固态电池</span></td><td class="tf-idx neutral">34</td><td class="neutral">中性</td><td class="down">-2.56%</td><td class="down">-0.19%</td><td class="down">-2.07%</td></tr><tr><td class="col-rank">24</td><td class="tf-name"><span class="tf-name-btn" data-idx="33">稀土永磁</span></td><td class="tf-idx neutral">33</td><td class="neutral">中性</td><td class="down">-2.56%</td><td class="down">-0.03%</td><td class="down">-3.20%</td></tr><tr><td class="col-rank">25</td><td class="tf-name"><span class="tf-name-btn" data-idx="32">减肥药</span></td><td class="tf-idx neutral">32</td><td class="neutral">中性</td><td class="down">-1.32%</td><td class="down">-0.88%</td><td class="down">-5.72%</td></tr><tr><td class="col-rank">26</td><td class="tf-name"><span class="tf-name-btn" data-idx="26">黄金</span></td><td class="tf-idx neutral">26</td><td class="neutral">中性</td><td class="down">-2.31%</td><td class="down">-6.85%</td><td class="up">+2.37%</td></tr><tr><td class="col-rank">27</td><td class="tf-name"><span class="tf-name-btn" data-idx="24">半导体</span></td><td class="tf-idx fear">24</td><td class="fear">恐惧</td><td class="down">-5.07%</td><td class="up">+0.05%</td><td class="down">-2.34%</td></tr><tr><td class="col-rank">28</td><td class="tf-name"><span class="tf-name-btn" data-idx="17">CRO</span></td><td class="tf-idx fear">17</td><td class="fear">恐惧</td><td class="down">-2.30%</td><td class="down">-4.42%</td><td class="down">-7.34%</td></tr></tbody></table></div>
+    <details class="tf-method-details"><summary>概念/题材恐贪指数 · 方法论与口径</summary><div class="tf-method note"><ul>
+    <li><b>计算方式</b>：对每个题材取其板块指数的 5/10/20 日区间涨跌幅（权重 0.5/0.3/0.2 合成综合动量），再对 28 个题材的综合动量做 <b>z-score 标准化</b>（中心 50 = 题材均值，约 ±1 标准差≈±15 分），得到 0~100 的「题材间相对恐贪分位」。</li>
+    <li><b>如何读</b>：数值越高=该题材相对其他题材越「贪婪/偏热」，越低=越「恐惧/偏冷」；50 为题材平均水位。颜色：<span class="greed">红=贪婪</span> · <span class="fear">绿=恐惧</span> · <span class="neutral">灰=中性</span>（采用 A 股习惯：暖色代表强势）。</li>
+    <li><b>与上方全市场指数的区别</b>：上方全市场恐贪指数用沪深300 自身近 250 交易日历史做百分位（绝对水位，最新 21.5）；本题材指数为<b>题材间相对排序</b>，用于在 28 个题材内部比较强弱，口径不同、不可直接相减。</li>
+    <li><b>数据来源与时效</b>：题材动量取自板块指数历史K线（东方财富），数据截至 <b>20260908</b> 收盘（最新可得快照）。本环境暂无法批量刷新板块历史K线，故为相对分位；后续接入各题材自身历史百分位后将升级为绝对恐贪指数。</li>
+    <li><b>单个题材走势图</b>：点击表中任一「题材」名称，可查看该题材恐贪指数的走势图并切换时间周期（5/10/20/30/60/120 日）。因题材恐贪为横截面相对分位（快照），走势图由<b>全市场恐贪指数历史叠加该题材当前相对水位</b>生成（示意），用于观察其随市场波动的相对位置变化，非该题材独立的真实历史序列。</li>
+  </ul></div></details>
+  </details>
+</div>
+<script>window.FG=[{"d":"2025-08-07","v":65.5},{"d":"2025-08-08","v":61.6},{"d":"2025-08-11","v":68.2},{"d":"2025-08-12","v":69.7},{"d":"2025-08-13","v":77.3},{"d":"2025-08-14","v":76.3},{"d":"2025-08-15","v":80.3},{"d":"2025-08-18","v":83.2},{"d":"2025-08-19","v":78.1},{"d":"2025-08-20","v":79.7},{"d":"2025-08-21","v":80.5},{"d":"2025-08-22","v":85},{"d":"2025-08-25","v":85.2},{"d":"2025-08-26","v":82.7},{"d":"2025-08-27","v":79.8},{"d":"2025-08-28","v":83},{"d":"2025-08-29","v":83.6},{"d":"2025-09-01","v":79.9},{"d":"2025-09-02","v":76},{"d":"2025-09-03","v":73.5},{"d":"2025-09-04","v":62.6},{"d":"2025-09-05","v":62.8},{"d":"2025-09-08","v":60.7},{"d":"2025-09-09","v":54.2},{"d":"2025-09-10","v":55.5},{"d":"2025-09-11","v":74.3},{"d":"2025-09-12","v":68.5},{"d":"2025-09-15","v":65.1},{"d":"2025-09-16","v":65.3},{"d":"2025-09-17","v":65},{"d":"2025-09-18","v":59.7},{"d":"2025-09-19","v":51},{"d":"2025-09-22","v":49},{"d":"2025-09-23","v":54.2},{"d":"2025-09-24","v":60.4},{"d":"2025-09-25","v":67.1},{"d":"2025-09-26","v":55.3},{"d":"2025-09-29","v":67.1},{"d":"2025-09-30","v":69.5},{"d":"2025-10-09","v":79},{"d":"2025-10-10","v":67},{"d":"2025-10-13","v":62.4},{"d":"2025-10-14","v":52.9},{"d":"2025-10-15","v":54},{"d":"2025-10-16","v":50.6},{"d":"2025-10-17","v":37.9},{"d":"2025-10-20","v":39.9},{"d":"2025-10-21","v":53},{"d":"2025-10-22","v":41.1},{"d":"2025-10-23","v":41.1},{"d":"2025-10-24","v":62.8},{"d":"2025-10-27","v":70.8},{"d":"2025-10-28","v":61.3},{"d":"2025-10-29","v":69.4},{"d":"2025-10-30","v":65.4},{"d":"2025-10-31","v":48.9},{"d":"2025-11-03","v":44.6},{"d":"2025-11-04","v":36.7},{"d":"2025-11-05","v":33},{"d":"2025-11-06","v":45},{"d":"2025-11-07","v":50.9},{"d":"2025-11-10","v":58.9},{"d":"2025-11-11","v":50.3},{"d":"2025-11-12","v":46.3},{"d":"2025-11-13","v":51.2},{"d":"2025-11-14","v":43.6},{"d":"2025-11-17","v":36.9},{"d":"2025-11-18","v":31.5},{"d":"2025-11-19","v":33.4},{"d":"2025-11-20","v":28.7},{"d":"2025-11-21","v":25.9},{"d":"2025-11-24","v":22.6},{"d":"2025-11-25","v":24.7},{"d":"2025-11-26","v":27.1},{"d":"2025-11-27","v":29.7},{"d":"2025-11-28","v":36.9},{"d":"2025-12-01","v":49.5},{"d":"2025-12-02","v":38.1},{"d":"2025-12-03","v":33.3},{"d":"2025-12-04","v":35.3},{"d":"2025-12-05","v":46.3},{"d":"2025-12-08","v":50.4},{"d":"2025-12-09","v":47.7},{"d":"2025-12-10","v":46.5},{"d":"2025-12-11","v":40.6},{"d":"2025-12-12","v":46.7},{"d":"2025-12-15","v":37.3},{"d":"2025-12-16","v":30.4},{"d":"2025-12-17","v":41.7},{"d":"2025-12-18","v":35.3},{"d":"2025-12-19","v":44.7},{"d":"2025-12-22","v":61.9},{"d":"2025-12-23","v":63.6},{"d":"2025-12-24","v":57.6},{"d":"2025-12-25","v":59.6},{"d":"2025-12-26","v":65.1},{"d":"2025-12-29","v":56.2},{"d":"2025-12-30","v":56.3},{"d":"2025-12-31","v":49.9},{"d":"2026-01-05","v":68.7},{"d":"2026-01-06","v":77.4},{"d":"2026-01-07","v":74.9},{"d":"2026-01-08","v":68.9},{"d":"2026-01-09","v":72.5},{"d":"2026-01-12","v":74.8},{"d":"2026-01-13","v":64.2},{"d":"2026-01-14","v":63.9},{"d":"2026-01-15","v":65.1},{"d":"2026-01-16","v":61.1},{"d":"2026-01-19","v":57.9},{"d":"2026-01-20","v":54.6},{"d":"2026-01-21","v":51.4},{"d":"2026-01-22","v":51.3},{"d":"2026-01-23","v":47.1},{"d":"2026-01-26","v":49.4},{"d":"2026-01-27","v":48.6},{"d":"2026-01-28","v":53.8},{"d":"2026-01-29","v":61.1},{"d":"2026-01-30","v":49.5},{"d":"2026-02-02","v":25.8},{"d":"2026-02-03","v":32.5},{"d":"2026-02-04","v":35.8},{"d":"2026-02-05","v":28.7},{"d":"2026-02-06","v":25},{"d":"2026-02-09","v":42.7},{"d":"2026-02-10","v":42.2},{"d":"2026-02-11","v":37.7},{"d":"2026-02-12","v":42.8},{"d":"2026-02-13","v":31.5},{"d":"2026-02-24","v":38},{"d":"2026-02-25","v":46.1},{"d":"2026-02-26","v":45.4},{"d":"2026-02-27","v":41.3},{"d":"2026-03-02","v":56.1},{"d":"2026-03-03","v":38.1},{"d":"2026-03-04","v":24.6},{"d":"2026-03-05","v":26.7},{"d":"2026-03-06","v":25.6},{"d":"2026-03-09","v":29.3},{"d":"2026-03-10","v":43.4},{"d":"2026-03-11","v":51.5},{"d":"2026-03-12","v":43.4},{"d":"2026-03-13","v":41.1},{"d":"2026-03-16","v":47.5},{"d":"2026-03-17","v":35},{"d":"2026-03-18","v":33},{"d":"2026-03-19","v":25},{"d":"2026-03-20","v":28.9},{"d":"2026-03-23","v":16.1},{"d":"2026-03-24","v":10.9},{"d":"2026-03-25","v":14.7},{"d":"2026-03-26","v":6.9},{"d":"2026-03-27","v":8.6},{"d":"2026-03-30","v":19.1},{"d":"2026-03-31","v":13.8},{"d":"2026-04-01","v":19.7},{"d":"2026-04-02","v":14.1},{"d":"2026-04-03","v":6.5},{"d":"2026-04-07","v":8.7},{"d":"2026-04-08","v":38.3},{"d":"2026-04-09","v":24.3},{"d":"2026-04-10","v":40},{"d":"2026-04-13","v":40.7},{"d":"2026-04-14","v":48},{"d":"2026-04-15","v":43.3},{"d":"2026-04-16","v":50.5},{"d":"2026-04-17","v":52.3},{"d":"2026-04-20","v":57.2},{"d":"2026-04-21","v":58.3},{"d":"2026-04-22","v":63.9},{"d":"2026-04-23","v":60.7},{"d":"2026-04-24","v":59.3},{"d":"2026-04-27","v":54.9},{"d":"2026-04-28","v":52.4},{"d":"2026-04-29","v":60.3},{"d":"2026-04-30","v":62.1},{"d":"2026-05-06","v":74.3},{"d":"2026-05-07","v":74.1},{"d":"2026-05-08","v":69.7},{"d":"2026-05-11","v":83.3},{"d":"2026-05-12","v":80.5},{"d":"2026-05-13","v":80.5},{"d":"2026-05-14","v":67.8},{"d":"2026-05-15","v":60.8},{"d":"2026-05-18","v":45.7},{"d":"2026-05-19","v":44.8},{"d":"2026-05-20","v":44.5},{"d":"2026-05-21","v":38.8},{"d":"2026-05-22","v":46.1},{"d":"2026-05-25","v":60.7},{"d":"2026-05-26","v":64.3},{"d":"2026-05-27","v":59.1},{"d":"2026-05-28","v":60.6},{"d":"2026-05-29","v":56.9},{"d":"2026-06-01","v":37.9},{"d":"2026-06-02","v":46.2},{"d":"2026-06-03","v":52.9},{"d":"2026-06-04","v":41},{"d":"2026-06-05","v":32.3},{"d":"2026-06-08","v":15.6},{"d":"2026-06-09","v":19.3},{"d":"2026-06-10","v":13.3},{"d":"2026-06-11","v":12.8},{"d":"2026-06-12","v":30.9},{"d":"2026-06-15","v":54.1},{"d":"2026-06-16","v":46.5},{"d":"2026-06-17","v":55.5},{"d":"2026-06-18","v":65.9},{"d":"2026-06-22","v":74.7},{"d":"2026-06-23","v":48.7},{"d":"2026-06-24","v":48.7},{"d":"2026-06-25","v":61.5},{"d":"2026-06-26","v":36.5},{"d":"2026-06-29","v":38.7},{"d":"2026-06-30","v":53.7},{"d":"2026-07-01","v":47.3},{"d":"2026-07-02","v":25.7},{"d":"2026-07-03","v":30.5},{"d":"2026-07-06","v":28.8},{"d":"2026-07-07","v":19.9},{"d":"2026-07-08","v":16.1},{"d":"2026-07-09","v":41.3},{"d":"2026-07-10","v":28.3},{"d":"2026-07-13","v":10.5},{"d":"2026-07-14","v":22.6},{"d":"2026-07-15","v":19.3},{"d":"2026-07-16","v":5.3},{"d":"2026-07-17","v":6.1},{"d":"2026-07-20","v":9},{"d":"2026-07-21","v":16.8},{"d":"2026-07-22","v":12.5},{"d":"2026-07-23","v":13.5},{"d":"2026-07-24","v":17.4},{"d":"2026-07-27","v":17.8},{"d":"2026-07-28","v":2.1},{"d":"2026-07-29","v":6.3},{"d":"2026-07-30","v":7.7},{"d":"2026-07-31","v":12.6},{"d":"2026-08-03","v":2.7},{"d":"2026-08-04","v":15.7},{"d":"2026-08-05","v":26.2},{"d":"2026-08-06","v":22.9},{"d":"2026-08-07","v":29.1},{"d":"2026-08-10","v":32.9},{"d":"2026-08-11","v":21.9},{"d":"2026-08-12","v":19.5},{"d":"2026-08-13","v":23.9},{"d":"2026-08-14","v":25.3},{"d":"2026-08-17","v":35.4},{"d":"2026-08-18","v":32.1},{"d":"2026-08-19","v":14.1},{"d":"2026-08-20","v":15.8},{"d":"2026-08-21","v":21.7},{"d":"2026-08-24","v":13.2},{"d":"2026-08-25","v":21.5},{"d":"2026-08-26","v":29.7},{"d":"2026-08-27","v":39.7},{"d":"2026-08-28","v":31.7},{"d":"2026-08-31","v":39.1},{"d":"2026-09-01","v":38.3},{"d":"2026-09-02","v":21.5}];</script>
+<script>window.THEMED=[{"name":"共封装光模块(CPO)","idx":68},{"name":"CRO","idx":17},{"name":"创新药","idx":38},{"name":"算力租赁","idx":55},{"name":"AI应用","idx":52},{"name":"人工智能","idx":58},{"name":"机器人概念","idx":42},{"name":"半导体","idx":24},{"name":"光伏概念","idx":46},{"name":"储能概念","idx":52},{"name":"锂电池","idx":40},{"name":"国防军工","idx":54},{"name":"消费电子","idx":66},{"name":"华为概念","idx":56},{"name":"苹果概念","idx":56},{"name":"数据要素","idx":59},{"name":"信创","idx":59},{"name":"数字经济","idx":65},{"name":"医疗器械","idx":49},{"name":"稀土永磁","idx":33},{"name":"黄金","idx":26},{"name":"网络游戏","idx":83},{"name":"5G概念","idx":61},{"name":"低空经济","idx":56},{"name":"商业航天","idx":48},{"name":"减肥药","idx":32},{"name":"固态电池","idx":34},{"name":"液冷概念","idx":70}];</script>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+(function(){
+  var FG=window.FG||[];
+  var W=1000,H=440,padL=66,padR=18,padT=20,padB=48;
+  var plotW=W-padL-padR, plotH=H-padT-padB;
+  function Y(v){ return padT+plotH*(1-v/100); }
+  function drawFG(id, view, color){
+    color=color||'#1a237e';
+    if(!view||view.length<2) return;
+    var N=view.length;
+    function X(i){ return padL+plotW*(i/(N-1)); }
+    var svg='';
+    var zones=[[0,25,'#fdecea'],[25,75,'#f4f6f8'],[75,100,'#e8f5e9']];
+    for(var z=0;z<zones.length;z++){ var a=zones[z][0],b=zones[z][1],col=zones[z][2]; svg+='<rect x="'+padL+'" y="'+Y(b).toFixed(1)+'" width="'+plotW+'" height="'+(Y(a)-Y(b)).toFixed(1)+'" fill="'+col+'"/>'; }
+    for(var v=0;v<=100;v+=25){ var y=Y(v); svg+='<line x1="'+padL+'" y1="'+y.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+y.toFixed(1)+'" stroke="#dfe3e8" stroke-width="1"/>'; svg+='<text x="'+(padL-8)+'" y="'+(y+5).toFixed(1)+'" font-size="16" fill="#555" text-anchor="end">'+v+'</text>'; }
+    svg+='<text x="'+(padL-8)+'" y="'+Y(12).toFixed(1)+'" font-size="15" fill="#c62828" text-anchor="end">恐惧</text>';
+    svg+='<text x="'+(padL-8)+'" y="'+Y(88).toFixed(1)+'" font-size="15" fill="#2e7d32" text-anchor="end">贪婪</text>';
+    var step=Math.max(1,Math.ceil(N/10));
+    var ticks=[]; for(var i=0;i<N;i+=step){ if((N-1)-i > step) ticks.push(i); }
+    ticks.push(N-1);
+    ticks.forEach(function(i){
+      var anchor=(i===N-1)?'end':'middle';
+      var x=(i===N-1)?(X(i)-3):X(i);
+      svg+='<text x="'+x.toFixed(1)+'" y="'+(H-padB+22).toFixed(1)+'" font-size="15" fill="#555" text-anchor="'+anchor+'">'+view[i].d+'</text>';
+    });
+    var pts=view.map(function(s,i){return X(i).toFixed(1)+','+Y(s.v).toFixed(1);}).join(' ');
+    svg+='<polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="2"/>';
+    if(N<=500){ for(var j=0;j<N;j++){ var cx=X(j),cy=Y(view[j].v); svg+='<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="2.2" fill="'+color+'"><title>'+view[j].d+' 恐贪指数='+view[j].v+'</title></circle>'; } }
+    var li=N-1; svg+='<circle cx="'+X(li).toFixed(1)+'" cy="'+Y(view[li].v).toFixed(1)+'" r="4" fill="#c62828"><title>'+view[li].d+' 恐贪指数='+view[li].v+'</title></circle>';
+    document.getElementById(id).innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">'+svg+'</svg>';
+  }
+  // 全市场恐贪指数走势
+  var sel=document.getElementById('periodSel');
+  if(sel){ sel.addEventListener('change',function(){ var n=parseInt(sel.value,10); drawFG('chart', n>0?FG.slice(-n):FG.slice(), '#1a237e'); }); drawFG('chart', FG.slice(-parseInt(sel.value||'126',10)), '#1a237e'); }
+  // 题材恐贪走势弹窗（基于全市场历史 + 当前相对水位 示意）
+  var mNow = FG.length? FG[FG.length-1].v : 50;
+  function themeSeries(idx){ var off=idx-mNow; return FG.map(function(p){ var v=p.v+off; v=v<0?0:(v>100?100:v); return {d:p.d, v:Math.round(v*10)/10}; }); }
+  var modal=document.getElementById('tfModal');
+  var mTitle=document.getElementById('tfModalTitle');
+  var mPeriods=document.querySelectorAll('.tf-modal-period button');
+  var curIdx=50;
+  function setPeriod(p){
+    p=+p;
+    mPeriods.forEach(function(b){ b.classList.toggle('on', +b.dataset.p===p); });
+    var s=themeSeries(curIdx);
+    drawFG('tfModalChart', p>0?s.slice(-p):s, '#283593');
+  }
+  function openTheme(el){
+    curIdx=+el.dataset.idx;
+    mTitle.textContent=el.textContent.trim()+' · 恐贪指数 '+el.dataset.idx;
+    modal.classList.add('show');
+    setPeriod(20);
+  }
+  mPeriods.forEach(function(b){ b.addEventListener('click', function(){ setPeriod(b.dataset.p); }); });
+  document.getElementById('tfModalClose').addEventListener('click', function(){ modal.classList.remove('show'); });
+  modal.addEventListener('click', function(e){ if(e.target===modal) modal.classList.remove('show'); });
+  document.querySelectorAll('.tf-name-btn').forEach(function(el){
+    el.addEventListener('click', function(){ openTheme(el); });
+  });
+})();
+});
+</script>
+<script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script>
+<div class="tf-modal" id="tfModal">
+  <div class="tf-modal-box">
+    <div class="tf-modal-head"><span class="t" id="tfModalTitle"></span><button class="tf-modal-close" id="tfModalClose" aria-label="关闭">×</button></div>
+    <div class="tf-modal-period">
+      <button data-p="5">5日</button><button data-p="10">10日</button><button data-p="20" class="on">20日</button><button data-p="30">30日</button><button data-p="60">60日</button><button data-p="120">120日</button>
+    </div>
+    <div id="tfModalChart"></div>
+    <div class="tf-modal-note">说明：题材恐贪指数本身为横截面相对分位（快照）。本走势图由「全市场恐贪指数历史 + 该题材当前相对水位」叠加生成（示意），用于观察其随市场波动的相对位置变化，并非该题材独立的真实历史序列。</div>
+  </div>
+</div>
+</body></html>

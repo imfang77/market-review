@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股收盘复盘 | 2026年8月7日</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #2d3436; line-height: 1.7; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 20px 60px; }
+  .header { text-align: center; padding: 32px 0 24px; border-bottom: 2px solid #e8ecf0; margin-bottom: 28px; }
+  .header h1 { font-size: 26px; font-weight: 700; color: #1a1a2e; letter-spacing: 1px; }
+  .header .subtitle { font-size: 14px; color: #636e72; margin-top: 8px; }
+  .header .date-tag { display: inline-block; background: #0984e3; color: #fff; font-size: 12px; padding: 3px 12px; border-radius: 12px; margin-top: 10px; }
+  .tldr { background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%); border: 1px solid #dfe6e9; border-radius: 12px; padding: 24px; margin-bottom: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .tldr h2 { font-size: 16px; color: #0984e3; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .tldr h2::before { content: ""; display: inline-block; width: 4px; height: 18px; background: #0984e3; border-radius: 2px; }
+  .tldr ul { list-style: none; }
+  .tldr li { padding: 6px 0 6px 20px; position: relative; font-size: 14px; color: #2d3436; }
+  .tldr li::before { content: "▸"; position: absolute; left: 0; color: #0984e3; font-weight: bold; }
+  .tldr .highlight { color: #d63031; font-weight: 600; }
+  .tldr .highlight-green { color: #00b894; font-weight: 600; }
+  .section { background: #fff; border: 1px solid #e8ecf0; border-radius: 10px; padding: 22px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.03); }
+  .section h2 { font-size: 17px; color: #1a1a2e; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 8px; }
+  .section h2 .icon { font-size: 20px; }
+  .section h3 { font-size: 14px; color: #2d3436; margin: 14px 0 8px; font-weight: 600; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
+  th { background: #f8f9fa; color: #636e72; font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 2px solid #e8ecf0; white-space: nowrap; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f0f0f0; }
+  tr:hover td { background: #f8f9fb; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .up { color: #d63031; font-weight: 600; }
+  .down { color: #00b894; font-weight: 600; }
+  .flat { color: #636e72; }
+  .chart-box { width: 100%; margin: 12px 0; }
+  .chart-title { font-size: 13px; color: #636e72; margin-bottom: 6px; font-weight: 500; }
+  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-right: 4px; }
+  .tag-up { background: #fadbd8; color: #c0392b; }
+  .tag-down { background: #d5f5e3; color: #27ae60; }
+  .tag-neutral { background: #dfe6e9; color: #636e72; }
+  .theme-card { border-left: 3px solid #0984e3; padding: 12px 16px; margin: 10px 0; background: #f8f9fb; border-radius: 0 8px 8px 0; }
+  .theme-card.coal { border-left-color: #e17055; }
+  .theme-card.semi { border-left-color: #0984e3; }
+  .theme-card.metal { border-left-color: #fdcb6e; }
+  .theme-card.weak { border-left-color: #00b894; }
+  .theme-card h4 { font-size: 14px; margin-bottom: 6px; }
+  .theme-card .meta { font-size: 12px; color: #636e72; margin-bottom: 4px; }
+  .theme-card p { font-size: 13px; color: #2d3436; }
+  .news-item { padding: 10px 0; border-bottom: 1px dashed #e8ecf0; }
+  .news-item:last-child { border-bottom: none; }
+  .news-item .news-title { font-size: 13px; font-weight: 600; color: #2d3436; }
+  .news-item .news-desc { font-size: 12px; color: #636e72; margin-top: 3px; }
+  .news-item .news-source { font-size: 11px; color: #b2bec3; margin-top: 2px; }
+  .state-badge { display: inline-block; font-size: 13px; font-weight: 600; padding: 4px 14px; border-radius: 20px; }
+  .state-mix { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+  .source-note { font-size: 11px; color: #b2bec3; margin-top: 6px; text-align: right; }
+  .disclaimer { font-size: 12px; color: #b2bec3; margin-top: 24px; padding: 16px; background: #f8f9fa; border-radius: 8px; line-height: 1.8; }
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0; }
+  .summary-card { text-align: center; padding: 14px 8px; border-radius: 8px; background: #f8f9fa; }
+  .summary-card .label { font-size: 11px; color: #636e72; margin-bottom: 4px; }
+  .summary-card .value { font-size: 20px; font-weight: 700; }
+  .summary-card .change { font-size: 12px; margin-top: 2px; }
+  .obs-list { list-style: none; }
+  .obs-list li { padding: 6px 0 6px 22px; position: relative; font-size: 13px; }
+  .obs-list li::before { content: "→"; position: absolute; left: 0; color: #0984e3; font-weight: bold; }
+  @media (max-width: 600px) {
+    .container { padding: 16px 12px 40px; }
+    .header { padding: 20px 0 16px; margin-bottom: 20px; }
+    .header h1 { font-size: 20px; }
+    .header .subtitle { font-size: 12px; }
+    .section { padding: 14px; margin-bottom: 14px; }
+    .section h2 { font-size: 15px; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .summary-card { padding: 10px 6px; }
+    .summary-card .value { font-size: 16px; }
+    .summary-card .label { font-size: 10px; }
+    .summary-card .change { font-size: 11px; }
+    table { font-size: 12px; }
+    th, td { padding: 6px 6px; }
+    .tldr { padding: 16px; }
+    .tldr li { font-size: 13px; }
+    .theme-card { padding: 10px 12px; }
+    .theme-card p { font-size: 12px; }
+    }
+
+  th.sortable { cursor: pointer; user-select: none; transition: background 0.15s; white-space: normal; }
+  th.sortable:hover { background: #e7ebef; color: #4263eb; }
+  th.sortable::after { content: " ⇅"; font-size: 10px; opacity: 0.35; font-weight: normal; }
+  th.sortable.asc::after { content: " ↑"; opacity: 1; color: #4263eb; font-weight: 700; }
+  th.sortable.desc::after { content: " ↓"; opacity: 1; color: #4263eb; font-weight: 700; }
+  .vb-list { list-style: none; margin: 6px 0 2px; padding: 0; }
+  .vb-list li { padding: 9px 0; border-bottom: 1px dashed #eceff1; font-size: 13px; line-height: 1.75; color: #2d3436; }
+  .vb-list li:last-child { border-bottom: none; }
+  .vb-list b { display: inline-block; min-width: 88px; color: #2d3436; }
+  .vb-list .up { color: #d63031; font-weight: 700; }
+  .vb-list .down { color: #00b894; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>A股收盘复盘报告</h1>
+    <div class="subtitle">三大指数集体收涨 沪指涨1.02% 创新药与PCB掀涨停潮 科技医药双主线 | 两市成交2.66万亿</div>
+    <span class="date-tag">2026-08-07 周五 收盘</span>
+  </div>
+
+  
+<div class="tldr">
+    <h2>核心结论</h2>
+    <ul>
+      <li>三大指数集体收涨，沪指低开高走 <span class="highlight">+1.02%</span> 报 3940.04，深成指 <span class="highlight">+1.42%</span>、创业板指 <span class="highlight">+1.35%</span>、科创50 <span class="highlight">+2.51%</span> 领涨，呈现"普涨反弹、科技弹性更优"格局</li>
+      <li>两市成交约 <span class="highlight">2.66万亿</span>，较前一交易日放量约1356亿，量能重回高位、资金做多意愿回升</li>
+      <li><span class="highlight">创新药/CRO 与 PCB/覆铜板 双主线爆发</span>：CRO 单日涨超10%（博腾股份、毕得医药等多股20CM涨停），PCB 受电子布涨价催化十余股涨停（景旺电子2连板、宝鼎科技6天5板）；半导体、稀土永磁、6G 同步活跃</li>
+      <li>数字货币/跨境支付/金融科技、软件开发/IT服务、铁路公路、多元金融、农业等板块调整<span class="highlight-green">（信息安全集体下挫）</span></li>
+      <li>全市场 <span class="highlight">2856只上涨、2536只下跌</span>（赚钱效应约51%），<span class="highlight">75只涨停、4只跌停</span>，结构性行情延续、医药电子赚钱效应集中</li>
+      <li>市场状态判断：<span class="state-badge state-mix">放量普涨 · 科技医药双主线</span>，量价配合改善，短期以"跟随主线、精选业绩兑现"为主</li>
+    </ul>
+  </div>
+<div class="section">
+    <h2><span class="icon">🎯</span> 三、主线研判</h2>
+
+    <div class="theme-card semi">
+      <h4>创新药 / CRO（医药主线）</h4>
+      <div class="meta">CRO 单日 +10%+ · 创新药ETF(159992) +6.56% · 生物医药ETF(159508) +6.40%</div>
+      <p>今日最强主线。CRO 板块受全球医药产业并购高景气提振单日涨超 10%，国金证券研报指出截至 2026-7-10 年内 TOP15 跨国药企外部资本开支已达 2003 亿美元（接近 2025 全年 73.5%）；创新药方向受 License-out 出海加速提振，2026 上半年中国创新药 License-out 总金额约 997 亿美元（约 2024 全年 2 倍）。盘面上博腾股份、毕得医药、南模生物、百普赛斯 20CM 涨停，百花医药 4 连板，凯莱英、昭衍新药、哈药股份、海正药业涨停。机构认为海外研发外包需求稳定回暖 + 国内 Biotech 逐步走出底部 + BD 高增，研发外包需求提振有望在 2026 年兑现，板块中期景气向上。</p>
+    </div>
+
+    <div class="theme-card metal">
+      <h4>PCB / 覆铜板 / 半导体（科技硬件主线）</h4>
+      <div class="meta">PCB概念主力净流入 +256.0亿 · 芯片概念 +229.9亿 · 半导体ETF当日 +3%</div>
+      <p>科技硬件全线走强，PCB/覆铜板方向受上游电子布大幅涨价催化爆发：花旗研报称 8 月 1080/2116/7628 系列电子布均价环比上涨 17%-18%、年内累计涨幅达 118%-165%，价格沿"电子布—覆铜板—PCB"链条传导。盘面上十余只 PCB 成分股涨停，景旺电子 2 连板、宝鼎科技 6 天 5 板、华正新材 4 天 3 板，方邦股份、一博科技 20CM 涨停；半导体设备（耐科装备 20CM）、稀土永磁（中国稀土涨停）同步活跃。AI 算力产业链遭遇存储端刚性瓶颈（全球存储产能年增约 20%，AI 相关存储需求增速达 200%+），进一步推升 PCB/光模块需求预期。主力资金主攻 PCB、中报预增、芯片、华为概念，科技硬件仍是中期资金共识方向。</p>
+    </div>
+
+    <div class="theme-card coal">
+      <h4>稀土永磁 / 小金属 / 贵金属（新材料 + 资源）</h4>
+      <div class="meta">稀土ETF(516150) +3.53% · 稀有金属ETF(159053) 5日 +13.66% · 贵金属延续强势</div>
+      <p>稀土永磁受涨价与国产替代逻辑驱动再度活跃，中国稀土涨停、方邦股份、中科磁业等跟涨；小金属、贵金属延续前期强势。在科技医药主线之外，资源/新材料方向凭借"涨价弹性 + 避险属性"获得资金持续承接，稀土 ETF 当日涨超 3.5%、5 日累计涨超 11%，显示中期资金对稀土战略价值的认可。</p>
+    </div>
+
+    <div class="theme-card weak">
+      <h4>弱势方向：数字货币 / 金融科技 / 软件 / 多元金融</h4>
+      <div class="meta">信息安全集体下挫 · 软件开发/IT服务调整 · 铁路公路/多元金融走弱</div>
+      <p>数字货币、跨境支付、金融科技、VPN 等题材今日集体调整，绿盟科技、天融信、任子行、高伟达等个股下挫；软件开发、IT 服务、铁路公路、多元金融、农业等板块跌幅居前。这属主线行情中的正常轮动与获利了结，不代表金融 IT 长期逻辑逆转，但在科技医药主线虹吸效应下，短期资金对其偏好明显回落。</p>
+    </div>
+  </div>
+<div class="section">
+    <h2><span class="icon">📊</span> 一、市场概览</h2>
+
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>指数</th>
+          <th class="num">收盘价</th>
+          <th class="num">当日</th>
+          <th class="num">成交额(亿)</th>
+          <th class="num">一个月</th>
+          <th class="num">年初至今</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>上证指数</td><td class="num">3940.04</td><td class="num up" style="color:#d63031">+1.02%</td><td class="num">12,095</td><td class="num" style="color:#00b894">-1.40%</td><td class="num down" style="color:#00b894">-0.73%</td></tr>
+        <tr><td>深证成指</td><td class="num">14311.01</td><td class="num up" style="color:#d63031">+1.42%</td><td class="num">14,549</td><td class="num" style="color:#00b894">-4.89%</td><td class="num up" style="color:#d63031">+5.81%</td></tr>
+        <tr><td>创业板指</td><td class="num">3563.12</td><td class="num up" style="color:#d63031">+1.35%</td><td class="num">7,301</td><td class="num" style="color:#00b894">-7.28%</td><td class="num up" style="color:#d63031">+11.24%</td></tr>
+        <tr><td>沪深300</td><td class="num">4694.44</td><td class="num up" style="color:#d63031">+0.93%</td><td class="num">7,884</td><td class="num" style="color:#00b894">-1.81%</td><td class="num up" style="color:#d63031">+1.39%</td></tr>
+        <tr><td>科创50</td><td class="num">1744.02</td><td class="num up" style="color:#d63031">+2.51%</td><td class="num">1,363</td><td class="num" style="color:#00b894">-15.54%</td><td class="num up" style="color:#d63031">+29.74%</td></tr>
+        <tr><td>中证1000</td><td class="num">7679.53</td><td class="num up" style="color:#d63031">+1.98%</td><td class="num">5,684</td><td class="num" style="color:#00b894">-6.33%</td><td class="num up" style="color:#d63031">+1.11%</td></tr>
+        <tr><td>中证500</td><td class="num">7980.12</td><td class="num up" style="color:#d63031">+1.93%</td><td class="num">5,253</td><td class="num" style="color:#00b894">-6.16%</td><td class="num up" style="color:#d63031">+6.89%</td></tr>
+        <tr><td>北证50</td><td class="num">1134.24</td><td class="num up" style="color:#d63031">+1.01%</td><td class="num">192</td><td class="num" style="color:#00b894">-6.19%</td><td class="num down" style="color:#00b894">-21.26%</td></tr>
+        <tr><td>中证全指</td><td class="num">5978.30</td><td class="num up" style="color:#d63031">+1.39%</td><td class="num">25,841</td><td class="num" style="color:#00b894">-3.81%</td><td class="num up" style="color:#d63031">+1.00%</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="source-note">数据来源：腾讯自选股 | 截至 2026-08-07 15:00</div>
+
+        <h3>量能与广度</h3>
+    <ul class="vb-list">
+      <li><b>两市成交额</b>：2.66万亿（26644亿）。较前一交易日 <span class="up">+1356亿（+5.1%）</span>，放量；高于 5/10/20/250 日均线，低于 60 日均线。</li>
+      <li><b>涨跌家数</b>：上涨 2856 / 下跌 2536 / 平盘 147 / 停牌 4，赚钱效应约 51%。</li>
+      <li><b>涨跌停</b>：涨停 75 / 跌停 4，市场情绪偏暖。</li>
+      <li><b>ETF 总成交</b>：5391亿（1624只），约占两市成交 20%。</li>
+      <li><b>涨跌分布</b>（11档）：涨停 75、&gt;7% 206、5~7% 213、2~5% 807、0~2% 3674、平 147、0~2% 2119、2~5% 365、5~7% 26、7%&lt; 22、跌停 4；其中涨≥7%共 281 家、跌≥7%共 26 家，0~2% 区间最密集（约 3674 家）。</li>
+    </ul>
+    <div class="source-note">数据来源：westock-data market-overview（trade）· changedist | 截至 2026-08-07 15:00</div>
+<h3>量能分析</h3>
+    <p style="font-size:13px; color:#2d3436;">今日两市成交 <strong>26644 亿（约 2.66 万亿）</strong>，较前一交易日放量约 <strong>1356 亿（+5.1%）</strong>，量能重回近期高位。对比多周期均值：当日成交显著高于近 5/10/20/250 日均值（分别放量约 +10.4% / +14.1% / +8.9% / +8.8%），与近 120 日均值基本持平，但低于近 60 日均值（缩量约 7.9%），说明量能已从 7 月底的缩量区间修复至年内活跃中枢附近，但尚未回到 60 日高位（2.89 万亿）。量价配合改善：在放量背景下指数全线收涨、赚钱效应约 51%，资金做多意愿明显回升；ETF 总成交 5391 亿（1624 只），反映场内交易型资金活跃度同步提升。后续需观察量能能否稳定在 2.5 万亿以上以确认反弹的持续性。</p>
+
+    <h3>盘面解读</h3>
+    <p style="font-size:13px; color:#2d3436;">今日 A 股呈普涨格局，申万一级 31 个行业中仅 5 个微跌（跌幅均不足 1%），医药生物、电子、建筑材料、有色金属、机械设备领涨，科创50 以 +2.51% 弹性领先；全市场涨跌家数接近（2856:2536），涨停 75 家、跌停仅 4 家，结构性赚钱效应集中于医药与电子硬件方向。指数低开高走、全线飘红，量能放大配合价升，市场情绪由分化转入共振。</p>
+  </div>
+<div class="section">
+    <h2><span class="icon">🔄</span> 二、板块轮动分析</h2>
+    <p style="font-size:13px; color:#2d3436;">按申万一级行业当日涨跌幅（c1）排序，列出领涨与领跌前 5 行业，并观察资金在行业间的轮动方向。</p>
+
+    <div class="section-title" style="font-size:15px;margin:10px 0 6px">当日领涨前 5 行业 <span class="badge">L1 · 按当日涨幅</span></div>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>申万一级行业</th><th class="num">当日</th><th class="num">5日</th><th class="num">20日</th></tr></thead>
+      <tbody><tr><td>医药生物</td><td class="num" style="color:#d63031">+4.77%</td><td class="num" style="color:#d63031">+6.27%</td><td class="num" style="color:#d63031">+6.21%</td></tr><tr><td>电子</td><td class="num" style="color:#d63031">+3.53%</td><td class="num" style="color:#d63031">+12.62%</td><td class="num" style="color:#00b894">-17.20%</td></tr><tr><td>建筑材料</td><td class="num" style="color:#d63031">+3.33%</td><td class="num" style="color:#d63031">+9.13%</td><td class="num" style="color:#00b894">-8.26%</td></tr><tr><td>有色金属</td><td class="num" style="color:#d63031">+3.19%</td><td class="num" style="color:#d63031">+10.95%</td><td class="num" style="color:#d63031">+10.79%</td></tr><tr><td>机械设备</td><td class="num" style="color:#d63031">+2.08%</td><td class="num" style="color:#d63031">+9.70%</td><td class="num" style="color:#00b894">-8.66%</td></tr></tbody>
+    </table>
+    </div>
+
+    <div class="section-title" style="font-size:15px;margin:14px 0 6px">当日领跌前 5 行业 <span class="badge">L1 · 按当日涨幅</span></div>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>申万一级行业</th><th class="num">当日</th><th class="num">5日</th><th class="num">20日</th></tr></thead>
+      <tbody><tr><td>家用电器</td><td class="num" style="color:#00b894">-0.86%</td><td class="num" style="color:#00b894">-2.14%</td><td class="num" style="color:#d63031">+1.47%</td></tr><tr><td>银行</td><td class="num" style="color:#00b894">-0.65%</td><td class="num" style="color:#00b894">-3.70%</td><td class="num" style="color:#d63031">+3.74%</td></tr><tr><td>交通运输</td><td class="num" style="color:#00b894">-0.64%</td><td class="num" style="color:#00b894">-1.22%</td><td class="num" style="color:#d63031">+4.57%</td></tr><tr><td>计算机</td><td class="num" style="color:#00b894">-0.60%</td><td class="num" style="color:#d63031">+4.94%</td><td class="num" style="color:#d63031">+0.16%</td></tr><tr><td>房地产</td><td class="num" style="color:#00b894">-0.51%</td><td class="num" style="color:#d63031">+2.09%</td><td class="num" style="color:#00b894">-1.28%</td></tr></tbody>
+    </table>
+    </div>
+
+    <h3>轮动方向研判</h3>
+    <p style="font-size:13px; color:#2d3436;">当日行业层面呈「普涨 + 主线聚焦」特征：31 个一级行业中 26 个上涨、仅 5 个微跌，涨幅居前的 <strong>医药生物（+4.77%）、电子（+3.53%）、建筑材料（+3.33%）、有色金属（+3.19%）、机械设备（+2.08%）</strong> 与其近 5 日主线（电子 +12.62%、有色金属 +10.95%）高度吻合，说明主线在当日进一步被强化；而计算机、银行、交通运输、家用电器、房地产等当日偏弱（跌幅均&lt;1%），显示资金从前期高位的软件/IT 细分与防御类（银行/地产）流出，向「硬科技（电子/半导体/PCB）+ 资源（有色/建材）+ 医药（创新药）」三条主线集中。综合判断：轮动方向由前期的普涨分散，转向以科技医药双主线为核心、资源品为辅的聚焦格局，金融地产与软件服务短期仍承压，持续性取决于中报业绩兑现与量能配合。</p>
+  </div>
+<div class="section">
+    <h2><span class="icon">💰</span> 四、资金流向与情绪</h2>
+    <h3>资金动向</h3>
+    <ul class="obs-list">
+      <li>PCB 概念主力净流入约 256.0 亿（16 只涨停、212 只上涨），芯片概念净流入约 229.9 亿（18 只涨停、657 只上涨），2026 中报预增净流入约 231.4 亿，华为概念净流入约 152.5 亿——科技硬件是主力主攻方向</li>
+      <li>创新药 / CRO 获资金追捧，生物医药 ETF 当日涨超 6%、创新药 ETF(159992) 涨 6.56%，医药主线资金共识增强</li>
+      <li>两市成交 2.66 万亿，较昨放量约 1356 亿，量能重回高位，资金做多意愿明显回升</li>
+      <li>涨停 75 家、跌停仅 4 家，赚钱效应约 51%，结构性行情特征突出、涨幅集中于医药与电子硬件</li>
+    </ul>
+  </div>
+<div class="section">
+    <h2><span class="icon">📰</span> 五、消息面</h2>
+    <div class="news-item">
+      <div class="news-title">收评：指数全线飘红超2800股上涨，创新药PCB掀起涨停潮</div>
+      <div class="news-desc">8月7日A股三大指数集体收红，沪指涨1.02%，深成指涨1.42%，创业板指涨1.35%，科创50涨2.51%、北证50涨1.01%。沪深两市全天成交2.66万亿元，较前一交易日放量1356亿元，全市场2856只个股上涨、2536只下跌，75只涨停、4只跌停。板块层面，CRO、创新药全线爆发，PCB概念快速走强十余股涨停，稀土永磁、6G概念活跃；数字货币、金融科技、软件开发等跌幅居前。</div>
+      <div class="news-source">来源：每日经济新闻 / 2026-08-07</div>
+    </div>
+    <div class="news-item">
+      <div class="news-title">三大指数集体上涨！CRO、PCB等概念走强</div>
+      <div class="news-desc">8月7日科创50以2.51%领涨，CRO单日涨超10%（博腾股份、毕得医药等多股20CM涨停，百花医药4连板）；PCB受电子布涨价催化爆发（景旺电子2连板、宝鼎科技6天5板）；稀土永磁中国稀土涨停，6G通宇通讯5天4板。下跌方向信息安全集体调整。</div>
+      <div class="news-source">来源：界面新闻 / 2026-08-07</div>
+    </div>
+    <div class="news-item">
+      <div class="news-title">机构：CRO受益全球医药并购高景气，PCB受益电子布涨价</div>
+      <div class="news-desc">国金证券研报指出截至2026-7-10年内TOP15跨国药企外部资本开支达2003亿美元（接近2025全年73.5%），全球医药并购高景气确立；花旗研报称8月1080/2116/7628系列电子布均价环比涨17%-18%、年内累计涨118%-165%，价格沿"电子布—覆铜板—PCB"链条传导。2026上半年中国创新药License-out出海总金额约997亿美元（约2024全年2倍）。</div>
+      <div class="news-source">来源：新浪财经 / 2026-08-07</div>
+    </div>
+  </div>
+<div class="section">
+    <h2><span class="icon">🔭</span> 六、后市研判</h2>
+    <ul class="obs-list">
+      <li><strong>短期：</strong>指数集体反弹、量能放大至 2.66 万亿，市场从分化转入普涨，科技医药双主线明确。沪指 3940 点附近获承接、科创50 弹性领先，短期以"跟随主线、精选业绩兑现"思路应对，避免追高日内已大幅发酵的题材。</li>
+      <li><strong>中期：</strong>机构判断 CRO 受益全球医药并购高景气 + 创新药 License-out 出海加速，PCB 受益电子布涨价沿产业链传导，科技硬件（PCB/光模块/半导体设备）景气具中期支撑；但反弹持续性取决于中报业绩兑现度与海外科技限制政策落地。</li>
+      <li><strong>策略：</strong>均衡持仓，关注两条线——① 医药（CRO/创新药）的高景气出海与研发外包需求兑现逻辑；② 科技硬件（PCB/覆铜板/半导体设备/光模块）的涨价与 AI 算力需求。规避业绩不及预期的高位题材与调整中的金融科技/软件。</li>
+      <li><strong>风险：</strong>量能能否维持在 2.5 万亿以上、电子布涨价持续性、海外对华科技限制政策、中报业绩不及预期带来的波动。</li>
+    </ul>
+  </div>
+<div class="section">
+    <h2><span class="icon">📑</span> 附录 · 申万行业涨跌幅（完整版）</h2>
+    <div class="source-note" style="margin-bottom:12px">行业分类口径：申万宏源2021版 一级（31个）/ 二级（124个）。下列为全量行业，含「当日」列；默认按当日降序，点击表头可排序（箭头 ⇅/↑/↓）。</div>
+
+    <div class="section-title" style="font-size:15px;margin:8px 0 6px">申万一级行业（全31个） <span class="badge">L1</span></div>
+    <div class="table-wrap">
+    <table>
+      <colgroup><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"></colgroup>
+      <thead><tr><th class="sortable">申万一级行业</th><th class="sortable desc">当日</th><th class="sortable">5日</th><th class="sortable">10日</th><th class="sortable">20日</th></tr></thead>
+      <tbody><tr>
+          <td>医药生物</td>
+          <td class="num" style="color:#d63031">+4.77%</td>
+          <td class="num" style="color:#d63031">+6.27%</td>
+          <td class="num" style="color:#d63031">+9.04%</td>
+          <td class="num" style="color:#d63031">+6.21%</td>
+        </tr><tr>
+          <td>电子</td>
+          <td class="num" style="color:#d63031">+3.53%</td>
+          <td class="num" style="color:#d63031">+12.62%</td>
+          <td class="num" style="color:#d63031">+2.74%</td>
+          <td class="num" style="color:#00b894">-17.20%</td>
+        </tr><tr>
+          <td>建筑材料</td>
+          <td class="num" style="color:#d63031">+3.33%</td>
+          <td class="num" style="color:#d63031">+9.13%</td>
+          <td class="num" style="color:#d63031">+12.22%</td>
+          <td class="num" style="color:#00b894">-8.26%</td>
+        </tr><tr>
+          <td>有色金属</td>
+          <td class="num" style="color:#d63031">+3.19%</td>
+          <td class="num" style="color:#d63031">+10.95%</td>
+          <td class="num" style="color:#d63031">+14.32%</td>
+          <td class="num" style="color:#d63031">+10.79%</td>
+        </tr><tr>
+          <td>机械设备</td>
+          <td class="num" style="color:#d63031">+2.08%</td>
+          <td class="num" style="color:#d63031">+9.70%</td>
+          <td class="num" style="color:#d63031">+8.83%</td>
+          <td class="num" style="color:#00b894">-8.66%</td>
+        </tr><tr>
+          <td>国防军工</td>
+          <td class="num" style="color:#d63031">+1.47%</td>
+          <td class="num" style="color:#d63031">+6.18%</td>
+          <td class="num" style="color:#d63031">+8.08%</td>
+          <td class="num" style="color:#00b894">-9.20%</td>
+        </tr><tr>
+          <td>基础化工</td>
+          <td class="num" style="color:#d63031">+1.23%</td>
+          <td class="num" style="color:#d63031">+6.77%</td>
+          <td class="num" style="color:#d63031">+9.00%</td>
+          <td class="num" style="color:#d63031">+0.61%</td>
+        </tr><tr>
+          <td>电力设备</td>
+          <td class="num" style="color:#d63031">+1.19%</td>
+          <td class="num" style="color:#d63031">+4.24%</td>
+          <td class="num" style="color:#d63031">+5.90%</td>
+          <td class="num" style="color:#00b894">-0.16%</td>
+        </tr><tr>
+          <td>综合</td>
+          <td class="num" style="color:#d63031">+0.77%</td>
+          <td class="num" style="color:#d63031">+8.31%</td>
+          <td class="num" style="color:#d63031">+11.63%</td>
+          <td class="num" style="color:#00b894">-5.52%</td>
+        </tr><tr>
+          <td>美容护理</td>
+          <td class="num" style="color:#d63031">+0.72%</td>
+          <td class="num" style="color:#00b894">-1.31%</td>
+          <td class="num" style="color:#d63031">+7.06%</td>
+          <td class="num" style="color:#d63031">+5.76%</td>
+        </tr><tr>
+          <td>石油石化</td>
+          <td class="num" style="color:#d63031">+0.64%</td>
+          <td class="num" style="color:#d63031">+0.96%</td>
+          <td class="num" style="color:#d63031">+3.08%</td>
+          <td class="num" style="color:#d63031">+10.40%</td>
+        </tr><tr>
+          <td>环保</td>
+          <td class="num" style="color:#d63031">+0.49%</td>
+          <td class="num" style="color:#d63031">+4.93%</td>
+          <td class="num" style="color:#d63031">+7.36%</td>
+          <td class="num" style="color:#00b894">-0.84%</td>
+        </tr><tr>
+          <td>汽车</td>
+          <td class="num" style="color:#d63031">+0.28%</td>
+          <td class="num" style="color:#d63031">+1.02%</td>
+          <td class="num" style="color:#d63031">+6.05%</td>
+          <td class="num" style="color:#00b894">-1.79%</td>
+        </tr><tr>
+          <td>食品饮料</td>
+          <td class="num" style="color:#d63031">+0.21%</td>
+          <td class="num" style="color:#00b894">-2.76%</td>
+          <td class="num" style="color:#d63031">+2.72%</td>
+          <td class="num" style="color:#d63031">+6.92%</td>
+        </tr><tr>
+          <td>通信</td>
+          <td class="num" style="color:#d63031">+0.13%</td>
+          <td class="num" style="color:#d63031">+9.69%</td>
+          <td class="num" style="color:#00b894">-1.70%</td>
+          <td class="num" style="color:#00b894">-14.65%</td>
+        </tr><tr>
+          <td>社会服务</td>
+          <td class="num" style="color:#d63031">+0.11%</td>
+          <td class="num" style="color:#d63031">+2.27%</td>
+          <td class="num" style="color:#d63031">+12.18%</td>
+          <td class="num" style="color:#d63031">+2.75%</td>
+        </tr><tr>
+          <td>传媒</td>
+          <td class="num" style="color:#d63031">+0.05%</td>
+          <td class="num" style="color:#d63031">+2.61%</td>
+          <td class="num" style="color:#d63031">+15.76%</td>
+          <td class="num" style="color:#d63031">+3.34%</td>
+        </tr><tr>
+          <td>建筑装饰</td>
+          <td class="num" style="color:#00b894">-0.06%</td>
+          <td class="num" style="color:#d63031">+1.84%</td>
+          <td class="num" style="color:#d63031">+5.03%</td>
+          <td class="num" style="color:#00b894">-2.19%</td>
+        </tr><tr>
+          <td>公用事业</td>
+          <td class="num" style="color:#00b894">-0.10%</td>
+          <td class="num" style="color:#00b894">-0.71%</td>
+          <td class="num" style="color:#d63031">+0.79%</td>
+          <td class="num" style="color:#d63031">+2.05%</td>
+        </tr><tr>
+          <td>轻工制造</td>
+          <td class="num" style="color:#00b894">-0.16%</td>
+          <td class="num" style="color:#d63031">+3.92%</td>
+          <td class="num" style="color:#d63031">+8.77%</td>
+          <td class="num" style="color:#d63031">+0.03%</td>
+        </tr><tr>
+          <td>钢铁</td>
+          <td class="num" style="color:#00b894">-0.21%</td>
+          <td class="num" style="color:#00b894">-0.55%</td>
+          <td class="num" style="color:#d63031">+3.96%</td>
+          <td class="num" style="color:#d63031">+5.01%</td>
+        </tr><tr>
+          <td>农林牧渔</td>
+          <td class="num" style="color:#00b894">-0.21%</td>
+          <td class="num" style="color:#d63031">+0.06%</td>
+          <td class="num" style="color:#d63031">+4.54%</td>
+          <td class="num" style="color:#d63031">+2.96%</td>
+        </tr><tr>
+          <td>非银金融</td>
+          <td class="num" style="color:#00b894">-0.26%</td>
+          <td class="num" style="color:#00b894">-1.61%</td>
+          <td class="num" style="color:#00b894">-0.52%</td>
+          <td class="num" style="color:#d63031">+0.77%</td>
+        </tr><tr>
+          <td>纺织服饰</td>
+          <td class="num" style="color:#00b894">-0.27%</td>
+          <td class="num" style="color:#d63031">+2.95%</td>
+          <td class="num" style="color:#d63031">+9.55%</td>
+          <td class="num" style="color:#d63031">+0.78%</td>
+        </tr><tr>
+          <td>煤炭</td>
+          <td class="num" style="color:#00b894">-0.34%</td>
+          <td class="num" style="color:#d63031">+1.17%</td>
+          <td class="num" style="color:#d63031">+2.51%</td>
+          <td class="num" style="color:#d63031">+8.81%</td>
+        </tr><tr>
+          <td>商贸零售</td>
+          <td class="num" style="color:#00b894">-0.42%</td>
+          <td class="num" style="color:#00b894">-0.39%</td>
+          <td class="num" style="color:#d63031">+8.10%</td>
+          <td class="num" style="color:#d63031">+4.52%</td>
+        </tr><tr>
+          <td>房地产</td>
+          <td class="num" style="color:#00b894">-0.51%</td>
+          <td class="num" style="color:#d63031">+2.09%</td>
+          <td class="num" style="color:#d63031">+7.23%</td>
+          <td class="num" style="color:#00b894">-1.28%</td>
+        </tr><tr>
+          <td>计算机</td>
+          <td class="num" style="color:#00b894">-0.60%</td>
+          <td class="num" style="color:#d63031">+4.94%</td>
+          <td class="num" style="color:#d63031">+10.81%</td>
+          <td class="num" style="color:#d63031">+0.16%</td>
+        </tr><tr>
+          <td>交通运输</td>
+          <td class="num" style="color:#00b894">-0.64%</td>
+          <td class="num" style="color:#00b894">-1.22%</td>
+          <td class="num" style="color:#d63031">+2.88%</td>
+          <td class="num" style="color:#d63031">+4.57%</td>
+        </tr><tr>
+          <td>银行</td>
+          <td class="num" style="color:#00b894">-0.65%</td>
+          <td class="num" style="color:#00b894">-3.70%</td>
+          <td class="num" style="color:#00b894">-1.03%</td>
+          <td class="num" style="color:#d63031">+3.74%</td>
+        </tr><tr>
+          <td>家用电器</td>
+          <td class="num" style="color:#00b894">-0.86%</td>
+          <td class="num" style="color:#00b894">-2.14%</td>
+          <td class="num" style="color:#d63031">+2.57%</td>
+          <td class="num" style="color:#d63031">+1.47%</td>
+        </tr></tbody>
+    </table>
+    </div>
+
+    <div class="section-title" style="font-size:15px;margin:16px 0 6px">申万二级行业（全124个） <span class="badge">L2</span></div>
+    <div class="table-wrap">
+    <table>
+      <colgroup><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:20%"></colgroup>
+      <thead><tr><th class="sortable">申万二级行业</th><th class="sortable desc">当日</th><th class="sortable">5日</th><th class="sortable">10日</th><th class="sortable">20日</th></tr></thead>
+      <tbody><tr>
+          <td>医疗服务</td>
+          <td class="num" style="color:#d63031">+8.40%</td>
+          <td class="num" style="color:#d63031">+15.99%</td>
+          <td class="num" style="color:#d63031">+18.73%</td>
+          <td class="num" style="color:#d63031">+17.60%</td>
+        </tr><tr>
+          <td>玻璃玻纤</td>
+          <td class="num" style="color:#d63031">+7.11%</td>
+          <td class="num" style="color:#d63031">+18.31%</td>
+          <td class="num" style="color:#d63031">+18.94%</td>
+          <td class="num" style="color:#00b894">-16.28%</td>
+        </tr><tr>
+          <td>元件</td>
+          <td class="num" style="color:#d63031">+6.74%</td>
+          <td class="num" style="color:#d63031">+23.95%</td>
+          <td class="num" style="color:#d63031">+14.74%</td>
+          <td class="num" style="color:#00b894">-7.90%</td>
+        </tr><tr>
+          <td>生物制品</td>
+          <td class="num" style="color:#d63031">+6.06%</td>
+          <td class="num" style="color:#d63031">+6.51%</td>
+          <td class="num" style="color:#d63031">+9.25%</td>
+          <td class="num" style="color:#d63031">+3.96%</td>
+        </tr><tr>
+          <td>非金属材料Ⅱ</td>
+          <td class="num" style="color:#d63031">+5.59%</td>
+          <td class="num" style="color:#d63031">+20.93%</td>
+          <td class="num" style="color:#d63031">+12.50%</td>
+          <td class="num" style="color:#00b894">-17.46%</td>
+        </tr><tr>
+          <td>化学制药</td>
+          <td class="num" style="color:#d63031">+5.21%</td>
+          <td class="num" style="color:#d63031">+6.07%</td>
+          <td class="num" style="color:#d63031">+6.43%</td>
+          <td class="num" style="color:#d63031">+1.83%</td>
+        </tr><tr>
+          <td>小金属</td>
+          <td class="num" style="color:#d63031">+4.30%</td>
+          <td class="num" style="color:#d63031">+20.35%</td>
+          <td class="num" style="color:#d63031">+18.63%</td>
+          <td class="num" style="color:#d63031">+0.00%</td>
+        </tr><tr>
+          <td>电子化学品Ⅱ</td>
+          <td class="num" style="color:#d63031">+3.63%</td>
+          <td class="num" style="color:#d63031">+18.63%</td>
+          <td class="num" style="color:#d63031">+10.44%</td>
+          <td class="num" style="color:#00b894">-16.55%</td>
+        </tr><tr>
+          <td>金属新材料</td>
+          <td class="num" style="color:#d63031">+3.32%</td>
+          <td class="num" style="color:#d63031">+15.14%</td>
+          <td class="num" style="color:#d63031">+14.17%</td>
+          <td class="num" style="color:#00b894">-10.01%</td>
+        </tr><tr>
+          <td>半导体</td>
+          <td class="num" style="color:#d63031">+3.29%</td>
+          <td class="num" style="color:#d63031">+9.99%</td>
+          <td class="num" style="color:#00b894">-2.57%</td>
+          <td class="num" style="color:#00b894">-21.53%</td>
+        </tr><tr>
+          <td>贵金属</td>
+          <td class="num" style="color:#d63031">+3.21%</td>
+          <td class="num" style="color:#d63031">+11.41%</td>
+          <td class="num" style="color:#d63031">+20.53%</td>
+          <td class="num" style="color:#d63031">+23.74%</td>
+        </tr><tr>
+          <td>自动化设备</td>
+          <td class="num" style="color:#d63031">+3.18%</td>
+          <td class="num" style="color:#d63031">+12.42%</td>
+          <td class="num" style="color:#d63031">+11.04%</td>
+          <td class="num" style="color:#00b894">-12.09%</td>
+        </tr><tr>
+          <td>航天装备Ⅱ</td>
+          <td class="num" style="color:#d63031">+3.09%</td>
+          <td class="num" style="color:#d63031">+14.45%</td>
+          <td class="num" style="color:#d63031">+13.46%</td>
+          <td class="num" style="color:#00b894">-24.58%</td>
+        </tr><tr>
+          <td>塑料</td>
+          <td class="num" style="color:#d63031">+3.07%</td>
+          <td class="num" style="color:#d63031">+13.82%</td>
+          <td class="num" style="color:#d63031">+14.55%</td>
+          <td class="num" style="color:#00b894">-8.70%</td>
+        </tr><tr>
+          <td>光伏设备</td>
+          <td class="num" style="color:#d63031">+2.97%</td>
+          <td class="num" style="color:#d63031">+7.34%</td>
+          <td class="num" style="color:#d63031">+5.76%</td>
+          <td class="num" style="color:#00b894">-5.08%</td>
+        </tr><tr>
+          <td>动物保健Ⅱ</td>
+          <td class="num" style="color:#d63031">+2.91%</td>
+          <td class="num" style="color:#d63031">+5.84%</td>
+          <td class="num" style="color:#d63031">+14.25%</td>
+          <td class="num" style="color:#d63031">+7.97%</td>
+        </tr><tr>
+          <td>工业金属</td>
+          <td class="num" style="color:#d63031">+2.86%</td>
+          <td class="num" style="color:#d63031">+7.70%</td>
+          <td class="num" style="color:#d63031">+12.30%</td>
+          <td class="num" style="color:#d63031">+18.81%</td>
+        </tr><tr>
+          <td>能源金属</td>
+          <td class="num" style="color:#d63031">+2.78%</td>
+          <td class="num" style="color:#d63031">+9.38%</td>
+          <td class="num" style="color:#d63031">+11.34%</td>
+          <td class="num" style="color:#00b894">-1.28%</td>
+        </tr><tr>
+          <td>通用设备</td>
+          <td class="num" style="color:#d63031">+2.61%</td>
+          <td class="num" style="color:#d63031">+14.38%</td>
+          <td class="num" style="color:#d63031">+11.37%</td>
+          <td class="num" style="color:#00b894">-11.26%</td>
+        </tr><tr>
+          <td>军工电子Ⅱ</td>
+          <td class="num" style="color:#d63031">+2.60%</td>
+          <td class="num" style="color:#d63031">+10.24%</td>
+          <td class="num" style="color:#d63031">+10.26%</td>
+          <td class="num" style="color:#00b894">-11.67%</td>
+        </tr><tr>
+          <td>其他电子Ⅱ</td>
+          <td class="num" style="color:#d63031">+2.53%</td>
+          <td class="num" style="color:#d63031">+12.06%</td>
+          <td class="num" style="color:#d63031">+6.77%</td>
+          <td class="num" style="color:#00b894">-22.53%</td>
+        </tr><tr>
+          <td>光学光电子</td>
+          <td class="num" style="color:#d63031">+2.49%</td>
+          <td class="num" style="color:#d63031">+12.73%</td>
+          <td class="num" style="color:#d63031">+9.01%</td>
+          <td class="num" style="color:#00b894">-14.70%</td>
+        </tr><tr>
+          <td>医疗器械</td>
+          <td class="num" style="color:#d63031">+2.49%</td>
+          <td class="num" style="color:#d63031">+2.28%</td>
+          <td class="num" style="color:#d63031">+7.53%</td>
+          <td class="num" style="color:#d63031">+4.08%</td>
+        </tr><tr>
+          <td>专用设备</td>
+          <td class="num" style="color:#d63031">+2.08%</td>
+          <td class="num" style="color:#d63031">+10.26%</td>
+          <td class="num" style="color:#d63031">+9.02%</td>
+          <td class="num" style="color:#00b894">-7.51%</td>
+        </tr><tr>
+          <td>风电设备</td>
+          <td class="num" style="color:#d63031">+2.05%</td>
+          <td class="num" style="color:#d63031">+9.06%</td>
+          <td class="num" style="color:#d63031">+13.45%</td>
+          <td class="num" style="color:#00b894">-4.31%</td>
+        </tr><tr>
+          <td>消费电子</td>
+          <td class="num" style="color:#d63031">+1.46%</td>
+          <td class="num" style="color:#d63031">+9.01%</td>
+          <td class="num" style="color:#d63031">+4.85%</td>
+          <td class="num" style="color:#00b894">-9.75%</td>
+        </tr><tr>
+          <td>中药Ⅱ</td>
+          <td class="num" style="color:#d63031">+1.45%</td>
+          <td class="num" style="color:#00b894">-0.01%</td>
+          <td class="num" style="color:#d63031">+4.36%</td>
+          <td class="num" style="color:#d63031">+6.19%</td>
+        </tr><tr>
+          <td>家电零部件Ⅱ</td>
+          <td class="num" style="color:#d63031">+1.35%</td>
+          <td class="num" style="color:#d63031">+6.07%</td>
+          <td class="num" style="color:#d63031">+11.38%</td>
+          <td class="num" style="color:#00b894">-8.67%</td>
+        </tr><tr>
+          <td>其他电源设备Ⅱ</td>
+          <td class="num" style="color:#d63031">+1.35%</td>
+          <td class="num" style="color:#d63031">+10.25%</td>
+          <td class="num" style="color:#d63031">+7.26%</td>
+          <td class="num" style="color:#00b894">-10.90%</td>
+        </tr><tr>
+          <td>照明设备Ⅱ</td>
+          <td class="num" style="color:#d63031">+1.19%</td>
+          <td class="num" style="color:#d63031">+8.58%</td>
+          <td class="num" style="color:#d63031">+11.32%</td>
+          <td class="num" style="color:#00b894">-3.00%</td>
+        </tr><tr>
+          <td>橡胶</td>
+          <td class="num" style="color:#d63031">+1.17%</td>
+          <td class="num" style="color:#d63031">+10.61%</td>
+          <td class="num" style="color:#d63031">+9.32%</td>
+          <td class="num" style="color:#00b894">-11.21%</td>
+        </tr><tr>
+          <td>医药商业</td>
+          <td class="num" style="color:#d63031">+1.10%</td>
+          <td class="num" style="color:#d63031">+0.96%</td>
+          <td class="num" style="color:#d63031">+5.96%</td>
+          <td class="num" style="color:#d63031">+5.86%</td>
+        </tr><tr>
+          <td>专业工程</td>
+          <td class="num" style="color:#d63031">+0.95%</td>
+          <td class="num" style="color:#d63031">+3.55%</td>
+          <td class="num" style="color:#d63031">+4.69%</td>
+          <td class="num" style="color:#00b894">-6.76%</td>
+        </tr><tr>
+          <td>电池</td>
+          <td class="num" style="color:#d63031">+0.93%</td>
+          <td class="num" style="color:#d63031">+1.70%</td>
+          <td class="num" style="color:#d63031">+4.42%</td>
+          <td class="num" style="color:#d63031">+3.01%</td>
+        </tr><tr>
+          <td>广告营销</td>
+          <td class="num" style="color:#d63031">+0.91%</td>
+          <td class="num" style="color:#d63031">+4.92%</td>
+          <td class="num" style="color:#d63031">+22.43%</td>
+          <td class="num" style="color:#d63031">+10.72%</td>
+        </tr><tr>
+          <td>化学制品</td>
+          <td class="num" style="color:#d63031">+0.91%</td>
+          <td class="num" style="color:#d63031">+6.85%</td>
+          <td class="num" style="color:#d63031">+8.84%</td>
+          <td class="num" style="color:#00b894">-0.84%</td>
+        </tr><tr>
+          <td>炼化及贸易</td>
+          <td class="num" style="color:#d63031">+0.89%</td>
+          <td class="num" style="color:#d63031">+1.95%</td>
+          <td class="num" style="color:#d63031">+4.79%</td>
+          <td class="num" style="color:#d63031">+11.33%</td>
+        </tr><tr>
+          <td>农化制品</td>
+          <td class="num" style="color:#d63031">+0.86%</td>
+          <td class="num" style="color:#d63031">+3.05%</td>
+          <td class="num" style="color:#d63031">+7.69%</td>
+          <td class="num" style="color:#d63031">+11.76%</td>
+        </tr><tr>
+          <td>环保设备Ⅱ</td>
+          <td class="num" style="color:#d63031">+0.81%</td>
+          <td class="num" style="color:#d63031">+8.98%</td>
+          <td class="num" style="color:#d63031">+11.62%</td>
+          <td class="num" style="color:#00b894">-6.55%</td>
+        </tr><tr>
+          <td>专业服务</td>
+          <td class="num" style="color:#d63031">+0.81%</td>
+          <td class="num" style="color:#d63031">+4.71%</td>
+          <td class="num" style="color:#d63031">+10.10%</td>
+          <td class="num" style="color:#00b894">-5.11%</td>
+        </tr><tr>
+          <td>综合Ⅱ</td>
+          <td class="num" style="color:#d63031">+0.77%</td>
+          <td class="num" style="color:#d63031">+8.31%</td>
+          <td class="num" style="color:#d63031">+11.63%</td>
+          <td class="num" style="color:#00b894">-5.52%</td>
+        </tr><tr>
+          <td>航空装备Ⅱ</td>
+          <td class="num" style="color:#d63031">+0.70%</td>
+          <td class="num" style="color:#d63031">+2.99%</td>
+          <td class="num" style="color:#d63031">+5.53%</td>
+          <td class="num" style="color:#00b894">-4.00%</td>
+        </tr><tr>
+          <td>化学纤维</td>
+          <td class="num" style="color:#d63031">+0.68%</td>
+          <td class="num" style="color:#d63031">+5.66%</td>
+          <td class="num" style="color:#d63031">+11.30%</td>
+          <td class="num" style="color:#d63031">+4.13%</td>
+        </tr><tr>
+          <td>汽车零部件</td>
+          <td class="num" style="color:#d63031">+0.59%</td>
+          <td class="num" style="color:#d63031">+4.47%</td>
+          <td class="num" style="color:#d63031">+7.95%</td>
+          <td class="num" style="color:#00b894">-3.97%</td>
+        </tr><tr>
+          <td>文娱用品</td>
+          <td class="num" style="color:#d63031">+0.49%</td>
+          <td class="num" style="color:#d63031">+5.65%</td>
+          <td class="num" style="color:#d63031">+11.10%</td>
+          <td class="num" style="color:#d63031">+3.28%</td>
+        </tr><tr>
+          <td>电机Ⅱ</td>
+          <td class="num" style="color:#d63031">+0.48%</td>
+          <td class="num" style="color:#d63031">+7.90%</td>
+          <td class="num" style="color:#d63031">+16.35%</td>
+          <td class="num" style="color:#d63031">+0.32%</td>
+        </tr><tr>
+          <td>工程咨询服务Ⅱ</td>
+          <td class="num" style="color:#d63031">+0.47%</td>
+          <td class="num" style="color:#d63031">+7.49%</td>
+          <td class="num" style="color:#d63031">+16.89%</td>
+          <td class="num" style="color:#00b894">-3.58%</td>
+        </tr><tr>
+          <td>地面兵装Ⅱ</td>
+          <td class="num" style="color:#d63031">+0.44%</td>
+          <td class="num" style="color:#d63031">+1.53%</td>
+          <td class="num" style="color:#d63031">+3.95%</td>
+          <td class="num" style="color:#00b894">-3.35%</td>
+        </tr><tr>
+          <td>汽车服务</td>
+          <td class="num" style="color:#d63031">+0.43%</td>
+          <td class="num" style="color:#d63031">+1.50%</td>
+          <td class="num" style="color:#d63031">+8.27%</td>
+          <td class="num" style="color:#d63031">+3.09%</td>
+        </tr><tr>
+          <td>环境治理</td>
+          <td class="num" style="color:#d63031">+0.40%</td>
+          <td class="num" style="color:#d63031">+3.89%</td>
+          <td class="num" style="color:#d63031">+6.27%</td>
+          <td class="num" style="color:#d63031">+0.83%</td>
+        </tr><tr>
+          <td>饮料乳品</td>
+          <td class="num" style="color:#d63031">+0.39%</td>
+          <td class="num" style="color:#00b894">-1.66%</td>
+          <td class="num" style="color:#d63031">+2.17%</td>
+          <td class="num" style="color:#d63031">+5.72%</td>
+        </tr><tr>
+          <td>白酒Ⅱ</td>
+          <td class="num" style="color:#d63031">+0.33%</td>
+          <td class="num" style="color:#00b894">-3.26%</td>
+          <td class="num" style="color:#d63031">+2.09%</td>
+          <td class="num" style="color:#d63031">+8.08%</td>
+        </tr><tr>
+          <td>通信设备</td>
+          <td class="num" style="color:#d63031">+0.31%</td>
+          <td class="num" style="color:#d63031">+10.91%</td>
+          <td class="num" style="color:#00b894">-2.67%</td>
+          <td class="num" style="color:#00b894">-16.61%</td>
+        </tr><tr>
+          <td>化学原料</td>
+          <td class="num" style="color:#d63031">+0.31%</td>
+          <td class="num" style="color:#d63031">+3.57%</td>
+          <td class="num" style="color:#d63031">+5.05%</td>
+          <td class="num" style="color:#d63031">+4.46%</td>
+        </tr><tr>
+          <td>个护用品</td>
+          <td class="num" style="color:#d63031">+0.30%</td>
+          <td class="num" style="color:#00b894">-0.90%</td>
+          <td class="num" style="color:#d63031">+7.17%</td>
+          <td class="num" style="color:#d63031">+4.83%</td>
+        </tr><tr>
+          <td>冶钢原料</td>
+          <td class="num" style="color:#d63031">+0.27%</td>
+          <td class="num" style="color:#d63031">+1.73%</td>
+          <td class="num" style="color:#d63031">+5.03%</td>
+          <td class="num" style="color:#d63031">+3.10%</td>
+        </tr><tr>
+          <td>航海装备Ⅱ</td>
+          <td class="num" style="color:#d63031">+0.19%</td>
+          <td class="num" style="color:#d63031">+2.09%</td>
+          <td class="num" style="color:#d63031">+7.17%</td>
+          <td class="num" style="color:#00b894">-5.42%</td>
+        </tr><tr>
+          <td>出版</td>
+          <td class="num" style="color:#d63031">+0.16%</td>
+          <td class="num" style="color:#d63031">+0.20%</td>
+          <td class="num" style="color:#d63031">+11.65%</td>
+          <td class="num" style="color:#d63031">+5.45%</td>
+        </tr><tr>
+          <td>电网设备</td>
+          <td class="num" style="color:#d63031">+0.15%</td>
+          <td class="num" style="color:#d63031">+4.15%</td>
+          <td class="num" style="color:#d63031">+6.11%</td>
+          <td class="num" style="color:#d63031">+2.30%</td>
+        </tr><tr>
+          <td>化妆品</td>
+          <td class="num" style="color:#d63031">+0.12%</td>
+          <td class="num" style="color:#00b894">-1.15%</td>
+          <td class="num" style="color:#d63031">+6.68%</td>
+          <td class="num" style="color:#d63031">+2.23%</td>
+        </tr><tr>
+          <td>农产品加工</td>
+          <td class="num" style="color:#d63031">+0.08%</td>
+          <td class="num" style="color:#d63031">+3.31%</td>
+          <td class="num" style="color:#d63031">+10.05%</td>
+          <td class="num" style="color:#d63031">+7.74%</td>
+        </tr><tr>
+          <td>轨交设备Ⅱ</td>
+          <td class="num" style="color:#d63031">+0.05%</td>
+          <td class="num" style="color:#d63031">+0.21%</td>
+          <td class="num" style="color:#d63031">+3.97%</td>
+          <td class="num" style="color:#d63031">+2.98%</td>
+        </tr><tr>
+          <td>燃气Ⅱ</td>
+          <td class="num" style="color:#d63031">+0.05%</td>
+          <td class="num" style="color:#d63031">+4.46%</td>
+          <td class="num" style="color:#d63031">+6.81%</td>
+          <td class="num" style="color:#d63031">+5.84%</td>
+        </tr><tr>
+          <td>调味发酵品Ⅱ</td>
+          <td class="num" style="color:#d63031">+0.04%</td>
+          <td class="num" style="color:#00b894">-1.92%</td>
+          <td class="num" style="color:#d63031">+5.56%</td>
+          <td class="num" style="color:#d63031">+5.85%</td>
+        </tr><tr>
+          <td>服装家纺</td>
+          <td class="num" style="color:#d63031">+0.01%</td>
+          <td class="num" style="color:#d63031">+3.43%</td>
+          <td class="num" style="color:#d63031">+10.58%</td>
+          <td class="num" style="color:#00b894">-3.17%</td>
+        </tr><tr>
+          <td>饰品</td>
+          <td class="num" style="color:#00b894">-0.02%</td>
+          <td class="num" style="color:#d63031">+1.83%</td>
+          <td class="num" style="color:#d63031">+10.04%</td>
+          <td class="num" style="color:#d63031">+6.70%</td>
+        </tr><tr>
+          <td>养殖业</td>
+          <td class="num" style="color:#00b894">-0.04%</td>
+          <td class="num" style="color:#00b894">-1.63%</td>
+          <td class="num" style="color:#d63031">+1.12%</td>
+          <td class="num" style="color:#d63031">+0.50%</td>
+        </tr><tr>
+          <td>乘用车</td>
+          <td class="num" style="color:#00b894">-0.05%</td>
+          <td class="num" style="color:#00b894">-6.53%</td>
+          <td class="num" style="color:#d63031">+0.05%</td>
+          <td class="num" style="color:#d63031">+0.89%</td>
+        </tr><tr>
+          <td>互联网电商</td>
+          <td class="num" style="color:#00b894">-0.05%</td>
+          <td class="num" style="color:#d63031">+5.39%</td>
+          <td class="num" style="color:#d63031">+10.18%</td>
+          <td class="num" style="color:#d63031">+4.24%</td>
+        </tr><tr>
+          <td>旅游及景区</td>
+          <td class="num" style="color:#00b894">-0.05%</td>
+          <td class="num" style="color:#d63031">+0.01%</td>
+          <td class="num" style="color:#d63031">+8.36%</td>
+          <td class="num" style="color:#d63031">+3.88%</td>
+        </tr><tr>
+          <td>小家电</td>
+          <td class="num" style="color:#00b894">-0.06%</td>
+          <td class="num" style="color:#00b894">-1.42%</td>
+          <td class="num" style="color:#d63031">+8.90%</td>
+          <td class="num" style="color:#d63031">+4.43%</td>
+        </tr><tr>
+          <td>包装印刷</td>
+          <td class="num" style="color:#00b894">-0.08%</td>
+          <td class="num" style="color:#d63031">+6.56%</td>
+          <td class="num" style="color:#d63031">+10.03%</td>
+          <td class="num" style="color:#00b894">-1.32%</td>
+        </tr><tr>
+          <td>计算机设备</td>
+          <td class="num" style="color:#00b894">-0.09%</td>
+          <td class="num" style="color:#d63031">+4.94%</td>
+          <td class="num" style="color:#d63031">+3.62%</td>
+          <td class="num" style="color:#00b894">-5.24%</td>
+        </tr><tr>
+          <td>水泥</td>
+          <td class="num" style="color:#00b894">-0.10%</td>
+          <td class="num" style="color:#d63031">+0.82%</td>
+          <td class="num" style="color:#d63031">+5.32%</td>
+          <td class="num" style="color:#d63031">+4.88%</td>
+        </tr><tr>
+          <td>游戏Ⅱ</td>
+          <td class="num" style="color:#00b894">-0.11%</td>
+          <td class="num" style="color:#d63031">+2.22%</td>
+          <td class="num" style="color:#d63031">+15.14%</td>
+          <td class="num" style="color:#00b894">-0.45%</td>
+        </tr><tr>
+          <td>电力</td>
+          <td class="num" style="color:#00b894">-0.11%</td>
+          <td class="num" style="color:#00b894">-1.15%</td>
+          <td class="num" style="color:#d63031">+0.28%</td>
+          <td class="num" style="color:#d63031">+1.72%</td>
+        </tr><tr>
+          <td>家居用品</td>
+          <td class="num" style="color:#00b894">-0.15%</td>
+          <td class="num" style="color:#d63031">+3.51%</td>
+          <td class="num" style="color:#d63031">+9.52%</td>
+          <td class="num" style="color:#00b894">-0.69%</td>
+        </tr><tr>
+          <td>渔业</td>
+          <td class="num" style="color:#00b894">-0.15%</td>
+          <td class="num" style="color:#d63031">+2.59%</td>
+          <td class="num" style="color:#d63031">+9.92%</td>
+          <td class="num" style="color:#d63031">+8.45%</td>
+        </tr><tr>
+          <td>油服工程</td>
+          <td class="num" style="color:#00b894">-0.15%</td>
+          <td class="num" style="color:#00b894">-0.47%</td>
+          <td class="num" style="color:#d63031">+0.83%</td>
+          <td class="num" style="color:#d63031">+9.42%</td>
+        </tr><tr>
+          <td>证券Ⅱ</td>
+          <td class="num" style="color:#00b894">-0.16%</td>
+          <td class="num" style="color:#00b894">-1.06%</td>
+          <td class="num" style="color:#00b894">-0.46%</td>
+          <td class="num" style="color:#00b894">-1.65%</td>
+        </tr><tr>
+          <td>航运港口</td>
+          <td class="num" style="color:#00b894">-0.21%</td>
+          <td class="num" style="color:#d63031">+0.60%</td>
+          <td class="num" style="color:#d63031">+4.84%</td>
+          <td class="num" style="color:#d63031">+9.22%</td>
+        </tr><tr>
+          <td>非白酒</td>
+          <td class="num" style="color:#00b894">-0.21%</td>
+          <td class="num" style="color:#00b894">-2.82%</td>
+          <td class="num" style="color:#d63031">+4.56%</td>
+          <td class="num" style="color:#d63031">+6.50%</td>
+        </tr><tr>
+          <td>煤炭开采</td>
+          <td class="num" style="color:#00b894">-0.22%</td>
+          <td class="num" style="color:#d63031">+1.21%</td>
+          <td class="num" style="color:#d63031">+2.40%</td>
+          <td class="num" style="color:#d63031">+9.05%</td>
+        </tr><tr>
+          <td>特钢Ⅱ</td>
+          <td class="num" style="color:#00b894">-0.23%</td>
+          <td class="num" style="color:#00b894">-0.01%</td>
+          <td class="num" style="color:#d63031">+5.55%</td>
+          <td class="num" style="color:#d63031">+6.05%</td>
+        </tr><tr>
+          <td>装修建材</td>
+          <td class="num" style="color:#00b894">-0.30%</td>
+          <td class="num" style="color:#d63031">+1.61%</td>
+          <td class="num" style="color:#d63031">+6.96%</td>
+          <td class="num" style="color:#00b894">-1.23%</td>
+        </tr><tr>
+          <td>保险Ⅱ</td>
+          <td class="num" style="color:#00b894">-0.34%</td>
+          <td class="num" style="color:#00b894">-2.83%</td>
+          <td class="num" style="color:#00b894">-1.74%</td>
+          <td class="num" style="color:#d63031">+6.32%</td>
+        </tr><tr>
+          <td>教育</td>
+          <td class="num" style="color:#00b894">-0.34%</td>
+          <td class="num" style="color:#d63031">+3.83%</td>
+          <td class="num" style="color:#d63031">+23.76%</td>
+          <td class="num" style="color:#d63031">+14.37%</td>
+        </tr><tr>
+          <td>休闲食品</td>
+          <td class="num" style="color:#00b894">-0.37%</td>
+          <td class="num" style="color:#00b894">-1.29%</td>
+          <td class="num" style="color:#d63031">+10.17%</td>
+          <td class="num" style="color:#d63031">+2.66%</td>
+        </tr><tr>
+          <td>普钢</td>
+          <td class="num" style="color:#00b894">-0.40%</td>
+          <td class="num" style="color:#00b894">-1.67%</td>
+          <td class="num" style="color:#d63031">+2.82%</td>
+          <td class="num" style="color:#d63031">+5.30%</td>
+        </tr><tr>
+          <td>国有大型银行Ⅱ</td>
+          <td class="num" style="color:#00b894">-0.43%</td>
+          <td class="num" style="color:#00b894">-5.45%</td>
+          <td class="num" style="color:#00b894">-2.73%</td>
+          <td class="num" style="color:#d63031">+2.22%</td>
+        </tr><tr>
+          <td>影视院线</td>
+          <td class="num" style="color:#00b894">-0.44%</td>
+          <td class="num" style="color:#d63031">+2.80%</td>
+          <td class="num" style="color:#d63031">+11.95%</td>
+          <td class="num" style="color:#00b894">-2.30%</td>
+        </tr><tr>
+          <td>基础建设</td>
+          <td class="num" style="color:#00b894">-0.47%</td>
+          <td class="num" style="color:#00b894">-0.79%</td>
+          <td class="num" style="color:#d63031">+1.94%</td>
+          <td class="num" style="color:#d63031">+2.17%</td>
+        </tr><tr>
+          <td>房地产开发</td>
+          <td class="num" style="color:#00b894">-0.51%</td>
+          <td class="num" style="color:#d63031">+2.16%</td>
+          <td class="num" style="color:#d63031">+7.20%</td>
+          <td class="num" style="color:#00b894">-1.58%</td>
+        </tr><tr>
+          <td>数字媒体</td>
+          <td class="num" style="color:#00b894">-0.51%</td>
+          <td class="num" style="color:#d63031">+2.76%</td>
+          <td class="num" style="color:#d63031">+16.99%</td>
+          <td class="num" style="color:#d63031">+5.79%</td>
+        </tr><tr>
+          <td>贸易Ⅱ</td>
+          <td class="num" style="color:#00b894">-0.53%</td>
+          <td class="num" style="color:#d63031">+0.71%</td>
+          <td class="num" style="color:#d63031">+8.85%</td>
+          <td class="num" style="color:#d63031">+2.45%</td>
+        </tr><tr>
+          <td>厨卫电器</td>
+          <td class="num" style="color:#00b894">-0.54%</td>
+          <td class="num" style="color:#00b894">-0.35%</td>
+          <td class="num" style="color:#d63031">+8.04%</td>
+          <td class="num" style="color:#d63031">+0.86%</td>
+        </tr><tr>
+          <td>摩托车及其他</td>
+          <td class="num" style="color:#00b894">-0.60%</td>
+          <td class="num" style="color:#00b894">-1.04%</td>
+          <td class="num" style="color:#d63031">+5.86%</td>
+          <td class="num" style="color:#d63031">+9.65%</td>
+        </tr><tr>
+          <td>股份制银行Ⅱ</td>
+          <td class="num" style="color:#00b894">-0.60%</td>
+          <td class="num" style="color:#00b894">-2.88%</td>
+          <td class="num" style="color:#00b894">-0.35%</td>
+          <td class="num" style="color:#d63031">+4.78%</td>
+        </tr><tr>
+          <td>IT服务Ⅱ</td>
+          <td class="num" style="color:#00b894">-0.61%</td>
+          <td class="num" style="color:#d63031">+6.13%</td>
+          <td class="num" style="color:#d63031">+11.13%</td>
+          <td class="num" style="color:#00b894">-0.61%</td>
+        </tr><tr>
+          <td>一般零售</td>
+          <td class="num" style="color:#00b894">-0.63%</td>
+          <td class="num" style="color:#00b894">-1.17%</td>
+          <td class="num" style="color:#d63031">+8.22%</td>
+          <td class="num" style="color:#d63031">+4.32%</td>
+        </tr><tr>
+          <td>造纸</td>
+          <td class="num" style="color:#00b894">-0.63%</td>
+          <td class="num" style="color:#00b894">-0.02%</td>
+          <td class="num" style="color:#d63031">+4.45%</td>
+          <td class="num" style="color:#d63031">+1.87%</td>
+        </tr><tr>
+          <td>食品加工</td>
+          <td class="num" style="color:#00b894">-0.64%</td>
+          <td class="num" style="color:#00b894">-2.24%</td>
+          <td class="num" style="color:#d63031">+2.26%</td>
+          <td class="num" style="color:#d63031">+2.61%</td>
+        </tr><tr>
+          <td>房地产服务</td>
+          <td class="num" style="color:#00b894">-0.65%</td>
+          <td class="num" style="color:#d63031">+0.95%</td>
+          <td class="num" style="color:#d63031">+7.69%</td>
+          <td class="num" style="color:#d63031">+3.83%</td>
+        </tr><tr>
+          <td>种植业</td>
+          <td class="num" style="color:#00b894">-0.71%</td>
+          <td class="num" style="color:#d63031">+2.78%</td>
+          <td class="num" style="color:#d63031">+8.98%</td>
+          <td class="num" style="color:#d63031">+7.11%</td>
+        </tr><tr>
+          <td>物流</td>
+          <td class="num" style="color:#00b894">-0.74%</td>
+          <td class="num" style="color:#00b894">-1.55%</td>
+          <td class="num" style="color:#d63031">+3.50%</td>
+          <td class="num" style="color:#d63031">+2.67%</td>
+        </tr><tr>
+          <td>工程机械</td>
+          <td class="num" style="color:#00b894">-0.76%</td>
+          <td class="num" style="color:#00b894">-3.43%</td>
+          <td class="num" style="color:#00b894">-0.18%</td>
+          <td class="num" style="color:#d63031">+0.34%</td>
+        </tr><tr>
+          <td>铁路公路</td>
+          <td class="num" style="color:#00b894">-0.83%</td>
+          <td class="num" style="color:#00b894">-2.28%</td>
+          <td class="num" style="color:#d63031">+0.19%</td>
+          <td class="num" style="color:#d63031">+3.38%</td>
+        </tr><tr>
+          <td>装修装饰Ⅱ</td>
+          <td class="num" style="color:#00b894">-0.84%</td>
+          <td class="num" style="color:#d63031">+6.02%</td>
+          <td class="num" style="color:#d63031">+10.22%</td>
+          <td class="num" style="color:#00b894">-6.61%</td>
+        </tr><tr>
+          <td>酒店餐饮</td>
+          <td class="num" style="color:#00b894">-0.86%</td>
+          <td class="num" style="color:#00b894">-2.54%</td>
+          <td class="num" style="color:#d63031">+8.97%</td>
+          <td class="num" style="color:#d63031">+7.29%</td>
+        </tr><tr>
+          <td>纺织制造</td>
+          <td class="num" style="color:#00b894">-0.86%</td>
+          <td class="num" style="color:#d63031">+2.79%</td>
+          <td class="num" style="color:#d63031">+7.57%</td>
+          <td class="num" style="color:#d63031">+4.68%</td>
+        </tr><tr>
+          <td>城商行Ⅱ</td>
+          <td class="num" style="color:#00b894">-0.88%</td>
+          <td class="num" style="color:#00b894">-2.71%</td>
+          <td class="num" style="color:#00b894">-0.27%</td>
+          <td class="num" style="color:#d63031">+3.67%</td>
+        </tr><tr>
+          <td>电视广播Ⅱ</td>
+          <td class="num" style="color:#00b894">-0.91%</td>
+          <td class="num" style="color:#d63031">+0.19%</td>
+          <td class="num" style="color:#d63031">+8.69%</td>
+          <td class="num" style="color:#d63031">+4.90%</td>
+        </tr><tr>
+          <td>商用车</td>
+          <td class="num" style="color:#00b894">-0.92%</td>
+          <td class="num" style="color:#00b894">-4.34%</td>
+          <td class="num" style="color:#d63031">+6.90%</td>
+          <td class="num" style="color:#d63031">+3.67%</td>
+        </tr><tr>
+          <td>软件开发</td>
+          <td class="num" style="color:#00b894">-0.96%</td>
+          <td class="num" style="color:#d63031">+3.95%</td>
+          <td class="num" style="color:#d63031">+16.25%</td>
+          <td class="num" style="color:#d63031">+5.13%</td>
+        </tr><tr>
+          <td>航空机场</td>
+          <td class="num" style="color:#00b894">-1.00%</td>
+          <td class="num" style="color:#00b894">-2.46%</td>
+          <td class="num" style="color:#d63031">+2.06%</td>
+          <td class="num" style="color:#d63031">+1.39%</td>
+        </tr><tr>
+          <td>多元金融</td>
+          <td class="num" style="color:#00b894">-1.05%</td>
+          <td class="num" style="color:#00b894">-1.35%</td>
+          <td class="num" style="color:#d63031">+5.12%</td>
+          <td class="num" style="color:#d63031">+1.74%</td>
+        </tr><tr>
+          <td>通信服务</td>
+          <td class="num" style="color:#00b894">-1.06%</td>
+          <td class="num" style="color:#d63031">+2.40%</td>
+          <td class="num" style="color:#d63031">+5.12%</td>
+          <td class="num" style="color:#d63031">+0.78%</td>
+        </tr><tr>
+          <td>专业连锁Ⅱ</td>
+          <td class="num" style="color:#00b894">-1.07%</td>
+          <td class="num" style="color:#00b894">-1.56%</td>
+          <td class="num" style="color:#d63031">+7.99%</td>
+          <td class="num" style="color:#d63031">+7.55%</td>
+        </tr><tr>
+          <td>房屋建设Ⅱ</td>
+          <td class="num" style="color:#00b894">-1.12%</td>
+          <td class="num" style="color:#00b894">-2.56%</td>
+          <td class="num" style="color:#00b894">-0.88%</td>
+          <td class="num" style="color:#00b894">-0.68%</td>
+        </tr><tr>
+          <td>农商行Ⅱ</td>
+          <td class="num" style="color:#00b894">-1.13%</td>
+          <td class="num" style="color:#00b894">-4.33%</td>
+          <td class="num" style="color:#00b894">-0.10%</td>
+          <td class="num" style="color:#d63031">+4.73%</td>
+        </tr><tr>
+          <td>饲料</td>
+          <td class="num" style="color:#00b894">-1.32%</td>
+          <td class="num" style="color:#00b894">-3.23%</td>
+          <td class="num" style="color:#d63031">+1.37%</td>
+          <td class="num" style="color:#d63031">+0.48%</td>
+        </tr><tr>
+          <td>黑色家电</td>
+          <td class="num" style="color:#00b894">-1.33%</td>
+          <td class="num" style="color:#d63031">+0.05%</td>
+          <td class="num" style="color:#d63031">+3.21%</td>
+          <td class="num" style="color:#00b894">-8.46%</td>
+        </tr><tr>
+          <td>白色家电</td>
+          <td class="num" style="color:#00b894">-1.51%</td>
+          <td class="num" style="color:#00b894">-4.74%</td>
+          <td class="num" style="color:#00b894">-0.55%</td>
+          <td class="num" style="color:#d63031">+5.60%</td>
+        </tr><tr>
+          <td>焦炭Ⅱ</td>
+          <td class="num" style="color:#00b894">-2.35%</td>
+          <td class="num" style="color:#d63031">+0.44%</td>
+          <td class="num" style="color:#d63031">+4.34%</td>
+          <td class="num" style="color:#d63031">+4.93%</td>
+        </tr></tbody>
+    </table>
+    </div>
+    <div class="source-note">数据来源：申万宏源行业分类（westock-data industry_list_sw1 / sw2）| 截至 2026-08-07 15:00</div>
+  </div>
+<div class="disclaimer">
+    <strong>免责声明：</strong>本报告基于公开数据整理，仅供复盘参考，不构成任何投资建议。股市有风险，投资需谨慎。报告中的分析观点仅代表作者基于当前数据的判断，不构成对未来走势的承诺。
+  </div>
+  </div>
+
+<script>
+function attachSort(table) {
+  var ths = table.querySelectorAll('th.sortable');
+  ths.forEach(function(th) {
+    th.addEventListener('click', function() {
+      var actualIdx = Array.prototype.indexOf.call(th.parentNode.children, th);
+      var tbody = table.querySelector('tbody'); var rows = Array.from(tbody.querySelectorAll('tr'));
+      var isDesc = th.classList.contains('desc');
+      var forceText = th.classList.contains('sort-text');
+      ths.forEach(function(t) { t.classList.remove('asc'); t.classList.remove('desc'); });
+      th.classList.add(isDesc ? 'asc' : 'desc');
+      var dir = isDesc ? 1 : -1;
+      rows.sort(function(a, b) {
+        var ta = a.cells[actualIdx].textContent.trim();
+        var tb = b.cells[actualIdx].textContent.trim();
+        if (!forceText) {
+          var aMiss = (ta === '-' || ta === ''), bMiss = (tb === '-' || tb === '');
+          if (aMiss || bMiss) {
+            if (aMiss && bMiss) return 0;
+            if (aMiss) return 1;
+            return -1;
+          }
+          var na = parseFloat(ta.replace(/[^0-9.\-]/g, '')), nb = parseFloat(tb.replace(/[^0-9.\-]/g, ''));
+          if (!isNaN(na) && !isNaN(nb)) return (na - nb) * dir;
+        }
+        return ta.localeCompare(tb) * dir;
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+    });
+  });
+}
+document.querySelectorAll('table').forEach(function(t) { if (t.querySelector('th.sortable')) attachSort(t); });
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d52455f7b9ae74571f4728091b9beaab";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+</html>
