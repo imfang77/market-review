@@ -136,13 +136,13 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   .header { padding: 16px 56px; }
   .fp-search input { width: 100%; }
   .fp-row { gap: 6px; }
-  /* 自定义模式：三个框保持一行（空间不足可横向滚动） */
+  /* 自定义模式：两行均固定为同一组三列宽度，第二行与第一行逐列对齐；空间不足时两行各自横向滚动 */
   #custom-row { gap: 6px; }
-  .custom-line { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
-  .custom-line .fp-seg { flex: 0 0 auto; }
-  .custom-line .fp-seg > span:first-child { font-size: 11px; }
-  .custom-line .fp-seg input { width: 36px; height: 26px; font-size: 12px; }
-  .custom-line .fp-seg select { font-size: 12px; }
+  #custom-row .custom-line { display: grid !important; grid-template-columns: repeat(3, 132px); width: 100% !important; gap: 6px !important; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+  #custom-row .custom-line .fp-seg { width: 132px; min-width: 132px; }
+  #custom-row .custom-line .fp-seg > span:first-child { font-size: 11px; }
+  #custom-row .custom-line .fp-seg input { width: 36px; height: 26px; font-size: 12px; }
+  #custom-row .custom-line .fp-seg select { font-size: 12px; }
   /* 查询框撑满一整行 */
   #query-row .fp-search { flex: 1 1 100%; }
   #query-row .fp-search input { width: 100%; }
@@ -258,7 +258,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
       <div id="rpsCtl" style="display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap;font-size:13px"></div>
       <div id="rpsChart" style="width:100%;height:360px"></div>
       <div id="rpsNow" style="margin-top:12px;font-size:13px;line-height:1.5"></div>
-      <div style="margin-top:8px;font-size:12px;color:#868e96">红色 = 当日 板块RPS ≥ 90 的点；仅当相邻两日均 ≥ 90 时，两点之间的连线才为红色（孤立红点其与前后日的连线保持原色）。历史曲线由每日横截面排名回溯计算，可切换至 12个月。勾选上方复选框可显隐对应曲线。</div>
+      <div style="margin-top:8px;font-size:12px;color:#868e96">相邻两日的板块RPS均 ≥ 90 时，两点之间显示红色线段；仅单个日期 ≥ 90 时，才凸显为红色点，前后连线保持该周期原色。历史曲线由每日横截面排名回溯计算，可切换至 12个月。勾选上方复选框可显隐对应曲线。</div>
     </div>
   </div>
 
@@ -644,12 +644,25 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     var dates = win.map(function (h) { return h[0]; });
     var mk = function (idx, name, color) {
       var arr = win.map(function (h) { return h[idx]; });
-      // 红色规则：当日 RPS>=90 → 该点为红色；仅当相邻两日都>=90 时，两点之间的连线才为红色。
-      // connectNulls:false 保证"孤立红点"不与前后红点连线（T-1 与 T+1 均<90 时，连线保持原色）。
-      var hot = arr.map(function (v) { return (v != null && v >= 90) ? v : null; });
+      /*
+       * 红线：仅连接相邻两个均 >=90 的日期。
+       * 红点：仅标记孤立的 >=90 日期（左右相邻日期均 <90 或不存在）。
+       * 因此连续红区间只显示红色线段；孤立红值只显示红色点，前后连线仍保持该周期原色。
+       */
+      var hotSegments = arr.map(function (v, i) {
+        var prevHot = i > 0 && arr[i - 1] != null && arr[i - 1] >= 90;
+        var nextHot = i < arr.length - 1 && arr[i + 1] != null && arr[i + 1] >= 90;
+        return (v != null && v >= 90 && (prevHot || nextHot)) ? v : null;
+      });
+      var singleHot = arr.map(function (v, i) {
+        var prevHot = i > 0 && arr[i - 1] != null && arr[i - 1] >= 90;
+        var nextHot = i < arr.length - 1 && arr[i + 1] != null && arr[i + 1] >= 90;
+        return (v != null && v >= 90 && !prevHot && !nextHot) ? v : null;
+      });
       return [
         { name: name, type: "line", data: arr, symbol: "none", connectNulls: true, lineStyle: { width: 1.6, color: color }, itemStyle: { color: color }, z: 2 },
-        { name: name + "-hot", type: "line", data: hot, symbol: "circle", symbolSize: 6, connectNulls: false, lineStyle: { width: 2.8, color: "#d63031" }, itemStyle: { color: "#d63031" }, z: 3, tooltip: { show: false } }
+        { name: name + "-hot", type: "line", data: hotSegments, symbol: "none", connectNulls: false, lineStyle: { width: 2.8, color: "#d63031" }, z: 3, tooltip: { show: false } },
+        { name: name + "-single", type: "line", data: singleHot, symbol: "circle", symbolSize: 7, showSymbol: true, connectNulls: false, lineStyle: { width: 0, color: "transparent" }, itemStyle: { color: "#d63031" }, z: 4, tooltip: { show: false } }
       ];
     };
     var series = [];
