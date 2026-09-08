@@ -191,6 +191,10 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         <span class="fp-seg"><span>板块RPS5</span><select id="c5op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c5" type="number" value="85"></span>
         <span class="fp-seg"><span>10</span><select id="c10op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c10" type="number" value="85"></span>
         <span class="fp-seg"><span>20</span><select id="c20op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c20" type="number" value="85"></span>
+        <span class="fp-seg"><span>60</span><select id="c60op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c60" type="number" value="85"></span>
+        <span class="fp-seg"><span>120</span><select id="c120op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c120" type="number" value="85"></span>
+        <span class="fp-seg"><span>240</span><select id="c240op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c240" type="number" value="85"></span>
+        <span class="fp-seg"><span>250</span><select id="c250op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c250" type="number" value="85"></span>
       </div>
 
       <!-- 查询模式 -->
@@ -228,8 +232,8 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     <details class="desc-fold">
       <summary>板块RPS 口径与其他说明</summary>
       <div>
-        <p><b>板块RPS 定义</b>：把每个板块当作一只"股票"，按其 N 日收益率在 <b>通达信401个板块内</b> 做百分位排名（100 = 最强，≥ 90 为领先板块）。板块RPS5 / 板块RPS10 / 板块RPS20 与<b>个股RPS 是相互独立的两套体系，请勿混淆</b>。</p>
-        <p><b>两线红</b> = 板块RPS5 / 板块RPS10 / 板块RPS20 中<b>至少 2 条 ≥ 90</b>（RPS 到了 90 才叫转红，表中 ≥ 90 标红）。<b>两线转红日</b> = 该板块最近一次由"非两线红"跳变为"两线红"的交易日。<b>领先周期数</b> = 板块RPS5/10/20 中 ≥ 90 的个数（0~3）。</p>
+        <p><b>板块RPS 定义</b>：把每个板块当作一只"股票"，按其 N 日收益率在 <b>通达信401个板块内</b> 做百分位排名（100 = 最强，≥ 90 为领先板块）。板块RPS5 / 板块RPS10 / 板块RPS20 以及 <b>板块RPS60 / 板块RPS120 / 板块RPS240 / 板块RPS250</b> 与<b>个股RPS 是相互独立的两套体系，请勿混淆</b>。</p>
+        <p><b>两线红</b> = 板块RPS5 / 板块RPS10 / 板块RPS20 中<b>至少 2 条 ≥ 90</b>（RPS 到了 90 才叫转红，表中 ≥ 90 标红）。<b>两线转红日</b> = 该板块最近一次由"非两线红"跳变为"两线红"的交易日。<b>领先周期数</b> = 板块RPS5/10/20 中 ≥ 90 的个数（0~3）。<b>注意</b>：板块RPS60 / 120 / 240 / 250 <b>不参与两线红判定</b>，仅用于表格展示与「板块RPS自定义」筛选条件。</p>
         <p><b>涨跌幅列</b>：涨跌幅5日% / 10日% / 20日% 为板块对应周期的收益率（百分比数值，表头已含 %，单元格内为纯数字）。</p>
         <p><b>日期区间（已取消，由「N日内首次两线转红」替代）</b>：两线红默认按<b>最新交易日（页面顶部数据日期）</b>查看"当前两线红板块"（数值列始终为最新交易日快照，仅"是否两线红 / 两线转红日"随口径变化）。勾选「N日内首次两线转红」即按"两线转红日落在近 N 个交易日"筛选，对应交易日区间实时显示在勾选框右侧（例如 N=5 即最近 5 个交易日）；不再提供独立的起止日期选择器。</p>
       </div>
@@ -248,7 +252,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
       <div id="rpsRange" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap"></div>
       <div id="rpsChart" style="width:100%;height:360px"></div>
       <div id="rpsNow" style="margin-top:12px;font-size:13px;line-height:1.5"></div>
-      <div style="margin-top:8px;font-size:12px;color:#868e96">红色线段 = 该周期 板块RPS ≥ 90（通达信401个板块内前 10%）。历史曲线由每日横截面排名回溯计算，可切换至 6 个月（当前历史最长约半年）。</div>
+      <div style="margin-top:8px;font-size:12px;color:#868e96">红色线段 = 该周期 板块RPS ≥ 90（通达信401个板块内前 10%）。历史曲线由每日横截面排名回溯计算，可切换至 一年（当前历史最长约一年）。</div>
     </div>
   </div>
 
@@ -265,7 +269,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   <div class="footer">数据仅供参考，不构成投资建议 ｜ 板块RPS 由 880xxx 板块指数日K 计算</div>
 </div>
 
-<script src="_board_rps_data.js?v=20260901f"></script>
+<script src="_board_rps_data.js?v=20260908a"></script>
 <script>
 (function () {
   var D = window.BOARD_RPS || { anchor: "—", boards: {} };
@@ -298,6 +302,10 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     { k: "rps5", t: "板块RPS5", num: true, rps: true, hdrBlack: true },
     { k: "rps10", t: "板块RPS10", num: true, rps: true, hdrBlack: true },
     { k: "rps20", t: "板块RPS20", num: true, rps: true, hdrBlack: true },
+    { k: "rps60", t: "板块RPS60", num: true, rps: true, hdrBlack: true },
+    { k: "rps120", t: "板块RPS120", num: true, rps: true, hdrBlack: true },
+    { k: "rps240", t: "板块RPS240", num: true, rps: true, hdrBlack: true },
+    { k: "rps250", t: "板块RPS250", num: true, rps: true, hdrBlack: true },
     { k: "ret5", t: "涨跌幅5日%", num: true, sign: true, black: true },
     { k: "ret10", t: "涨跌幅10日%", num: true, sign: true, black: true },
     { k: "ret20", t: "涨跌幅20日%", num: true, sign: true, black: true },
@@ -312,8 +320,8 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   var state = {
     mode: "tri_red",
     triFresh: true, triFreshWin: 5,
-    c5: 85, c10: 85, c20: 85,
-    c5op: "ge", c10op: "ge", c20op: "ge",
+    c5: 85, c10: 85, c20: 85, c60: 85, c120: 85, c240: 85, c250: 85,
+    c5op: "ge", c10op: "ge", c20op: "ge", c60op: "ge", c120op: "ge", c240op: "ge", c250op: "ge",
     q: "",
     sortKey: "rps5", sortDir: "desc"
   };
@@ -355,7 +363,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     for (var i = 0; i < b.hist.length; i++) {
       if (b.hist[i][0] <= d) chosen = b.hist[i]; else break;
     }
-    return chosen ? chosen[4] === 1 : false;
+    return chosen ? chosen[chosen.length - 1] === 1 : false;
   }
   // 新鲜度：三线转红日 距 选定结束日 的交易日数 <= 窗口
   function isFreshAsOf(b, d) {
@@ -396,7 +404,11 @@ tr.three-yes:hover > td { background: #ffe8cc; }
       out = base.filter(function (b) {
         return cmpOp(b.rps5, state.c5op, state.c5)
             && cmpOp(b.rps10, state.c10op, state.c10)
-            && cmpOp(b.rps20, state.c20op, state.c20);
+            && cmpOp(b.rps20, state.c20op, state.c20)
+            && cmpOp(b.rps60, state.c60op, state.c60)
+            && cmpOp(b.rps120, state.c120op, state.c120)
+            && cmpOp(b.rps240, state.c240op, state.c240)
+            && cmpOp(b.rps250, state.c250op, state.c250);
       });
     } else { // query
       var q = state.q.trim().toLowerCase();
@@ -505,9 +517,17 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   $("c5").oninput = function () { state.c5 = parseFloat(this.value) || 0; page = 1; renderBody(); };
   $("c10").oninput = function () { state.c10 = parseFloat(this.value) || 0; page = 1; renderBody(); };
   $("c20").oninput = function () { state.c20 = parseFloat(this.value) || 0; page = 1; renderBody(); };
+  $("c60").oninput = function () { state.c60 = parseFloat(this.value) || 0; page = 1; renderBody(); };
+  $("c120").oninput = function () { state.c120 = parseFloat(this.value) || 0; page = 1; renderBody(); };
+  $("c240").oninput = function () { state.c240 = parseFloat(this.value) || 0; page = 1; renderBody(); };
+  $("c250").oninput = function () { state.c250 = parseFloat(this.value) || 0; page = 1; renderBody(); };
   $("c5op").onchange = function () { state.c5op = this.value; page = 1; renderBody(); };
   $("c10op").onchange = function () { state.c10op = this.value; page = 1; renderBody(); };
   $("c20op").onchange = function () { state.c20op = this.value; page = 1; renderBody(); };
+  $("c60op").onchange = function () { state.c60op = this.value; page = 1; renderBody(); };
+  $("c120op").onchange = function () { state.c120op = this.value; page = 1; renderBody(); };
+  $("c240op").onchange = function () { state.c240op = this.value; page = 1; renderBody(); };
+  $("c250op").onchange = function () { state.c250op = this.value; page = 1; renderBody(); };
   $("q").oninput = function () { state.q = this.value; page = 1; renderBody(); };
   var prev = $("sr-prev"), next = $("sr-next");
   if (prev) prev.onclick = function () { page--; renderBody(); };
@@ -516,14 +536,14 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   $("fp-reset").onclick = function () {
     state.mode = "tri_red";
     state.triFresh = true; state.triFreshWin = 5;
-    state.c5 = 85; state.c10 = 85; state.c20 = 85;
-    state.c5op = "ge"; state.c10op = "ge"; state.c20op = "ge";
+    state.c5 = 85; state.c10 = 85; state.c20 = 85; state.c60 = 85; state.c120 = 85; state.c240 = 85; state.c250 = 85;
+    state.c5op = "ge"; state.c10op = "ge"; state.c20op = "ge"; state.c60op = "ge"; state.c120op = "ge"; state.c240op = "ge"; state.c250op = "ge";
     state.q = "";
     state.sortKey = "rps5"; state.sortDir = "desc";
     $("fp-plan").value = "tri_red";
     $("tri-fresh").checked = true; $("tri-fresh-win").value = 5; updateFreshRange();
-    $("c5").value = 85; $("c10").value = 85; $("c20").value = 85;
-    $("c5op").value = "ge"; $("c10op").value = "ge"; $("c20op").value = "ge";
+    $("c5").value = 85; $("c10").value = 85; $("c20").value = 85; $("c60").value = 85; $("c120").value = 85; $("c240").value = 85; $("c250").value = 85;
+    $("c5op").value = "ge"; $("c10op").value = "ge"; $("c20op").value = "ge"; $("c60op").value = "ge"; $("c120op").value = "ge"; $("c240op").value = "ge"; $("c250op").value = "ge";
     $("q").value = "";
     page = 1; applyMode(); renderHead(); renderBody();
   };
@@ -560,7 +580,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     document.getElementById("rpsModal").style.display = "flex";
     var rg = document.getElementById("rpsRange");
     if (rg && !rg.getAttribute("data-init")) {
-      [[20, "1个月"], [60, "3个月"], [120, "6个月"]].forEach(function (o) {
+      [[20, "1个月"], [60, "3个月"], [120, "6个月"], [250, "一年"]].forEach(function (o) {
         var btn = document.createElement("button");
         btn.setAttribute("data-d", o[0]); btn.textContent = o[1];
         btn.style.cssText = "padding:5px 12px;border:1px solid #ced4da;border-radius:6px;background:#fff;color:#1a1a2e;font-size:13px;cursor:pointer";
@@ -594,17 +614,19 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     if (!boardChart) boardChart = echarts.init(box);
     boardChart.setOption({
       tooltip: { trigger: "axis", axisPointer: { type: "cross" }, formatter: function (ps) { var h = ps[0].axisValue + "<br/>"; ps.forEach(function (o) { if (o.seriesName.indexOf("-hot") < 0 && o.value != null) h += o.marker + o.seriesName + "：" + o.value + "<br/>"; }); return h; } },
-      legend: { data: ["板块RPS5", "板块RPS10", "板块RPS20"], top: 0, textStyle: { fontSize: 12 } },
+      legend: { data: ["板块RPS5", "板块RPS10", "板块RPS20", "板块RPS60", "板块RPS120", "板块RPS240"], top: 0, textStyle: { fontSize: 12 } },
       grid: { left: 46, right: 18, top: 40, bottom: 38 },
       xAxis: { type: "category", data: dates, boundaryGap: false, axisLabel: { fontSize: 10, color: "#868e96", formatter: function (v) { return String(v).slice(5); } } },
       yAxis: { type: "value", min: 0, max: 100, axisLabel: { fontSize: 11, color: "#868e96" }, splitLine: { lineStyle: { color: "#e9ecef" } } },
       series: mk(1, "板块RPS5", "#4263eb").concat(mk(2, "板块RPS10", "#0ca678")).concat(mk(3, "板块RPS20", "#f59f00"))
+        .concat(mk(4, "板块RPS60", "#e8590c")).concat(mk(5, "板块RPS120", "#9c36b5")).concat(mk(6, "板块RPS240", "#1098ad"))
     }, true);
     boardChart.resize();
     var last = b.hist[b.hist.length - 1];
+    var nowPairs = [["板块RPS5", 1], ["板块RPS10", 2], ["板块RPS20", 3], ["板块RPS60", 4], ["板块RPS120", 5], ["板块RPS240", 6]];
     var html = '<div class="rps-now-row">';
-    ["板块RPS5", "板块RPS10", "板块RPS20"].forEach(function (nm, i) {
-      var v = last[i + 1];
+    nowPairs.forEach(function (pair) {
+      var nm = pair[0], v = last[pair[1]];
       var col = (v != null && v >= 90) ? "#d63031" : "#1a1a2e";
       html += "<span>" + nm + "：" + (v == null ? "—" : '<b style="color:' + col + '">' + v + "</b>") + "</span> ";
     });
