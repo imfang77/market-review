@@ -137,11 +137,12 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   .fp-search input { width: 100%; }
   .fp-row { gap: 6px; }
   /* 自定义模式：三个框保持一行（空间不足可横向滚动） */
-  #custom-row { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
-  #custom-row .fp-seg { flex: 0 0 auto; }
-  #custom-row .fp-seg > span:first-child { font-size: 11px; }
-  #custom-row .fp-seg input { width: 36px; height: 26px; font-size: 12px; }
-  #custom-row .fp-seg select { font-size: 12px; }
+  #custom-row { gap: 6px; }
+  .custom-line { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+  .custom-line .fp-seg { flex: 0 0 auto; }
+  .custom-line .fp-seg > span:first-child { font-size: 11px; }
+  .custom-line .fp-seg input { width: 36px; height: 26px; font-size: 12px; }
+  .custom-line .fp-seg select { font-size: 12px; }
   /* 查询框撑满一整行 */
   #query-row .fp-search { flex: 1 1 100%; }
   #query-row .fp-search input { width: 100%; }
@@ -188,14 +189,17 @@ tr.three-yes:hover > td { background: #ffe8cc; }
       </div>
 
       <!-- 自定义模式 -->
-      <div class="fp-row fp-row2 fp-hidden" id="custom-row">
-        <span class="fp-seg"><span>板块RPS5</span><select id="c5op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c5" type="number" value="85"></span>
-        <span class="fp-seg"><span>10</span><select id="c10op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c10" type="number" value="85"></span>
-        <span class="fp-seg"><span>20</span><select id="c20op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c20" type="number" value="85"></span>
-        <span class="fp-seg"><span>60</span><select id="c60op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c60" type="number" value="85"></span>
-        <span class="fp-seg"><span>120</span><select id="c120op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c120" type="number" value="85"></span>
-        <span class="fp-seg"><span>240</span><select id="c240op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c240" type="number" value="85"></span>
-        <span class="fp-seg"><span>250</span><select id="c250op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c250" type="number" value="85"></span>
+      <div class="fp-row fp-row2 fp-hidden" id="custom-row" style="flex-direction:column;align-items:flex-start;gap:6px">
+        <div class="custom-line" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+          <span class="fp-seg"><span>板块RPS5</span><select id="c5op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c5" type="number" value="85"></span>
+          <span class="fp-seg"><span>10</span><select id="c10op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c10" type="number" value="85"></span>
+          <span class="fp-seg"><span>20</span><select id="c20op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c20" type="number" value="85"></span>
+        </div>
+        <div class="custom-line" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:6px;border-top:1px dashed #e9ecef;width:100%">
+          <span class="fp-seg"><span>60</span><select id="c60op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c60" type="number" value="60"></span>
+          <span class="fp-seg"><span>120</span><select id="c120op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c120" type="number" value="60"></span>
+          <span class="fp-seg"><span>240</span><select id="c240op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c240" type="number" value="60"></span>
+        </div>
       </div>
 
       <!-- 查询模式 -->
@@ -254,7 +258,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
       <div id="rpsCtl" style="display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap;font-size:13px"></div>
       <div id="rpsChart" style="width:100%;height:360px"></div>
       <div id="rpsNow" style="margin-top:12px;font-size:13px;line-height:1.5"></div>
-      <div style="margin-top:8px;font-size:12px;color:#868e96">红色线段 = 该周期 板块RPS ≥ 90（通达信401个板块内前 10%）。历史曲线由每日横截面排名回溯计算，可切换至 12个月（当前历史最长约一年）。勾选上方复选框可显隐对应曲线。</div>
+      <div style="margin-top:8px;font-size:12px;color:#868e96">红色 = 当日 板块RPS ≥ 90 的点；仅当相邻两日均 ≥ 90 时，两点之间的连线才为红色（孤立红点其与前后日的连线保持原色）。历史曲线由每日横截面排名回溯计算，可切换至 12个月。勾选上方复选框可显隐对应曲线。</div>
     </div>
   </div>
 
@@ -324,8 +328,8 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   var state = {
     mode: "tri_red",
     triFresh: true, triFreshWin: 5,
-    c5: 85, c10: 85, c20: 85, c60: 85, c120: 85, c240: 85, c250: 85,
-    c5op: "ge", c10op: "ge", c20op: "ge", c60op: "ge", c120op: "ge", c240op: "ge", c250op: "ge",
+    c5: 85, c10: 85, c20: 85, c60: 60, c120: 60, c240: 60,
+    c5op: "ge", c10op: "ge", c20op: "ge", c60op: "ge", c120op: "ge", c240op: "ge",
     q: "",
     sortKey: "rps5", sortDir: "desc"
   };
@@ -411,8 +415,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
             && cmpOp(b.rps20, state.c20op, state.c20)
             && cmpOp(b.rps60, state.c60op, state.c60)
             && cmpOp(b.rps120, state.c120op, state.c120)
-            && cmpOp(b.rps240, state.c240op, state.c240)
-            && cmpOp(b.rps250, state.c250op, state.c250);
+            && cmpOp(b.rps240, state.c240op, state.c240);
       });
     } else { // query
       var q = state.q.trim().toLowerCase();
@@ -524,14 +527,12 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   $("c60").oninput = function () { state.c60 = parseFloat(this.value) || 0; page = 1; renderBody(); };
   $("c120").oninput = function () { state.c120 = parseFloat(this.value) || 0; page = 1; renderBody(); };
   $("c240").oninput = function () { state.c240 = parseFloat(this.value) || 0; page = 1; renderBody(); };
-  $("c250").oninput = function () { state.c250 = parseFloat(this.value) || 0; page = 1; renderBody(); };
   $("c5op").onchange = function () { state.c5op = this.value; page = 1; renderBody(); };
   $("c10op").onchange = function () { state.c10op = this.value; page = 1; renderBody(); };
   $("c20op").onchange = function () { state.c20op = this.value; page = 1; renderBody(); };
   $("c60op").onchange = function () { state.c60op = this.value; page = 1; renderBody(); };
   $("c120op").onchange = function () { state.c120op = this.value; page = 1; renderBody(); };
   $("c240op").onchange = function () { state.c240op = this.value; page = 1; renderBody(); };
-  $("c250op").onchange = function () { state.c250op = this.value; page = 1; renderBody(); };
   $("q").oninput = function () { state.q = this.value; page = 1; renderBody(); };
   var prev = $("sr-prev"), next = $("sr-next");
   if (prev) prev.onclick = function () { page--; renderBody(); };
@@ -540,14 +541,14 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   $("fp-reset").onclick = function () {
     state.mode = "tri_red";
     state.triFresh = true; state.triFreshWin = 5;
-    state.c5 = 85; state.c10 = 85; state.c20 = 85; state.c60 = 85; state.c120 = 85; state.c240 = 85; state.c250 = 85;
-    state.c5op = "ge"; state.c10op = "ge"; state.c20op = "ge"; state.c60op = "ge"; state.c120op = "ge"; state.c240op = "ge"; state.c250op = "ge";
+    state.c5 = 85; state.c10 = 85; state.c20 = 85; state.c60 = 60; state.c120 = 60; state.c240 = 60;
+    state.c5op = "ge"; state.c10op = "ge"; state.c20op = "ge"; state.c60op = "ge"; state.c120op = "ge"; state.c240op = "ge";
     state.q = "";
     state.sortKey = "rps5"; state.sortDir = "desc";
     $("fp-plan").value = "tri_red";
     $("tri-fresh").checked = true; $("tri-fresh-win").value = 5; updateFreshRange();
-    $("c5").value = 85; $("c10").value = 85; $("c20").value = 85; $("c60").value = 85; $("c120").value = 85; $("c240").value = 85; $("c250").value = 85;
-    $("c5op").value = "ge"; $("c10op").value = "ge"; $("c20op").value = "ge"; $("c60op").value = "ge"; $("c120op").value = "ge"; $("c240op").value = "ge"; $("c250op").value = "ge";
+    $("c5").value = 85; $("c10").value = 85; $("c20").value = 85; $("c60").value = 60; $("c120").value = 60; $("c240").value = 60;
+    $("c5op").value = "ge"; $("c10op").value = "ge"; $("c20op").value = "ge"; $("c60op").value = "ge"; $("c120op").value = "ge"; $("c240op").value = "ge";
     $("q").value = "";
     page = 1; applyMode(); renderHead(); renderBody();
   };
@@ -643,10 +644,12 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     var dates = win.map(function (h) { return h[0]; });
     var mk = function (idx, name, color) {
       var arr = win.map(function (h) { return h[idx]; });
+      // 红色规则：当日 RPS>=90 → 该点为红色；仅当相邻两日都>=90 时，两点之间的连线才为红色。
+      // connectNulls:false 保证"孤立红点"不与前后红点连线（T-1 与 T+1 均<90 时，连线保持原色）。
       var hot = arr.map(function (v) { return (v != null && v >= 90) ? v : null; });
       return [
         { name: name, type: "line", data: arr, symbol: "none", connectNulls: true, lineStyle: { width: 1.6, color: color }, itemStyle: { color: color }, z: 2 },
-        { name: name + "-hot", type: "line", data: hot, symbol: "none", connectNulls: true, lineStyle: { width: 2.8, color: "#d63031" }, itemStyle: { color: "#d63031" }, z: 3, tooltip: { show: false } }
+        { name: name + "-hot", type: "line", data: hot, symbol: "circle", symbolSize: 6, connectNulls: false, lineStyle: { width: 2.8, color: "#d63031" }, itemStyle: { color: "#d63031" }, z: 3, tooltip: { show: false } }
       ];
     };
     var series = [];
