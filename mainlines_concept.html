@@ -62,7 +62,7 @@
   <div class="header">
     <a class="back" href="index.html">&#8592; 返回</a>
     <h1>5-20日主线分析（按概念/题材）</h1>
-    <div class="subtitle">概念/题材（跨行业主题）分类口径 | 5日 / 10日 / 20日 主线研判 | 点击日期查看</div>
+    <div class="subtitle">更新至：<span id="upd-date">—</span>，点击日期查看</div>
   </div>
 
   <div class="container">
@@ -111,6 +111,8 @@
         listEl.innerHTML = '<div class="empty-state"><div class="icon">&#127919;</div><div>暂无概念/题材主线分析，等待自动生成</div></div>';
         return;
       }
+      var ud = document.getElementById('upd-date');
+      if (ud) ud.textContent = conceptReports[0].date;
 
       conceptReports.forEach(function(r) {
         var a = document.createElement('a');

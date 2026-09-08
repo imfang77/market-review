@@ -184,6 +184,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
       <!-- 两线红模式 -->
       <div class="fp-row fp-row2" id="tri-row">
         <label class="fp-check"><input type="checkbox" id="tri-fresh" checked> <input type="number" id="tri-fresh-win" class="fp-fresh-win" value="5" min="2" max="250"> 日内首次两线转红 <span class="fp-hint" id="fresh-range"></span></label>
+        <div class="fp-hint" style="margin-top:6px">注：<b>两线红 / 三线红</b>均特指 <b>板块RPS5、板块RPS10、板块RPS20</b>（其中≥90 的条数）；板块RPS60 / 120 / 240 / 250 <b>不参与两线红判定</b>，仅用于表格展示与「板块RPS自定义」筛选。</div>
       </div>
 
       <!-- 自定义模式 -->
@@ -250,9 +251,10 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         <button onclick="closeBoardRps()" style="border:none;background:#f1f3f5;font-size:19px;line-height:1;width:30px;height:30px;border-radius:6px;cursor:pointer;color:#495057">×</button>
       </div>
       <div id="rpsRange" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap"></div>
+      <div id="rpsCtl" style="display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap;font-size:13px"></div>
       <div id="rpsChart" style="width:100%;height:360px"></div>
       <div id="rpsNow" style="margin-top:12px;font-size:13px;line-height:1.5"></div>
-      <div style="margin-top:8px;font-size:12px;color:#868e96">红色线段 = 该周期 板块RPS ≥ 90（通达信401个板块内前 10%）。历史曲线由每日横截面排名回溯计算，可切换至 一年（当前历史最长约一年）。</div>
+      <div style="margin-top:8px;font-size:12px;color:#868e96">红色线段 = 该周期 板块RPS ≥ 90（通达信401个板块内前 10%）。历史曲线由每日横截面排名回溯计算，可切换至 12个月（当前历史最长约一年）。勾选上方复选框可显隐对应曲线。</div>
     </div>
   </div>
 
@@ -299,18 +301,20 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     { k: "code", t: "板块", num: false, sticky: true, merged: true },
     { k: "amount", t: "成交额(亿)", num: true },
     { k: "chg", t: "当日涨幅(%)", num: true, sign: true, black: true },
-    { k: "rps5", t: "板块RPS5", num: true, rps: true, hdrBlack: true },
-    { k: "rps10", t: "板块RPS10", num: true, rps: true, hdrBlack: true },
-    { k: "rps20", t: "板块RPS20", num: true, rps: true, hdrBlack: true },
-    { k: "rps60", t: "板块RPS60", num: true, rps: true, hdrBlack: true },
-    { k: "rps120", t: "板块RPS120", num: true, rps: true, hdrBlack: true },
-    { k: "rps240", t: "板块RPS240", num: true, rps: true, hdrBlack: true },
-    { k: "rps250", t: "板块RPS250", num: true, rps: true, hdrBlack: true },
+    { k: "rps5", t: "板块RPS5", num: true, rps: true },
+    { k: "rps10", t: "板块RPS10", num: true, rps: true },
+    { k: "rps20", t: "板块RPS20", num: true, rps: true },
+    { k: "rps60", t: "板块RPS60", num: true, rps: true },
+    { k: "rps120", t: "板块RPS120", num: true, rps: true },
+    { k: "rps240", t: "板块RPS240", num: true, rps: true },
     { k: "ret5", t: "涨跌幅5日%", num: true, sign: true, black: true },
     { k: "ret10", t: "涨跌幅10日%", num: true, sign: true, black: true },
     { k: "ret20", t: "涨跌幅20日%", num: true, sign: true, black: true },
+    { k: "ret60", t: "涨跌幅60日%", num: true, sign: true, black: true },
+    { k: "ret120", t: "涨跌幅120日%", num: true, sign: true, black: true },
+    { k: "ret240", t: "涨跌幅240日%", num: true, sign: true, black: true },
     { k: "three", t: "是否两<br>线红", num: false, bool: true, cls: "c-three" },
-    { k: "red_date", t: "三线转红日", num: false },
+    { k: "red_date", t: "两线转红日", num: false },
     { k: "lead", t: "领先周期<br>数", num: true, cls: "c-lead" },
     { k: "lg", t: "龙头个股", num: false, drill: "lead", cls: "c-drill", nosort: true },
     { k: "etfTop", t: "相关ETF", num: false, drill: "etf", cls: "c-drill", nosort: true }
@@ -572,15 +576,26 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 
   // 板块 RPS 下钻弹窗
   var boardCode = null, boardRpsDays = 20, boardChart = null;
+  var RPSDEFS = [
+    { idx: 1, name: "板块RPS5",   short: "5",   color: "#4263eb" },
+    { idx: 2, name: "板块RPS10",  short: "10",  color: "#0ca678" },
+    { idx: 3, name: "板块RPS20",  short: "20",  color: "#f59f00" },
+    { idx: 4, name: "板块RPS60",  short: "60",  color: "#e8590c" },
+    { idx: 5, name: "板块RPS120", short: "120", color: "#9c36b5" },
+    { idx: 6, name: "板块RPS240", short: "240", color: "#1098ad" }
+  ];
+  var RPS_DEFAULT_ON = { "板块RPS5": true, "板块RPS10": true, "板块RPS20": true, "板块RPS60": false, "板块RPS120": false, "板块RPS240": false };
+  var rpsVis = Object.assign({}, RPS_DEFAULT_ON);
   function openBoardRps(code, name) {
     boardCode = code;
     var b = BOARDS[code];
     if (!b || !b.hist || !b.hist.length) { alert("该板块暂无 RPS 历史数据"); return; }
+    rpsVis = Object.assign({}, RPS_DEFAULT_ON);
     document.getElementById("rpsTitle").textContent = code + " " + (name || "");
     document.getElementById("rpsModal").style.display = "flex";
     var rg = document.getElementById("rpsRange");
     if (rg && !rg.getAttribute("data-init")) {
-      [[20, "1个月"], [60, "3个月"], [120, "6个月"], [250, "一年"]].forEach(function (o) {
+      [[20, "1个月"], [60, "3个月"], [120, "6个月"], [250, "12个月"]].forEach(function (o) {
         var btn = document.createElement("button");
         btn.setAttribute("data-d", o[0]); btn.textContent = o[1];
         btn.style.cssText = "padding:5px 12px;border:1px solid #ced4da;border-radius:6px;background:#fff;color:#1a1a2e;font-size:13px;cursor:pointer";
@@ -588,6 +603,29 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         rg.appendChild(btn);
       });
       rg.setAttribute("data-init", "1");
+    }
+    var ctl = document.getElementById("rpsCtl");
+    if (ctl) {
+      if (!ctl.getAttribute("data-init")) {
+        RPSDEFS.forEach(function (d) {
+          var lab = document.createElement("label");
+          lab.style.cssText = "display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:13px";
+          var cb = document.createElement("input");
+          cb.type = "checkbox"; cb.setAttribute("data-name", d.name); cb.checked = !!RPS_DEFAULT_ON[d.name];
+          cb.style.cssText = "width:14px;height:14px;accent-color:" + d.color;
+          cb.onchange = function () { rpsVis[d.name] = this.checked; drawBoardChart(); };
+          var sp = document.createElement("span");
+          sp.textContent = (RPSDEFS.indexOf(d) === 0) ? d.name : d.short;
+          sp.style.color = d.color;
+          lab.appendChild(cb); lab.appendChild(sp);
+          ctl.appendChild(lab);
+        });
+        ctl.setAttribute("data-init", "1");
+      } else {
+        Array.prototype.forEach.call(ctl.querySelectorAll("input[type=checkbox]"), function (cb) {
+          cb.checked = !!RPS_DEFAULT_ON[cb.getAttribute("data-name")];
+        });
+      }
     }
     drawBoardChart();
   }
@@ -611,24 +649,25 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         { name: name + "-hot", type: "line", data: hot, symbol: "none", connectNulls: true, lineStyle: { width: 2.8, color: "#d63031" }, itemStyle: { color: "#d63031" }, z: 3, tooltip: { show: false } }
       ];
     };
+    var series = [];
+    RPSDEFS.forEach(function (d) { if (rpsVis[d.name]) series = series.concat(mk(d.idx, d.name, d.color)); });
     if (!boardChart) boardChart = echarts.init(box);
     boardChart.setOption({
       tooltip: { trigger: "axis", axisPointer: { type: "cross" }, formatter: function (ps) { var h = ps[0].axisValue + "<br/>"; ps.forEach(function (o) { if (o.seriesName.indexOf("-hot") < 0 && o.value != null) h += o.marker + o.seriesName + "：" + o.value + "<br/>"; }); return h; } },
-      legend: { data: ["板块RPS5", "板块RPS10", "板块RPS20", "板块RPS60", "板块RPS120", "板块RPS240"], top: 0, textStyle: { fontSize: 12 } },
+      legend: { show: false },
       grid: { left: 46, right: 18, top: 40, bottom: 38 },
       xAxis: { type: "category", data: dates, boundaryGap: false, axisLabel: { fontSize: 10, color: "#868e96", formatter: function (v) { return String(v).slice(5); } } },
       yAxis: { type: "value", min: 0, max: 100, axisLabel: { fontSize: 11, color: "#868e96" }, splitLine: { lineStyle: { color: "#e9ecef" } } },
-      series: mk(1, "板块RPS5", "#4263eb").concat(mk(2, "板块RPS10", "#0ca678")).concat(mk(3, "板块RPS20", "#f59f00"))
-        .concat(mk(4, "板块RPS60", "#e8590c")).concat(mk(5, "板块RPS120", "#9c36b5")).concat(mk(6, "板块RPS240", "#1098ad"))
+      series: series
     }, true);
     boardChart.resize();
     var last = b.hist[b.hist.length - 1];
-    var nowPairs = [["板块RPS5", 1], ["板块RPS10", 2], ["板块RPS20", 3], ["板块RPS60", 4], ["板块RPS120", 5], ["板块RPS240", 6]];
     var html = '<div class="rps-now-row">';
-    nowPairs.forEach(function (pair) {
-      var nm = pair[0], v = last[pair[1]];
+    RPSDEFS.forEach(function (d, i) {
+      var v = last[d.idx];
       var col = (v != null && v >= 90) ? "#d63031" : "#1a1a2e";
-      html += "<span>" + nm + "：" + (v == null ? "—" : '<b style="color:' + col + '">' + v + "</b>") + "</span> ";
+      var label = (i === 0) ? d.name : d.short;
+      html += "<span>" + label + "：" + (v == null ? "—" : '<b style="color:' + col + '">' + v + "</b>") + "</span> ";
     });
     html += "</div>";
     document.getElementById("rpsNow").innerHTML = html;
