@@ -136,13 +136,14 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   .header { padding: 16px 56px; }
   .fp-search input { width: 100%; }
   .fp-row { gap: 6px; }
-  /* 自定义模式：两行均固定为同一组三列宽度，第二行与第一行逐列对齐；空间不足时两行各自横向滚动 */
-  #custom-row { gap: 6px; }
-  #custom-row .custom-line { display: grid !important; grid-template-columns: repeat(3, 132px); width: 100% !important; gap: 6px !important; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
-  #custom-row .custom-line .fp-seg { width: 132px; min-width: 132px; }
+  /* 自定义模式：保留第一行原有的自然紧凑宽度；第二行按 5/10/20 对应列对齐 */
+  #custom-row { display: grid !important; grid-template-columns: max-content max-content max-content; grid-auto-flow: row; align-items: center; column-gap: 6px; row-gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  #custom-row .custom-line { display: contents !important; }
+  #custom-row .custom-line .fp-seg { box-sizing: border-box; width: max-content; min-width: max-content; }
   #custom-row .custom-line .fp-seg > span:first-child { font-size: 11px; }
   #custom-row .custom-line .fp-seg input { width: 36px; height: 26px; font-size: 12px; }
   #custom-row .custom-line .fp-seg select { font-size: 12px; }
+  #custom-row .custom-line:nth-child(2) .fp-seg { border-top: 1px dashed #e9ecef; border-radius: 0 0 6px 6px; }
   /* 查询框撑满一整行 */
   #query-row .fp-search { flex: 1 1 100%; }
   #query-row .fp-search input { width: 100%; }
@@ -185,7 +186,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
       <!-- 两线红模式 -->
       <div class="fp-row fp-row2" id="tri-row">
         <label class="fp-check"><input type="checkbox" id="tri-fresh" checked> <input type="number" id="tri-fresh-win" class="fp-fresh-win" value="5" min="2" max="250"> 日内首次两线转红 <span class="fp-hint" id="fresh-range"></span></label>
-        <div class="fp-hint" style="margin-top:6px">注：<b>两线红 / 三线红</b>均特指 <b>板块RPS5、板块RPS10、板块RPS20</b>（其中≥90 的条数）；板块RPS60 / 120 / 240 / 250 <b>不参与两线红判定</b>，仅用于表格展示与「板块RPS自定义」筛选。</div>
+        <div class="fp-hint" style="margin-top:6px">注：<b>两线红 / 三线红</b>均特指 <b>板块RPS5、板块RPS10、板块RPS20</b>（其中≥90 的条数）；板块RPS60 / 120 / 240 <b>不参与两线红判定</b>，仅用于表格展示与「板块RPS自定义」筛选。</div>
       </div>
 
       <!-- 自定义模式 -->
@@ -238,7 +239,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
       <summary>板块RPS 口径与其他说明</summary>
       <div>
         <p><b>板块RPS 定义</b>：把每个板块当作一只"股票"，按其 N 日收益率在 <b>通达信401个板块内</b> 做百分位排名（100 = 最强，≥ 90 为领先板块）。板块RPS5 / 板块RPS10 / 板块RPS20 以及 <b>板块RPS60 / 板块RPS120 / 板块RPS240 / 板块RPS250</b> 与<b>个股RPS 是相互独立的两套体系，请勿混淆</b>。</p>
-        <p><b>两线红</b> = 板块RPS5 / 板块RPS10 / 板块RPS20 中<b>至少 2 条 ≥ 90</b>（RPS 到了 90 才叫转红，表中 ≥ 90 标红）。<b>两线转红日</b> = 该板块最近一次由"非两线红"跳变为"两线红"的交易日。<b>领先周期数</b> = 板块RPS5/10/20 中 ≥ 90 的个数（0~3）。<b>注意</b>：板块RPS60 / 120 / 240 / 250 <b>不参与两线红判定</b>，仅用于表格展示与「板块RPS自定义」筛选条件。</p>
+        <p><b>两线红</b> = 板块RPS5 / 板块RPS10 / 板块RPS20 中<b>至少 2 条 ≥ 90</b>（RPS 到了 90 才叫转红，表中 ≥ 90 标红）。<b>两线转红日</b> = 该板块最近一次由"非两线红"跳变为"两线红"的交易日。<b>领先周期数</b> = 板块RPS5/10/20 中 ≥ 90 的个数（0~3）。<b>注意</b>：板块RPS60 / 120 / 240 <b>不参与两线红判定</b>，仅用于表格展示与「板块RPS自定义」筛选条件。</p>
         <p><b>涨跌幅列</b>：涨跌幅5日% / 10日% / 20日% 为板块对应周期的收益率（百分比数值，表头已含 %，单元格内为纯数字）。</p>
         <p><b>日期区间（已取消，由「N日内首次两线转红」替代）</b>：两线红默认按<b>最新交易日（页面顶部数据日期）</b>查看"当前两线红板块"（数值列始终为最新交易日快照，仅"是否两线红 / 两线转红日"随口径变化）。勾选「N日内首次两线转红」即按"两线转红日落在近 N 个交易日"筛选，对应交易日区间实时显示在勾选框右侧（例如 N=5 即最近 5 个交易日）；不再提供独立的起止日期选择器。</p>
       </div>
