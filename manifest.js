@@ -7,6 +7,18 @@
  */
 window.REPORTS = [
   {
+    "date": "2026-09-09",
+    "weekday": "周三",
+    "reviewFile": "review-20260909.html",
+    "reviewSummary": "沪指+0.28% 深成+0.15% 创业板-0.14% 科创-0.6% 涨跌1729:3369 中证全指+0.10% 成交2.10万亿 恐贪55中性偏贪婪",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口:技术面(G1趋势突破/G2业绩缺口/G4ETF五日均强) + 基本面(高盈利/高成长/高股息)",
+    "mainlineFile": "mainline-20260909.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260909.html",
+    "conceptSummary": "5日主线:共封装光模块(CPO)/网络游戏/5G概念｜10日主线:网络游戏/共封装光模块(CPO)/数字经济｜20日主线:共封装光模块(CPO)/黄金/液冷概念"
+  },
+  {
     "date": "2026-09-08",
     "weekday": "周二",
     "reviewFile": "review-20260908.html",
