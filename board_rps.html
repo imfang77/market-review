@@ -137,13 +137,13 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   .fp-search input { width: 100%; }
   .fp-row { gap: 6px; }
   /* 自定义模式：保留第一行原有的自然紧凑宽度；第二行按 5/10/20 对应列对齐 */
-  #custom-row { display: grid !important; grid-template-columns: max-content max-content max-content; grid-auto-flow: row; align-items: center; column-gap: 8px; row-gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  #custom-row { display: grid !important; grid-template-columns: max-content max-content max-content; grid-auto-flow: row; align-items: center; justify-content: start; column-gap: 8px; row-gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   #custom-row .custom-line { display: contents !important; }
   #custom-row .custom-line .fp-seg { box-sizing: border-box; width: max-content; min-width: max-content; }
   #custom-row .custom-line .fp-seg > span:first-child { font-size: 11px; }
   #custom-row .custom-line .fp-seg input { width: 36px; height: 26px; font-size: 12px; }
   #custom-row .custom-line .fp-seg select { font-size: 12px; }
-  #custom-row .custom-line:nth-child(2) .fp-seg { width: 100%; min-width: 0; border-top: 1px dashed #e9ecef; border-radius: 0 0 6px 6px; }
+  #custom-row .custom-line:nth-child(2) .fp-seg { width: auto; min-width: 0; border-top: 1px dashed #e9ecef; border-radius: 0 0 6px 6px; }
   /* 查询框撑满一整行 */
   #query-row .fp-search { flex: 1 1 100%; }
   #query-row .fp-search input { width: 100%; }
