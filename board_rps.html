@@ -22,6 +22,8 @@ body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", san
 .fp-seg span { font-size: 12px; color: #495057; white-space: nowrap; }
 .fp-seg input { width: 48px; border: none; background: transparent; text-align: center; padding: 0; height: 28px; font-size: 13px; outline: none; }
 .fp-seg input:focus { box-shadow: 0 0 0 2px rgba(66,99,235,0.18); border-radius: 4px; }
+.fp-seg select.fp-num { border: none; background: transparent; text-align: center; height: 28px; font-size: 13px; color: #343a40; outline: none; cursor: pointer; min-width: 50px; padding: 0 2px; }
+.fp-seg select.fp-num:focus { box-shadow: 0 0 0 2px rgba(66,99,235,0.18); border-radius: 4px; }
 .fp-search input { width: 220px; height: 36px; box-sizing: border-box; border: 1px solid #ced4da; border-radius: 6px; padding: 0 12px; font-size: 13px; background: #fff; outline: none; }
 .fp-search input:focus { border-color: #4263eb; box-shadow: 0 0 0 2px rgba(66,99,235,0.12); }
 .fp-reset { height: 36px; box-sizing: border-box; border: 1px solid #4263eb; background: #4263eb; color: #fff; padding: 0 16px; border-radius: 6px; cursor: pointer; font-size: 13px; }
@@ -139,11 +141,13 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   /* 自定义模式：保留第一行原有的自然紧凑宽度；第二行按 5/10/20 对应列对齐 */
   /* 自定义模式：第一行保持自然紧凑宽度，第二行由脚本同步对应列宽 */
   #custom-row { align-items: flex-start; }
-  #custom-row .custom-line { display: flex; flex-wrap: nowrap; align-items: center; gap: 8px; width: max-content; }
-  #custom-row .custom-line .fp-seg { box-sizing: border-box; flex: 0 0 auto; width: max-content; min-width: max-content; border: 0; border-radius: 6px; }
-  #custom-row .custom-line .fp-seg > span:first-child { font-size: 11px; }
+  #custom-row .custom-line { display: flex; flex-wrap: nowrap; align-items: center; gap: 8px; width: 100%; }
+  /* 灰框宽度由脚本按「第一列对齐第一列」同步，此处不锁 max-content，否则无法对齐 */
+  #custom-row .custom-line .fp-seg { box-sizing: border-box; flex: 0 0 auto; width: auto; min-width: 0; max-width: none; border: 0; border-radius: 6px; padding: 3px 6px; overflow: hidden; }
+  #custom-row .custom-line .fp-seg > span:first-child { font-size: 11px; white-space: nowrap; }
   #custom-row .custom-line .fp-seg input { width: 36px; height: 26px; font-size: 12px; }
   #custom-row .custom-line .fp-seg select { font-size: 12px; }
+  #custom-row .custom-line .fp-seg select.fp-num { min-width: 42px; max-width: 60px; }
   #custom-row .custom-query { width: 100%; padding-top: 6px; border-top: 1px dashed #e9ecef; }
   #custom-row .custom-query .fp-search { display: block; width: 100%; }
   #custom-row .custom-query .fp-search input { width: 100%; }
@@ -178,28 +182,28 @@ tr.three-yes:hover > td { background: #ffe8cc; }
           <option value="custom">板块RPS自定义</option>
         </select>
         <span class="fp-actions">
-          <button id="fp-reset" class="fp-reset" type="button">重置</button>
-          <button id="fp-export" class="fp-export" type="button">下载</button>
+          <button id="fp-reset" class="fp-reset" type="button">默认值</button>
+          <button id="fp-clear" class="fp-export fp-hidden" type="button">清零</button>
         </span>
       </div>
 
       <!-- 两线红模式 -->
       <div class="fp-row fp-row2" id="tri-row">
-        <label class="fp-check"><input type="checkbox" id="tri-fresh" checked> <input type="number" id="tri-fresh-win" class="fp-fresh-win" value="5" min="2" max="250"> 日内首次两线转红 <span class="fp-hint" id="fresh-range"></span></label>
+        <label class="fp-check"><input type="checkbox" id="tri-fresh" checked> <select id="tri-fresh-win" class="fp-fresh-win"></select> 日内首次两线转红 <span class="fp-hint" id="fresh-range"></span></label>
         <div class="fp-hint" style="margin-top:6px">注：<b>两线红 / 三线红</b>均特指 <b>板块RPS5、板块RPS10、板块RPS20</b>（其中≥90 的条数）；板块RPS60 / 120 / 240 <b>不参与两线红判定</b>，仅用于表格展示与「板块RPS自定义」筛选。</div>
       </div>
 
       <!-- 自定义模式 -->
       <div class="fp-row fp-row2 fp-hidden" id="custom-row" style="flex-direction:column;align-items:flex-start;gap:6px">
         <div class="custom-line" id="custom-line-top">
-          <span class="fp-seg"><span>板块RPS5</span><select id="c5op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c5" type="number" value="85"></span>
-          <span class="fp-seg"><span>10</span><select id="c10op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c10" type="number" value="85"></span>
-          <span class="fp-seg"><span>20</span><select id="c20op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c20" type="number" value="85"></span>
+          <span class="fp-seg"><span>板块RPS5</span><select id="c5op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><select id="c5" class="fp-num"></select></span>
+          <span class="fp-seg"><span>10</span><select id="c10op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><select id="c10" class="fp-num"></select></span>
+          <span class="fp-seg"><span>20</span><select id="c20op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><select id="c20" class="fp-num"></select></span>
         </div>
         <div class="custom-line" id="custom-line-bottom">
-          <span class="fp-seg"><span>60</span><select id="c60op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c60" type="number" value="60"></span>
-          <span class="fp-seg"><span>120</span><select id="c120op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c120" type="number" value="60"></span>
-          <span class="fp-seg"><span>240</span><select id="c240op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c240" type="number" value="60"></span>
+          <span class="fp-seg"><span>60</span><select id="c60op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><select id="c60" class="fp-num"></select></span>
+          <span class="fp-seg"><span>120</span><select id="c120op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><select id="c120" class="fp-num"></select></span>
+          <span class="fp-seg"><span>240</span><select id="c240op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><select id="c240" class="fp-num"></select></span>
         </div>
         <div class="custom-query">
           <span class="fp-search"><input id="q" type="text" placeholder="输入板块名称或代码，如 石油 / 880310"></span>
@@ -209,7 +213,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   </div>
 
   <div class="section">
-    <div class="section-title"><span>筛选结果</span><span class="count-inline" id="count-inline">—</span></div>
+    <div class="section-title"><span>筛选结果</span><span class="count-inline" id="count-inline">—</span><button id="fp-export" class="fp-export" type="button" style="margin-left:8px;height:28px;padding:0 12px;font-size:12px;flex-shrink:0">下载</button></div>
     <div class="table-wrap">
       <table id="tbl">
         <thead><tr id="thead"></tr></thead>
@@ -274,7 +278,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   <div class="footer">数据仅供参考，不构成投资建议 ｜ 板块RPS 由 880xxx 板块指数日K 计算</div>
 </div>
 
-<script src="_board_rps_data.js?v=20260908a"></script>
+<script src="_board_rps_data.js?v=20260909d"></script>
 <script>
 (function () {
   var D = window.BOARD_RPS || { anchor: "—", boards: {} };
@@ -290,12 +294,11 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     list.push(b);
   }
 
-  // 交易日历（所有板块 hist 日期并集，升序），用于两线红"按日期"与新鲜度计算
-  var ALLDATES = [];
-  (function () {
+  // 交易日历：由生成器统一提供（dates 字段），不再依赖逐板块 hist，避免首屏拉 4MB 历史曲线
+  var ALLDATES = (D && D.dates && D.dates.length) ? D.dates.slice() : (function () {
     var set = {};
     list.forEach(function (b) { if (b.hist) b.hist.forEach(function (h) { set[h[0]] = 1; }); });
-    ALLDATES = Object.keys(set).sort();
+    return Object.keys(set).sort();
   })();
   var MIN_DATE = ALLDATES.length ? ALLDATES[0] : ANCHOR;
 
@@ -365,7 +368,9 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     renderBody();
   }
   function threeAsOf(b, d) {
-    if (!b.hist || !b.hist.length) return false;
+    // 查最新数据日时直接取生成器算好的 three，无需历史曲线（避免首屏加载 hist）
+    if (!d || d >= ANCHOR) return b.three === 1;
+    if (!b.hist || !b.hist.length) return b.three === 1;
     var chosen = null;
     for (var i = 0; i < b.hist.length; i++) {
       if (b.hist[i][0] <= d) chosen = b.hist[i]; else break;
@@ -511,8 +516,11 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 
   // 模式显隐
   function applyMode() {
-    $("tri-row").classList.toggle("fp-hidden", state.mode !== "tri_red");
-    $("custom-row").classList.toggle("fp-hidden", state.mode !== "custom");
+    var isCustom = state.mode === "custom";
+    $("tri-row").classList.toggle("fp-hidden", !isCustom && state.mode !== "tri_red");
+    $("custom-row").classList.toggle("fp-hidden", !isCustom);
+    var clr = $("fp-clear");
+    if (clr) clr.classList.toggle("fp-hidden", !isCustom);
   }
 
   // 保持手机端第二行与第一行三列严格对齐；桌面端也保留自然紧凑宽度
@@ -521,29 +529,74 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     var top = document.querySelectorAll("#custom-line-top .fp-seg");
     var bottom = document.querySelectorAll("#custom-line-bottom .fp-seg");
     if (!row || row.classList.contains("fp-hidden") || top.length < 3 || bottom.length < 3) return;
+    // 先清除显式宽度，量出第一行三列的「自然紧凑宽度」
+    for (var j = 0; j < 3; j++) {
+      top[j].style.width = ""; top[j].style.minWidth = ""; top[j].style.maxWidth = "";
+      bottom[j].style.width = ""; bottom[j].style.minWidth = ""; bottom[j].style.maxWidth = "";
+    }
+    var ws = [];
+    for (var k = 0; k < 3; k++) ws.push(top[k].getBoundingClientRect().width);
     for (var i = 0; i < 3; i++) {
-      var w = top[i].getBoundingClientRect().width;
-      if (w > 0) bottom[i].style.width = w + "px";
+      if (ws[i] <= 0) continue;
+      var w = ws[i] + "px";
+      // 60→对齐5、120→对齐10、240→对齐20
+      top[i].style.width = w; top[i].style.minWidth = w; top[i].style.maxWidth = w;
+      bottom[i].style.width = w; bottom[i].style.minWidth = w; bottom[i].style.maxWidth = w;
     }
   }
 
+  // RPS 阈值下拉选项（降序）
+  var RPS_OPTIONS = [100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88, 87, 86, 85,
+                     80, 75, 70, 65, 60, 50, 40, 30, 20, 10];
+  var RPS_DEFAULTS = { c5: 85, c10: 85, c20: 85, c60: 60, c120: 60, c240: 60 };
+  var FRESH_DEFAULTS = 5;
+
+  function fillRpsSelect(sel, val) {
+    if (!sel) return;
+    sel.innerHTML = "";
+    // 不在标准选项里的值（如「清零」后的 0）插到最前，保证可回显
+    if (val != null && RPS_OPTIONS.indexOf(val) < 0) {
+      var o0 = document.createElement("option");
+      o0.value = val; o0.textContent = val;
+      sel.appendChild(o0);
+    }
+    for (var i = 0; i < RPS_OPTIONS.length; i++) {
+      var v = RPS_OPTIONS[i];
+      var o = document.createElement("option");
+      o.value = v; o.textContent = v;
+      sel.appendChild(o);
+    }
+    sel.value = String(val);
+  }
+  function fillFreshSelect(val) {
+    var sel = $("tri-fresh-win");
+    if (!sel) return;
+    sel.innerHTML = "";
+    for (var n = 1; n <= 20; n++) {
+      var o = document.createElement("option");
+      o.value = n; o.textContent = n;
+      if (n === val) o.selected = true;
+      sel.appendChild(o);
+    }
+  }
+  function syncRpsInputs() {
+    fillRpsSelect($("c5"), state.c5); fillRpsSelect($("c10"), state.c10); fillRpsSelect($("c20"), state.c20);
+    fillRpsSelect($("c60"), state.c60); fillRpsSelect($("c120"), state.c120); fillRpsSelect($("c240"), state.c240);
+  }
+
   // 事件绑定
-  $("fp-plan").onchange = function () { state.mode = this.value; applyMode(); syncCustomWidths(); page = 1; renderBody(); };
+  $("fp-plan").onchange = function () {
+    state.mode = this.value; applyMode(); syncCustomWidths(); page = 1; renderBody();
+  };
   window.addEventListener("resize", syncCustomWidths);
   $("tri-fresh").onchange = function () { state.triFresh = this.checked; updateFreshRange(); page = 1; renderBody(); };
-  $("tri-fresh-win").oninput = function () { state.triFreshWin = parseInt(this.value, 10) || 5; updateFreshRange(); page = 1; renderBody(); };
-  $("c5").oninput = function () { state.c5 = parseFloat(this.value) || 0; page = 1; renderBody(); };
-  $("c10").oninput = function () { state.c10 = parseFloat(this.value) || 0; page = 1; renderBody(); };
-  $("c20").oninput = function () { state.c20 = parseFloat(this.value) || 0; page = 1; renderBody(); };
-  $("c60").oninput = function () { state.c60 = parseFloat(this.value) || 0; page = 1; renderBody(); };
-  $("c120").oninput = function () { state.c120 = parseFloat(this.value) || 0; page = 1; renderBody(); };
-  $("c240").oninput = function () { state.c240 = parseFloat(this.value) || 0; page = 1; renderBody(); };
-  $("c5op").onchange = function () { state.c5op = this.value; page = 1; renderBody(); };
-  $("c10op").onchange = function () { state.c10op = this.value; page = 1; renderBody(); };
-  $("c20op").onchange = function () { state.c20op = this.value; page = 1; renderBody(); };
-  $("c60op").onchange = function () { state.c60op = this.value; page = 1; renderBody(); };
-  $("c120op").onchange = function () { state.c120op = this.value; page = 1; renderBody(); };
-  $("c240op").onchange = function () { state.c240op = this.value; page = 1; renderBody(); };
+  $("tri-fresh-win").onchange = function () { state.triFreshWin = parseInt(this.value, 10) || 5; updateFreshRange(); page = 1; renderBody(); };
+  ["c5", "c10", "c20", "c60", "c120", "c240"].forEach(function (k) {
+    $(k).onchange = function () { state[k] = parseFloat(this.value) || 0; page = 1; renderBody(); };
+  });
+  ["c5op", "c10op", "c20op", "c60op", "c120op", "c240op"].forEach(function (k) {
+    $(k).onchange = function () { state[k] = this.value; page = 1; renderBody(); };
+  });
   $("q").oninput = function () { state.q = this.value; page = 1; renderBody(); };
   var prev = $("sr-prev"), next = $("sr-next");
   if (prev) prev.onclick = function () { page--; renderBody(); };
@@ -551,17 +604,24 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 
   $("fp-reset").onclick = function () {
     state.mode = "tri_red";
-    state.triFresh = true; state.triFreshWin = 5;
+    state.triFresh = true; state.triFreshWin = FRESH_DEFAULTS;
     state.c5 = 85; state.c10 = 85; state.c20 = 85; state.c60 = 60; state.c120 = 60; state.c240 = 60;
     state.c5op = "ge"; state.c10op = "ge"; state.c20op = "ge"; state.c60op = "ge"; state.c120op = "ge"; state.c240op = "ge";
     state.q = "";
     state.sortKey = "rps5"; state.sortDir = "desc";
     $("fp-plan").value = "tri_red";
-    $("tri-fresh").checked = true; $("tri-fresh-win").value = 5; updateFreshRange();
-    $("c5").value = 85; $("c10").value = 85; $("c20").value = 85; $("c60").value = 60; $("c120").value = 60; $("c240").value = 60;
-    $("c5op").value = "ge"; $("c10op").value = "ge"; $("c20op").value = "ge"; $("c60op").value = "ge"; $("c120op").value = "ge"; $("c240op").value = "ge";
+    $("tri-fresh").checked = true; fillFreshSelect(FRESH_DEFAULTS); updateFreshRange();
+    syncRpsInputs();
+    ["c5op", "c10op", "c20op", "c60op", "c120op", "c240op"].forEach(function (k) { $(k).value = "ge"; });
     $("q").value = "";
     page = 1; applyMode(); syncCustomWidths(); renderHead(); renderBody();
+  };
+
+  // 清零：仅把 6 个 RPS 阈值全部设为 0（不改变模式与运算符）
+  $("fp-clear").onclick = function () {
+    state.c5 = 0; state.c10 = 0; state.c20 = 0; state.c60 = 0; state.c120 = 0; state.c240 = 0;
+    syncRpsInputs();
+    syncCustomWidths(); page = 1; renderBody();
   };
 
   $("fp-export").onclick = function () {
@@ -598,10 +658,50 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   ];
   var RPS_DEFAULT_ON = { "板块RPS5": true, "板块RPS10": true, "板块RPS20": true, "板块RPS60": false, "板块RPS120": false, "板块RPS240": false };
   var rpsVis = Object.assign({}, RPS_DEFAULT_ON);
+
+  // hist（板块RPS历史曲线）体积约占 70%，拆到 _board_rps_hist.js 按需加载，首屏只拉主数据
+  var histLoading = false, histReady = false, histTried = false;
+  var HIST_TAG = (function () {
+    var m = document.querySelector('script[src*="_board_rps_hist.js"]');
+    if (m && m.src) { var q = m.src.split("?v="); if (q[1]) return q[1]; }
+    var d = document.querySelector('script[src*="_board_rps_data.js"]');
+    if (d && d.src) { var q2 = d.src.split("?v="); if (q2[1]) return q2[1]; }
+    return Date.now();
+  })();
+  function loadHist(cb) {
+    if (histReady || histTried) { cb(); return; }
+    if (histLoading) { var iv = setInterval(function () { if (histReady) { clearInterval(iv); cb(); } }, 120); return; }
+    histLoading = true; histTried = true;
+    var s = document.createElement("script");
+    s.src = "_board_rps_hist.js?v=" + HIST_TAG;
+    s.onload = function () {
+      var H = window.BOARD_RPS_HIST;
+      if (H && H.d) {
+        for (var k in H.d) { if (BOARDS[k]) BOARDS[k].hist = H.d[k]; }
+      }
+      histReady = true; histLoading = false; cb();
+    };
+    s.onerror = function () { histLoading = false; histReady = true; cb(); };
+    document.head.appendChild(s);
+  }
+
   function openBoardRps(code, name) {
     boardCode = code;
     var b = BOARDS[code];
-    if (!b || !b.hist || !b.hist.length) { alert("该板块暂无 RPS 历史数据"); return; }
+    if (!b) { alert("该板块暂无数据"); return; }
+    if (!b.hist || !b.hist.length) {
+      if (!histTried) {
+        // 首次点开需要拉取历史曲线文件（约 4MB，仅此一次）
+        var box0 = document.getElementById("rpsChart");
+        if (box0) box0.innerHTML = '<div style="padding:70px;text-align:center;color:#868e96;font-size:14px">历史曲线加载中…</div>';
+        document.getElementById("rpsTitle").textContent = code + " " + (name || "");
+        document.getElementById("rpsModal").style.display = "flex";
+        loadHist(function () { openBoardRps(code, name); });
+        return;
+      }
+      alert("该板块暂无 RPS 历史数据（历史曲线文件未加载成功）");
+      return;
+    }
     rpsVis = Object.assign({}, RPS_DEFAULT_ON);
     document.getElementById("rpsTitle").textContent = code + " " + (name || "");
     document.getElementById("rpsModal").style.display = "flex";
@@ -879,6 +979,11 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   $("c5op").value = state.c5op;
   $("c10op").value = state.c10op;
   $("c20op").value = state.c20op;
+  $("c60op").value = state.c60op;
+  $("c120op").value = state.c120op;
+  $("c240op").value = state.c240op;
+  fillFreshSelect(state.triFreshWin);
+  syncRpsInputs();
   updateFreshRange();
   applyMode();
   syncCustomWidths();
