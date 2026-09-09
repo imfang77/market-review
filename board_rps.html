@@ -137,16 +137,17 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   .fp-search input { width: 100%; }
   .fp-row { gap: 6px; }
   /* 自定义模式：保留第一行原有的自然紧凑宽度；第二行按 5/10/20 对应列对齐 */
-  #custom-row { display: grid !important; grid-template-columns: max-content max-content max-content; grid-auto-flow: row; align-items: center; justify-content: start; column-gap: 8px; row-gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  #custom-row .custom-line { display: contents !important; }
-  #custom-row .custom-line .fp-seg { box-sizing: border-box; width: max-content; min-width: max-content; }
+  /* 自定义模式：第一行保持自然紧凑宽度，第二行由脚本同步对应列宽 */
+  #custom-row { align-items: flex-start; }
+  #custom-row .custom-line { display: flex; flex-wrap: nowrap; align-items: center; gap: 8px; width: max-content; }
+  #custom-row .custom-line .fp-seg { box-sizing: border-box; flex: 0 0 auto; width: max-content; min-width: max-content; border: 0; border-radius: 6px; }
   #custom-row .custom-line .fp-seg > span:first-child { font-size: 11px; }
   #custom-row .custom-line .fp-seg input { width: 36px; height: 26px; font-size: 12px; }
   #custom-row .custom-line .fp-seg select { font-size: 12px; }
-  #custom-row .custom-line:nth-child(2) .fp-seg { width: auto; min-width: 0; border-top: 1px dashed #e9ecef; border-radius: 0 0 6px 6px; }
-  /* 查询框撑满一整行 */
-  #query-row .fp-search { flex: 1 1 100%; }
-  #query-row .fp-search input { width: 100%; }
+  #custom-row .custom-query { width: 100%; padding-top: 6px; border-top: 1px dashed #e9ecef; }
+  #custom-row .custom-query .fp-search { display: block; width: 100%; }
+  #custom-row .custom-query .fp-search input { width: 100%; }
+  #custom-row .fp-seg { background: #f1f3f5; border-radius: 6px; }
   /* 表格更紧凑 */
   th { font-size: 11px; padding: 6px 4px; }
   td { font-size: 11px; padding: 5px 5px; }
@@ -175,7 +176,6 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         <select id="fp-plan" class="fp-plan">
           <option value="tri_red" selected>板块RPS两线红</option>
           <option value="custom">板块RPS自定义</option>
-          <option value="query">板块RPS查询</option>
         </select>
         <span class="fp-actions">
           <button id="fp-reset" class="fp-reset" type="button">重置</button>
@@ -191,21 +191,19 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 
       <!-- 自定义模式 -->
       <div class="fp-row fp-row2 fp-hidden" id="custom-row" style="flex-direction:column;align-items:flex-start;gap:6px">
-        <div class="custom-line" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+        <div class="custom-line" id="custom-line-top">
           <span class="fp-seg"><span>板块RPS5</span><select id="c5op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c5" type="number" value="85"></span>
           <span class="fp-seg"><span>10</span><select id="c10op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c10" type="number" value="85"></span>
           <span class="fp-seg"><span>20</span><select id="c20op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c20" type="number" value="85"></span>
         </div>
-        <div class="custom-line" style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:6px;border-top:1px dashed #e9ecef;width:100%">
+        <div class="custom-line" id="custom-line-bottom">
           <span class="fp-seg"><span>60</span><select id="c60op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c60" type="number" value="60"></span>
           <span class="fp-seg"><span>120</span><select id="c120op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c120" type="number" value="60"></span>
           <span class="fp-seg"><span>240</span><select id="c240op" class="fp-op"><option value="ge" selected>≥</option><option value="le">≤</option></select><input id="c240" type="number" value="60"></span>
         </div>
-      </div>
-
-      <!-- 查询模式 -->
-      <div class="fp-row fp-row2 fp-hidden" id="query-row">
-        <span class="fp-search"><input id="q" type="text" placeholder="输入板块名称或代码，如 石油 / 880310"></span>
+        <div class="custom-query">
+          <span class="fp-search"><input id="q" type="text" placeholder="输入板块名称或代码，如 石油 / 880310"></span>
+        </div>
       </div>
     </div>
   </div>
@@ -409,21 +407,21 @@ tr.three-yes:hover > td { background: #ffe8cc; }
       if (state.triFresh) {
         out = out.filter(function (b) { return isFreshAsOf(b, ANCHOR); }); // N日内首次三线转红（替代日期选项）
       }
-    } else if (state.mode === "custom") {
-      out = base.filter(function (b) {
-        return cmpOp(b.rps5, state.c5op, state.c5)
-            && cmpOp(b.rps10, state.c10op, state.c10)
-            && cmpOp(b.rps20, state.c20op, state.c20)
-            && cmpOp(b.rps60, state.c60op, state.c60)
-            && cmpOp(b.rps120, state.c120op, state.c120)
-            && cmpOp(b.rps240, state.c240op, state.c240);
-      });
-    } else { // query
+    } else { // custom：有查询文本时优先按名称/代码匹配，否则才应用六个RPS条件
       var q = state.q.trim().toLowerCase();
-      if (!q) { out = base.slice(); }
-      else {
+      if (q) {
         out = base.filter(function (b) {
-          return b.code.indexOf(q) >= 0 || (b.name || "").toLowerCase().indexOf(q) >= 0;
+          return (b.code || "").toLowerCase().indexOf(q) >= 0
+            || (b.name || "").toLowerCase().indexOf(q) >= 0;
+        });
+      } else {
+        out = base.filter(function (b) {
+          return cmpOp(b.rps5, state.c5op, state.c5)
+              && cmpOp(b.rps10, state.c10op, state.c10)
+              && cmpOp(b.rps20, state.c20op, state.c20)
+              && cmpOp(b.rps60, state.c60op, state.c60)
+              && cmpOp(b.rps120, state.c120op, state.c120)
+              && cmpOp(b.rps240, state.c240op, state.c240);
         });
       }
     }
@@ -515,11 +513,23 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   function applyMode() {
     $("tri-row").classList.toggle("fp-hidden", state.mode !== "tri_red");
     $("custom-row").classList.toggle("fp-hidden", state.mode !== "custom");
-    $("query-row").classList.toggle("fp-hidden", state.mode !== "query");
+  }
+
+  // 保持手机端第二行与第一行三列严格对齐；桌面端也保留自然紧凑宽度
+  function syncCustomWidths() {
+    var row = $("custom-row");
+    var top = document.querySelectorAll("#custom-line-top .fp-seg");
+    var bottom = document.querySelectorAll("#custom-line-bottom .fp-seg");
+    if (!row || row.classList.contains("fp-hidden") || top.length < 3 || bottom.length < 3) return;
+    for (var i = 0; i < 3; i++) {
+      var w = top[i].getBoundingClientRect().width;
+      if (w > 0) bottom[i].style.width = w + "px";
+    }
   }
 
   // 事件绑定
-  $("fp-plan").onchange = function () { state.mode = this.value; applyMode(); page = 1; renderBody(); };
+  $("fp-plan").onchange = function () { state.mode = this.value; applyMode(); syncCustomWidths(); page = 1; renderBody(); };
+  window.addEventListener("resize", syncCustomWidths);
   $("tri-fresh").onchange = function () { state.triFresh = this.checked; updateFreshRange(); page = 1; renderBody(); };
   $("tri-fresh-win").oninput = function () { state.triFreshWin = parseInt(this.value, 10) || 5; updateFreshRange(); page = 1; renderBody(); };
   $("c5").oninput = function () { state.c5 = parseFloat(this.value) || 0; page = 1; renderBody(); };
@@ -551,7 +561,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     $("c5").value = 85; $("c10").value = 85; $("c20").value = 85; $("c60").value = 60; $("c120").value = 60; $("c240").value = 60;
     $("c5op").value = "ge"; $("c10op").value = "ge"; $("c20op").value = "ge"; $("c60op").value = "ge"; $("c120op").value = "ge"; $("c240op").value = "ge";
     $("q").value = "";
-    page = 1; applyMode(); renderHead(); renderBody();
+    page = 1; applyMode(); syncCustomWidths(); renderHead(); renderBody();
   };
 
   $("fp-export").onclick = function () {
@@ -871,6 +881,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   $("c20op").value = state.c20op;
   updateFreshRange();
   applyMode();
+  syncCustomWidths();
   renderHead();
   renderBody();
 })();
