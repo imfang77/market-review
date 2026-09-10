@@ -193,7 +193,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 
       <!-- 两线红模式：说明（含新鲜度日期区间） -->
       <div class="fp-row fp-row2" id="tri-row">
-        <div class="fp-hint" style="margin-top:6px">注：<b>两线红 / 三线红</b>均特指 <b>板块RPS5、板块RPS10、板块RPS20</b>（其中≥90 的条数）；板块RPS60 / 120 / 240 <b>不参与两线红判定</b>，仅用于表格展示与「板块RPS自定义」筛选。<span id="fresh-range"></span></div>
+        <div class="fp-hint" style="margin-top:6px">注：<b>两线红 / 三线红</b>均特指 <b>板块RPS5、板块RPS10、板块RPS20</b>（其中≥90 的条数）；板块RPS60 / 120 / 240 <b>不参与两线红判定</b>，仅用于表格展示与「板块RPS自定义」筛选。</div>
       </div>
 
       <!-- 自定义模式 -->
@@ -281,7 +281,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   <div class="footer">数据仅供参考，不构成投资建议 ｜ 板块RPS 由 880xxx 板块指数日K 计算</div>
 </div>
 
-<script src="_board_rps_data.js?v=20260909g"></script>
+<script src="_board_rps_data.js?v=20260909h"></script>
 <script>
 (function () {
   var D = window.BOARD_RPS || { anchor: "—", boards: {} };
@@ -388,18 +388,6 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     if (ri < 0) return false;            // 早于历史窗口，视为不新鲜
     if (di < 0) di = ALLDATES.length - 1;
     return (di - ri) <= state.triFreshWin;
-  }
-  // 新鲜度区间提示：N日内首次三线转红 对应的交易日区间（替代原日期选项）
-  function updateFreshRange() {
-    var el = document.getElementById("fresh-range");
-    if (!el) return;
-    if (!state.triFresh) { el.textContent = ""; return; }
-    var n = state.triFreshWin || 5;
-    var di = ALLDATES.indexOf(ANCHOR);
-    if (di < 0) di = ALLDATES.length - 1;
-    var si = Math.max(0, di - n + 1);
-    function fmt(d) { var p = d.split('-'); return p[0] + '/' + (+p[1]) + '/' + (+p[2]); }
-    el.textContent = "「" + n + "日内首次两线转红」对应交易日区间：" + fmt(ALLDATES[si]) + "~" + fmt(ALLDATES[di]) + "。";
   }
   // 自定义模式：>= / <= 比较
   function cmpOp(v, op, thr) {
@@ -599,8 +587,8 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     state.mode = this.value; applyMode(); syncCustomWidths(); page = 1; renderBody();
   };
   window.addEventListener("resize", syncCustomWidths);
-  $("tri-fresh").onchange = function () { state.triFresh = this.checked; updateFreshRange(); page = 1; renderBody(); };
-  $("tri-fresh-win").onchange = function () { state.triFreshWin = parseInt(this.value, 10) || 5; updateFreshRange(); page = 1; renderBody(); };
+  $("tri-fresh").onchange = function () { state.triFresh = this.checked; page = 1; renderBody(); };
+  $("tri-fresh-win").onchange = function () { state.triFreshWin = parseInt(this.value, 10) || 5; page = 1; renderBody(); };
   ["c5", "c10", "c20", "c60", "c120", "c240"].forEach(function (k) {
     $(k).onchange = function () { state[k] = parseFloat(this.value) || 0; page = 1; renderBody(); };
   });
@@ -988,7 +976,6 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   $("c240op").value = state.c240op;
   fillFreshSelect(state.triFreshWin);
   syncRpsInputs();
-  updateFreshRange();
   applyMode();
   syncCustomWidths();
   renderHead();
