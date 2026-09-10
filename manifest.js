@@ -7,6 +7,18 @@
  */
 window.REPORTS = [
   {
+    "date": "2026-09-10",
+    "weekday": "周四",
+    "reviewFile": "review-20260910.html",
+    "reviewSummary": "复盘报告生成成功,板块/恐贪/资金全维度",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面(G1趋势突破/G2断层/G4 ETF5日强) + 基本面",
+    "mainlineFile": "mainline-20260910.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260910.html",
+    "conceptSummary": "5日主线:共封装光模块(CPO)/5G概念/网络游戏｜10日主线:共封装光模块(CPO)/国防军工/网络游戏｜20日主线:共封装光模块(CPO)/液冷概念/黄金"
+  },
+  {
     "date": "2026-09-09",
     "weekday": "周三",
     "reviewFile": "review-20260909.html",
