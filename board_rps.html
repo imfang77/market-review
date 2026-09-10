@@ -278,7 +278,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   <div class="footer">数据仅供参考，不构成投资建议 ｜ 板块RPS 由 880xxx 板块指数日K 计算</div>
 </div>
 
-<script src="_board_rps_data.js?v=20260909e"></script>
+<script src="_board_rps_data.js?v=20260909f"></script>
 <script>
 (function () {
   var D = window.BOARD_RPS || { anchor: "—", boards: {} };
@@ -517,7 +517,8 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   // 模式显隐
   function applyMode() {
     var isCustom = state.mode === "custom";
-    $("tri-row").classList.toggle("fp-hidden", !isCustom && state.mode !== "tri_red");
+    // 「N日内首次两线转红」及其说明只在「板块RPS两线红」下显示，自定义模式整行隐藏
+    $("tri-row").classList.toggle("fp-hidden", state.mode !== "tri_red");
     $("custom-row").classList.toggle("fp-hidden", !isCustom);
     // 「默认值 / 清零」只在「板块RPS自定义」下出现（两线红模式没有 RPS 阈值可设）
     var clr = $("fp-clear"), rst = $("fp-reset");
