@@ -324,8 +324,8 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     { k: "three", t: "是否两<br>线红", num: false, bool: true, cls: "c-three" },
     { k: "red_date", t: "两线转红日", num: false },
     { k: "lead", t: "领先周期<br>数", num: true, cls: "c-lead" },
-    { k: "lg", t: "龙头个股", num: false, drill: "lead", cls: "c-drill", nosort: true },
-    { k: "etfTop", t: "相关ETF", num: false, drill: "etf", cls: "c-drill", nosort: true }
+    { k: "lg", t: "龙头个股", num: false, drill: "lead", cls: "c-drill" },
+    { k: "etfTop", t: "相关ETF", num: false, drill: "etf", cls: "c-drill" }
   ];
 
   // 状态
@@ -425,9 +425,24 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     return out;
   }
 
+  // 末两列（龙头个股 / 相关ETF）是文本列，取出用于排序的名称
+  function sortVal(b, k) {
+    if (k === "lg") { var lg = b.lg || []; return lg.length ? (lg[0].n || "") : ""; }
+    if (k === "etfTop") { var et = b.etfTop; return et ? (et.n || "") : ""; }
+    return b[k];
+  }
+
   function cmp(a, b) {
     var k = state.sortKey, dir = state.sortDir === "desc" ? -1 : 1;
-    var va = a[k], vb = b[k];
+    var va = sortVal(a, k), vb = sortVal(b, k);
+    // 文本列（龙头个股 / 相关ETF）：按中文名称排序，无数据（空）的统一排最后
+    if (k === "lg" || k === "etfTop") {
+      if (va === "" && vb === "") return 0;
+      if (va === "") return 1;
+      if (vb === "") return -1;
+      return String(va).localeCompare(String(vb), "zh") * dir;
+    }
+    // 其余列（数值 / 日期）沿用原有逻辑
     if (va == null) va = -1e9;
     if (vb == null) vb = -1e9;
     if (typeof va === "string") return va.localeCompare(vb) * dir;
