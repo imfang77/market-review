@@ -280,7 +280,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   <div class="footer">数据仅供参考，不构成投资建议 ｜ 板块RPS 由 880xxx 板块指数日K 计算</div>
 </div>
 
-<script src="_board_rps_data.js?v=20260910b"></script>
+<script src="_board_rps_data.js?v=20260910c"></script>
 <script>
 (function () {
   var D = window.BOARD_RPS || { anchor: "—", boards: {} };
@@ -425,18 +425,32 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     return out;
   }
 
-  // 末两列（龙头个股 / 相关ETF）是文本列，取出用于排序的名称
+  // 龙头个股列：取第一只龙头名称用于排序
   function sortVal(b, k) {
     if (k === "lg") { var lg = b.lg || []; return lg.length ? (lg[0].n || "") : ""; }
-    if (k === "etfTop") { var et = b.etfTop; return et ? (et.n || "") : ""; }
     return b[k];
+  }
+  // 板块名称比较（用于 ETF 涨跌幅相同时的二级排序，方向跟随当前升降序）
+  function nameCmp(a, b, dir) {
+    return String(a.name || "").localeCompare(String(b.name || ""), "zh") * dir;
   }
 
   function cmp(a, b) {
     var k = state.sortKey, dir = state.sortDir === "desc" ? -1 : 1;
+    // 相关ETF：按 ETF 当日涨跌幅排序；涨跌幅相同则按板块名称排序；无 ETF / 无涨跌幅的排最后
+    if (k === "etfTop") {
+      var ea = a.etfTop, eb = b.etfTop;
+      var ca = (ea && ea.chg != null) ? ea.chg : null;
+      var cv = (eb && eb.chg != null) ? eb.chg : null;
+      if (ca == null && cv == null) return nameCmp(a, b, dir);
+      if (ca == null) return 1;
+      if (cv == null) return -1;
+      if (ca !== cv) return (ca - cv) * dir;
+      return nameCmp(a, b, dir);
+    }
     var va = sortVal(a, k), vb = sortVal(b, k);
-    // 文本列（龙头个股 / 相关ETF）：按中文名称排序，无数据（空）的统一排最后
-    if (k === "lg" || k === "etfTop") {
+    // 龙头个股：按中文名称排序，无数据（空）的统一排最后
+    if (k === "lg") {
       if (va === "" && vb === "") return 0;
       if (va === "") return 1;
       if (vb === "") return -1;
