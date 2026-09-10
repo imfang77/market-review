@@ -186,8 +186,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         </select>
         <label class="fp-check fp-fresh-wrap" id="tri-fresh-wrap"><input type="checkbox" id="tri-fresh" checked> <select id="tri-fresh-win" class="fp-fresh-win"></select> 日内首次两线转红</label>
         <span class="fp-actions">
-          <button id="fp-reset" class="fp-reset" type="button">默认值</button>
-          <button id="fp-clear" class="fp-reset fp-hidden" type="button">清零</button>
+          <button id="fp-clear" class="fp-reset fp-hidden" type="button">重置</button>
         </span>
       </div>
 
@@ -281,7 +280,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   <div class="footer">数据仅供参考，不构成投资建议 ｜ 板块RPS 由 880xxx 板块指数日K 计算</div>
 </div>
 
-<script src="_board_rps_data.js?v=20260909i"></script>
+<script src="_board_rps_data.js?v=20260909j"></script>
 <script>
 (function () {
   var D = window.BOARD_RPS || { anchor: "—", boards: {} };
@@ -333,7 +332,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   var state = {
     mode: "tri_red",
     triFresh: true, triFreshWin: 5,
-    c5: 85, c10: 85, c20: 85, c60: 60, c120: 60, c240: 60,
+    c5: 0, c10: 0, c20: 0, c60: 0, c120: 0, c240: 0,
     c5op: "ge", c10op: "ge", c20op: "ge", c60op: "ge", c120op: "ge", c240op: "ge",
     q: "",
     sortKey: "rps5", sortDir: "desc"
@@ -392,7 +391,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   // 自定义模式：>= / <= 比较
   function cmpOp(v, op, thr) {
     // 阈值 0 = 不过滤：长周期缺数据的板块（如 MLCC概念 日线有断层、AI营销 上市不足 240 日）
-    // 也应保留，否则「清零」后板块数会从 401 掉到 399。
+    // 也应保留，否则「重置」后板块数会从 401 掉到 399。
     if (v == null) return op === "ge" && thr <= 0;
     return op === "le" ? (v <= thr) : (v >= thr);
   }
@@ -515,10 +514,9 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     var fw = $("tri-fresh-wrap");
     if (fw) fw.classList.toggle("fp-hidden", state.mode !== "tri_red");
     $("custom-row").classList.toggle("fp-hidden", !isCustom);
-    // 「默认值 / 清零」只在「板块RPS自定义」下出现（两线红模式没有 RPS 阈值可设）
-    var clr = $("fp-clear"), rst = $("fp-reset");
+    // 「重置」只在「板块RPS自定义」下出现（两线红模式没有 RPS 阈值可设）
+    var clr = $("fp-clear");
     if (clr) clr.classList.toggle("fp-hidden", !isCustom);
-    if (rst) rst.classList.toggle("fp-hidden", !isCustom);
   }
 
   // 保持手机端第二行与第一行三列严格对齐；桌面端也保留自然紧凑宽度
@@ -546,13 +544,11 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   // RPS 阈值下拉选项（降序）
   var RPS_OPTIONS = [100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88, 87, 86, 85,
                      80, 75, 70, 65, 60, 50, 40, 30, 20, 10];
-  var RPS_DEFAULTS = { c5: 85, c10: 85, c20: 85, c60: 60, c120: 60, c240: 60 };
-  var FRESH_DEFAULTS = 5;
 
   function fillRpsSelect(sel, val) {
     if (!sel) return;
     sel.innerHTML = "";
-    // 不在标准选项里的值（如「清零」后的 0）插到最前，保证可回显
+    // 不在标准选项里的值（如「重置」后的 0）插到最前，保证可回显
     if (val != null && RPS_OPTIONS.indexOf(val) < 0) {
       var o0 = document.createElement("option");
       o0.value = val; o0.textContent = val;
@@ -600,16 +596,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   if (prev) prev.onclick = function () { page--; renderBody(); };
   if (next) next.onclick = function () { page++; renderBody(); };
 
-  // 默认值：只把 6 个 RPS 阈值恢复为 85/85/85/60/60/60，
-  // 不切换筛选模式（保持板块RPS自定义）、不动查询框/运算符/排序
-  $("fp-reset").onclick = function () {
-    state.c5 = RPS_DEFAULTS.c5; state.c10 = RPS_DEFAULTS.c10; state.c20 = RPS_DEFAULTS.c20;
-    state.c60 = RPS_DEFAULTS.c60; state.c120 = RPS_DEFAULTS.c120; state.c240 = RPS_DEFAULTS.c240;
-    syncRpsInputs();
-    syncCustomWidths(); page = 1; renderBody();
-  };
-
-  // 清零：仅把 6 个 RPS 阈值全部设为 0（不改变模式与运算符）
+  // 重置：把 6 个 RPS 阈值全部设为 0（不改变模式与运算符），即恢复自定义模式默认（显示全部 401 板块）
   $("fp-clear").onclick = function () {
     state.c5 = 0; state.c10 = 0; state.c20 = 0; state.c60 = 0; state.c120 = 0; state.c240 = 0;
     syncRpsInputs();
