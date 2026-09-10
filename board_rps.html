@@ -183,7 +183,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         </select>
         <span class="fp-actions">
           <button id="fp-reset" class="fp-reset" type="button">默认值</button>
-          <button id="fp-clear" class="fp-export fp-hidden" type="button">清零</button>
+          <button id="fp-clear" class="fp-reset fp-hidden" type="button">清零</button>
         </span>
       </div>
 
@@ -278,7 +278,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   <div class="footer">数据仅供参考，不构成投资建议 ｜ 板块RPS 由 880xxx 板块指数日K 计算</div>
 </div>
 
-<script src="_board_rps_data.js?v=20260909d"></script>
+<script src="_board_rps_data.js?v=20260909e"></script>
 <script>
 (function () {
   var D = window.BOARD_RPS || { anchor: "—", boards: {} };
@@ -519,8 +519,10 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     var isCustom = state.mode === "custom";
     $("tri-row").classList.toggle("fp-hidden", !isCustom && state.mode !== "tri_red");
     $("custom-row").classList.toggle("fp-hidden", !isCustom);
-    var clr = $("fp-clear");
+    // 「默认值 / 清零」只在「板块RPS自定义」下出现（两线红模式没有 RPS 阈值可设）
+    var clr = $("fp-clear"), rst = $("fp-reset");
     if (clr) clr.classList.toggle("fp-hidden", !isCustom);
+    if (rst) rst.classList.toggle("fp-hidden", !isCustom);
   }
 
   // 保持手机端第二行与第一行三列严格对齐；桌面端也保留自然紧凑宽度
@@ -602,19 +604,13 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   if (prev) prev.onclick = function () { page--; renderBody(); };
   if (next) next.onclick = function () { page++; renderBody(); };
 
+  // 默认值：只把 6 个 RPS 阈值恢复为 85/85/85/60/60/60，
+  // 不切换筛选模式（保持板块RPS自定义）、不动查询框/运算符/排序
   $("fp-reset").onclick = function () {
-    state.mode = "tri_red";
-    state.triFresh = true; state.triFreshWin = FRESH_DEFAULTS;
-    state.c5 = 85; state.c10 = 85; state.c20 = 85; state.c60 = 60; state.c120 = 60; state.c240 = 60;
-    state.c5op = "ge"; state.c10op = "ge"; state.c20op = "ge"; state.c60op = "ge"; state.c120op = "ge"; state.c240op = "ge";
-    state.q = "";
-    state.sortKey = "rps5"; state.sortDir = "desc";
-    $("fp-plan").value = "tri_red";
-    $("tri-fresh").checked = true; fillFreshSelect(FRESH_DEFAULTS); updateFreshRange();
+    state.c5 = RPS_DEFAULTS.c5; state.c10 = RPS_DEFAULTS.c10; state.c20 = RPS_DEFAULTS.c20;
+    state.c60 = RPS_DEFAULTS.c60; state.c120 = RPS_DEFAULTS.c120; state.c240 = RPS_DEFAULTS.c240;
     syncRpsInputs();
-    ["c5op", "c10op", "c20op", "c60op", "c120op", "c240op"].forEach(function (k) { $(k).value = "ge"; });
-    $("q").value = "";
-    page = 1; applyMode(); syncCustomWidths(); renderHead(); renderBody();
+    syncCustomWidths(); page = 1; renderBody();
   };
 
   // 清零：仅把 6 个 RPS 阈值全部设为 0（不改变模式与运算符）
