@@ -7,6 +7,18 @@
  */
 window.REPORTS = [
   {
+    "date": "2026-09-11",
+    "weekday": "周五",
+    "reviewFile": "review-20260911.html",
+    "reviewSummary": "沪指-1.18% 深成指-1.08% 创业板-0.49% 科创50-1.01% 涨跌643:4870 涨停40 跌停21 成交1.97万亿",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面 G1 2只(鼎信通讯/中信出版) G2 0只 + 基本面",
+    "mainlineFile": "mainline-20260911.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260911.html",
+    "conceptSummary": "5日主线:共封装光模块(CPO)/5G概念/国防军工｜10日主线:网络游戏/国防军工/共封装光模块(CPO)｜20日主线:黄金/共封装光模块(CPO)/5G概念"
+  },
+  {
     "date": "2026-09-10",
     "weekday": "周四",
     "reviewFile": "review-20260910.html",
