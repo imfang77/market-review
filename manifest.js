@@ -7,6 +7,18 @@
  */
 window.REPORTS = [
   {
+    "date": "2026-09-15",
+    "weekday": "周二",
+    "reviewFile": "review-20260915.html",
+    "reviewSummary": "沪指-0.54% 创业板-1.15% 科创50+1.55% 涨跌1054:4103 成交1.61万亿 恐贪16.1恐惧",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口：技术面页最新20260915（G1趋势突破5只：中新赛克/中信出版/昌红科技/药石科技/中视传媒）+ 基本面页数据截至最新季报",
+    "mainlineFile": "mainline_concept-20260915.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260915.html",
+    "conceptSummary": "5日主线:共封装光模块(CPO)｜10日主线:｜20日主线:黄金"
+  },
+  {
     "date": "2026-09-14",
     "weekday": "周一",
     "reviewFile": "review-20260914.html",
