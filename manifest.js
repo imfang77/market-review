@@ -7,6 +7,30 @@
  */
 window.REPORTS = [
   {
+    "date": "2026-09-17",
+    "weekday": "周四",
+    "reviewFile": "review-20260917.html",
+    "reviewSummary": "沪指-0.41% 创业板-0.40% 涨跌2504/2558 成交1.82万亿 涨停51 恐贪24.1恐惧",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口：技术面页最新20260917（G1趋势突破12只：中视传媒/博瑞传播/龙版传媒/峰岹科技/华民股份 等）+ 基本面页数据截至最新季报",
+    "mainlineFile": "mainline-20260917.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260917.html",
+    "conceptSummary": "5日主线:共封装光模块(CPO)/半导体/黄金｜10日主线:共封装光模块(CPO)/5G概念/半导体｜20日主线:共封装光模块(CPO)/5G概念/液冷概念"
+  },
+  {
+    "date": "2026-09-16",
+    "weekday": "周三",
+    "reviewFile": "review-20260916.html",
+    "reviewSummary": "沪指+0.71% 创业板+1.96% 涨跌3888/1134",
+    "screeningFile": "screening.html",
+    "screeningSummary": "",
+    "mainlineFile": "mainline_concept-20260916.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260916.html",
+    "conceptSummary": "5日主线:共封装光模块(CPO)｜10日主线:｜20日主线:黄金"
+  },
+  {
     "date": "2026-09-15",
     "weekday": "周二",
     "reviewFile": "review-20260915.html",
