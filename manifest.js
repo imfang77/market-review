@@ -7,6 +7,18 @@
  */
 window.REPORTS = [
   {
+    "date": "2026-09-18",
+    "weekday": "周五",
+    "reviewFile": "review-20260918.html",
+    "reviewSummary": "2026-09-18周五复盘：沪指3911.87(+0.94%)，创业板指+2.25%、科创50+2.88%、中证全指+1.45%；两市成交约2.08万亿，全市场3937只上涨，科创成长领涨、结构分化。",
+    "screeningFile": "screening.html",
+    "screeningSummary": "条件选股三入口：技术面页最新20260918(G1/G2/ETF)；基本面页数据截至最新季报；RPS选股页数据日期20260918(已修复长期停留8/28的bug)。",
+    "mainlineFile": "mainline_concept-20260918.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260918.html",
+    "conceptSummary": "5日主线:CRO/半导体/共封装光模块(CPO)｜10日主线:共封装光模块(CPO)/5G概念/半导体｜20日主线:共封装光模块(CPO)/5G概念/液冷概念"
+  },
+  {
     "date": "2026-09-17",
     "weekday": "周四",
     "reviewFile": "review-20260917.html",

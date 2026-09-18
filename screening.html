@@ -58,7 +58,7 @@ body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", san
   <div class="arrow">&#8250;</div>
 </a>
 
-<a class="card rps" href="https://f8b621e42fbf44deb06edc02bd4ea962.app.workbuddy.link" target="_blank" rel="noopener" id="card-rps">
+<a class="card rps" href="stock_rps.html?v=20260918" id="card-rps">
   <div class="top"><div class="ico">&#128202;</div><div><div class="title">RPS选股</div></div></div>
   <div class="desc">欧奈尔相对价格强度 RPS（5 / 20 / 50 / 120 / 250）。<br>全市场历史 · 拼音搜索 · 三线转红筛选，已与通达信核对。</div>
   <div class="meta">
@@ -73,9 +73,9 @@ body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", san
 </div>
 
 <script>
-var TECH_DATE = "20260812";
-var FUND_DATE = "20260813";
-var RPS_DATE = "20260828";
+var TECH_DATE = "20260918";
+var FUND_DATE = "20260918";
+var RPS_DATE = "20260918";
 var META_KEY = "ashare_screening_meta_read_v1";
 function loadRead(){ try { return JSON.parse(localStorage.getItem(META_KEY) || "{}"); } catch(e){ return {}; } }
 function saveRead(o){ try { localStorage.setItem(META_KEY, JSON.stringify(o)); } catch(e){} }
@@ -108,7 +108,7 @@ document.getElementById("card-rps").addEventListener("click", function(){ markRe
       if (!m) return;
       if (m.techDate){ TECH_DATE = m.techDate; setupCard("tech", TECH_DATE); var ct = document.getElementById("card-tech"); if (ct) ct.href = "screening_tech.html?v=" + TECH_DATE; }
       if (m.fundDate){ FUND_DATE = m.fundDate; setupCard("fund", FUND_DATE); var cf = document.getElementById("card-fund"); if (cf) cf.href = "screening_fund.html?v=" + FUND_DATE; }
-      if (m.rpsDate){ RPS_DATE = m.rpsDate; setupCard("rps", RPS_DATE); }
+      if (m.rpsDate){ RPS_DATE = m.rpsDate; setupCard("rps", RPS_DATE); var cr = document.getElementById("card-rps"); if (cr) cr.href = "stock_rps.html?v=" + RPS_DATE; }
     }).catch(function(e){ console.log("screening_meta load fail", e); });
   } catch(e){}
 })();
