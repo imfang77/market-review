@@ -7,6 +7,18 @@
  */
 window.REPORTS = [
   {
+    "date": "2026-09-21",
+    "weekday": "周一",
+    "reviewFile": "review-20260921.html",
+    "reviewSummary": "沪指+0.97% 创业板+0.80% 涨跌4211/906 成交2.01万亿 涨停103 恐贪40.7中性",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口：技术面页最新20260921（G1趋势突破新增16只：沃森生物/继峰股份/博腾股份/长白山 等）+ 基本面页数据截至最新季报",
+    "mainlineFile": "mainline-20260921.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260921.html",
+    "conceptSummary": "5日主线:半导体/CRO/共封装光模块(CPO)｜10日主线:共封装光模块(CPO)/半导体/5G概念｜20日主线:共封装光模块(CPO)/5G概念/液冷概念"
+  },
+  {
     "date": "2026-09-18",
     "weekday": "周五",
     "reviewFile": "review-20260918.html",
