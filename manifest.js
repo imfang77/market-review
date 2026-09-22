@@ -7,6 +7,18 @@
  */
 window.REPORTS = [
   {
+    "date": "2026-09-22",
+    "weekday": "周二",
+    "reviewFile": "review-20260922.html",
+    "reviewSummary": "沪指+0.06% 创业板+0.01% 涨跌2284/2782 成交2.14万亿 涨停65 恐贪43.6中性",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口：技术面页最新20260922（G1趋势突破新增13只：华仁药业/中新赛克/黑猫股份/新华制药/南兴股份/联合光电 等）+ 基本面页数据截至最新季报",
+    "mainlineFile": "mainline-20260922.html",
+    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineConceptFile": "mainline_concept-20260922.html",
+    "conceptSummary": "5日主线:CRO/半导体/减肥药｜10日主线:CRO/共封装光模块(CPO)/半导体｜20日主线:共封装光模块(CPO)/5G概念/液冷概念"
+  },
+  {
     "date": "2026-09-21",
     "weekday": "周一",
     "reviewFile": "review-20260921.html",
