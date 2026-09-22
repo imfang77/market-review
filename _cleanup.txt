@@ -1,4 +1,0 @@
-﻿STATUS:  M _git_out.txt
-ADD: warning: in the working copy of '_git_out.txt', LF will be replaced by CRLF the next time Git touches it
-COMMIT: [main 02a1fb1] cleanup temp files| 1 file changed, 5 insertions(+), 5 deletions(-)
-PUSH: hostkeys_find_by_key_hostfile: hostkeys_foreach failed for /c/Users/15921/.ssh/known_hosts: Permission denied|Host key verification failed.|fatal: Could not read from remote repository.|System.Management.Automation.RemoteException|Please make sure you have the correct access rights|and the repository exists.
