@@ -1,6 +1,6 @@
 ﻿ADD: warning: in the working copy of '_git_out.txt', LF will be replaced by CRLF the next time Git touches it
-COMMIT: [main 99b8e70] 涓荤嚎鍒嗘瀽淇锛氭牳蹇冧釜鑲℃槑缁嗘垚浜ら璇垽鍋滅墝(_em_quotes鏉冨▉蹇収)锛?鏈堝叏鏈?6鏃ラ噸绠? 1 file changed, 6 insertions(+)| create mode 100644 _git_out.txt
-PUSH: hostkeys_find_by_key_hostfile: hostkeys_foreach failed for /c/Users/15921/.ssh/known_hosts: Permission denied|Host key verification failed.|fatal: Could not read from remote repository.|System.Management.Automation.RemoteException|Please make sure you have the correct access rights|and the repository exists.
-LOG: 99b8e70 涓荤嚎鍒嗘瀽淇锛氭牳蹇冧釜鑲℃槑缁嗘垚浜ら璇垽鍋滅墝(_em_quotes鏉冨▉蹇収)锛?鏈堝叏鏈?6鏃ラ噸绠?
-HEAD: 99b8e7047df905340fdb8624166a5ea8c0706b99
-ORIG: 4c6caddb2f75aee5bde04cf9a019fa8b5b9d59cc
+COMMIT: [main aafd957] 涓荤嚎鍒嗘瀽淇锛氭牳蹇冧釜鑲℃槑缁嗘垚浜ら璇垽鍋滅墝(_em_quotes鏉冨▉蹇収)锛?鏈堝叏鏈?6鏃ラ噸绠? 1 file changed, 5 insertions(+), 5 deletions(-)
+PUSH: To github.com:imfang77/market-review.git|   4c6cadd..aafd957  main -> main
+LOG: aafd957 涓荤嚎鍒嗘瀽淇锛氭牳蹇冧釜鑲℃槑缁嗘垚浜ら璇垽鍋滅墝(_em_quotes鏉冨▉蹇収)锛?鏈堝叏鏈?6鏃ラ噸绠?
+HEAD: aafd957975c64a42124f353f6cc11c964de81494
+ORIG: aafd957975c64a42124f353f6cc11c964de81494
