@@ -14,9 +14,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "双入口：技术面页最新20260922（G1趋势突破新增13只：华仁药业/中新赛克/黑猫股份/新华制药/南兴股份/联合光电 等）+ 基本面页数据截至最新季报",
     "mainlineFile": "mainline-20260922.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:红黄酒/房产服务/CXO概念｜10日主线:红黄酒/玻璃/MLCC概念｜20日主线:林业/红黄酒/石油贸易",
     "mainlineConceptFile": "mainline_concept-20260922.html",
-    "conceptSummary": "5日主线:CRO/半导体/减肥药｜10日主线:CRO/共封装光模块(CPO)/半导体｜20日主线:共封装光模块(CPO)/5G概念/液冷概念"
+    "conceptSummary": "5日主线:红黄酒/房产服务/CXO概念｜10日主线:红黄酒/玻璃/MLCC概念｜20日主线:林业/红黄酒/石油贸易"
   },
   {
     "date": "2026-09-21",
@@ -26,9 +26,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "双入口：技术面页最新20260921（G1趋势突破新增16只：沃森生物/继峰股份/博腾股份/长白山 等）+ 基本面页数据截至最新季报",
     "mainlineFile": "mainline-20260921.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:红黄酒/半导体/房产服务｜10日主线:红黄酒/玻璃/石油贸易｜20日主线:林业/红黄酒/种业",
     "mainlineConceptFile": "mainline_concept-20260921.html",
-    "conceptSummary": "5日主线:半导体/CRO/共封装光模块(CPO)｜10日主线:共封装光模块(CPO)/半导体/5G概念｜20日主线:共封装光模块(CPO)/5G概念/液冷概念"
+    "conceptSummary": "5日主线:红黄酒/半导体/房产服务｜10日主线:红黄酒/玻璃/石油贸易｜20日主线:林业/红黄酒/种业"
   },
   {
     "date": "2026-09-18",
@@ -38,9 +38,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "条件选股三入口：技术面页最新20260918(G1/G2/ETF)；基本面页数据截至最新季报；RPS选股页数据日期20260918(已修复长期停留8/28的bug)。",
     "mainlineFile": "mainline_concept-20260918.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:红黄酒/次新股/先进封装｜10日主线:玻璃/石油贸易/CPO概念｜20日主线:林业/红黄酒/石油贸易",
     "mainlineConceptFile": "mainline_concept-20260918.html",
-    "conceptSummary": "5日主线:CRO/半导体/共封装光模块(CPO)｜10日主线:共封装光模块(CPO)/5G概念/半导体｜20日主线:共封装光模块(CPO)/5G概念/液冷概念"
+    "conceptSummary": "5日主线:红黄酒/次新股/先进封装｜10日主线:玻璃/石油贸易/CPO概念｜20日主线:林业/红黄酒/石油贸易"
   },
   {
     "date": "2026-09-17",
@@ -50,9 +50,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "双入口：技术面页最新20260917（G1趋势突破12只：中视传媒/博瑞传播/龙版传媒/峰岹科技/华民股份 等）+ 基本面页数据截至最新季报",
     "mainlineFile": "mainline-20260917.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:玻璃/陶瓷/MLCC概念｜10日主线:林业/红黄酒/玻璃｜20日主线:林业/石油贸易/培育钻石",
     "mainlineConceptFile": "mainline_concept-20260917.html",
-    "conceptSummary": "5日主线:共封装光模块(CPO)/半导体/黄金｜10日主线:共封装光模块(CPO)/5G概念/半导体｜20日主线:共封装光模块(CPO)/5G概念/液冷概念"
+    "conceptSummary": "5日主线:玻璃/陶瓷/MLCC概念｜10日主线:林业/红黄酒/玻璃｜20日主线:林业/石油贸易/培育钻石"
   },
   {
     "date": "2026-09-16",
@@ -62,9 +62,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "",
     "mainlineFile": "mainline_concept-20260916.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:陶瓷/玻璃/MLCC概念｜10日主线:林业/培育钻石/红黄酒｜20日主线:林业/石油贸易/培育钻石",
     "mainlineConceptFile": "mainline_concept-20260916.html",
-    "conceptSummary": "5日主线:共封装光模块(CPO)｜10日主线:｜20日主线:黄金"
+    "conceptSummary": "5日主线:陶瓷/玻璃/MLCC概念｜10日主线:林业/培育钻石/红黄酒｜20日主线:林业/石油贸易/培育钻石"
   },
   {
     "date": "2026-09-15",
@@ -74,9 +74,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "双入口：技术面页最新20260915（G1趋势突破5只：中新赛克/中信出版/昌红科技/药石科技/中视传媒）+ 基本面页数据截至最新季报",
     "mainlineFile": "mainline_concept-20260915.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:玻璃/陶瓷/MLCC概念｜10日主线:船舶/培育钻石/石油贸易｜20日主线:林业/船舶/石油贸易",
     "mainlineConceptFile": "mainline_concept-20260915.html",
-    "conceptSummary": "5日主线:共封装光模块(CPO)｜10日主线:｜20日主线:黄金"
+    "conceptSummary": "5日主线:玻璃/陶瓷/MLCC概念｜10日主线:船舶/培育钻石/石油贸易｜20日主线:林业/船舶/石油贸易"
   },
   {
     "date": "2026-09-14",
@@ -86,9 +86,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "双入口：技术面（趋势突破G1/跳空缺口G2/ETF五日均强）+ 基本面（高盈利/高成长/高股息）",
     "mainlineFile": "mainline_concept-20260914.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:培育钻石/石油贸易/水力发电｜10日主线:林业/船舶/培育钻石｜20日主线:种业/林业",
     "mainlineConceptFile": "mainline_concept-20260914.html",
-    "conceptSummary": "5日主线:共封装光模块(CPO)｜10日主线:共封装光模块(CPO)/5G概念｜20日主线:黄金/共封装光模块(CPO)/5G概念"
+    "conceptSummary": "5日主线:培育钻石/石油贸易/水力发电｜10日主线:林业/船舶/培育钻石｜20日主线:种业/林业"
   },
   {
     "date": "2026-09-11",
@@ -98,9 +98,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "技术面 G1 2只(鼎信通讯/中信出版) G2 0只 + 基本面",
     "mainlineFile": "mainline-20260911.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:玻璃/石油贸易/通信设备｜10日主线:船舶/知识付费/军贸概念｜20日主线:种业/粮食概念",
     "mainlineConceptFile": "mainline_concept-20260911.html",
-    "conceptSummary": "5日主线:共封装光模块(CPO)/5G概念/国防军工｜10日主线:网络游戏/国防军工/共封装光模块(CPO)｜20日主线:黄金/共封装光模块(CPO)/5G概念"
+    "conceptSummary": "5日主线:玻璃/石油贸易/通信设备｜10日主线:船舶/知识付费/军贸概念｜20日主线:种业/粮食概念"
   },
   {
     "date": "2026-09-10",
@@ -110,9 +110,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "技术面(G1趋势突破/G2断层/G4 ETF5日强) + 基本面",
     "mainlineFile": "mainline-20260910.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:船舶/林业/渔业｜10日主线:林业/船舶/种业｜20日主线:种业/粮食概念",
     "mainlineConceptFile": "mainline_concept-20260910.html",
-    "conceptSummary": "5日主线:共封装光模块(CPO)/5G概念/网络游戏｜10日主线:共封装光模块(CPO)/国防军工/网络游戏｜20日主线:共封装光模块(CPO)/液冷概念/黄金"
+    "conceptSummary": "5日主线:船舶/林业/渔业｜10日主线:林业/船舶/种业｜20日主线:种业/粮食概念"
   },
   {
     "date": "2026-09-09",
@@ -122,9 +122,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "双入口:技术面(G1趋势突破/G2业绩缺口/G4ETF五日均强) + 基本面(高盈利/高成长/高股息)",
     "mainlineFile": "mainline-20260909.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:种植业/渔业/船舶｜10日主线:种业/林业｜20日主线:种业/粮食概念",
     "mainlineConceptFile": "mainline_concept-20260909.html",
-    "conceptSummary": "5日主线:共封装光模块(CPO)/网络游戏/5G概念｜10日主线:网络游戏/共封装光模块(CPO)/数字经济｜20日主线:共封装光模块(CPO)/黄金/液冷概念"
+    "conceptSummary": "5日主线:种植业/渔业/船舶｜10日主线:种业/林业｜20日主线:种业/粮食概念"
   },
   {
     "date": "2026-09-08",
@@ -134,9 +134,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "技术面页最新20260908: G1趋势突破6只,G2跳空缺口4只,G3 ETF 5日最强,G4基本面双季扣非;基本面页数据截至2026中报",
     "mainlineFile": "mainline_concept-20260908.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:船舶/橡胶/培育钻石｜10日主线:种业/林业/种植业｜20日主线:种业/种植业/粮食概念",
     "mainlineConceptFile": "mainline_concept-20260908.html",
-    "conceptSummary": "5日主线:网络游戏/数字经济｜10日主线:网络游戏/液冷概念/消费电子｜20日主线:共封装光模块(CPO)/液冷概念/消费电子"
+    "conceptSummary": "5日主线:船舶/橡胶/培育钻石｜10日主线:种业/林业/种植业｜20日主线:种业/种植业/粮食概念"
   },
   {
     "date": "2026-09-07",
@@ -146,9 +146,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "双入口：技术面(趋势突破G1-1只/跳空缺口G2-0只/ETF五日均强20只)+基本面(高盈利/高成长/高股息三维度)",
     "mainlineFile": "mainline_concept-20260907.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:种业/林业/百货｜10日主线:种业/林业｜20日主线:种业/粮食概念",
     "mainlineConceptFile": "mainline_concept-20260907.html",
-    "conceptSummary": "5日主线:网络游戏/AI应用/国防军工｜10日主线:网络游戏/信创/数字经济｜20日主线:黄金/消费电子/液冷概念"
+    "conceptSummary": "5日主线:种业/林业/百货｜10日主线:种业/林业｜20日主线:种业/粮食概念"
   },
   {
     "date": "2026-09-04",
@@ -158,9 +158,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "双入口:技术面(G1趋势突破8只/G2跳空缺口候选池69只/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
     "mainlineFile": "mainline_concept-20260904.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:影视音像/红黄酒｜10日主线:种业/林业｜20日主线:种业/粮食概念",
     "mainlineConceptFile": "mainline_concept-20260904.html",
-    "conceptSummary": "5日主线:网络游戏/AI应用/国防军工｜10日主线:液冷概念/消费电子/国防军工｜20日主线:黄金/液冷概念/消费电子"
+    "conceptSummary": "5日主线:影视音像/红黄酒｜10日主线:种业/林业｜20日主线:种业/粮食概念"
   },
   {
     "date": "2026-09-03",
@@ -170,9 +170,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "技术面页:趋势突破G1+净利润断层G2+ETF五日强;基本面页:高盈利/高成长/高股息",
     "mainlineFile": "mainline-20260903.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:军贸概念/影视音像/石油贸易｜10日主线:种业/石油贸易/保险｜20日主线:种业/粮食概念",
     "mainlineConceptFile": "mainline_concept-20260903.html",
-    "conceptSummary": "5日主线:国防军工/网络游戏/AI应用｜10日主线:消费电子/液冷概念/网络游戏｜20日主线:黄金/共封装光模块(CPO)/消费电子"
+    "conceptSummary": "5日主线:军贸概念/影视音像/石油贸易｜10日主线:种业/石油贸易/保险｜20日主线:种业/粮食概念"
   },
   {
     "date": "2026-09-02",
@@ -182,9 +182,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "双入口:技术面(趋势突破G1/净利润断层G2/ETF五日均强) + 基本面(高盈利/高成长/高股息)",
     "mainlineFile": "mainline_concept-20260902.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:种业/林业/军贸概念｜10日主线:种业/林业/旅游｜20日主线:种业/粮食概念/种植业",
     "mainlineConceptFile": "mainline_concept-20260902.html",
-    "conceptSummary": "5日主线:网络游戏/信创/数字经济｜10日主线:黄金/网络游戏/数字经济｜20日主线:黄金/共封装光模块(CPO)/消费电子"
+    "conceptSummary": "5日主线:种业/林业/军贸概念｜10日主线:种业/林业/旅游｜20日主线:种业/粮食概念/种植业"
   },
   {
     "date": "2026-09-01",
@@ -194,9 +194,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "技术面页更新20260901(G1突破12只:金一文化/苏垦农发等;G2池0只;ETF5日最强20只) 基本面页数据截至最新季报",
     "mainlineFile": "mainline_concept-20260901.html",
-    "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+    "mainlineSummary": "5日主线:种业/种植业/林业｜10日主线:种业/焦炭加工/种植业｜20日主线:种业/种植业/粮食概念",
     "mainlineConceptFile": "mainline_concept-20260901.html",
-    "conceptSummary": "5日主线:｜10日主线:黄金｜20日主线:共封装光模块(CPO)/黄金/半导体"
+    "conceptSummary": "5日主线:种业/种植业/林业｜10日主线:种业/焦炭加工/种植业｜20日主线:种业/种植业/粮食概念"
   },
   {
     "date": "2026-08-31",
