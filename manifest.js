@@ -110,9 +110,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "技术面(G1趋势突破/G2断层/G4 ETF5日强) + 基本面",
     "mainlineFile": "mainline-20260910.html",
-    "mainlineSummary": "5日主线:船舶/林业/渔业｜10日主线:林业/船舶/种业｜20日主线:种业/粮食概念",
+    "mainlineSummary": "5日主线:船舶/林业/渔业｜10日主线:林业/船舶/种业｜20日主线:种业/种植业/粮食概念",
     "mainlineConceptFile": "mainline_concept-20260910.html",
-    "conceptSummary": "5日主线:船舶/林业/渔业｜10日主线:林业/船舶/种业｜20日主线:种业/粮食概念"
+    "conceptSummary": "5日主线:船舶/林业/渔业｜10日主线:林业/船舶/种业｜20日主线:种业/种植业/粮食概念"
   },
   {
     "date": "2026-09-09",
@@ -134,9 +134,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "技术面页最新20260908: G1趋势突破6只,G2跳空缺口4只,G3 ETF 5日最强,G4基本面双季扣非;基本面页数据截至2026中报",
     "mainlineFile": "mainline_concept-20260908.html",
-    "mainlineSummary": "5日主线:船舶/橡胶/培育钻石｜10日主线:种业/林业/种植业｜20日主线:种业/种植业/粮食概念",
+    "mainlineSummary": "5日主线:船舶/橡胶/培育钻石｜10日主线:种业/林业｜20日主线:种业/粮食概念",
     "mainlineConceptFile": "mainline_concept-20260908.html",
-    "conceptSummary": "5日主线:船舶/橡胶/培育钻石｜10日主线:种业/林业/种植业｜20日主线:种业/种植业/粮食概念"
+    "conceptSummary": "5日主线:船舶/橡胶/培育钻石｜10日主线:种业/林业｜20日主线:种业/粮食概念"
   },
   {
     "date": "2026-09-07",
@@ -182,9 +182,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "双入口:技术面(趋势突破G1/净利润断层G2/ETF五日均强) + 基本面(高盈利/高成长/高股息)",
     "mainlineFile": "mainline_concept-20260902.html",
-    "mainlineSummary": "5日主线:种业/林业/军贸概念｜10日主线:种业/林业/旅游｜20日主线:种业/粮食概念/种植业",
+    "mainlineSummary": "5日主线:种业/林业/军贸概念｜10日主线:种业/林业/旅游｜20日主线:种业/粮食概念",
     "mainlineConceptFile": "mainline_concept-20260902.html",
-    "conceptSummary": "5日主线:种业/林业/军贸概念｜10日主线:种业/林业/旅游｜20日主线:种业/粮食概念/种植业"
+    "conceptSummary": "5日主线:种业/林业/军贸概念｜10日主线:种业/林业/旅游｜20日主线:种业/粮食概念"
   },
   {
     "date": "2026-09-01",

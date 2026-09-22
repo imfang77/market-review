@@ -1,0 +1,5 @@
+﻿C:\Users\15921\.workbuddy\binaries\PortableGit\versions\1.2.0\bin\git.exe => False
+C:\Users\15921\.workbuddy\binaries\PortableGit\versions\1.2.0\cmd\git.exe => True
+C:\Program Files\Git\cmd\git.exe => False
+C:\Program Files\Git\bin\git.exe => False
+GetCommand=NOTFOUND
