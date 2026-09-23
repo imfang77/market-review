@@ -37,6 +37,12 @@ var weekday = args[3];
 var summary = args[4];
 
 var typeInfo = TYPE_MAP[type];
+// 401 改版：mainline_concept-<DATE>.html 与 mainline-<DATE>.html 内容一致(同为401板块)，
+// 自动化第三步会对概念文件再调一次 mainline 类型 add-report。为不让它错误覆盖 mainlineFile，
+// 这里按文件名识别：命中 mainline_concept- 时改映射到 conceptSummary/mainlineConceptFile。
+if (type === 'mainline' && /mainline_concept-/.test(file)) {
+  typeInfo = { fileKey: 'mainlineConceptFile', summaryKey: 'conceptSummary', label: '主线分析(概念)' };
+}
 if (!typeInfo) {
   console.error('类型必须是 review, screening 或 mainline');
   process.exit(1);
