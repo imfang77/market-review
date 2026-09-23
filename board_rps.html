@@ -184,6 +184,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 .rps-ma-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:12px;margin:-4px 0 8px;font-variant-numeric:tabular-nums}
 .rps-ma-lbl{color:#868e96;font-weight:600}
 .rps-ma-val{font-weight:600}
+.rps-ma-num{font-size:11px;color:#000;font-weight:500;margin-right:8px}
 .rps-date-blue{font-weight:600;color:#4263eb}
 .rps-sel{border:1px solid #ced4da;background:#fff;color:#1a1a2e;padding:5px 10px;border-radius:6px;font-size:13px;cursor:pointer}
 .rps-now{margin-top:12px;font-size:13px;line-height:1.5}
@@ -210,6 +211,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 .skin-B .rps-ctl-lab input{accent-color:#4dabf7}
 .skin-B .rps-ma-bar,.skin-B .rps-note{color:#7d8694}
 .skin-B .rps-date-blue{color:#4dabf7}
+.skin-B .rps-ma-num{color:#c5cad3}
 .skin-B .rps-sel{background:#1b2030;color:#c5cad3;border-color:#2b3242}
 .skin-B .rps-up{color:#ff6b6b}.skin-B .rps-down{color:#51cf66}
 /* Skin C 极简留白（细线、克制）*/
@@ -224,6 +226,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 .skin-C .rps-ctl-lab{color:#adb5bd}
 .skin-C .rps-ctl-lab input{accent-color:#495057}
 .skin-C .rps-date-blue{color:#1971c2}
+.skin-C .rps-ma-num{color:#1a1a2e}
 .skin-C .rps-sel{background:#fff;color:#868e96;border-color:#e9ecef}
 .skin-C .rps-up{color:#e03131}.skin-C .rps-down{color:#2f9e44}
 
@@ -321,8 +324,8 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         <div style="display:flex;align-items:center;gap:14px">
           <div id="rpsTitle" style="font-size:16px;font-weight:700"></div>
           <div class="rps-toggle" id="rpsToggle">
-            <button data-mode="rps" class="on">RPS趋势</button>
-            <button data-mode="kline">K线图</button>
+            <button data-mode="rps" class="on">RPS</button>
+            <button data-mode="kline">K线</button>
           </div>
         </div>
         <button onclick="closeBoardRps()" class="rps-x" style="border:none;font-size:19px;line-height:1;width:30px;height:30px;border-radius:6px;cursor:pointer">×</button>
@@ -998,7 +1001,11 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         key = dt.getFullYear() + "-" + wk;
       } else { key = d.slice(0, 6); }
       if (!groups[key]) { groups[key] = { d: bar[0], o: bar[1], h: bar[2], l: bar[3], c: bar[4] }; order.push(key); }
-      else { var g = groups[key]; if (bar[2] > g.h) g.h = bar[2]; if (bar[3] < g.l) g.l = bar[3]; g.c = bar[4]; }
+      var g = groups[key];
+      if (bar[2] > g.h) g.h = bar[2];
+      if (bar[3] < g.l) g.l = bar[3];
+      g.c = bar[4];
+      g.d = bar[0]; // 用组内最后一根日期作为标签（=最新更新日期）
     });
     return order.map(function (k) { var g = groups[k]; return [g.d, g.o, g.h, g.l, g.c]; });
   }
@@ -1047,7 +1054,8 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         lineStyle: { width: (p <= 20 ? 1.4 : 1.1), color: col, opacity: 0.95, type: dashed ? "dashed" : "solid" },
         itemStyle: { color: col }, z: 3 });
       var lastV = m[m.length - 1];
-      maHtml += '<span class="rps-ma-val" style="color:' + col + '">MA' + p + " " + (lastV == null ? "—" : lastV) + "</span>";
+      maHtml += '<span class="rps-ma-val" style="color:' + col + '">MA' + p + '</span>' +
+                '<span class="rps-ma-num">' + (lastV == null ? "—" : lastV) + "</span>";
     });
     // 通达信风格：跳空用灰色横线条（矩形带）表示
     //   水平跨度 = 相邻两根 K 线之间的空隙（上一根 → 当前根）
@@ -1084,7 +1092,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         } },
       legend: { show: false },
       grid: { left: 58, right: 24, top: 40, bottom: 38 },
-      xAxis: { type: "category", data: dates, boundaryGap: true, axisLabel: { fontSize: 10, color: th.axis, hideOverlap: true, formatter: function (v) { return klinePeriod === "day" ? String(v).slice(4) : v; } }, axisLine: { lineStyle: { color: th.split } } },
+      xAxis: { type: "category", data: dates, boundaryGap: true, axisLabel: { fontSize: 10, color: th.axis, hideOverlap: true, showMaxLabel: true, formatter: function (v) { return klinePeriod === "day" ? String(v).slice(4) : v; } }, axisLine: { lineStyle: { color: th.split } } },
       yAxis: { scale: true, axisLabel: { fontSize: 11, color: th.axis }, splitLine: { lineStyle: { color: th.split } } },
       series: series
     }, true);
