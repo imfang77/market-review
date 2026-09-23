@@ -6,6 +6,19 @@
  * mainlines.html 读取 mainlineFile/mainlineSummary 渲染日期列表
  */
 window.REPORTS = [
+{
+    "date": "2026-09-23",
+    "weekday": "周三",
+    "reviewFile": "review-20260923.html",
+    "reviewSummary": "",
+    "screeningFile": "screening.html",
+    "screeningSummary": "",
+    "mainlineFile": "mainline-20260923.html",
+    "mainlineSummary": "5日主线:房产服务/红黄酒/CXO概念｜10日主线:红黄酒/陶瓷/玻璃｜20日主线:红黄酒/林业/培育钻石",
+    "mainlineConceptFile": "mainline_concept-20260923.html",
+    "conceptSummary": "5日主线:房产服务/红黄酒/CXO概念｜10日主线:红黄酒/陶瓷/玻璃｜20日主线:红黄酒/林业/培育钻石"
+  },
+
   {
     "date": "2026-09-22",
     "weekday": "周二",
