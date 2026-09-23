@@ -261,6 +261,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
       </div>
       <div id="rpsRange" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap"></div>
       <div id="rpsCtl" style="display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap;font-size:13px"></div>
+      <div id="rpsDateCap" style="font-size:12px;color:#868e96;margin:-2px 0 8px"></div>
       <div id="rpsChart" style="width:100%;height:360px"></div>
       <div id="rpsNow" style="margin-top:12px;font-size:13px;line-height:1.5"></div>
       <div style="margin-top:8px;font-size:12px;color:#868e96">相邻两日的板块RPS均 ≥ 90 时，两点之间显示红色线段；仅单个日期 ≥ 90 时，才凸显为红色点，前后连线保持该周期原色。历史曲线由每日横截面排名回溯计算，可切换至 12个月。勾选上方复选框可显隐对应曲线。</div>
@@ -776,6 +777,9 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     if (!b || !b.hist || !b.hist.length) { box.innerHTML = '<div style="padding:70px;text-align:center;color:#868e96;font-size:14px">暂无历史数据</div>'; return; }
     var win = b.hist.slice(-boardRpsDays);
     var dates = win.map(function (h) { return h[0]; });
+    // 数据日期（最新）= T：明确显示最后一根所在交易日，避免与页面“当前日期”混淆/重叠
+    var _cap = document.getElementById("rpsDateCap");
+    if (_cap) _cap.textContent = "数据日期（最新）：" + (dates[dates.length - 1] || "—") + "　|　历史共 " + b.hist.length + " 个交易日";
     var mk = function (idx, name, color) {
       var arr = win.map(function (h) { return h[idx]; });
       /*
@@ -805,8 +809,8 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     boardChart.setOption({
       tooltip: { trigger: "axis", axisPointer: { type: "cross" }, formatter: function (ps) { var h = ps[0].axisValue + "<br/>"; ps.forEach(function (o) { if (o.seriesName.indexOf("-hot") < 0 && o.value != null) h += o.marker + o.seriesName + "：" + o.value + "<br/>"; }); return h; } },
       legend: { show: false },
-      grid: { left: 46, right: 18, top: 40, bottom: 38 },
-      xAxis: { type: "category", data: dates, boundaryGap: false, axisLabel: { fontSize: 10, color: "#868e96", formatter: function (v) { return String(v).slice(5); } } },
+      grid: { left: 46, right: 40, top: 40, bottom: 38 },
+      xAxis: { type: "category", data: dates, boundaryGap: false, axisLabel: { fontSize: 10, color: "#868e96", showMinLabel: true, showMaxLabel: true, hideOverlap: true, formatter: function (v) { return String(v).slice(5); } } },
       yAxis: { type: "value", min: 0, max: 100, axisLabel: { fontSize: 11, color: "#868e96" }, splitLine: { lineStyle: { color: "#e9ecef" } } },
       series: series
     }, true);
