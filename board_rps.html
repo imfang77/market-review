@@ -165,6 +165,68 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   .fp-fresh-win { width: 42px; height: 24px; }
   .fp-hint { font-size: 11px; }
 }
+
+/* ===== 升级：RPS趋势 ↔ K线 切换（在原有点击弹窗基础上）===== */
+.rps-hidden{display:none!important}
+.rps-card{background:#fff;color:#1a1a2e;transition:background .2s,color .2s}
+.rps-x{background:#f1f3f5;color:#495057;border:none}
+.rps-toolbar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.rps-lbl{font-size:12px;color:#868e96;margin-right:2px;white-space:nowrap}
+.rps-toggle{display:inline-flex;border:1px solid #dee2e6;border-radius:8px;overflow:hidden}
+.rps-toggle button{border:none;background:#fff;color:#495057;padding:6px 16px;font-size:13px;cursor:pointer;font-weight:600}
+.rps-toggle button.on{background:#4263eb;color:#fff}
+.rps-seg{display:inline-flex;gap:4px;flex-wrap:wrap}
+.rps-range-btn{border:1px solid #ced4da;background:#fff;color:#1a1a2e;padding:5px 12px;border-radius:6px;font-size:13px;cursor:pointer}
+.rps-range-btn.on{background:#4263eb;color:#fff;border-color:#4263eb}
+.rps-ctl{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;margin-bottom:8px}
+.rps-ctl-lab{display:inline-flex;align-items:center;gap:4px;cursor:pointer}
+.rps-ctl-lab input{width:14px;height:14px;accent-color:#4263eb}
+.rps-ma-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:12px;margin:-4px 0 8px;font-variant-numeric:tabular-nums}
+.rps-ma-lbl{color:#868e96;font-weight:600}
+.rps-ma-val{font-weight:600}
+.rps-date-blue{font-weight:600;color:#4263eb}
+.rps-sel{border:1px solid #ced4da;background:#fff;color:#1a1a2e;padding:5px 10px;border-radius:6px;font-size:13px;cursor:pointer}
+.rps-now{margin-top:12px;font-size:13px;line-height:1.5}
+.rps-note{margin-top:8px;font-size:12px;color:#868e96;line-height:1.6}
+.rps-up{color:#d63031;font-weight:600}
+.rps-down{color:#00b894;font-weight:600}
+/* Skin A 专业交易终端（浅色紧凑，与现有页面一致）*/
+.skin-A .rps-card{background:#fff;color:#1a1a2e}
+.skin-A .rps-x{background:#f1f3f5;color:#495057}
+.skin-A .rps-toggle{border-color:#dee2e6}
+.skin-A .rps-toggle button{background:#fff;color:#495057}
+.skin-A .rps-toggle button.on{background:#4263eb;color:#fff}
+.skin-A .rps-range-btn.on{background:#4263eb;color:#fff;border-color:#4263eb}
+/* Skin B 暗色霓虹（TradingView 暗夜）*/
+.skin-B .rps-card{background:#131722;color:#e6e9ef;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.skin-B .rps-x{background:#232838;color:#c5cad3}
+.skin-B .rps-lbl{color:#7d8694}
+.skin-B .rps-toggle{border-color:#2b3242}
+.skin-B .rps-toggle button{background:#131722;color:#9aa4b2}
+.skin-B .rps-toggle button.on{background:linear-gradient(90deg,#4dabf7,#3bc9db);color:#06121f;box-shadow:0 0 10px rgba(77,171,247,.5)}
+.skin-B .rps-range-btn{background:#1b2030;color:#c5cad3;border-color:#2b3242}
+.skin-B .rps-range-btn.on{background:#4dabf7;color:#06121f;border-color:#4dabf7;box-shadow:0 0 8px rgba(77,171,247,.5)}
+.skin-B .rps-ctl-lab{color:#c5cad3}
+.skin-B .rps-ctl-lab input{accent-color:#4dabf7}
+.skin-B .rps-ma-bar,.skin-B .rps-note{color:#7d8694}
+.skin-B .rps-date-blue{color:#4dabf7}
+.skin-B .rps-sel{background:#1b2030;color:#c5cad3;border-color:#2b3242}
+.skin-B .rps-up{color:#ff6b6b}.skin-B .rps-down{color:#51cf66}
+/* Skin C 极简留白（细线、克制）*/
+.skin-C .rps-card{background:#ffffff;color:#495057;box-shadow:0 4px 24px rgba(0,0,0,.08)}
+.skin-C .rps-x{background:#f8f9fa;color:#adb5bd}
+.skin-C .rps-lbl{color:#ced4da}
+.skin-C .rps-toggle{border-color:#e9ecef}
+.skin-C .rps-toggle button{background:#fff;color:#adb5bd;font-weight:500}
+.skin-C .rps-toggle button.on{background:#495057;color:#fff}
+.skin-C .rps-range-btn{background:#fff;color:#868e96;border-color:#e9ecef}
+.skin-C .rps-range-btn.on{background:#495057;color:#fff;border-color:#495057}
+.skin-C .rps-ctl-lab{color:#adb5bd}
+.skin-C .rps-ctl-lab input{accent-color:#495057}
+.skin-C .rps-date-blue{color:#1971c2}
+.skin-C .rps-sel{background:#fff;color:#868e96;border-color:#e9ecef}
+.skin-C .rps-up{color:#e03131}.skin-C .rps-down{color:#2f9e44}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 </head>
@@ -253,18 +315,33 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     </div>
   </div>
 
-  <div id="rpsModal" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center">
-    <div style="background:#fff;border-radius:12px;padding:18px 20px;width:min(860px,94vw);max-height:92vh;overflow:auto;box-shadow:0 8px 32px rgba(0,0,0,.18)">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-        <div id="rpsTitle" style="font-size:16px;font-weight:700"></div>
-        <button onclick="closeBoardRps()" style="border:none;background:#f1f3f5;font-size:19px;line-height:1;width:30px;height:30px;border-radius:6px;cursor:pointer;color:#495057">×</button>
+  <div id="rpsModal" class="skin-A" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center">
+    <div class="rps-card" style="border-radius:12px;padding:18px 20px;width:min(900px,95vw);height:620px;max-height:92vh;overflow:auto;box-shadow:0 8px 32px rgba(0,0,0,.18)">
+      <div class="rps-head" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:10px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div id="rpsTitle" style="font-size:16px;font-weight:700"></div>
+          <div class="rps-toggle" id="rpsToggle">
+            <button data-mode="rps" class="on">RPS趋势</button>
+            <button data-mode="kline">K线图</button>
+          </div>
+        </div>
+        <button onclick="closeBoardRps()" class="rps-x" style="border:none;font-size:19px;line-height:1;width:30px;height:30px;border-radius:6px;cursor:pointer">×</button>
       </div>
-      <div id="rpsRange" style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap"></div>
-      <div id="rpsCtl" style="display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap;font-size:13px"></div>
-      <div id="rpsDateCap" style="font-size:12px;color:#868e96;margin:-2px 0 8px"></div>
-      <div id="rpsChart" style="width:100%;height:360px"></div>
-      <div id="rpsNow" style="margin-top:12px;font-size:13px;line-height:1.5"></div>
-      <div style="margin-top:8px;font-size:12px;color:#868e96">相邻两日的板块RPS均 ≥ 90 时，两点之间显示红色线段；仅单个日期 ≥ 90 时，才凸显为红色点，前后连线保持该周期原色。历史曲线由每日横截面排名回溯计算，可切换至 12个月。勾选上方复选框可显隐对应曲线。</div>
+      <div class="rps-toolbar">
+        <div class="rps-shared-range">
+          <span class="rps-lbl">周期</span>
+          <div id="rpsRange" class="rps-seg"></div>
+        </div>
+        <div class="rps-kline-period rps-hidden" id="rpsKlinePeriod">
+          <span class="rps-lbl">K线</span>
+          <select id="klinePeriodSel" class="rps-sel"></select>
+        </div>
+      </div>
+      <div id="rpsCtl" class="rps-ctl"></div>
+      <div id="rpsMaBar" class="rps-ma-bar rps-hidden"></div>
+      <div id="rpsChart" style="width:100%;height:380px"></div>
+      <div id="rpsNow" class="rps-now"></div>
+      <div id="rpsNote" class="rps-note"></div>
     </div>
   </div>
 
@@ -282,6 +359,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 </div>
 
 <script src="_board_rps_data.js?v=20260923b"></script>
+  <script src="_board_kline.js?v=20260923a"></script>
 <script>
 (function () {
   var D = window.BOARD_RPS || { anchor: "—", boards: {} };
@@ -709,13 +787,46 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     document.head.appendChild(s);
   }
 
+  // ===== 升级：RPS趋势 ↔ K线 切换（共用周期）=====
+  var viewMode = "rps";      // rps | kline
+  var klinePeriod = "day";   // day | week | month
+  var KLINE_PERIODS = [["day", "日K"], ["week", "周K"], ["month", "月K"]];
+  var RANGE_OPTS = [[20, "1个月"], [60, "3个月"], [120, "6个月"], [250, "12个月"]];
+  var g_dateCap = "";
+
+  function skinOf() {
+    var m = document.getElementById("rpsModal");
+    var c = m ? (m.className || "") : "";
+    var mm = c.match(/skin-([ABC])/);
+    return mm ? mm[1] : "A";
+  }
+  function chartTheme(skin) {
+    if (skin === "B") return {
+      bg: "#131722", axis: "#7d8694", split: "#232838",
+      up: "#ff4d4f", down: "#00e676", upBorder: "#ff4d4f", downBorder: "#00e676",
+      text: "#c5cad3",
+      ma: ["#ffa94d", "#4dabf7", "#69db7c", "#da77f2", "#3bc9db", "#ff6b6b", "#adb5bd"]
+    };
+    if (skin === "C") return {
+      bg: "#ffffff", axis: "#adb5bd", split: "#f1f3f5",
+      up: "#e03131", down: "#2f9e44", upBorder: "#e03131", downBorder: "#2f9e44",
+      text: "#868e96",
+      ma: ["#f08c00", "#1971c2", "#2f9e44", "#9c36b5", "#0c8599", "#e03131", "#adb5bd"]
+    };
+    return {
+      bg: "#ffffff", axis: "#868e96", split: "#e9ecef",
+      up: "#d63031", down: "#00b894", upBorder: "#d63031", downBorder: "#00b894",
+      text: "#495057",
+      ma: ["#f08c00", "#1971c2", "#2f9e44", "#9c36b5", "#0c8599", "#e03131", "#adb5bd"]
+    };
+  }
+
   function openBoardRps(code, name) {
     boardCode = code;
     var b = BOARDS[code];
     if (!b) { alert("该板块暂无数据"); return; }
     if (!b.hist || !b.hist.length) {
       if (!histTried) {
-        // 首次点开需要拉取历史曲线文件（约 4MB，仅此一次）
         var box0 = document.getElementById("rpsChart");
         if (box0) box0.innerHTML = '<div style="padding:70px;text-align:center;color:#868e96;font-size:14px">历史曲线加载中…</div>';
         document.getElementById("rpsTitle").textContent = code + " " + (name || "");
@@ -729,44 +840,93 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     rpsVis = Object.assign({}, RPS_DEFAULT_ON);
     document.getElementById("rpsTitle").textContent = code + " " + (name || "");
     document.getElementById("rpsModal").style.display = "flex";
-    var rg = document.getElementById("rpsRange");
-    if (rg && !rg.getAttribute("data-init")) {
-      [[20, "1个月"], [60, "3个月"], [120, "6个月"], [250, "12个月"]].forEach(function (o) {
-        var btn = document.createElement("button");
-        btn.setAttribute("data-d", o[0]); btn.textContent = o[1];
-        btn.style.cssText = "padding:5px 12px;border:1px solid #ced4da;border-radius:6px;background:#fff;color:#1a1a2e;font-size:13px;cursor:pointer";
-        if (o[0] === 20) { btn.style.background = "#4263eb"; btn.style.color = "#fff"; btn.style.borderColor = "#4263eb"; }
-        rg.appendChild(btn);
-      });
-      rg.setAttribute("data-init", "1");
-    }
-    var ctl = document.getElementById("rpsCtl");
-    if (ctl) {
-      if (!ctl.getAttribute("data-init")) {
-        RPSDEFS.forEach(function (d) {
-          var lab = document.createElement("label");
-          lab.style.cssText = "display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:13px";
-          var cb = document.createElement("input");
-          cb.type = "checkbox"; cb.setAttribute("data-name", d.name); cb.checked = !!RPS_DEFAULT_ON[d.name];
-          cb.style.cssText = "width:14px;height:14px;accent-color:" + d.color;
-          cb.onchange = function () { rpsVis[d.name] = this.checked; drawBoardChart(); };
-          var sp = document.createElement("span");
-          sp.textContent = (RPSDEFS.indexOf(d) === 0) ? d.name : d.short;
-          sp.style.color = d.color;
-          lab.appendChild(cb); lab.appendChild(sp);
-          ctl.appendChild(lab);
-        });
-        ctl.setAttribute("data-init", "1");
-      } else {
-        Array.prototype.forEach.call(ctl.querySelectorAll("input[type=checkbox]"), function (cb) {
-          cb.checked = !!RPS_DEFAULT_ON[cb.getAttribute("data-name")];
-        });
-      }
-    }
-    drawBoardChart();
+    buildRange();
+    buildKlinePeriod();
+    buildRpsCtl();
+    viewMode = "rps"; klinePeriod = "day"; boardRpsDays = 20;
+    updateRangeUI();
+    syncToggleUI();
+    drawActive();
   }
-  function closeBoardRps() { document.getElementById("rpsModal").style.display = "none"; }
-  window.closeBoardRps = closeBoardRps;
+
+  function buildRange() {
+    var rg = document.getElementById("rpsRange");
+    if (!rg) return;
+    rg.innerHTML = "";
+    RANGE_OPTS.forEach(function (o) {
+      var btn = document.createElement("button");
+      btn.setAttribute("data-d", o[0]);
+      btn.textContent = o[1];
+      btn.className = "rps-range-btn" + (o[0] === 20 ? " on" : "");
+      btn.onclick = function () {
+        boardRpsDays = o[0];
+        Array.prototype.forEach.call(rg.children, function (x) { x.classList.toggle("on", x === btn); });
+        drawActive();
+      };
+      rg.appendChild(btn);
+    });
+  }
+  function buildKlinePeriod() {
+    var sel = document.getElementById("klinePeriodSel");
+    if (!sel) return;
+    sel.innerHTML = "";
+    KLINE_PERIODS.forEach(function (o) {
+      var opt = document.createElement("option");
+      opt.value = o[0];
+      opt.textContent = o[1];
+      sel.appendChild(opt);
+    });
+    sel.value = "day";
+    sel.onchange = function () { klinePeriod = sel.value; drawActive(); };
+  }
+  function buildRpsCtl() {
+    var ctl = document.getElementById("rpsCtl");
+    if (!ctl) return;
+    ctl.innerHTML = "";
+    RPSDEFS.forEach(function (d) {
+      var lab = document.createElement("label");
+      lab.className = "rps-ctl-lab";
+      var cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.setAttribute("data-name", d.name);
+      cb.checked = !!RPS_DEFAULT_ON[d.name];
+      cb.onchange = function () { rpsVis[d.name] = this.checked; if (viewMode === "rps") drawBoardChart(); };
+      var sp = document.createElement("span");
+      sp.textContent = (RPSDEFS.indexOf(d) === 0) ? d.name : d.short;
+      sp.style.color = d.color;
+      lab.appendChild(cb); lab.appendChild(sp);
+      ctl.appendChild(lab);
+    });
+  }
+  function syncToggleUI() {
+    var tg = document.getElementById("rpsToggle");
+    if (tg) Array.prototype.forEach.call(tg.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-mode") === viewMode);
+    });
+    document.getElementById("rpsCtl").classList.toggle("rps-hidden", viewMode !== "rps");
+    document.getElementById("rpsKlinePeriod").classList.toggle("rps-hidden", viewMode !== "kline");
+    document.getElementById("rpsMaBar").classList.toggle("rps-hidden", viewMode !== "kline");
+    document.getElementById("rpsNow").classList.toggle("rps-hidden", viewMode !== "rps");
+    renderNote();
+  }
+  function updateRangeUI() {
+    var rg = document.getElementById("rpsRange");
+    if (!rg) return;
+    Array.prototype.forEach.call(rg.children, function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-d"), 10) === boardRpsDays);
+    });
+  }
+  function renderNote() {
+    var note = document.getElementById("rpsNote");
+    if (!note) return;
+    var body = viewMode === "rps"
+      ? "相邻两日板块RPS均 ≥ 90 时两点间显示红色线段；仅单日 ≥ 90 才凸显为红色点。历史曲线由每日横截面排名回溯计算。勾选上方复选框可显隐对应曲线。"
+      : 'K线含 MA5/10/20/40/60/120/240 均线（数值见上方色条）；灰色横线条标示<span class="rps-up">向上跳空</span> / <span class="rps-down">向下跳空</span> 缺口（通达信风格，横线条厚度随缺口价差大小变化）。';
+    note.innerHTML = '<span class="rps-date-blue">' + (g_dateCap || "") + "</span> " + body;
+  }
+  function drawActive() { if (viewMode === "rps") drawBoardChart(); else drawKline(); }
+
+  // ----- RPS 趋势图（原逻辑，按皮肤着色）-----
   function drawBoardChart() {
     var box = document.getElementById("rpsChart");
     if (typeof echarts === "undefined") {
@@ -777,25 +937,20 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     if (!b || !b.hist || !b.hist.length) { box.innerHTML = '<div style="padding:70px;text-align:center;color:#868e96;font-size:14px">暂无历史数据</div>'; return; }
     var win = b.hist.slice(-boardRpsDays);
     var dates = win.map(function (h) { return h[0]; });
-    // 数据日期（最新）= T：明确显示最后一根所在交易日，避免与页面“当前日期”混淆/重叠
-    var _cap = document.getElementById("rpsDateCap");
-    if (_cap) _cap.textContent = "数据日期（最新）：" + (dates[dates.length - 1] || "—") + "　|　历史共 " + b.hist.length + " 个交易日";
+    g_dateCap = "数据日期（最新）：" + (dates[dates.length - 1] || "—");
+    renderNote();
+    var th = chartTheme(skinOf());
     var mk = function (idx, name, color) {
       var arr = win.map(function (h) { return h[idx]; });
-      /*
-       * 红线：仅连接相邻两个均 >=90 的日期。
-       * 红点：仅标记孤立的 >=90 日期（左右相邻日期均 <90 或不存在）。
-       * 因此连续红区间只显示红色线段；孤立红值只显示红色点，前后连线仍保持该周期原色。
-       */
       var hotSegments = arr.map(function (v, i) {
-        var prevHot = i > 0 && arr[i - 1] != null && arr[i - 1] >= 90;
-        var nextHot = i < arr.length - 1 && arr[i + 1] != null && arr[i + 1] >= 90;
-        return (v != null && v >= 90 && (prevHot || nextHot)) ? v : null;
+        var ph = i > 0 && arr[i - 1] != null && arr[i - 1] >= 90;
+        var nh = i < arr.length - 1 && arr[i + 1] != null && arr[i + 1] >= 90;
+        return (v != null && v >= 90 && (ph || nh)) ? v : null;
       });
       var singleHot = arr.map(function (v, i) {
-        var prevHot = i > 0 && arr[i - 1] != null && arr[i - 1] >= 90;
-        var nextHot = i < arr.length - 1 && arr[i + 1] != null && arr[i + 1] >= 90;
-        return (v != null && v >= 90 && !prevHot && !nextHot) ? v : null;
+        var ph = i > 0 && arr[i - 1] != null && arr[i - 1] >= 90;
+        var nh = i < arr.length - 1 && arr[i + 1] != null && arr[i + 1] >= 90;
+        return (v != null && v >= 90 && !ph && !nh) ? v : null;
       });
       return [
         { name: name, type: "line", data: arr, symbol: "none", connectNulls: true, lineStyle: { width: 1.6, color: color }, itemStyle: { color: color }, z: 2 },
@@ -806,12 +961,14 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     var series = [];
     RPSDEFS.forEach(function (d) { if (rpsVis[d.name]) series = series.concat(mk(d.idx, d.name, d.color)); });
     if (!boardChart) boardChart = echarts.init(box);
+    boardChart.clear();
     boardChart.setOption({
+      backgroundColor: th.bg,
       tooltip: { trigger: "axis", axisPointer: { type: "cross" }, formatter: function (ps) { var h = ps[0].axisValue + "<br/>"; ps.forEach(function (o) { if (o.seriesName.indexOf("-hot") < 0 && o.value != null) h += o.marker + o.seriesName + "：" + o.value + "<br/>"; }); return h; } },
       legend: { show: false },
       grid: { left: 46, right: 40, top: 40, bottom: 38 },
-      xAxis: { type: "category", data: dates, boundaryGap: false, axisLabel: { fontSize: 10, color: "#868e96", showMinLabel: true, showMaxLabel: true, hideOverlap: true, formatter: function (v) { return String(v).slice(5); } } },
-      yAxis: { type: "value", min: 0, max: 100, axisLabel: { fontSize: 11, color: "#868e96" }, splitLine: { lineStyle: { color: "#e9ecef" } } },
+      xAxis: { type: "category", data: dates, boundaryGap: false, axisLabel: { fontSize: 10, color: th.axis, showMinLabel: true, showMaxLabel: true, hideOverlap: true, formatter: function (v) { return String(v).slice(5); } }, axisLine: { lineStyle: { color: th.split } } },
+      yAxis: { type: "value", min: 0, max: 100, axisLabel: { fontSize: 11, color: th.axis }, splitLine: { lineStyle: { color: th.split } } },
       series: series
     }, true);
     boardChart.resize();
@@ -826,6 +983,131 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     html += "</div>";
     document.getElementById("rpsNow").innerHTML = html;
   }
+
+  // ----- K线图（真实日K + MA + 缺口）-----
+  function aggregate(daily, period) {
+    if (period === "day") return daily.slice();
+    var groups = {}, order = [];
+    daily.forEach(function (bar) {
+      var d = String(bar[0]);
+      var key;
+      if (period === "week") {
+        var dt = new Date(d.slice(0, 4) + "-" + d.slice(4, 6) + "-" + d.slice(6, 8));
+        var onejan = new Date(dt.getFullYear(), 0, 1);
+        var wk = Math.ceil((((dt - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+        key = dt.getFullYear() + "-" + wk;
+      } else { key = d.slice(0, 6); }
+      if (!groups[key]) { groups[key] = { d: bar[0], o: bar[1], h: bar[2], l: bar[3], c: bar[4] }; order.push(key); }
+      else { var g = groups[key]; if (bar[2] > g.h) g.h = bar[2]; if (bar[3] < g.l) g.l = bar[3]; g.c = bar[4]; }
+    });
+    return order.map(function (k) { var g = groups[k]; return [g.d, g.o, g.h, g.l, g.c]; });
+  }
+  function maArr(closes, p) {
+    var out = [], sum = 0;
+    for (var i = 0; i < closes.length; i++) {
+      sum += closes[i];
+      if (i >= p) sum -= closes[i - p];
+      out.push(i >= p - 1 ? +(sum / p).toFixed(2) : null);
+    }
+    return out;
+  }
+  function drawKline() {
+    var box = document.getElementById("rpsChart");
+    if (typeof echarts === "undefined") {
+      box.innerHTML = '<div style="padding:70px;text-align:center;color:#868e96;font-size:14px">ECharts 未加载（无网络），无法绘制。</div>';
+      return;
+    }
+    var kl = (window.BOARD_KLINE && boardCode) ? window.BOARD_KLINE[boardCode] : null;
+    if (!kl || !kl.length) {
+      box.innerHTML = '<div style="padding:70px;text-align:center;color:#868e96;font-size:14px">暂无 K 线数据</div>';
+      document.getElementById("rpsMaBar").innerHTML = "";
+      return;
+    }
+    var periodBars = aggregate(kl, klinePeriod);
+    var n = klinePeriod === "day" ? boardRpsDays : (klinePeriod === "week" ? Math.max(8, Math.round(boardRpsDays / 5)) : Math.max(4, Math.round(boardRpsDays / 20)));
+    var win = periodBars.slice(-n);
+    var dates = win.map(function (b) { return b[0]; });
+    var candle = win.map(function (b) { return [b[1], b[4], b[3], b[2]]; }); // open,close,low,high
+    var closes = win.map(function (b) { return b[4]; });
+    var th = chartTheme(skinOf());
+    var ups = [], downs = [];
+    for (var i = 1; i < win.length; i++) {
+      if (win[i][3] > win[i - 1][2]) ups.push([i, win[i][3]]);
+      else if (win[i][2] < win[i - 1][3]) downs.push([i, win[i][2]]);
+    }
+    var maDefs = [5, 10, 20, 40, 60, 120, 240];
+    var series = [{ name: "K线", type: "candlestick", data: candle,
+      itemStyle: { color: th.up, color0: th.down, borderColor: th.upBorder, borderColor0: th.downBorder }, z: 2 }];
+    var maHtml = '<span class="rps-ma-lbl">MA</span>';
+    maDefs.forEach(function (p, idx) {
+      var m = maArr(closes, p);
+      var col = th.ma[idx % th.ma.length];
+      var dashed = (idx >= 4);
+      series.push({ name: "MA" + p, type: "line", data: m, symbol: "none", smooth: false,
+        lineStyle: { width: (p <= 20 ? 1.4 : 1.1), color: col, opacity: 0.95, type: dashed ? "dashed" : "solid" },
+        itemStyle: { color: col }, z: 3 });
+      var lastV = m[m.length - 1];
+      maHtml += '<span class="rps-ma-val" style="color:' + col + '">MA' + p + " " + (lastV == null ? "—" : lastV) + "</span>";
+    });
+    // 通达信风格：跳空用灰色横线条（矩形带）表示
+    //   水平跨度 = 相邻两根 K 线之间的空隙（上一根 → 当前根）
+    //   横线条厚度 = 缺口的价差大小（即缺口区域本身：上一根 high/low 到当前根 low/high）
+    var gapAreas = [];
+    ups.forEach(function (u) {
+      var i = u[0];
+      var y0 = win[i - 1][2]; // 上一根 high = 向上跳空缺口下沿
+      var y1 = win[i][3];     // 当前根 low  = 向上跳空缺口上沿
+      gapAreas.push([{ xAxis: String(win[i - 1][0]), yAxis: y0 }, { xAxis: String(win[i][0]), yAxis: y1 }]);
+    });
+    downs.forEach(function (d) {
+      var i = d[0];
+      var y0 = win[i - 1][3]; // 上一根 low  = 向下跳空缺口上沿
+      var y1 = win[i][2];     // 当前根 high = 向下跳空缺口下沿
+      gapAreas.push([{ xAxis: String(win[i - 1][0]), yAxis: y0 }, { xAxis: String(win[i][0]), yAxis: y1 }]);
+    });
+    series[0].markArea = { silent: true, itemStyle: { color: "rgba(140,140,140,0.45)" }, data: gapAreas, z: 1 };
+    if (!boardChart) boardChart = echarts.init(box);
+    boardChart.clear();
+    boardChart.setOption({
+      backgroundColor: th.bg,
+      tooltip: { trigger: "axis", axisPointer: { type: "cross" },
+        formatter: function (ps) {
+          if (!ps.length) return "";
+          var h = ps[0].axisValue + "<br/>";
+          var c = null;
+          ps.forEach(function (o) {
+            if (o.seriesName === "K线") c = o.value;
+            else if (o.seriesName && o.seriesName.indexOf("MA") === 0 && o.value != null) h += o.marker + o.seriesName + "：" + o.value + "<br/>";
+          });
+          if (c) h += "开 " + c[0] + "　收 " + c[1] + "　低 " + c[2] + "　高 " + c[3] + "<br/>";
+          return h;
+        } },
+      legend: { show: false },
+      grid: { left: 58, right: 24, top: 40, bottom: 38 },
+      xAxis: { type: "category", data: dates, boundaryGap: true, axisLabel: { fontSize: 10, color: th.axis, hideOverlap: true, formatter: function (v) { return klinePeriod === "day" ? String(v).slice(4) : v; } }, axisLine: { lineStyle: { color: th.split } } },
+      yAxis: { scale: true, axisLabel: { fontSize: 11, color: th.axis }, splitLine: { lineStyle: { color: th.split } } },
+      series: series
+    }, true);
+    boardChart.resize();
+    document.getElementById("rpsMaBar").innerHTML = maHtml;
+    g_dateCap = "数据日期（最新）：" + (dates[dates.length - 1] || "—");
+    renderNote();
+  }
+
+  var _tg = document.getElementById("rpsToggle");
+  if (_tg) _tg.addEventListener("click", function (e) {
+    var btn = e.target.closest ? e.target.closest("button[data-mode]") : null;
+    if (!btn) return;
+    viewMode = btn.getAttribute("data-mode");
+    boardRpsDays = (viewMode === "kline") ? 250 : 20; // K线默认12个月，RPS默认1个月
+    updateRangeUI();
+    syncToggleUI();
+    drawActive();
+  });
+
+  function closeBoardRps() { document.getElementById("rpsModal").style.display = "none"; }
+  window.closeBoardRps = closeBoardRps;
+
   /* ===== 龙头个股 / 相关ETF 下钻弹窗（格式与每日主线分析一致） ===== */
   function pct2(v) { return v == null ? "-" : ((v > 0 ? "+" : "") + v.toFixed(2) + "%"); }
   function pctn(v) { return v == null ? "-" : ((v > 0 ? "+" : "") + v.toFixed(2)); } /* 同 pct2 但无 %（% 已上提至表头） */
@@ -988,17 +1270,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     if (t && t.classList && t.classList.contains("drill-link")) {
       openDrill(t.getAttribute("data-drill"), t.getAttribute("data-code")); return;
     }
-    if (t && t.getAttribute && t.getAttribute("data-d")) {
-      boardRpsDays = parseInt(t.getAttribute("data-d"), 10);
-      var bs = document.querySelectorAll("#rpsRange button");
-      for (var i = 0; i < bs.length; i++) {
-        var on = (bs[i] === t);
-        bs[i].style.background = on ? "#4263eb" : "#fff";
-        bs[i].style.color = on ? "#fff" : "#1a1a2e";
-        bs[i].style.borderColor = on ? "#4263eb" : "#ced4da";
-      }
-      drawBoardChart();
-    }
+    /* 周期按钮已自带 onclick，无需此分支 */
   });
   document.getElementById("rpsModal").addEventListener("click", function (e) { if (e.target === this) this.style.display = "none"; });
 
