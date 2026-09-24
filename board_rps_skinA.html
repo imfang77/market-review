@@ -184,7 +184,6 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 .rps-ma-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:12px;margin:-4px 0 8px;font-variant-numeric:tabular-nums}
 .rps-ma-lbl{color:#868e96;font-weight:600}
 .rps-ma-val{font-weight:600}
-.rps-ma-num{font-size:11px;color:#000;font-weight:500;margin-right:8px}
 .rps-date-blue{font-weight:600;color:#4263eb}
 .rps-sel{border:1px solid #ced4da;background:#fff;color:#1a1a2e;padding:5px 10px;border-radius:6px;font-size:13px;cursor:pointer}
 .rps-now{margin-top:12px;font-size:13px;line-height:1.5}
@@ -211,7 +210,6 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 .skin-B .rps-ctl-lab input{accent-color:#4dabf7}
 .skin-B .rps-ma-bar,.skin-B .rps-note{color:#7d8694}
 .skin-B .rps-date-blue{color:#4dabf7}
-.skin-B .rps-ma-num{color:#c5cad3}
 .skin-B .rps-sel{background:#1b2030;color:#c5cad3;border-color:#2b3242}
 .skin-B .rps-up{color:#ff6b6b}.skin-B .rps-down{color:#51cf66}
 /* Skin C 极简留白（细线、克制）*/
@@ -226,12 +224,11 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 .skin-C .rps-ctl-lab{color:#adb5bd}
 .skin-C .rps-ctl-lab input{accent-color:#495057}
 .skin-C .rps-date-blue{color:#1971c2}
-.skin-C .rps-ma-num{color:#1a1a2e}
 .skin-C .rps-sel{background:#fff;color:#868e96;border-color:#e9ecef}
 .skin-C .rps-up{color:#e03131}.skin-C .rps-down{color:#2f9e44}
 
 </style>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script src="_echarts.min.js"></script>
 </head>
 <body>
 <div class="header">
@@ -324,8 +321,8 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         <div style="display:flex;align-items:center;gap:14px">
           <div id="rpsTitle" style="font-size:16px;font-weight:700"></div>
           <div class="rps-toggle" id="rpsToggle">
-            <button data-mode="rps" class="on">RPS</button>
-            <button data-mode="kline">K线</button>
+            <button data-mode="rps" class="on">RPS趋势</button>
+            <button data-mode="kline">K线图</button>
           </div>
         </div>
         <button onclick="closeBoardRps()" class="rps-x" style="border:none;font-size:19px;line-height:1;width:30px;height:30px;border-radius:6px;cursor:pointer">×</button>
@@ -361,8 +358,8 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   <div class="footer">数据仅供参考，不构成投资建议 ｜ 板块RPS 由 880xxx 板块指数日K 计算</div>
 </div>
 
-<script src="_board_rps_data.js?v=20260924a"></script>
-  <script src="_board_kline.js?v=20260924a"></script>
+<script src="_board_rps_data.js?v=20260923b"></script>
+  <script src="_board_kline_proto.js"></script>
 <script>
 (function () {
   var D = window.BOARD_RPS || { anchor: "—", boards: {} };
@@ -924,7 +921,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     if (!note) return;
     var body = viewMode === "rps"
       ? "相邻两日板块RPS均 ≥ 90 时两点间显示红色线段；仅单日 ≥ 90 才凸显为红色点。历史曲线由每日横截面排名回溯计算。勾选上方复选框可显隐对应曲线。"
-      : 'K线含 MA5/10/20/40/60/120/240 均线（数值见上方色条）；灰色横线条标示<span class="rps-up">向上跳空</span> / <span class="rps-down">向下跳空</span> 缺口（通达信风格，横线条厚度随缺口价差大小变化）。';
+      : 'K线含 MA5/10/20/40/60/120/240 均线（数值见上方色条）；灰色横线条标示<span class="rps-up">向上跳空</span> / <span class="rps-down">向下跳空</span> 缺口（通达信风格，横线条宽度随缺口大小变化）。';
     note.innerHTML = '<span class="rps-date-blue">' + (g_dateCap || "") + "</span> " + body;
   }
   function drawActive() { if (viewMode === "rps") drawBoardChart(); else drawKline(); }
@@ -1001,11 +998,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         key = dt.getFullYear() + "-" + wk;
       } else { key = d.slice(0, 6); }
       if (!groups[key]) { groups[key] = { d: bar[0], o: bar[1], h: bar[2], l: bar[3], c: bar[4] }; order.push(key); }
-      var g = groups[key];
-      if (bar[2] > g.h) g.h = bar[2];
-      if (bar[3] < g.l) g.l = bar[3];
-      g.c = bar[4];
-      g.d = bar[0]; // 用组内最后一根日期作为标签（=最新更新日期）
+      else { var g = groups[key]; if (bar[2] > g.h) g.h = bar[2]; if (bar[3] < g.l) g.l = bar[3]; g.c = bar[4]; }
     });
     return order.map(function (k) { var g = groups[k]; return [g.d, g.o, g.h, g.l, g.c]; });
   }
@@ -1054,26 +1047,20 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         lineStyle: { width: (p <= 20 ? 1.4 : 1.1), color: col, opacity: 0.95, type: dashed ? "dashed" : "solid" },
         itemStyle: { color: col }, z: 3 });
       var lastV = m[m.length - 1];
-      maHtml += '<span class="rps-ma-val" style="color:' + col + '">MA' + p + '</span>' +
-                '<span class="rps-ma-num">' + (lastV == null ? "—" : lastV) + "</span>";
+      maHtml += '<span class="rps-ma-val" style="color:' + col + '">MA' + p + " " + (lastV == null ? "—" : lastV) + "</span>";
     });
-    // 通达信风格：跳空用灰色横线条（矩形带）表示
-    //   水平跨度 = 相邻两根 K 线之间的空隙（上一根 → 当前根）
-    //   横线条厚度 = 缺口的价差大小（即缺口区域本身：上一根 high/low 到当前根 low/high）
+    // 通达信风格：跳空用灰色横线条表示（画在缺口处、横跨相邻两根 K 线之间的空隙；线宽=两根之间的缺口宽度）
     var gapAreas = [];
+    var GE = 0.0025; // 横线条半厚（相对价格，仅为可见）
     ups.forEach(function (u) {
-      var i = u[0];
-      var y0 = win[i - 1][2]; // 上一根 high = 向上跳空缺口下沿
-      var y1 = win[i][3];     // 当前根 low  = 向上跳空缺口上沿
-      gapAreas.push([{ xAxis: String(win[i - 1][0]), yAxis: y0 }, { xAxis: String(win[i][0]), yAxis: y1 }]);
+      var i = u[0], p = win[i - 1][2]; // 上一根 high（向上跳空的缺口下沿）
+      gapAreas.push([{ xAxis: String(win[i - 1][0]), yAxis: p * (1 - GE) }, { xAxis: String(win[i][0]), yAxis: p * (1 + GE) }]);
     });
     downs.forEach(function (d) {
-      var i = d[0];
-      var y0 = win[i - 1][3]; // 上一根 low  = 向下跳空缺口上沿
-      var y1 = win[i][2];     // 当前根 high = 向下跳空缺口下沿
-      gapAreas.push([{ xAxis: String(win[i - 1][0]), yAxis: y0 }, { xAxis: String(win[i][0]), yAxis: y1 }]);
+      var i = d[0], p = win[i - 1][3]; // 上一根 low（向下跳空的缺口上沿）
+      gapAreas.push([{ xAxis: String(win[i - 1][0]), yAxis: p * (1 - GE) }, { xAxis: String(win[i][0]), yAxis: p * (1 + GE) }]);
     });
-    series[0].markArea = { silent: true, itemStyle: { color: "rgba(140,140,140,0.45)" }, data: gapAreas, z: 1 };
+    series[0].markArea = { silent: true, itemStyle: { color: "rgba(140,140,140,0.5)" }, data: gapAreas };
     if (!boardChart) boardChart = echarts.init(box);
     boardChart.clear();
     boardChart.setOption({
@@ -1092,7 +1079,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         } },
       legend: { show: false },
       grid: { left: 58, right: 24, top: 40, bottom: 38 },
-      xAxis: { type: "category", data: dates, boundaryGap: true, axisLabel: { fontSize: 10, color: th.axis, hideOverlap: true, showMaxLabel: true, formatter: function (v) { return klinePeriod === "day" ? String(v).slice(4) : v; } }, axisLine: { lineStyle: { color: th.split } } },
+      xAxis: { type: "category", data: dates, boundaryGap: true, axisLabel: { fontSize: 10, color: th.axis, hideOverlap: true, formatter: function (v) { return klinePeriod === "day" ? String(v).slice(4) : v; } }, axisLine: { lineStyle: { color: th.split } } },
       yAxis: { scale: true, axisLabel: { fontSize: 11, color: th.axis }, splitLine: { lineStyle: { color: th.split } } },
       series: series
     }, true);

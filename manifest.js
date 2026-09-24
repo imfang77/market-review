@@ -6,7 +6,19 @@
  * mainlines.html 读取 mainlineFile/mainlineSummary 渲染日期列表
  */
 window.REPORTS = [
-{
+  {
+    "date": "2026-09-24",
+    "weekday": "周四",
+    "reviewFile": "review-20260924.html",
+    "reviewSummary": "沪指-1.22% 创业板-2.68% 涨停52只 成交2.33万亿 恐贪27.1",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口:技术面(趋势突破G1/净利润断层G2/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
+    "mainlineFile": "mainline-20260924.html",
+    "mainlineSummary": "5日主线:红黄酒/房产服务/全国地产｜10日主线:红黄酒/陶瓷/CXO概念｜20日主线:红黄酒/林业/房产服务",
+    "mainlineConceptFile": "mainline_concept-20260924.html",
+    "conceptSummary": "5日主线:红黄酒/房产服务/全国地产｜10日主线:红黄酒/陶瓷/CXO概念｜20日主线:红黄酒/林业/房产服务"
+  },
+  {
     "date": "2026-09-23",
     "weekday": "周三",
     "reviewFile": "review-20260923.html",
@@ -18,7 +30,6 @@ window.REPORTS = [
     "mainlineConceptFile": "mainline_concept-20260923.html",
     "conceptSummary": "5日主线:房产服务/红黄酒/CXO概念｜10日主线:红黄酒/陶瓷/玻璃｜20日主线:红黄酒/林业/培育钻石"
   },
-
   {
     "date": "2026-09-22",
     "weekday": "周二",
