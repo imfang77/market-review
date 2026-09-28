@@ -7,6 +7,18 @@
  */
 window.REPORTS = [
   {
+    "date": "2026-09-28",
+    "weekday": "周一",
+    "reviewFile": "review-20260928.html",
+    "reviewSummary": "沪指-1.67% 创业板-4.53% 涨跌862/5345 涨停35只 成交2.49万亿 恐贪15.9恐惧",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口:技术面(趋势突破G1-3只/净利润断层G2动态筛选/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
+    "mainlineFile": "mainline-20260928.html",
+    "mainlineSummary": "5日主线:红黄酒/房产服务/林业｜10日主线:红黄酒/林业/房产服务｜20日主线:红黄酒/林业/房产服务",
+    "mainlineConceptFile": "mainline_concept-20260928.html",
+    "conceptSummary": "5日主线:红黄酒/房产服务/林业｜10日主线:红黄酒/林业/房产服务｜20日主线:红黄酒/林业/房产服务"
+  },
+  {
     "date": "2026-09-24",
     "weekday": "周四",
     "reviewFile": "review-20260924.html",
