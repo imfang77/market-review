@@ -6,6 +6,19 @@
  * mainlines.html 读取 mainlineFile/mainlineSummary 渲染日期列表
  */
 window.REPORTS = [
+{
+    "date": "2026-09-29",
+    "weekday": "周二",
+    "reviewFile": "review-20260929.html",
+    "reviewSummary": "",
+    "screeningFile": "screening.html",
+    "screeningSummary": "",
+    "mainlineFile": "mainline-20260929.html",
+    "mainlineSummary": "5日主线:｜10日主线:｜20日主线:",
+    "mainlineConceptFile": "mainline_concept-20260929.html",
+    "conceptSummary": "5日主线:｜10日主线:｜20日主线:"
+  },
+
   {
     "date": "2026-09-28",
     "weekday": "周一",
