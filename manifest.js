@@ -6,7 +6,19 @@
  * mainlines.html 读取 mainlineFile/mainlineSummary 渲染日期列表
  */
 window.REPORTS = [
-{
+  {
+    "date": "2026-09-30",
+    "weekday": "周三",
+    "reviewFile": "review-20260930.html",
+    "reviewSummary": "沪指+0.31% 创业板-0.23% 涨跌2346/2713 涨停59只 成交1.44万亿 恐贪23.5(恐惧)",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口:技术面(趋势突破G1-8只/净利润断层G2-0只/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
+    "mainlineFile": "mainline-20260930.html",
+    "mainlineSummary": "5日主线:房产服务/分散染料/园区开发｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/全国地产",
+    "mainlineConceptFile": "mainline_concept-20260930.html",
+    "conceptSummary": "5日主线:房产服务/分散染料/园区开发｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/全国地产"
+  },
+  {
     "date": "2026-09-29",
     "weekday": "周二",
     "reviewFile": "review-20260929.html",
@@ -18,7 +30,6 @@ window.REPORTS = [
     "mainlineConceptFile": "mainline_concept-20260929.html",
     "conceptSummary": "5日主线:｜10日主线:｜20日主线:"
   },
-
   {
     "date": "2026-09-28",
     "weekday": "周一",
