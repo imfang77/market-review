@@ -26,9 +26,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "",
     "mainlineFile": "mainline-20260929.html",
-    "mainlineSummary": "5日主线:｜10日主线:｜20日主线:",
+    "mainlineSummary": "5日主线:房产服务/石油开采/出版业｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/全国地产",
     "mainlineConceptFile": "mainline_concept-20260929.html",
-    "conceptSummary": "5日主线:｜10日主线:｜20日主线:"
+    "conceptSummary": "5日主线:房产服务/石油开采/出版业｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/全国地产"
   },
   {
     "date": "2026-09-28",
