@@ -7,6 +7,19 @@
  */
 window.REPORTS = [
 {
+    "date": "2026-10-09",
+    "weekday": "周五",
+    "reviewFile": "review-20261009.html",
+    "reviewSummary": "",
+    "screeningFile": "screening.html",
+    "screeningSummary": "",
+    "mainlineFile": "mainline-20261009.html",
+    "mainlineSummary": "5日主线:分散染料/石油开采/影视音像｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/出版业",
+    "mainlineConceptFile": "mainline_concept-20261009.html",
+    "conceptSummary": "5日主线:分散染料/石油开采/影视音像｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/出版业"
+  },
+
+{
     "date": "2026-10-08",
     "weekday": "周四",
     "reviewFile": "review-20261008.html",
