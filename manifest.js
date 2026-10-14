@@ -7,6 +7,19 @@
  */
 window.REPORTS = [
 {
+    "date": "2026-10-14",
+    "weekday": "周三",
+    "reviewFile": "review-20261014.html",
+    "reviewSummary": "",
+    "screeningFile": "screening.html",
+    "screeningSummary": "",
+    "mainlineFile": "mainline-20261014.html",
+    "mainlineSummary": "5日主线:石油开采/出版业/传媒娱乐｜10日主线:石油开采/出版业｜20日主线:石油开采/出版业/红黄酒",
+    "mainlineConceptFile": "mainline_concept-20261014.html",
+    "conceptSummary": "5日主线:石油开采/出版业/传媒娱乐｜10日主线:石油开采/出版业｜20日主线:石油开采/出版业/红黄酒"
+  },
+
+{
     "date": "2026-10-13",
     "weekday": "周二",
     "reviewFile": "review-20261013.html",
