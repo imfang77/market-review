@@ -6,7 +6,19 @@
  * mainlines.html 读取 mainlineFile/mainlineSummary 渲染日期列表
  */
 window.REPORTS = [
-{
+  {
+    "date": "2026-10-15",
+    "weekday": "周四",
+    "reviewFile": "review-20261015.html",
+    "reviewSummary": "沪指-1.59% 创业板-2.92% 涨跌437/4738 涨停34只 成交0.98万亿",
+    "screeningFile": "screening.html",
+    "screeningSummary": "双入口:技术面(趋势突破G1-3只/净利润断层G2-0只/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
+    "mainlineFile": "mainline-20261015.html",
+    "mainlineSummary": "5日主线:出版业/传媒娱乐｜10日主线:石油开采/出版业｜20日主线:出版业/石油开采/传媒娱乐",
+    "mainlineConceptFile": "mainline_concept-20261015.html",
+    "conceptSummary": "5日主线:出版业/传媒娱乐｜10日主线:石油开采/出版业｜20日主线:出版业/石油开采/传媒娱乐"
+  },
+  {
     "date": "2026-10-14",
     "weekday": "周三",
     "reviewFile": "review-20261014.html",
@@ -18,8 +30,7 @@ window.REPORTS = [
     "mainlineConceptFile": "mainline_concept-20261014.html",
     "conceptSummary": "5日主线:石油开采/出版业/传媒娱乐｜10日主线:石油开采/出版业｜20日主线:石油开采/出版业/红黄酒"
   },
-
-{
+  {
     "date": "2026-10-13",
     "weekday": "周二",
     "reviewFile": "review-20261013.html",
@@ -31,7 +42,6 @@ window.REPORTS = [
     "mainlineConceptFile": "mainline_concept-20261013.html",
     "conceptSummary": "5日主线:分散染料/石油开采/影视音像｜10日主线:石油开采/分散染料/出版业｜20日主线:红黄酒/分散染料/石油开采"
   },
-
   {
     "date": "2026-10-12",
     "weekday": "周一",
