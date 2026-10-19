@@ -35,6 +35,9 @@ td.c-theme { white-space:normal; word-break:break-word; line-height:1.35; max-wi
 a { color:#1565c0; }
 .filter-bar { display:flex; flex-direction:column; flex-wrap:wrap; gap:14px; align-items:flex-start; padding:10px 20px; background:#fafbff; border-bottom:1px solid #e3e6ea; font-size:13px; }
 .filter-bar .ft-row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; width:100%; }
+.filter-bar .ft-row:first-child { flex-wrap:nowrap; }
+.filter-bar .ft-row:first-child label { display:flex; align-items:center; gap:4px; flex:1 1 0; min-width:0; white-space:nowrap; }
+.filter-bar .ft-row:first-child select { flex:1 1 0; min-width:0; max-width:none; }
 .filter-bar .ft-row + .ft-row { border-top:1px dashed #dfe3ec; padding-top:12px; }
 .filter-bar .ft-group { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
 .filter-bar label { color:#495057; }
