@@ -14,6 +14,10 @@ body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFa
 .summary .box b { color:#1a237e; font-size:18px; font-weight:700; line-height:1.1; }
 .summary .box .sub { font-size:10px; color:#888; margin-top:1px; }
 .summary .box b .u { font-size:11px; font-weight:400; color:#555; }
+.summary .box-click { cursor:pointer; transition:background .15s, border-color .15s, box-shadow .15s; }
+.summary .box-click:hover { background:#eaf0ff; border-color:#4263eb; }
+.summary .box-click.active { background:#e3edff; border-color:#1565c0; box-shadow:0 0 0 2px rgba(66,99,235,.25); }
+.summary .box-click:active { transform:translateY(1px); }
 .note { padding:10px 20px; font-size:12px; color:#555; background:#fffdf5; border-bottom:1px solid #f0e6c8; line-height:1.6; }
 .wrap { padding:14px 12px 40px; overflow-x:auto; }
 table { border-collapse:collapse; width:100%; min-width:1380px; font-size:11px; background:#fff; }
@@ -66,8 +70,8 @@ a { color:#1565c0; }
 <div class="sub">复盘日期 2026-10-16 · 范围：上个报告期(中报 2026-06-30)结束后至 2026-10-18，发布「下个报告期(三季报 / 年报)」业绩预告的 A 股 · 数据源：东方财富业绩预告(RPT_PUBLIC_OP_NEWPREDICT)</div></div>
 <div class="summary">
 <div class="box"><span class="lab">预告记录</span><b>137<span class="u"> 条</span></b></div>
-<div class="box"><span class="lab">预增</span><b>92<span class="u"> 条</span></b></div>
-<div class="box"><span class="lab">扭亏</span><b>8<span class="u"> 条</span></b></div>
+<div class="box box-click" data-type="预增" title="点击按「预增」筛选"><span class="lab">预增</span><b>92<span class="u"> 条</span></b></div>
+<div class="box box-click" data-type="扭亏" title="点击按「扭亏」筛选"><span class="lab">扭亏</span><b>8<span class="u"> 条</span></b></div>
 </div>
 <div class="filter-bar">
 <div class="ft-row">
@@ -76,8 +80,8 @@ a { color:#1565c0; }
 </div>
 <div class="ft-row">
 <label>个股：<input id="stockInput" type="text" placeholder="代码/名称" autocomplete="off"></label>
-<span class="info" id="filterInfo"></span>
 <button class="clear-btn" id="clearFilter" type="button">✕ 清除筛选</button>
+<span class="info" id="filterInfo"></span>
 </div>
 </div>
 <div class="wrap"><table id="tbl"><thead><tr>
@@ -192,14 +196,17 @@ var HEAD = [['个股'],['预告类型'],['预告内容'],['下一交易日'],['�
   document.addEventListener('click',function(e){ if(colFilterPop.style.display==='block' && !colFilterPop.contains(e.target)) closeColFilter(); });
   ths.forEach(function(th,i){ th.addEventListener('click',function(e){ if(e.target.classList.contains('fbtn')) return; var dir=(sortIdx===i)?(sortDir==='asc'?'desc':'asc'):'asc'; sortIdx=i; sortDir=dir; ths.forEach(function(x){x.classList.remove('asc','desc');}); th.classList.add(dir); page=1; render(); }); });
   if(themeSel)themeSel.addEventListener('change',function(){ state.theme=themeSel.value; page=1; render(); });
-  if(typeSel)typeSel.addEventListener('change',function(){ state.type=typeSel.value; page=1; render(); });
+  if(typeSel)typeSel.addEventListener('change',function(){ state.type=typeSel.value; page=1; render(); syncBoxActive(); });
+  function syncBoxActive(){ document.querySelectorAll('.box-click').forEach(function(bx){ bx.classList.toggle('active', bx.getAttribute('data-type')===state.type); }); }
+  document.querySelectorAll('.box-click').forEach(function(bx){ bx.addEventListener('click',function(){ var t=bx.getAttribute('data-type'); if(typeSel){ typeSel.value=t; state.type=t; page=1; render(); syncBoxActive(); } }); });
   if(stockInput)stockInput.addEventListener('input',function(){ state.stockKW=(stockInput.value||'').trim().toLowerCase(); page=1; render(); });
-  if(clearBtn)clearBtn.addEventListener('click',function(){ state.type=''; state.theme=''; state.stockKW=''; state.colFilters={}; document.querySelectorAll('.fbtn.active').forEach(function(x){x.classList.remove('active');}); if(themeSel)themeSel.value=''; if(typeSel)typeSel.value=''; if(stockInput)stockInput.value=''; page=1; render(); });
+  if(clearBtn)clearBtn.addEventListener('click',function(){ state.type=''; state.theme=''; state.stockKW=''; state.colFilters={}; document.querySelectorAll('.fbtn.active').forEach(function(x){x.classList.remove('active');}); if(themeSel)themeSel.value=''; if(typeSel)typeSel.value=''; if(stockInput)stockInput.value=''; page=1; render(); syncBoxActive(); });
   if(pageSizeSel)pageSizeSel.addEventListener('change',function(){ PAGE=parseInt(pageSizeSel.value,10)||50; page=1; render(); });
   if(prevBtn)prevBtn.addEventListener('click',function(){ if(page>1){page--; render();} });
   if(nextBtn)nextBtn.addEventListener('click',function(){ page++; render(); });
   if(pageJump)pageJump.addEventListener('change',function(){ page=parseInt(pageJump.value,10)||1; render(); });
   render();
+  syncBoxActive();
 })();
 </script>
 </body></html>
