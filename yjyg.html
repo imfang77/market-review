@@ -45,8 +45,9 @@ a { color:#1565c0; }
 .filter-bar .ft-row:first-child { flex-wrap:nowrap; }
 .filter-bar .ft-row:first-child label { display:flex; align-items:center; gap:4px; flex:1 1 0; min-width:0; white-space:nowrap; }
 .filter-bar .ft-row:first-child select { flex:1 1 0; min-width:0; max-width:none; }
-.filter-bar .ft-row + .ft-row { border-top:1px dashed #dfe3ec; padding-top:12px; }
-.filter-bar .ft-row .stk { flex:1 1 auto; min-width:120px; }
+.filter-bar .ft-row + .ft-row { border-top:1px dashed #dfe3ec; padding-top:12px; flex-wrap:nowrap; }
+.filter-bar .ft-row .stk { flex:0 1 160px; min-width:90px; max-width:160px; }
+.filter-bar .ft-row .stk input { width:100%; box-sizing:border-box; }
 .filter-bar .ft-group { display:flex; flex-wrap:nowrap; gap:14px; align-items:center; flex-shrink:0; white-space:nowrap; }
 .filter-bar label { color:#495057; }
 .filter-bar select { padding:6px 10px; border:1px solid #ced4da; border-radius:8px; font-size:13px; background:#fff; color:#1a1a2e; max-width:260px; }
