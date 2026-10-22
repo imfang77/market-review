@@ -7,6 +7,18 @@
  */
 window.REPORTS = [
   {
+    "date": "2026-10-22",
+    "weekday": "周四",
+    "reviewFile": "review-20261022.html",
+    "reviewSummary": "沪指-1.48% 创业板-4.37% 涨跌448/4739 涨停34只 成交1.53万亿",
+    "screeningFile": "screening_tech/fund.html",
+    "screeningSummary": "G1趋势突破候选3只；ETF组合Top20已更新",
+    "mainlineFile": "mainline-20261022.html",
+    "mainlineSummary": "5日主线:军贸概念/农业综合/DRG-DIP｜10日主线:石油开采/出版业/石油｜20日主线:石油开采/石油/出版业",
+    "mainlineConceptFile": "mainline_concept-20261022.html",
+    "conceptSummary": "5日主线:军贸概念/农业综合/DRG-DIP｜10日主线:石油开采/出版业/石油｜20日主线:石油开采/石油/出版业"
+  },
+  {
     "date": "2026-10-21",
     "weekday": "周三",
     "reviewFile": "review-20261021.html",
