@@ -7,6 +7,18 @@
  */
 window.REPORTS = [
   {
+    "date": "2026-10-23",
+    "weekday": "周五",
+    "reviewFile": "review-20261023.html",
+    "reviewSummary": "沪指+0.89% 创业板+4.16% 涨跌4197/887 涨停84只 成交1.96万亿",
+    "screeningFile": "screening_tech/fund.html",
+    "screeningSummary": "G1趋势突破候选18只；ETF组合Top20已更新",
+    "mainlineFile": "mainline-20261023.html",
+    "mainlineSummary": "5日主线:纺织机械/工业软件/减速器｜10日主线:石油开采/军贸概念/石油｜20日主线:石油开采/石油/出版业",
+    "mainlineConceptFile": "mainline_concept-20261023.html",
+    "conceptSummary": "5日主线:纺织机械/工业软件/减速器｜10日主线:石油开采/军贸概念/石油｜20日主线:石油开采/石油/出版业"
+  },
+  {
     "date": "2026-10-22",
     "weekday": "周四",
     "reviewFile": "review-20261022.html",
