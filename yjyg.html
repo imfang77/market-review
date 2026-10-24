@@ -69,13 +69,29 @@ a { color:#1565c0; }
 .filter-bar .num-add, .filter-bar .num-clear { border:1px solid #90caf9; background:#fff; color:#1565c0; border-radius:6px; padding:4px 10px; font-size:12px; cursor:pointer; }
 .filter-bar .num-add:hover, .filter-bar .num-clear:hover { background:#1565c0; color:#fff; }
 .filter-bar #numRows { display:flex; flex-direction:column; gap:6px; }
-.filter-bar .num-row { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.filter-bar .num-row { display:flex; flex-wrap:nowrap; gap:6px; align-items:center; max-width:100%; }
 .filter-bar .num-row select { padding:5px 8px; font-size:12px; max-width:none; }
-.filter-bar .num-row input { padding:5px 8px; font-size:12px; width:64px; text-align:right; }
+.filter-bar .num-row select.num-f { flex:1 1 auto; min-width:0; max-width:100%; }
+.filter-bar .num-row select.num-op { flex:0 0 auto; }
+.filter-bar .num-row input { padding:5px 8px; font-size:12px; width:64px; text-align:right; flex:0 0 auto; }
 .filter-bar .num-row .num-u { color:#495057; font-size:12px; min-width:16px; }
 .filter-bar .num-row .num-sep { color:#6b7a99; font-size:12px; }
-.filter-bar .num-del { border:none; background:transparent; color:#90a4ae; cursor:pointer; font-size:12px; padding:2px 6px; border-radius:4px; }
+.filter-bar .num-del { border:none; background:transparent; color:#90a4ae; cursor:pointer; font-size:12px; padding:2px 6px; border-radius:4px; flex:0 0 auto; }
 .filter-bar .num-del:hover { color:#c62828; background:#fbe9e7; }
+@media (max-width:640px){
+  .filter-bar { padding:8px 10px; font-size:12px; gap:10px; }
+  .filter-bar .ft-row { gap:8px; }
+  .filter-bar .numf-head { gap:6px; }
+  .filter-bar .numf-head .numf-tip { display:none; }
+  .filter-bar .num-row { gap:4px; width:100%; }
+  .filter-bar .num-row select { padding:4px 4px; font-size:11px; }
+  .filter-bar .num-row select.num-f { flex:1 1 0; min-width:0; max-width:none; }
+  .filter-bar .num-row select.num-op { flex:0 0 auto; }
+  .filter-bar .num-row input { padding:4px 4px; font-size:11px; width:44px; flex:0 0 auto; }
+  .filter-bar .num-row .num-u { font-size:11px; min-width:10px; flex:0 0 auto; }
+  .filter-bar .num-row .num-sep { font-size:11px; flex:0 0 auto; }
+  .filter-bar .num-del { padding:2px 4px; font-size:12px; flex:0 0 auto; margin-left:auto; }
+}
 .filter-bar input { padding:6px 10px; border:1px solid #ced4da; border-radius:8px; font-size:13px; background:#fff; color:#1a1a2e; width:160px; }
 #tbl th:nth-child(1), #tbl td:nth-child(1){ position:sticky; left:0; z-index:3; background:#fff; white-space:nowrap; max-width:180px; }
 #tbl thead th:nth-child(1){ z-index:5; background:#eef1f8; }
@@ -195,14 +211,18 @@ var HEAD = [['个股'],['报告类型'],['类型'],['TTM-ROE'],['最近季度收
   var applyingPreset=false;
   var pageSizeSel=document.getElementById('pageSizeSel'), prevBtn=document.getElementById('prevBtn'), nextBtn=document.getElementById('nextBtn'), pageJump=document.getElementById('pageJump'), totalTip=document.getElementById('totalTip');
   var colFilterPop=document.getElementById('colFilterPop'), cfpInput=document.getElementById('cfpInput'), cfpOk=document.getElementById('cfpOk'), cfpClear=document.getElementById('cfpClear'), cfpTitle=document.getElementById('cfpTitle'), cfpList=document.getElementById('cfpList'), cfpTextWrap=document.getElementById('cfpTextWrap'), cfpRangeWrap=document.getElementById('cfpRangeWrap'), cfpMin=document.getElementById('cfpMin'), cfpMax=document.getElementById('cfpMax'), cfpUnit=document.getElementById('cfpUnit');
-  var NUM_FIELDS=[{f:'nextGain',t:'下一交易日涨幅',u:'%'},{f:'toDate',t:'至今涨幅',u:'%'},{f:'amountYi',t:'成交金额(亿)',u:'亿'},{f:'ttmRoe',t:'TTM-ROE',u:'%'},{f:'revQYoy',t:'最近季度收入同比增长',u:'%'},{f:'kcQYoy',t:'最近季度扣非净利润同比增长',u:'%'},{f:'divYield',t:'股息率(近12月)',u:'%'},{f:'npLo',t:'净利润涨幅下限',u:'%'},{f:'npHi',t:'净利润涨幅上限',u:'%'},{f:'kcLo',t:'扣非净利润涨幅下限',u:'%'},{f:'kcHi',t:'扣非净利润涨幅上限',u:'%'},{f:'revLo',t:'营业收入涨幅下限',u:'%'},{f:'revHi',t:'营业收入涨幅上限',u:'%'}];
+  var NUM_FIELDS=[{f:'nextGain',t:'下一交易日涨幅',u:'%'},{f:'toDate',t:'至今涨幅',u:'%'},{f:'amountYi',t:'成交金额(亿)',u:'亿'},{f:'ttmRoe',t:'TTM-ROE',u:'%',s:'TTM-ROE'},{f:'revQYoy',t:'最近季度收入同比增长',u:'%',s:'单季收入同比'},{f:'kcQYoy',t:'最近季度扣非净利润同比增长',u:'%',s:'单季扣非同比'},{f:'divYield',t:'股息率(近12月)',u:'%',s:'股息率'},{f:'npLo',t:'净利润涨幅下限',u:'%',s:'净利下限'},{f:'npHi',t:'净利润涨幅上限',u:'%',s:'净利上限'},{f:'kcLo',t:'扣非净利润涨幅下限',u:'%',s:'扣非下限'},{f:'kcHi',t:'扣非净利润涨幅上限',u:'%',s:'扣非上限'},{f:'revLo',t:'营业收入涨幅下限',u:'%',s:'营收下限'},{f:'revHi',t:'营业收入涨幅上限',u:'%',s:'营收上限'}];
   var NUM_OPS=[{v:'ge',t:'≥'},{v:'le',t:'≤'},{v:'range',t:'区间'}];
+  // 字段存储单位系数：100=数据存小数(0.2 表示 20%)；1=数据已是百分数(20 表示 20%)。
+  // 输入值→存储值 = 输入 ÷ 系数；存储值→显示值 = 存储 × 系数。数值条件与表头区间筛选、表格显示必须同口径。
+  var FRAC_FIELDS={nextGain:1,toDate:1,ttmRoe:1,revQYoy:1,kcQYoy:1,divYield:1};
+  function scaleOf(f){ return FRAC_FIELDS[f]?100:1; }
   // 方案预设：选中后自动填好多行数值条件（预设值均为显示单位，如 15 表示 15%）
   var PRESETS = {
     p1: [ {f:'ttmRoe',op:'ge',val:15}, {f:'revQYoy',op:'ge',val:20}, {f:'kcQYoy',op:'ge',val:20}, {f:'divYield',op:'ge',val:3} ]
   };
   function colUnit(ci){ return (COLS[ci].f==='amountYi')?'亿':'%'; }
-  function disp(v,u){ if(v==null) return '—'; var x=(u==='%')?v*100:v; return (Math.round(x*100)/100).toString(); }
+  function disp(v,u,f){ if(v==null) return '—'; var x=(u==='%')?v*scaleOf(f):v; return (Math.round(x*100)/100).toString(); }
   function numFieldOf(f){ for(var k=0;k<NUM_FIELDS.length;k++){ if(NUM_FIELDS[k].f===f) return NUM_FIELDS[k]; } return null; }
   function numNum(v){ var n=parseFloat((''+v).trim().replace(/%/g,'')); return isNaN(n)?null:n; }
   DATA.forEach(function(r){ r._n=(r.n||'').toLowerCase(); r._c=(r.c||'').toLowerCase(); });
@@ -220,6 +240,7 @@ var HEAD = [['个股'],['报告类型'],['类型'],['TTM-ROE'],['最近季度收
   function sign(v){ return v==null?'':(v>=0?'+':''); }
   function cls(v){ return v==null?'':(v>=0?'up':'down'); }
   function ampCell(v){ return '<td class="num '+(v==null?'deg':cls(v))+'">'+(v==null?'—':sign(v)+v.toFixed(2)+'%')+'</td>'; }
+  function ampCellS(v,f){ if(v==null) return '<td class="num deg">—</td>'; var x=v*scaleOf(f); return '<td class="num '+cls(x)+'">'+sign(x)+x.toFixed(2)+'%</td>'; }
   function pctCell(v){ return '<td class="num'+(v==null?' deg':'')+'">'+(v==null?'—':(v*100).toFixed(2)+'%')+'</td>'; }
   function rtBadge(rt){ return '<span class="rt-badge '+(rt==='正式报告'?'rt-zsbg':'rt-yjyg')+'">'+esc(rt)+'</span>'; }
   function cell(r,idx){
@@ -228,8 +249,8 @@ var HEAD = [['个股'],['报告类型'],['类型'],['TTM-ROE'],['最近季度收
       case 1: return '<td>'+rtBadge(r.rt)+'</td>';
       case 2: return '<td>'+esc(r.type)+'</td>';
       case 3: return pctCell(r.ttmRoe);
-      case 4: return ampCell(r.revQYoy);
-      case 5: return ampCell(r.kcQYoy);
+      case 4: return ampCellS(r.revQYoy,'revQYoy');
+      case 5: return ampCellS(r.kcQYoy,'kcQYoy');
       case 6: return pctCell(r.divYield);
       case 7: return ampCell(r.npLo);
       case 8: return ampCell(r.npHi);
@@ -284,7 +305,7 @@ var HEAD = [['个股'],['报告类型'],['类型'],['TTM-ROE'],['最近季度收
   }
   function setFreeze(){ /* noop, first col already sticky via css */ }
   function numRowHTML(){
-    var fo=''; NUM_FIELDS.forEach(function(x){ fo+='<option value="'+x.f+'">'+x.t+'</option>'; });
+    var fo=''; NUM_FIELDS.forEach(function(x){ fo+='<option value="'+x.f+'" data-t="'+x.t+'" data-s="'+(x.s||x.t)+'" title="'+x.t+'">'+x.t+'</option>'; });
     var oo=''; NUM_OPS.forEach(function(x){ oo+='<option value="'+x.v+'">'+x.t+'</option>'; });
     return '<span class="num-row">'
       +'<select class="num-f">'+fo+'</select>'
@@ -300,10 +321,23 @@ var HEAD = [['个股'],['报告类型'],['类型'],['TTM-ROE'],['最近季度收
     var fSel=row.querySelector('.num-f'), opSel=row.querySelector('.num-op'), vIn=row.querySelector('.num-v'), v2In=row.querySelector('.num-v2'), uLab=row.querySelector('.num-u'), sep=row.querySelector('.num-sep');
     function syncOp(){ var isRange=opSel.value==='range'; sep.style.display=isRange?'':'none'; v2In.style.display=isRange?'':'none'; }
     function syncUnit(){ var fd=numFieldOf(fSel.value); uLab.textContent=(fd&&fd.u==='亿')?' 亿':'%'; vIn.placeholder=(fd&&fd.u==='亿')?'如 2':'如 3'; v2In.placeholder=(fd&&fd.u==='亿')?'如 20':'如 10'; }
-    fSel.addEventListener('change',function(){ syncUnit(); if(!applyingPreset&&presetSel) presetSel.value=''; numSync(); });
-    opSel.addEventListener('change',function(){ syncOp(); if(!applyingPreset&&presetSel) presetSel.value=''; numSync(); });
-    vIn.addEventListener('input',function(){ if(!applyingPreset&&presetSel) presetSel.value=''; numSync(); });
-    v2In.addEventListener('input',function(){ if(!applyingPreset&&presetSel) presetSel.value=''; numSync(); });
+    function syncLabels(){
+      var narrow=(window.innerWidth||9999)<=640;
+      var opts=fSel.options;
+      for(var oi=0;oi<opts.length;oi++){
+        var op=opts[oi];
+        var full=op.getAttribute('data-t')||op.textContent;
+        var sh=op.getAttribute('data-s')||full;
+        op.textContent = narrow?sh:full;
+        op.setAttribute('title', full);
+      }
+    }
+    syncLabels();
+    if(window.addEventListener) window.addEventListener('resize', function(){ syncLabels(); });
+    fSel.addEventListener('change',function(){ syncUnit(); if(applyingPreset) return; if(presetSel) presetSel.value=''; numSync(); });
+    opSel.addEventListener('change',function(){ syncOp(); if(applyingPreset) return; if(presetSel) presetSel.value=''; numSync(); });
+    vIn.addEventListener('input',function(){ if(applyingPreset) return; if(presetSel) presetSel.value=''; numSync(); });
+    v2In.addEventListener('input',function(){ if(applyingPreset) return; if(presetSel) presetSel.value=''; numSync(); });
     vIn.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); numAddRow(true); } });
     v2In.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); numAddRow(true); } });
     row.querySelector('.num-del').addEventListener('click',function(){ row.parentNode.removeChild(row); if(!numRows.querySelector('.num-row')) numAddRow(false); numSync(); });
@@ -331,7 +365,7 @@ var HEAD = [['个股'],['报告类型'],['类型'],['TTM-ROE'],['最近季度收
       var f=row.querySelector('.num-f').value, op=row.querySelector('.num-op').value;
       var fd=numFieldOf(f); if(!fd) continue;
       var v=numNum(row.querySelector('.num-v').value); if(v==null) continue;
-      var k=(fd.u==='%')?100:1;
+      var k=scaleOf(f);
       if(op==='range'){ var v2=numNum(row.querySelector('.num-v2').value); if(v2==null) continue; if(v>v2){ var t=v; v=v2; v2=t; }
         out.push({f:f,op:'range',val:v/k,val2:v2/k,u:fd.u});
       } else { out.push({f:f,op:op,val:v/k,u:fd.u}); }
@@ -339,7 +373,7 @@ var HEAD = [['个股'],['报告类型'],['类型'],['TTM-ROE'],['最近季度收
     return out;
   }
   function numSync(){ state.numFilters=numReadRows(); page=1; render(); }
-  function nfToInit(nf){ var u=numFieldOf(nf.f).u; return {f:nf.f, op:nf.op, val:(nf.val!=null?disp(nf.val,u):null), val2:(nf.val2!=null?disp(nf.val2,u):null)}; }
+  function nfToInit(nf){ var u=numFieldOf(nf.f).u; return {f:nf.f, op:nf.op, val:(nf.val!=null?disp(nf.val,u,nf.f):null), val2:(nf.val2!=null?disp(nf.val2,u,nf.f):null)}; }
   function numBuildRowsFromState(filters){
     if(!numRows) return;
     numRows.innerHTML='';
@@ -354,6 +388,17 @@ var HEAD = [['个股'],['报告类型'],['类型'],['TTM-ROE'],['最近季度收
     applyingPreset=false;
     numSync();
   }
+  // 页面默认载入即套用方案1：先建行(静默，不触发中途 numSync)，再一次性写入 state 并渲染
+  function initDefaultPreset(key){
+    var p=PRESETS[key];
+    if(!p||!numRows) return;
+    applyingPreset=true;
+    numRows.innerHTML='';
+    p.forEach(function(x){ numAddRow(false, {f:x.f, op:x.op, val:x.val, val2:(x.op==='range'?x.val2:undefined)}); });
+    applyingPreset=false;
+    state.numFilters=numReadRows();
+    if(presetSel) presetSel.value=key;
+  }
   function renderChips(){
     if(!chips) return;
     var H=[];
@@ -361,12 +406,12 @@ var HEAD = [['个股'],['报告类型'],['类型'],['TTM-ROE'],['最近季度收
       var fd=numFieldOf(nf.f); if(!fd) return;
       var sym = nf.op==='ge'?'≥':(nf.op==='le'?'≤':'区间');
       var unit = fd.u==='亿'?' 亿':'%';
-      var valDisp = nf.op==='range' ? (disp(nf.val,fd.u)+unit+'~'+disp(nf.val2,fd.u)+unit) : (sym+' '+disp(nf.val,fd.u)+unit);
+      var valDisp = nf.op==='range' ? (disp(nf.val,fd.u,nf.f)+unit+'~'+disp(nf.val2,fd.u,nf.f)+unit) : (sym+' '+disp(nf.val,fd.u,nf.f)+unit);
       H.push('<span class="fchip k-num" data-kind="num" data-nidx="'+i+'">'+esc(fd.t+' '+valDisp)+'<span class="fx">✕</span></span>');
     });
     for(var ci in state.colFilters){ var kw=state.colFilters[ci]; if(kw){ H.push('<span class="fchip k-col" data-kind="col" data-ci="'+ci+'" data-ctype="kw">'+esc(HEAD[ci][0]+' 包含 '+kw)+'<span class="fx">✕</span></span>'); } }
     for(var cs in state.colSel){ var sel=state.colSel[cs]; if(sel&&sel.length){ H.push('<span class="fchip k-col" data-kind="col" data-ci="'+cs+'" data-ctype="sel">'+esc(HEAD[cs][0]+' ∈ {'+sel.join('/')+'}')+'<span class="fx">✕</span></span>'); } }
-    for(var cr in state.colRange){ var rg=state.colRange[cr]; if(rg&&(rg.min!=null||rg.max!=null)){ var u=colUnit(parseInt(cr,10)); var s=(rg.min!=null?disp(rg.min,u):'—')+'~'+(rg.max!=null?disp(rg.max,u):'—')+u; H.push('<span class="fchip k-col" data-kind="col" data-ci="'+cr+'" data-ctype="range">'+esc(HEAD[cr][0]+' '+s)+'<span class="fx">✕</span></span>'); } }
+    for(var cr in state.colRange){ var rg=state.colRange[cr]; if(rg&&(rg.min!=null||rg.max!=null)){ var ciR=parseInt(cr,10); var u=colUnit(ciR), scR=scaleOf(COLS[ciR].f); var s=(rg.min!=null?disp(rg.min,u,COLS[ciR].f):'—')+'~'+(rg.max!=null?disp(rg.max,u,COLS[ciR].f):'—')+u; H.push('<span class="fchip k-col" data-kind="col" data-ci="'+cr+'" data-ctype="range">'+esc(HEAD[cr][0]+' '+s)+'<span class="fx">✕</span></span>'); } }
     chips.innerHTML=H.join('');
     chipsRow.style.display = H.length?'flex':'none';
   }
@@ -415,8 +460,9 @@ var HEAD = [['个股'],['报告类型'],['类型'],['TTM-ROE'],['最近季度收
       var isPct=(col.f!=='amountYi');
       cfpUnit.textContent=isPct?'%（输 3 = 3%）':'（亿元）';
       var rg=state.colRange[idx]||{};
-      cfpMin.value=(rg.min!=null)?(isPct?(rg.min*100):rg.min):'';
-      cfpMax.value=(rg.max!=null)?(isPct?(rg.max*100):rg.max):'';
+      var scC=scaleOf(col.f);
+      cfpMin.value=(rg.min!=null)?(isPct?(rg.min*scC):rg.min):'';
+      cfpMax.value=(rg.max!=null)?(isPct?(rg.max*scC):rg.max):'';
       cfpMin.focus();
     } else {
       cfpRangeWrap.style.display='none'; cfpTextWrap.style.display='block'; cfpList.style.display='block';
@@ -439,7 +485,7 @@ var HEAD = [['个股'],['报告类型'],['类型'],['TTM-ROE'],['最近季度收
   function syncFbtn(idx){ var fb=document.querySelector('.fbtn[data-c="'+idx+'"]'); if(fb) fb.classList.toggle('active', !!(state.colFilters[idx]||state.colSel[idx]||state.colRange[idx])); }
   if(cfpOk)cfpOk.addEventListener('click',function(){ if(curCol>=0){ var col=COLS[curCol];
     if(col.n){
-      var isPct=(col.f!=='amountYi'), k=isPct?100:1;
+      var isPct=(col.f!=='amountYi'), k=isPct?scaleOf(col.f):1;
       var mn=numNum(cfpMin.value), mx=numNum(cfpMax.value);
       var rg={};
       if(mn!=null) rg.min=mn/k;
@@ -479,7 +525,7 @@ var HEAD = [['个股'],['报告类型'],['类型'],['TTM-ROE'],['最近季度收
       syncFbtn(ci); page=1; render();
     }
   });
-  numAddRow(false);
+  initDefaultPreset('p1');
   if(clearBtn)clearBtn.addEventListener('click',function(){ state.rt=''; state.type=''; state.theme=''; state.stockKW=''; state.notice=''; state.colFilters={}; state.colSel={}; state.colRange={}; state.numFilters=[]; if(numRows)numRows.innerHTML=''; numAddRow(false); if(presetSel)presetSel.value=''; document.querySelectorAll('.fbtn.active').forEach(function(x){x.classList.remove('active');}); if(rtSel)rtSel.value=''; if(themeSel)themeSel.value=''; if(typeSel)typeSel.value=''; if(stockInput)stockInput.value=''; if(noticeSel)noticeSel.value=''; page=1; render(); syncBoxActive(); });
   if(pageSizeSel)pageSizeSel.addEventListener('change',function(){ PAGE=parseInt(pageSizeSel.value,10)||50; page=1; render(); });
   if(prevBtn)prevBtn.addEventListener('click',function(){ if(page>1){page--; render();} });
