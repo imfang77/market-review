@@ -588,7 +588,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     if (v == null) return '<td class="' + (c.num ? "num" : "") + (c.cls ? " " + c.cls : "") + '">—</td>';
     if (c.rps) {
       var cls = "num" + (v >= 90 ? " rps-hot" : "") + (c.cls ? " " + c.cls : "");
-      return '<td class="' + cls + '">' + v + '</td>';
+      return '<td class="' + cls + '">' + v.toFixed(1) + '</td>';
     }
     if (c.sign) {
       var cls2 = "num " + (c.black ? "" : (v > 0 ? "up" : (v < 0 ? "down" : "flat"))) + (c.cls ? " " + c.cls : "");
@@ -736,6 +736,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         var v = b[c.k];
         if (c.bool) return v === 1 ? "是" : "—";
         if (v == null) return "";
+        if (c.rps) return v.toFixed(1);
         if (c.sign || c.k === "amount") return v.toFixed(2);
         return v;
       });
