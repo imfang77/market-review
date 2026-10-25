@@ -121,7 +121,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 .holds-detail > summary::-webkit-details-marker { display: none; }
 .holds-detail > summary::before { content: "\25B8 "; }
 .holds-detail[open] > summary::before { content: "\25BE "; }
-.hold-row { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; line-height: 1.5; white-space: nowrap; }
+.hold-row { display: flex; justify-content: flex-start; gap: 8px; align-items: center; font-size: 11px; line-height: 1.5; white-space: nowrap; }
 .hold-row.core { background: #fff6f5; border-radius: 3px; }
 .hold-row .hn { font-weight: 600; color: #495057; }
 .hold-row .hr { color: #868e96; }
@@ -231,7 +231,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 .skin-C .rps-up{color:#e03131}.skin-C .rps-down{color:#2f9e44}
 
 </style>
-<script src="_echarts.min.js"></script>
+<!-- ECharts 改为懒加载（首屏提速）：首次打开走势/K线弹窗时才加载 _echarts.min.js -->
 </head>
 <body>
 <div class="header">
@@ -361,8 +361,8 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   <div class="footer">数据仅供参考，不构成投资建议 ｜ 板块RPS 由 880xxx 板块指数日K 计算</div>
 </div>
 
-<script src="_board_rps_data.js?v=20261023a"></script>
-  <script src="_board_kline.js?v=20261023a"></script>
+<script src="_board_rps_data.js?v=20261023b"></script>
+<!-- _board_kline.js（4.85MB）改懒加载：首次切 K 线视图时才拉取 -->
 <script>
 (function () {
   var D = window.BOARD_RPS || { anchor: "—", boards: {} };
@@ -773,6 +773,32 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     if (d && d.src) { var q2 = d.src.split("?v="); if (q2[1]) return q2[1]; }
     return Date.now();
   })();
+  // 懒加载通用器：同 key 只注入一次，cb 幂等回调（onerror 也回调，页面内已有降级提示）
+  var LAZY = {};
+  function loadScriptOnce(key, src, cb) {
+    if (LAZY[key] === 2) { cb(); return; }
+    if (LAZY[key] === 1) { var iv = setInterval(function () { if (LAZY[key] === 2) { clearInterval(iv); cb(); } }, 120); return; }
+    LAZY[key] = 1;
+    var s = document.createElement("script");
+    s.src = src;
+    s.onload = function () { LAZY[key] = 2; cb(); };
+    s.onerror = function () { LAZY[key] = 2; cb(); };
+    document.head.appendChild(s);
+  }
+  // 明细数据（sd/etf，约 2.1MB）：拆到 _board_rps_detail.js，首次打开下钻弹窗才加载
+  var DETAIL_TAG = HIST_TAG;
+  var detailReady = false;
+  function loadDetail(cb) {
+    loadScriptOnce("detail", "_board_rps_detail.js?v=" + DETAIL_TAG, function () {
+      var D = window.BOARD_RPS_DETAIL;
+      if (D && D.d) { for (var k in D.d) { if (BOARDS[k]) { BOARDS[k].sd = D.d[k].sd || []; BOARDS[k].etf = D.d[k].etf || []; } } }
+      detailReady = true; cb();
+    });
+  }
+  // ECharts（约 1MB）：首次绘制走势/K线图才加载
+  function loadEcharts(cb) { loadScriptOnce("echarts", "_echarts.min.js", cb); }
+  // 板块日K OHLC（约 4.9MB）：首次切 K 线视图才加载
+  function loadKlineData(cb) { loadScriptOnce("kline", "_board_kline.js?v=" + HIST_TAG, cb); }
   function loadHist(cb) {
     if (histReady || histTried) { cb(); return; }
     if (histLoading) { var iv = setInterval(function () { if (histReady) { clearInterval(iv); cb(); } }, 120); return; }
@@ -927,7 +953,16 @@ tr.three-yes:hover > td { background: #ffe8cc; }
       : 'K线含 MA5/10/20/40/60/120/240 均线（数值见上方色条）；灰色横线条标示<span class="rps-up">向上跳空</span> / <span class="rps-down">向下跳空</span> 缺口（通达信风格，横线条厚度随缺口价差大小变化）。';
     note.innerHTML = '<span class="rps-date-blue">' + (g_dateCap || "") + "</span> " + body;
   }
-  function drawActive() { if (viewMode === "rps") drawBoardChart(); else drawKline(); }
+  function drawActive() {
+    var box = document.getElementById("rpsChart");
+    loadEcharts(function () {
+      if (viewMode === "rps") { drawBoardChart(); return; }
+      if (typeof window.BOARD_KLINE === "undefined") {
+        if (box) box.innerHTML = '<div style="padding:70px;text-align:center;color:#868e96;font-size:14px">K 线数据加载中…（首次约 5MB，请稍候）</div>';
+        loadKlineData(function () { drawKline(); });
+      } else { drawKline(); }
+    });
+  }
 
   // ----- RPS 趋势图（原逻辑，按皮肤着色）-----
   function drawBoardChart() {
@@ -1223,9 +1258,9 @@ tr.three-yes:hover > td { background: #ffe8cc; }
         holdsCell = '<td class="holds-cell" style="color:#adb5bd">跟踪商品价格 · 无个股持仓</td>';
       } else {
         var hs = e.h.map(function (x) {
-          return '<div class="hold-row' + (x.core ? " core" : "") + '"><span class="hn">' + x.n
-            + (x.core ? '<i class="core-tag">核心</i>' : '') + '</span><span class="hr">'
-            + (x.r == null ? "-" : x.r) + '%</span></div>';
+          return '<div class="hold-row' + (x.core ? " core" : "") + '"><span class="hn">' + x.n + '</span>'
+            + '<span class="hr">' + (x.r == null ? "-" : x.r) + '%</span>'
+            + (x.core ? '<i class="core-tag">核心</i>' : '') + '</div>';
         }).join("");
         holdsCell = '<td class="holds-cell"><details class="holds-detail"><summary>持仓明细(' + e.h.length
           + ')</summary><div>' + hs + '</div></details></td>';
@@ -1255,8 +1290,13 @@ tr.three-yes:hover > td { background: #ffe8cc; }
     var title = (kind === "lead") ? "龙头个股 · 核心个股明细（5日口径）" : "相关ETF";
     $("drillTitle").innerHTML = title
       + '<span style="font-size:13px;color:#868e96;font-weight:400">　' + (b.name || "") + " " + code + "</span>";
-    $("drillBody").innerHTML = renderDrill();
     $("drillModal").style.display = "flex";
+    if (detailReady || (b.sd && b.sd.length) || (b.etf && b.etf.length)) { $("drillBody").innerHTML = renderDrill(); return; }
+    $("drillBody").innerHTML = '<div class="dt-empty">明细数据加载中…（首次约 2MB，请稍候）</div>';
+    loadDetail(function () {
+      if (drillState.code !== code) return;   // 用户已切换到其他板块
+      $("drillBody").innerHTML = renderDrill();
+    });
   }
   window.closeDrill = function () { $("drillModal").style.display = "none"; };
   $("drillModal").addEventListener("click", function (e) { if (e.target === this) this.style.display = "none"; });
