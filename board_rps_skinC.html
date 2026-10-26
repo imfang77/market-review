@@ -234,7 +234,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 <div class="header">
   <a class="back" href="mainlines_concept.html">&#8592; 返回</a>
   <h1>板块 RPS 分析</h1>
-  <div class="subtitle" id="subtitle">通达信 401 个板块 · 数据日期 <span id="data-date" style="color:#1976d2;font-weight:600;">加载中…</span></div>
+  <div class="subtitle" id="subtitle">通达信 746 个板块 · 数据日期 <span id="data-date" style="color:#1976d2;font-weight:600;">加载中…</span></div>
 </div>
 <div class="container">
 
@@ -294,24 +294,24 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 
   <div class="section">
     <details class="desc-fold">
-      <summary>第一个通达信401个板块的来源及下载</summary>
-      <div>本页的 <b>通达信401个板块</b> 以你提供的《板块指数RPS20260830（401只）》为准，系从通达信系统导出「行业板块 + 概念板块」成分股清单（覆盖 325 个板块）与「全部A股-细分+概念主题」导出（推导其余 76 个板块）去重并集而成，全部为通达信板块指数（880xxx 代码段），涵盖二级行业、细分行业与概念主题，<b>不再区分层级</b>，统一称为"这 通达信401个板块"。最终确认的「通达信401个板块 ↔ 沪深个股」双向映射文件见本页最下方下载链接。</div>
+      <summary>第一个通达信746个板块的来源及下载</summary>
+      <div>本页的 <b>通达信746个板块</b> 以你提供的通达信自定义板块清单 BKZSRPS.blk（746 只，401 个880段 + 345 个881段细分行业）为准，系通达信自定义板块 BKZSRPS.blk 的实时清单（行业+细分+概念去重并集），成分股由 infoharbor_block.dat 与 tdxzs3.cfg/tdxhy.cfg 自动映射还原，全部为通达信板块指数（880xxx / 881xxx 代码段），涵盖二级行业、三级细分行业与概念主题，<b>不再区分层级</b>，统一称为"这 通达信746个板块"。最终确认的「通达信746个板块 ↔ 沪深个股」双向映射文件见本页最下方下载链接。</div>
     </details>
     <details class="desc-fold">
-      <summary>通达信401个板块涨跌幅的数据源</summary>
+      <summary>通达信746个板块涨跌幅的数据源</summary>
       <div>板块涨跌幅取自 <b>通达信公共行情服务器</b>（pytdx <code>get_index_bars</code>，market=1，category=9）的 880xxx 板块指数日K线。板块指数为成分股加权合成、<b>无分红除权</b>，故直接读取指数收盘价计算 N 日收益率即为板块涨跌幅，零除权失真。锚点日（最新收盘）见页面顶部，当前为 <b id="anchor-text">—</b>。成交额、当日涨幅均为该最新交易日数据。</div>
     </details>
     <details class="desc-fold">
       <summary>板块RPS 口径与其他说明</summary>
       <div>
-        <p><b>板块RPS 定义</b>：把每个板块当作一只"股票"，按其 N 日收益率在 <b>通达信401个板块内</b> 做百分位排名（100 = 最强，≥ 90 为领先板块）。板块RPS5 / 板块RPS10 / 板块RPS20 以及 <b>板块RPS60 / 板块RPS120 / 板块RPS240 / 板块RPS250</b> 与<b>个股RPS 是相互独立的两套体系，请勿混淆</b>。</p>
+        <p><b>板块RPS 定义</b>：把每个板块当作一只"股票"，按其 N 日收益率在 <b>通达信746个板块内</b> 做百分位排名（100 = 最强，≥ 90 为领先板块）。板块RPS5 / 板块RPS10 / 板块RPS20 以及 <b>板块RPS60 / 板块RPS120 / 板块RPS240 / 板块RPS250</b> 与<b>个股RPS 是相互独立的两套体系，请勿混淆</b>。</p>
         <p><b>两线红</b> = 板块RPS5 / 板块RPS10 / 板块RPS20 中<b>至少 2 条 ≥ 90</b>（RPS 到了 90 才叫转红，表中 ≥ 90 标红）。<b>两线转红日</b> = 该板块最近一次由"非两线红"跳变为"两线红"的交易日。<b>领先周期数</b> = 板块RPS5/10/20 中 ≥ 90 的个数（0~3）。<b>注意</b>：板块RPS60 / 120 / 240 <b>不参与两线红判定</b>，仅用于表格展示与「板块RPS自定义」筛选条件。</p>
         <p><b>涨幅列</b>：当日涨幅(%) 为最新交易日涨跌；5日涨幅(%) / 10日涨幅(%) / 20日涨幅(%) / 60日涨幅(%) / 120日涨幅(%) / 240日涨幅(%) 为板块对应周期的收益率（百分比数值，表头已含 %，单元格内为纯数字）。</p>
         <p><b>两线红筛选口径</b>：默认按<b>最新交易日（页面顶部数据日期）</b>查看"当前两线红板块"（数值列始终为最新交易日快照，仅"是否两线红 / 两线转红日"随口径变化）。勾选「N日内首次两线转红」即按"两线转红日落在近 N 个交易日"筛选（例如 N=5 即最近 5 个交易日）；不再提供独立的起止日期选择器。</p>
       </div>
     </details>
     <div style="text-align:center; padding: 6px 0 4px;">
-      <a class="dl-link" href="401板块映射_个股与板块.xlsx" download>下载：通达信401个板块与个股映射（.xlsx）</a>
+      <a class="dl-link" href="746板块映射_个股与板块.xlsx" download>下载：通达信746个板块与个股映射（.xlsx）</a>
     </div>
   </div>
 
@@ -485,7 +485,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   // 自定义模式：>= / <= 比较
   function cmpOp(v, op, thr) {
     // 阈值 0 = 不过滤：长周期缺数据的板块（如 MLCC概念 日线有断层、AI营销 上市不足 240 日）
-    // 也应保留，否则「重置」后板块数会从 401 掉到 399。
+    // 也应保留，否则「重置」后板块数会从 746 掉到 744。
     if (v == null) return op === "ge" && thr <= 0;
     return op === "le" ? (v <= thr) : (v >= thr);
   }
@@ -719,7 +719,7 @@ tr.three-yes:hover > td { background: #ffe8cc; }
   if (prev) prev.onclick = function () { page--; renderBody(); };
   if (next) next.onclick = function () { page++; renderBody(); };
 
-  // 重置：把 6 个 RPS 阈值全部设为 0（不改变模式与运算符），即恢复自定义模式默认（显示全部 401 板块）
+  // 重置：把 6 个 RPS 阈值全部设为 0（不改变模式与运算符），即恢复自定义模式默认（显示全部 746 板块）
   $("fp-clear").onclick = function () {
     state.c5 = 0; state.c10 = 0; state.c20 = 0; state.c60 = 0; state.c120 = 0; state.c240 = 0;
     syncRpsInputs();

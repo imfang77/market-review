@@ -14,9 +14,9 @@ window.REPORTS = [
     "screeningFile": "screening.html",
     "screeningSummary": "技术面(趋势突破G1-15只/净利润断层G2-0只/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
     "mainlineFile": "mainline-20261026.html",
-    "mainlineSummary": "5日主线:纺织机械/工业软件/外骨骼机器人｜10日主线:石油开采/石油/军贸概念｜20日主线:石油开采/石油/出版业",
+    "mainlineSummary": "5日主线:机器人/新兴软件/其他专业服务｜10日主线:油气开采/石油开采/石油｜20日主线:油气开采/石油开采/视频音频媒体",
     "mainlineConceptFile": "mainline_concept-20261026.html",
-    "conceptSummary": "5日主线:纺织机械/工业软件/外骨骼机器人｜10日主线:石油开采/石油/军贸概念｜20日主线:石油开采/石油/出版业"
+    "conceptSummary": "5日主线:机器人/新兴软件/其他专业服务｜10日主线:油气开采/石油开采/石油｜20日主线:油气开采/石油开采/视频音频媒体"
   },
   {
     "date": "2026-10-23",
