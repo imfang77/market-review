@@ -7,6 +7,18 @@
  */
 window.REPORTS = [
   {
+    "date": "2026-10-26",
+    "weekday": "周一",
+    "reviewFile": "review-20261026.html",
+    "reviewSummary": "沪指+0.19% 深成指-1.19% 创业板指-1.71% 科创50-2.23% 成交1.61万亿 恐贪26.6·中性",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面页最新20261026；基本面页数据截至最新季报；RPS选股页数据日期20261026",
+    "mainlineFile": "mainline-20261026.html",
+    "mainlineSummary": "5日主线:纺织机械/工业软件/外骨骼机器人｜10日主线:石油开采/石油/军贸概念｜20日主线:石油开采/石油/出版业",
+    "mainlineConceptFile": "mainline_concept-20261026.html",
+    "conceptSummary": "5日主线:纺织机械/工业软件/外骨骼机器人｜10日主线:石油开采/石油/军贸概念｜20日主线:石油开采/石油/出版业"
+  },
+  {
     "date": "2026-10-23",
     "weekday": "周五",
     "reviewFile": "review-20261023.html",
