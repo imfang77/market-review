@@ -9,13 +9,13 @@ window.REPORTS = [
   {
     "date": "2026-10-26",
     "weekday": "周一",
-    "reviewFile": "review-20261026.html",
+    "reviewFile": "review-20261026.html?v=1793011439",
     "reviewSummary": "沪指+0.19% 创业板-1.71% 涨跌2082/2991 涨停59只 成交1.61万亿 恐贪26.6中性",
     "screeningFile": "screening.html",
     "screeningSummary": "技术面(趋势突破G1-15只/净利润断层G2-0只/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
-    "mainlineFile": "mainline-20261026.html",
+    "mainlineFile": "mainline-20261026.html?v=1793028465",
     "mainlineSummary": "5日主线:纺织机械/工业软件/外骨骼机器人｜10日主线:石油开采/石油/军贸概念｜20日主线:石油开采/石油/出版业",
-    "mainlineConceptFile": "mainline_concept-20261026.html",
+    "mainlineConceptFile": "mainline_concept-20261026.html?v=1793028465",
     "conceptSummary": "5日主线:纺织机械/工业软件/外骨骼机器人｜10日主线:石油开采/石油/军贸概念｜20日主线:石油开采/石油/出版业"
   },
   {

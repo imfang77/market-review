@@ -117,7 +117,9 @@
       conceptReports.forEach(function(r) {
         var a = document.createElement('a');
         a.className = 'report-card';
-        a.href = r.mainlineConceptFile + '?v=24';
+        // manifest 里已带 ?v=<mtime> 缓存戳（2026-10-26 加），此处不再追加固定戳，
+        // 否则会出现双 ?v= 导致取不到新版
+        a.href = r.mainlineConceptFile;
 
         var header = '<div class="card-header">' +
           '<span class="date-text">' + r.date + '</span>' +
