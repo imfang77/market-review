@@ -7,6 +7,18 @@
  */
 window.REPORTS = [
   {
+    "date": "2026-10-27",
+    "weekday": "周二",
+    "reviewFile": "review-20261027.html?v=1793097342",
+    "reviewSummary": "沪指-1.33% 深成指-2.50% 创业板-3.41% 中证全指-2.22%｜恐贪21·恐惧｜5-20日主线：石油开采/石油/电信运营",
+    "screeningFile": "screening.html",
+    "screeningSummary": "技术面页最新20261027；基本面页数据截至最新季报；RPS选股页数据日期20261027（G2/G4净利润断层候选池因 earnings 源暂空，属基线）",
+    "mainlineFile": "mainline-20261027.html?v=1793096834",
+    "mainlineSummary": "5日主线:纺织机械/商品城/石油开采｜10日主线:石油开采/石油/白酒｜20日主线:石油开采/石油/电信运营",
+    "mainlineConceptFile": "mainline_concept-20261027.html?v=1793096834",
+    "conceptSummary": "5日主线:纺织机械/商品城/石油开采｜10日主线:石油开采/石油/白酒｜20日主线:石油开采/石油/电信运营"
+  },
+  {
     "date": "2026-10-26",
     "weekday": "周一",
     "reviewFile": "review-20261026.html?v=1793011439",
