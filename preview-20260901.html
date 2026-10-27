@@ -47,6 +47,22 @@
   .fg-level{font-size:13px;font-weight:700;color:#0984e3}
   .fg-desc{font-size:11px;color:#636e72;margin-top:6px;line-height:1.5}
   .empty{color:#b2bec3;font-size:13px;text-align:center;padding:14px}
+  /* 市场脉搏：融资余额 / 涨跌家数（各一行，手机不折行） */
+  .pulse{background:#f8f9fb;border:1px solid #eef1f5;border-radius:10px;padding:8px 10px;margin:10px 0 2px}
+  .pl-row{display:flex;flex-wrap:nowrap;align-items:baseline;white-space:nowrap;overflow:hidden;font-size:12px;line-height:1.95;font-variant-numeric:tabular-nums}
+  .pl-k{color:#636e72;font-size:11.5px;font-weight:700;margin-right:4px;flex-shrink:0}
+  .pl-v{font-size:13px;font-weight:800;color:#2d3436;font-variant-numeric:tabular-nums;margin-right:2px}
+  .pl-sep{color:#dfe6e9;margin:0 4px;font-weight:400}
+  .pl-x{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+  .pl-x.up{color:#d63031}
+  .pl-x.down{color:#00b894}
+  .pl-x.flat{color:#b2bec3}
+  .pl-x.mut{color:#636e72;font-weight:500}
+  .pl-dt{color:#b2bec3;font-size:11px;font-variant-numeric:tabular-nums;margin-left:auto}
+  .pl-ar{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;margin-left:3px}
+  .pl-ar.up{color:#d63031}
+  .pl-ar.down{color:#00b894}
+  .pl-ar.flat{color:#b2bec3}
 </style></head>
 <body>
 <div class="card">
@@ -60,64 +76,74 @@
   </div>
 
   <div class="sec">
-    <div class="sec-h">5-20日主线（核心 · 3）</div>
+    <div class="sec-h">5-20日主线（核心 · 9 · 通达信401板块口径）</div>
     <div class="seg">
     <div class="seg-h">5日主线（按5日涨幅）</div>
-    
+    <div class="ml">
+      <div class="ml-name">种业 <span class="ml-meta">5日 +20.70%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：大北农、神农种业、万向德农；核心梯队：万向德农、敦煌种业、神农种业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +18.37 个百分点，核心个股近5日累计成交约 85 亿，领涨股 万向德农 近5日涨 +61.01%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">种植业 <span class="ml-meta">5日 +13.61%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：北大荒、神农种业、万向德农；核心梯队：万向德农、新赛股份、敦煌种业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +11.28 个百分点，核心个股近5日累计成交约 110 亿，领涨股 万向德农 近5日涨 +61.01%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">林业 <span class="ml-meta">5日 +13.15%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：平潭发展、平潭发展、福建金森；核心梯队：福建金森、平潭发展、永安林业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 3（前 0.7%），相对中证全指跑赢 +10.82 个百分点，核心个股近5日累计成交约 23 亿，领涨股 福建金森 近5日涨 +34.62%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div>
   </div><div class="seg">
     <div class="seg-h">10日主线（按10日涨幅）</div>
-    
+    <div class="ml">
+      <div class="ml-name">种业 <span class="ml-meta">10日 +20.18%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：大北农、神农种业、万向德农；核心梯队：万向德农、敦煌种业、神农种业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +21.26 个百分点，核心个股近5日累计成交约 85 亿，领涨股 万向德农 近5日涨 +61.01%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">焦炭加工 <span class="ml-meta">10日 +12.15%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：美锦能源、美锦能源、云煤能源；核心梯队：云煤能源、陕西黑猫、安泰集团</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +6.02 个百分点，核心个股近5日累计成交约 23 亿，领涨股 云煤能源 近5日涨 +15.71%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">种植业 <span class="ml-meta">10日 +11.53%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：北大荒、神农种业、万向德农；核心梯队：万向德农、新赛股份、敦煌种业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 3（前 0.7%），相对中证全指跑赢 +14.17 个百分点，核心个股近5日累计成交约 110 亿，领涨股 万向德农 近5日涨 +61.01%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div>
   </div><div class="seg">
     <div class="seg-h">20日主线（按20日涨幅）</div>
     <div class="ml">
-      <div class="ml-name">共封装光模块(CPO) <span class="ml-meta">20日 +24.33%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：AI算力需求爆发，英伟达/博通CPO（共封装光学）量产提速、1.6T光模块迭代加速，光通信订单与业绩预期持续上修。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：工业富联（龙头），中际旭创、新易盛（中军），立讯精密、生益科技、东山精密、亨通光电、科翔股份、华懋科技、中富电路、沃格光电、金禄电子（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近20日涨 +24.33%、更长周期（20日）—，震荡修复性质；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：一般。趋势尚未明确，以题材/事件驱动为主；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 1（前 4%），相对中证全指跑赢 +20.08 个百分点，核心个股近5日累计成交约 880.35 亿，领涨股 科翔股份 近5日涨 +60.69%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>工业富联</td><td>中际旭创</td><td>新易盛</td><td>立讯精密</td><td>生益科技</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>中际旭创</td><td>新易盛</td><td>东山精密</td><td>生益科技</td><td>亨通光电</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>金禄电子</td><td>工业富联</td><td>立讯精密</td><td>华懋科技</td><td>中富电路</td></tr>
-    </tbody>
-  </table>
+      <div class="ml-name">种业 <span class="ml-meta">20日 +44.95%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：大北农、神农种业、万向德农；核心梯队：万向德农、敦煌种业、神农种业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +15.95 个百分点，核心个股近5日累计成交约 85 亿，领涨股 万向德农 近5日涨 +61.01%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
     </div><div class="ml">
-      <div class="ml-name">黄金 <span class="ml-meta">20日 +21.02%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：全球央行购金与地缘避险需求，实际利率下行预期，金价中枢上移。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：山东黄金（龙头），中金黄金、赤峰黄金（中军），山金国际、湖南黄金、西部黄金、招金黄金、晓程科技（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近20日涨 +21.02%、更长周期（20日）—，震荡修复性质；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：一般。趋势尚未明确，以题材/事件驱动为主；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 2（前 7%），相对中证全指跑赢 +16.77 个百分点，核心个股近5日累计成交约 145.60 亿，领涨股 招金黄金 近5日涨 +35.55%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>山东黄金</td><td>中金黄金</td><td>赤峰黄金</td><td>山金国际</td><td>湖南黄金</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>山东黄金</td><td>赤峰黄金</td><td>湖南黄金</td><td>中金黄金</td><td>晓程科技</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>招金黄金</td><td>山东黄金</td><td>晓程科技</td><td>山金国际</td><td>西部黄金</td></tr>
-    </tbody>
-  </table>
+      <div class="ml-name">种植业 <span class="ml-meta">20日 +28.19%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：北大荒、神农种业、万向德农；核心梯队：万向德农、新赛股份、敦煌种业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +8.86 个百分点，核心个股近5日累计成交约 110 亿，领涨股 万向德农 近5日涨 +61.01%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
     </div><div class="ml">
-      <div class="ml-name">半导体 <span class="ml-meta">20日 +18.78%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：半导体景气周期复苏，AI芯片与先进封装需求旺盛，国产设备/材料替代提速，存储涨价周期开启。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：长鑫科技（龙头），中芯国际、寒武纪（中军），海光信息、北方华创、兆易创新、澜起科技、长川科技、有研新材、国科微、先导基电、晶丰明源、和林微纳（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近20日涨 +18.78%、更长周期（20日）—，震荡修复性质；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：一般。趋势尚未明确，以题材/事件驱动为主；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 3（前 11%），相对中证全指跑赢 +14.53 个百分点，核心个股近5日累计成交约 672.23 亿，领涨股 有研新材 近5日涨 +56.95%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>长鑫科技</td><td>中芯国际</td><td>寒武纪</td><td>海光信息</td><td>北方华创</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>长鑫科技</td><td>寒武纪</td><td>兆易创新</td><td>长川科技</td><td>澜起科技</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>长鑫科技</td><td>北方华创</td><td>有研新材</td><td>海光信息</td><td>长川科技</td></tr>
-    </tbody>
-  </table>
+      <div class="ml-name">粮食概念 <span class="ml-meta">20日 +25.34%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：金龙鱼、莲花控股、万向德农；核心梯队：万向德农、新赛股份、金健米业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 3（前 0.7%），相对中证全指跑赢 +6.93 个百分点，核心个股近5日累计成交约 134 亿，领涨股 万向德农 近5日涨 +61.01%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
     </div>
   </div>
+    <div class="pulse"><div class="pl-row"><span class="pl-k">两融</span><span class="pl-v">26,369.15亿</span><span class="pl-sep">·</span><span class="pl-ar up">▲14.23亿</span></div><div class="pl-row">
+      <span class="pl-k">涨跌</span>
+      <span class="pl-x up">3377</span><span class="pl-sep">/</span>
+      <span class="pl-x flat">119</span><span class="pl-sep">/</span>
+      <span class="pl-x down">2041</span><span class="pl-sep">·</span>
+      <span class="pl-x mut">总5537</span>
+    </div></div>
   </div>
 
   <div class="sec">
     <div class="sec-h">技术面选股 · 当日新增</div>
-    <div class="tech-sub">趋势突破（今日 12 只）</div>
-    <table class="mini-tbl"><thead><tr><th>名称</th><th>代码</th><th>涨幅</th><th>综合评分</th></tr></thead><tbody><tr><td>中国人保</td><td>601319</td><td class="num" style="color:#d63031">+6.17%</td><td class="num">92.65</td></tr><tr><td>上港集团</td><td>600018</td><td class="num" style="color:#d63031">+5.51%</td><td class="num">86.01</td></tr><tr><td>北京银行</td><td>601169</td><td class="num" style="color:#d63031">+2.62%</td><td class="num">83.86</td></tr><tr><td>华林证券</td><td>002945</td><td class="num" style="color:#d63031">+10.01%</td><td class="num">91.95</td></tr><tr><td>奥飞娱乐</td><td>002292</td><td class="num" style="color:#d63031">+2.92%</td><td class="num">86.71</td></tr><tr><td>隆平高科</td><td>000998</td><td class="num" style="color:#d63031">+10.04%</td><td class="num">72.08</td></tr><tr><td>苏垦农发</td><td>601952</td><td class="num" style="color:#d63031">+7.39%</td><td class="num">84.27</td></tr><tr><td>金一文化</td><td>002721</td><td class="num" style="color:#d63031">+10.03%</td><td class="num">94.51</td></tr><tr><td>农发种业</td><td>600313</td><td class="num" style="color:#d63031">+10.03%</td><td class="num">94.43</td></tr><tr><td>我爱我家</td><td>000560</td><td class="num" style="color:#d63031">+10.00%</td><td class="num">93.78</td></tr><tr><td>国投丰乐</td><td>000713</td><td class="num" style="color:#d63031">+10.02%</td><td class="num">80.73</td></tr><tr><td>透景生命</td><td>300642</td><td class="num" style="color:#d63031">+19.99%</td><td class="num">97.86</td></tr></tbody></table>
-    <div class="tech-sub">净利润断层（新增 0 只）</div>
-    <div class="ld-empty">净利润断层 今日无新增</div>
+    <div class="tech-sub">趋势突破（今日 0 只）</div>
+    <div class="ld-empty">趋势突破 今日 0 只</div>
+    <div class="tech-sub">净利润断层（新增 10 只）</div>
+    <table class="mini-tbl"><thead><tr><th>名称</th><th>代码</th><th>涨幅</th><th>净利润同比</th></tr></thead><tbody><tr><td>中文在线</td><td>300364</td><td class="num" style="color:#d63031">+3.78%</td><td class="num">81.0%</td></tr><tr><td>乐心医疗</td><td>300562</td><td class="num" style="color:#d63031">+5.56%</td><td class="num">39.8%</td></tr><tr><td>透景生命</td><td>300642</td><td class="num" style="color:#00b894">-5.65%</td><td class="num">315.9%</td></tr><tr><td>华阳股份</td><td>600348</td><td class="num" style="color:#00b894">-2.02%</td><td class="num">35.6%</td></tr><tr><td>潞化科技</td><td>600691</td><td class="num" style="color:#00b894">-7.02%</td><td class="num">120.1%</td></tr><tr><td>中国平安</td><td>601318</td><td class="num" style="color:#d63031">+0.41%</td><td class="num">36.1%</td></tr><tr><td>中国人保</td><td>601319</td><td class="num" style="color:#d63031">+0.51%</td><td class="num">38.5%</td></tr><tr><td>黑芝麻</td><td>000716</td><td class="num" style="color:#d63031">+0.68%</td><td class="num">1361.5%</td></tr><tr><td>新朋股份</td><td>002328</td><td class="num" style="color:#00b894">-3.63%</td><td class="num">316.3%</td></tr><tr><td>我爱我家</td><td>000560</td><td class="num" style="color:#00b894">-6.09%</td><td class="num">110.4%</td></tr></tbody></table>
     <div class="tech-sub">ETF 5日最强（前 5）</div>
-    <table class="mini-tbl"><thead><tr><th>ETF名称</th><th>ETF代码</th><th>5日涨幅</th></tr></thead><tbody><tr><td>科创半导体ETF华夏</td><td>sh588170</td><td class="num" style="color:#d63031">+9.59%</td></tr><tr><td>科创创新药ETF国泰</td><td>sh589720</td><td class="num" style="color:#d63031">+9.43%</td></tr><tr><td>科创创新药ETF汇添富</td><td>sh589120</td><td class="num" style="color:#d63031">+9.36%</td></tr><tr><td>科创半导体设备ETF华泰柏瑞</td><td>sh588710</td><td class="num" style="color:#d63031">+9.16%</td></tr><tr><td>科创200ETF华泰柏瑞</td><td>sh588230</td><td class="num" style="color:#d63031">+8.11%</td></tr></tbody></table>
+    <table class="mini-tbl"><thead><tr><th>ETF名称</th><th>ETF代码</th><th>5日涨幅</th></tr></thead><tbody><tr><td>能源化工ETF建信</td><td>sz159981</td><td class="num" style="color:#d63031">+5.31%</td></tr><tr><td>机器人ETF鹏华</td><td>sz159278</td><td class="num" style="color:#d63031">+3.57%</td></tr><tr><td>机器人ETF富国</td><td>sz159272</td><td class="num" style="color:#d63031">+3.53%</td></tr><tr><td>机器人ETF景顺</td><td>sz159559</td><td class="num" style="color:#d63031">+3.53%</td></tr><tr><td>机器人ETF易方达</td><td>sz159530</td><td class="num" style="color:#d63031">+3.28%</td></tr></tbody></table>
   </div>
 
   <div class="ft">
-    📎 <a href="https://a370eac17bf645659375782958b12fb9.app.workbuddy.link/index.html">详情请看复盘中心</a>
+    📎 <a href="https://imfang77.github.io/market-review/index.html">详情请看复盘中心</a>
   </div>
 </div>
 </body></html>

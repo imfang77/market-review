@@ -47,6 +47,22 @@
   .fg-level{font-size:13px;font-weight:700;color:#0984e3}
   .fg-desc{font-size:11px;color:#636e72;margin-top:6px;line-height:1.5}
   .empty{color:#b2bec3;font-size:13px;text-align:center;padding:14px}
+  /* 市场脉搏：融资余额 / 涨跌家数（各一行，手机不折行） */
+  .pulse{background:#f8f9fb;border:1px solid #eef1f5;border-radius:10px;padding:8px 10px;margin:10px 0 2px}
+  .pl-row{display:flex;flex-wrap:nowrap;align-items:baseline;white-space:nowrap;overflow:hidden;font-size:12px;line-height:1.95;font-variant-numeric:tabular-nums}
+  .pl-k{color:#636e72;font-size:11.5px;font-weight:700;margin-right:4px;flex-shrink:0}
+  .pl-v{font-size:13px;font-weight:800;color:#2d3436;font-variant-numeric:tabular-nums;margin-right:2px}
+  .pl-sep{color:#dfe6e9;margin:0 4px;font-weight:400}
+  .pl-x{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+  .pl-x.up{color:#d63031}
+  .pl-x.down{color:#00b894}
+  .pl-x.flat{color:#b2bec3}
+  .pl-x.mut{color:#636e72;font-weight:500}
+  .pl-dt{color:#b2bec3;font-size:11px;font-variant-numeric:tabular-nums;margin-left:auto}
+  .pl-ar{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;margin-left:3px}
+  .pl-ar.up{color:#d63031}
+  .pl-ar.down{color:#00b894}
+  .pl-ar.flat{color:#b2bec3}
 </style></head>
 <body>
 <div class="card">
@@ -60,49 +76,70 @@
   </div>
 
   <div class="sec">
-    <div class="sec-h">5-20日主线（核心 · 2）</div>
+    <div class="sec-h">5-20日主线（核心 · 9 · 通达信401板块口径）</div>
     <div class="seg">
     <div class="seg-h">5日主线（按5日涨幅）</div>
     <div class="ml">
-      <div class="ml-name">共封装光模块(CPO) <span class="ml-meta">5日 +0.02%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：AI算力需求爆发，英伟达/博通CPO（共封装光学）量产提速、1.6T光模块迭代加速，光通信订单与业绩预期持续上修。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：工业富联（龙头），中际旭创、新易盛（中军），立讯精密、长飞光纤、东山精密、天孚通信、亨通光电、科翔股份、中富电路、沃格光电、威尔高、金禄电子（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近5日涨 +0.02%、更长周期（10日）+3.33%，趋势性/基本面驱动性质（长短周期共振向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。短中期方向共振、资金聚焦，延续性较好；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 2（前 7%），相对中证全指跑输 -2.98 个百分点，核心个股近5日累计成交约 939.92 亿，领涨股 科翔股份 近5日涨 +60.69%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>工业富联</td><td>中际旭创</td><td>新易盛</td><td>立讯精密</td><td>长飞光纤</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>中际旭创</td><td>新易盛</td><td>东山精密</td><td>天孚通信</td><td>亨通光电</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>科翔股份</td><td>金禄电子</td><td>沃格光电</td><td>中富电路</td><td>威尔高</td></tr>
-    </tbody>
-  </table>
+      <div class="ml-name">陶瓷 <span class="ml-meta">5日 +8.81%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：国瓷材料、国瓷材料、国瓷材料；核心梯队：国瓷材料、蒙娜丽莎、开尔新材</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +10.21 个百分点，核心个股近5日累计成交约 66 亿，领涨股 国瓷材料 近5日涨 +14.25%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">玻璃 <span class="ml-meta">5日 +8.72%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：中国巨石、中国巨石、凯盛新能；核心梯队：凯盛新能、长海股份、国际复材</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +10.12 个百分点，核心个股近5日累计成交约 315 亿，领涨股 凯盛新能 近5日涨 +18.78%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">MLCC概念 <span class="ml-meta">5日 +8.71%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：三环集团、风华高科、双星新材；核心梯队：双星新材、昀冢科技、斯迪克</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 3（前 0.7%），相对中证全指跑赢 +10.11 个百分点，核心个股近5日累计成交约 362 亿，领涨股 双星新材 近5日涨 +38.11%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
     </div>
   </div><div class="seg">
     <div class="seg-h">10日主线（按10日涨幅）</div>
-    
+    <div class="ml">
+      <div class="ml-name">林业 <span class="ml-meta">10日 +14.60%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：平潭发展、平潭发展、平潭发展；核心梯队：平潭发展、福建金森、*ST景谷</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +5.61 个百分点，核心个股近5日累计成交约 31 亿，领涨股 平潭发展 近5日涨 +5.19%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">培育钻石 <span class="ml-meta">10日 +10.26%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：晶盛机电、黄河旋风、英诺激光；核心梯队：英诺激光、力量钻石、亚振家居</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +2.00 个百分点，核心个股近5日累计成交约 150 亿，领涨股 英诺激光 近5日涨 +12.12%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">红黄酒 <span class="ml-meta">10日 +9.67%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：百润股份、会稽山、会稽山；核心梯队：会稽山、金枫酒业、古越龙山</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 3（前 0.7%），相对中证全指跑赢 +2.67 个百分点，核心个股近5日累计成交约 18 亿，领涨股 会稽山 近5日涨 +11.98%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div>
   </div><div class="seg">
     <div class="seg-h">20日主线（按20日涨幅）</div>
     <div class="ml">
-      <div class="ml-name">黄金 <span class="ml-meta">20日 +2.36%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：全球央行购金与地缘避险需求，实际利率下行预期，金价中枢上移。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：山东黄金（龙头），中金黄金、赤峰黄金（中军），山金国际、湖南黄金、西部黄金、招金黄金、晓程科技（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近20日涨 +2.36%、更长周期（20日）—，震荡修复性质；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：一般。趋势尚未明确，以题材/事件驱动为主；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 1（前 4%），相对中证全指跑输 -1.89 个百分点，核心个股近5日累计成交约 112.39 亿，领涨股 招金黄金 近5日涨 +35.55%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>山东黄金</td><td>中金黄金</td><td>赤峰黄金</td><td>山金国际</td><td>湖南黄金</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>赤峰黄金</td><td>山东黄金</td><td>湖南黄金</td><td>晓程科技</td><td>中金黄金</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>招金黄金</td><td>山东黄金</td><td>晓程科技</td><td>山金国际</td><td>西部黄金</td></tr>
-    </tbody>
-  </table>
+      <div class="ml-name">林业 <span class="ml-meta">20日 +29.67%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：平潭发展、平潭发展、平潭发展；核心梯队：平潭发展、福建金森、*ST景谷</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +4.23 个百分点，核心个股近5日累计成交约 31 亿，领涨股 平潭发展 近5日涨 +5.19%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">石油贸易 <span class="ml-meta">20日 +15.36%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：和顺石油、和顺石油、和顺石油；核心梯队：和顺石油、广聚能源、泰山石油</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +1.12 个百分点，核心个股近5日累计成交约 7 亿，领涨股 和顺石油 近5日涨 +11.99%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">培育钻石 <span class="ml-meta">20日 +14.10%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：晶盛机电、黄河旋风、英诺激光；核心梯队：英诺激光、力量钻石、亚振家居</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 3（前 0.7%），相对中证全指跑赢 +0.62 个百分点，核心个股近5日累计成交约 150 亿，领涨股 英诺激光 近5日涨 +12.12%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
     </div>
   </div>
+    <div class="pulse"><div class="pl-row"><span class="pl-k">两融</span><span class="pl-v">26,075.39亿</span><span class="pl-sep">·</span><span class="pl-ar up">▲92.52亿</span></div><div class="pl-row">
+      <span class="pl-k">涨跌</span>
+      <span class="pl-x up">4162</span><span class="pl-sep">/</span>
+      <span class="pl-x flat">191</span><span class="pl-sep">/</span>
+      <span class="pl-x down">1194</span><span class="pl-sep">·</span>
+      <span class="pl-x mut">总5547</span>
+    </div></div>
   </div>
 
   <div class="sec">
     <div class="sec-h">技术面选股 · 当日新增</div>
-    <div class="tech-sub">趋势突破（今日 3 只）</div>
-    <table class="mini-tbl"><thead><tr><th>名称</th><th>代码</th><th>涨幅</th><th>综合评分</th></tr></thead><tbody><tr><td>百亚股份</td><td>003006</td><td class="num" style="color:#d63031">+6.82%</td><td class="num">77.27</td></tr><tr><td>西陇科学</td><td>002584</td><td class="num" style="color:#d63031">+10.02%</td><td class="num">89.52</td></tr><tr><td>远 望 谷</td><td>002161</td><td class="num" style="color:#d63031">+9.97%</td><td class="num">94.89</td></tr></tbody></table>
+    <div class="tech-sub">趋势突破（今日 1 只）</div>
+    <table class="mini-tbl"><thead><tr><th>名称</th><th>代码</th><th>涨幅</th><th>综合评分</th></tr></thead><tbody><tr><td>百亚股份</td><td>003006</td><td class="num" style="color:#d63031">+6.82%</td><td class="num">77.27</td></tr></tbody></table>
     <div class="tech-sub">净利润断层（新增 1 只）</div>
     <table class="mini-tbl"><thead><tr><th>名称</th><th>代码</th><th>涨幅</th><th>净利润同比</th></tr></thead><tbody><tr><td>和顺石油</td><td>603353</td><td class="num" style="color:#d63031">+3.72%</td><td class="num">480.5%</td></tr></tbody></table>
     <div class="tech-sub">ETF 5日最强（前 5）</div>
-    <table class="mini-tbl"><thead><tr><th>ETF名称</th><th>ETF代码</th><th>5日涨幅</th></tr></thead><tbody><tr><td>科创半导体ETF华夏</td><td>sh588170</td><td class="num" style="color:#d63031">+9.59%</td></tr><tr><td>科创创新药ETF国泰</td><td>sh589720</td><td class="num" style="color:#d63031">+9.43%</td></tr><tr><td>科创创新药ETF汇添富</td><td>sh589120</td><td class="num" style="color:#d63031">+9.36%</td></tr><tr><td>科创半导体设备ETF华泰柏瑞</td><td>sh588710</td><td class="num" style="color:#d63031">+9.16%</td></tr><tr><td>科创200ETF华泰柏瑞</td><td>sh588230</td><td class="num" style="color:#d63031">+8.11%</td></tr></tbody></table>
+    <table class="mini-tbl"><thead><tr><th>ETF名称</th><th>ETF代码</th><th>5日涨幅</th></tr></thead><tbody><tr><td>能源化工ETF建信</td><td>sz159981</td><td class="num" style="color:#d63031">+5.31%</td></tr><tr><td>机器人ETF鹏华</td><td>sz159278</td><td class="num" style="color:#d63031">+3.57%</td></tr><tr><td>机器人ETF富国</td><td>sz159272</td><td class="num" style="color:#d63031">+3.53%</td></tr><tr><td>机器人ETF景顺</td><td>sz159559</td><td class="num" style="color:#d63031">+3.53%</td></tr><tr><td>机器人ETF易方达</td><td>sz159530</td><td class="num" style="color:#d63031">+3.28%</td></tr></tbody></table>
   </div>
 
   <div class="ft">

@@ -47,6 +47,22 @@
   .fg-level{font-size:13px;font-weight:700;color:#0984e3}
   .fg-desc{font-size:11px;color:#636e72;margin-top:6px;line-height:1.5}
   .empty{color:#b2bec3;font-size:13px;text-align:center;padding:14px}
+  /* 市场脉搏：融资余额 / 涨跌家数（各一行，手机不折行） */
+  .pulse{background:#f8f9fb;border:1px solid #eef1f5;border-radius:10px;padding:8px 10px;margin:10px 0 2px}
+  .pl-row{display:flex;flex-wrap:nowrap;align-items:baseline;white-space:nowrap;overflow:hidden;font-size:12px;line-height:1.95;font-variant-numeric:tabular-nums}
+  .pl-k{color:#636e72;font-size:11.5px;font-weight:700;margin-right:4px;flex-shrink:0}
+  .pl-v{font-size:13px;font-weight:800;color:#2d3436;font-variant-numeric:tabular-nums;margin-right:2px}
+  .pl-sep{color:#dfe6e9;margin:0 4px;font-weight:400}
+  .pl-x{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+  .pl-x.up{color:#d63031}
+  .pl-x.down{color:#00b894}
+  .pl-x.flat{color:#b2bec3}
+  .pl-x.mut{color:#636e72;font-weight:500}
+  .pl-dt{color:#b2bec3;font-size:11px;font-variant-numeric:tabular-nums;margin-left:auto}
+  .pl-ar{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;margin-left:3px}
+  .pl-ar.up{color:#d63031}
+  .pl-ar.down{color:#00b894}
+  .pl-ar.flat{color:#b2bec3}
 </style></head>
 <body>
 <div class="card">
@@ -60,27 +76,70 @@
   </div>
 
   <div class="sec">
-    <div class="sec-h">5-20日主线（核心 · 0）</div>
+    <div class="sec-h">5-20日主线（核心 · 9 · 通达信400板块口径）</div>
     <div class="seg">
     <div class="seg-h">5日主线（按5日涨幅）</div>
-    
+    <div class="ml">
+      <div class="ml-name">纺织机械 <span class="ml-meta">5日 +8.96%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：杰克科技、慈星股份；核心梯队：方正电机、大豪科技、越剑智能</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：短周期反弹性质（仅5日向上，更长周期未共振）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 400 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +9.39 个百分点，核心个股近5日累计成交约 33 亿，领涨股 慈星股份 近5日涨 +37.75%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">工业软件 <span class="ml-meta">5日 +8.42%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：汇川技术、XD索辰科；核心梯队：赛摩智能、鼎捷数智、能科科技</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 400 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +8.85 个百分点，核心个股近5日累计成交约 148 亿，领涨股 XD索辰科 近5日涨 +53.31%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">减速器 <span class="ml-meta">5日 +8.29%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：蓝思科技、长盈精密；核心梯队：兆威机电、斯菱智驱、步科股份</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 400 个板块中排名第 3（前 0.8%），相对中证全指跑赢 +8.72 个百分点，核心个股近5日累计成交约 221 亿，领涨股 长盈精密 近5日涨 +52.11%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div>
   </div><div class="seg">
     <div class="seg-h">10日主线（按10日涨幅）</div>
-    
+    <div class="ml">
+      <div class="ml-name">石油开采 <span class="ml-meta">10日 +7.49%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：中国石油、*ST准油；核心梯队：通源石油、博迈科、中曼石油</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：短线承压；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 400 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +3.08 个百分点，核心个股近5日累计成交约 67 亿，领涨股 *ST准油 近5日涨 +5.57%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：政策与时事背景国际传美以敲定对伊朗新一轮打击计划：消息称美国和以色列军方已制定具体计划，拟在美国中期选举结束后再次打击伊朗，目标可能包括能源基础设施、核设施及导弹与无人机武器库，特朗普是否批准尚不确定；伊朗称已做好应对全面战争的准备。地缘风险反复，油价、避险资产波动加大，能源与军工板块获事件性支撑。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">军贸概念 <span class="ml-meta">10日 +5.95%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：中航沈飞、长城军工、国科军工；核心梯队：华如科技、广东宏大、华强科技</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 400 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +4.50 个百分点，核心个股近5日累计成交约 75 亿，领涨股 国科军工 近5日涨 +9.73%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">石油 <span class="ml-meta">10日 +5.29%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：中国石油、博汇股份；核心梯队：统一股份、*ST准油、通源石油</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：短线承压；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 400 个板块中排名第 3（前 0.8%），相对中证全指跑赢 +2.75 个百分点，核心个股近5日累计成交约 86 亿，领涨股 博汇股份 近5日涨 +44.98%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：政策与时事背景国际传美以敲定对伊朗新一轮打击计划：消息称美国和以色列军方已制定具体计划，拟在美国中期选举结束后再次打击伊朗，目标可能包括能源基础设施、核设施及导弹与无人机武器库，特朗普是否批准尚不确定；伊朗称已做好应对全面战争的准备。地缘风险反复，油价、避险资产波动加大，能源与军工板块获事件性支撑。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div>
   </div><div class="seg">
     <div class="seg-h">20日主线（按20日涨幅）</div>
-    
+    <div class="ml">
+      <div class="ml-name">石油开采 <span class="ml-meta">20日 +16.22%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：中国石油、*ST准油；核心梯队：通源石油、博迈科、中曼石油</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：短线承压；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 400 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +4.50 个百分点，核心个股近5日累计成交约 67 亿，领涨股 *ST准油 近5日涨 +5.57%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：政策与时事背景国际传美以敲定对伊朗新一轮打击计划：消息称美国和以色列军方已制定具体计划，拟在美国中期选举结束后再次打击伊朗，目标可能包括能源基础设施、核设施及导弹与无人机武器库，特朗普是否批准尚不确定；伊朗称已做好应对全面战争的准备。地缘风险反复，油价、避险资产波动加大，能源与军工板块获事件性支撑。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">石油 <span class="ml-meta">20日 +13.04%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：中国石油、博汇股份；核心梯队：统一股份、*ST准油、通源石油</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：短线承压；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 400 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +4.17 个百分点，核心个股近5日累计成交约 86 亿，领涨股 博汇股份 近5日涨 +44.98%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：政策与时事背景国际传美以敲定对伊朗新一轮打击计划：消息称美国和以色列军方已制定具体计划，拟在美国中期选举结束后再次打击伊朗，目标可能包括能源基础设施、核设施及导弹与无人机武器库，特朗普是否批准尚不确定；伊朗称已做好应对全面战争的准备。地缘风险反复，油价、避险资产波动加大，能源与军工板块获事件性支撑。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div><div class="ml">
+      <div class="ml-name">出版业 <span class="ml-meta">20日 +9.32%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：新华文轩、新华传媒、粤 传 媒；核心梯队：世纪天鸿、中文在线、长江传媒</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：短线承压；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 400 个板块中排名第 3（前 0.8%），相对中证全指跑赢 -1.45 个百分点，核心个股近5日累计成交约 95 亿，领涨股 粤 传 媒 近5日涨 +4.02%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
+    </div>
   </div>
+    <div class="pulse"><div class="pl-row"><span class="pl-k">两融</span><span class="pl-v">24,026.63亿</span><span class="pl-sep">·</span><span class="pl-ar down">▼242.51亿</span></div><div class="pl-row">
+      <span class="pl-k">涨跌</span>
+      <span class="pl-x up">4516</span><span class="pl-sep">/</span>
+      <span class="pl-x flat">137</span><span class="pl-sep">/</span>
+      <span class="pl-x down">913</span><span class="pl-sep">·</span>
+      <span class="pl-x mut">总5566</span>
+    </div></div>
   </div>
 
   <div class="sec">
     <div class="sec-h">技术面选股 · 当日新增</div>
-    <div class="tech-sub">趋势突破（今日 18 只）</div>
-    <table class="mini-tbl"><thead><tr><th>名称</th><th>代码</th><th>涨幅</th><th>综合评分</th></tr></thead><tbody><tr><td>安克创新</td><td>300866</td><td class="num" style="color:#d63031">+9.17%</td><td class="num">86.81</td></tr><tr><td>华大九天</td><td>301269</td><td class="num" style="color:#d63031">+10.97%</td><td class="num">86.43</td></tr><tr><td>新产业</td><td>300832</td><td class="num" style="color:#d63031">+5.71%</td><td class="num">73.19</td></tr><tr><td>芒果超媒</td><td>300413</td><td class="num" style="color:#d63031">+6.56%</td><td class="num">76.30</td></tr><tr><td>峰岹科技</td><td>688279</td><td class="num" style="color:#d63031">+14.67%</td><td class="num">82.33</td></tr><tr><td>利亚德</td><td>300296</td><td class="num" style="color:#d63031">+20.00%</td><td class="num">97.77</td></tr><tr><td>华鑫股份</td><td>600621</td><td class="num" style="color:#d63031">+3.91%</td><td class="num">84.57</td></tr><tr><td>奥飞娱乐</td><td>002292</td><td class="num" style="color:#d63031">+4.70%</td><td class="num">88.39</td></tr><tr><td>赛意信息</td><td>300687</td><td class="num" style="color:#d63031">+14.35%</td><td class="num">93.60</td></tr><tr><td>药石科技</td><td>300725</td><td class="num" style="color:#d63031">+3.46%</td><td class="num">85.81</td></tr><tr><td>鼎捷数智</td><td>300378</td><td class="num" style="color:#d63031">+13.72%</td><td class="num">97.86</td></tr><tr><td>达实智能</td><td>002421</td><td class="num" style="color:#d63031">+9.94%</td><td class="num">88.46</td></tr><tr><td>慈星股份</td><td>300307</td><td class="num" style="color:#d63031">+20.00%</td><td class="num">92.86</td></tr><tr><td>多伦科技</td><td>603528</td><td class="num" style="color:#d63031">+10.00%</td><td class="num">85.49</td></tr><tr><td>赛摩智能</td><td>300466</td><td class="num" style="color:#d63031">+10.37%</td><td class="num">88.46</td></tr><tr><td>亿田智能</td><td>300911</td><td class="num" style="color:#d63031">+5.88%</td><td class="num">96.04</td></tr><tr><td>敏芯股份</td><td>688286</td><td class="num" style="color:#d63031">+16.09%</td><td class="num">97.86</td></tr><tr><td>奕帆传动</td><td>301023</td><td class="num" style="color:#d63031">+7.64%</td><td class="num">95.48</td></tr></tbody></table>
+    <div class="tech-sub">趋势突破（今日 3 只）</div>
+    <table class="mini-tbl"><thead><tr><th>名称</th><th>代码</th><th>涨幅</th><th>综合评分</th></tr></thead><tbody><tr><td>新产业</td><td>300832</td><td class="num" style="color:#d63031">+5.71%</td><td class="num">73.19</td></tr><tr><td>芒果超媒</td><td>300413</td><td class="num" style="color:#d63031">+6.56%</td><td class="num">76.30</td></tr><tr><td>多伦科技</td><td>603528</td><td class="num" style="color:#d63031">+10.00%</td><td class="num">85.49</td></tr></tbody></table>
     <div class="tech-sub">净利润断层（新增 0 只）</div>
     <div class="ld-empty">净利润断层 今日无新增</div>
     <div class="tech-sub">ETF 5日最强（前 5）</div>
-    <table class="mini-tbl"><thead><tr><th>ETF名称</th><th>ETF代码</th><th>5日涨幅</th></tr></thead><tbody><tr><td>机器人ETF易方达</td><td>sz159530</td><td class="num" style="color:#d63031">+18.28%</td></tr><tr><td>机器人ETF景顺</td><td>sz159559</td><td class="num" style="color:#d63031">+17.71%</td></tr><tr><td>机器人ETF富国</td><td>sz159272</td><td class="num" style="color:#d63031">+17.63%</td></tr><tr><td>机器人ETF鹏华</td><td>sz159278</td><td class="num" style="color:#d63031">+17.59%</td></tr><tr><td>机器人ETF华夏</td><td>sh562500</td><td class="num" style="color:#d63031">+11.60%</td></tr></tbody></table>
+    <table class="mini-tbl"><thead><tr><th>ETF名称</th><th>ETF代码</th><th>5日涨幅</th></tr></thead><tbody><tr><td>能源化工ETF建信</td><td>sz159981</td><td class="num" style="color:#d63031">+5.31%</td></tr><tr><td>机器人ETF鹏华</td><td>sz159278</td><td class="num" style="color:#d63031">+3.57%</td></tr><tr><td>机器人ETF富国</td><td>sz159272</td><td class="num" style="color:#d63031">+3.53%</td></tr><tr><td>机器人ETF景顺</td><td>sz159559</td><td class="num" style="color:#d63031">+3.53%</td></tr><tr><td>机器人ETF易方达</td><td>sz159530</td><td class="num" style="color:#d63031">+3.28%</td></tr></tbody></table>
   </div>
 
   <div class="ft">

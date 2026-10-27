@@ -47,6 +47,22 @@
   .fg-level{font-size:13px;font-weight:700;color:#0984e3}
   .fg-desc{font-size:11px;color:#636e72;margin-top:6px;line-height:1.5}
   .empty{color:#b2bec3;font-size:13px;text-align:center;padding:14px}
+  /* 市场脉搏：融资余额 / 涨跌家数（各一行，手机不折行） */
+  .pulse{background:#f8f9fb;border:1px solid #eef1f5;border-radius:10px;padding:8px 10px;margin:10px 0 2px}
+  .pl-row{display:flex;flex-wrap:nowrap;align-items:baseline;white-space:nowrap;overflow:hidden;font-size:12px;line-height:1.95;font-variant-numeric:tabular-nums}
+  .pl-k{color:#636e72;font-size:11.5px;font-weight:700;margin-right:4px;flex-shrink:0}
+  .pl-v{font-size:13px;font-weight:800;color:#2d3436;font-variant-numeric:tabular-nums;margin-right:2px}
+  .pl-sep{color:#dfe6e9;margin:0 4px;font-weight:400}
+  .pl-x{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+  .pl-x.up{color:#d63031}
+  .pl-x.down{color:#00b894}
+  .pl-x.flat{color:#b2bec3}
+  .pl-x.mut{color:#636e72;font-weight:500}
+  .pl-dt{color:#b2bec3;font-size:11px;font-variant-numeric:tabular-nums;margin-left:auto}
+  .pl-ar{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;margin-left:3px}
+  .pl-ar.up{color:#d63031}
+  .pl-ar.down{color:#00b894}
+  .pl-ar.flat{color:#b2bec3}
 </style></head>
 <body>
 <div class="card">
@@ -60,130 +76,70 @@
   </div>
 
   <div class="sec">
-    <div class="sec-h">5-20日主线（核心 · 9）</div>
+    <div class="sec-h">5-20日主线（核心 · 8 · 通达信401板块口径）</div>
     <div class="seg">
     <div class="seg-h">5日主线（按5日涨幅）</div>
     <div class="ml">
-      <div class="ml-name">网络游戏 <span class="ml-meta">5日 +5.96%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：版号常态化发放，AI降本增效与小程序游戏出海，行业监管环境改善。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：协创数据（龙头），世纪华通、三六零（中军），昆仑万维、方正科技、芒果超媒、中文在线、亨通股份、儒意电影、天娱数科、中电电机、任子行（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近5日涨 +5.96%、更长周期（10日）+3.46%，趋势性/基本面驱动性质（长短周期共振向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。短中期方向共振、资金聚焦，延续性较好；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 1（前 4%），相对中证全指跑赢 +2.96 个百分点，核心个股近5日累计成交约 264.53 亿，领涨股 方正科技 近5日涨 +29.21%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>协创数据</td><td>世纪华通</td><td>三六零</td><td>昆仑万维</td><td>方正科技</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>协创数据</td><td>芒果超媒</td><td>昆仑万维</td><td>中文在线</td><td>天娱数科</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>方正科技</td><td>中电电机</td><td>亨通股份</td><td>任子行</td><td>儒意电影</td></tr>
-    </tbody>
-  </table>
+      <div class="ml-name">种业 <span class="ml-meta">5日 +11.94%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：大北农、神农种业、万向德农；核心梯队：万向德农、敦煌种业、神农种业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +11.12 个百分点，核心个股近5日累计成交约 94 亿，领涨股 万向德农 近5日涨 +40.78%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
     </div><div class="ml">
-      <div class="ml-name">信创 <span class="ml-meta">5日 +5.23%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：党政与行业信创加速，国产CPU/OS/数据库替代深化，AI加持下国产软硬件生态扩张。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：海光信息（龙头），沐曦股份、江波龙（中军），锐捷网络、浪潮信息、佰维存储、星网锐捷、旭光电子、香山股份、苏州科达、兆日科技（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近5日涨 +5.23%、更长周期（10日）+1.39%，趋势性/基本面驱动性质（长短周期共振向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。短中期方向共振、资金聚焦，延续性较好；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 2（前 7%），相对中证全指跑赢 +2.23 个百分点，核心个股近5日累计成交约 256.71 亿，领涨股 旭光电子 近5日涨 +29.69%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>海光信息</td><td>沐曦股份</td><td>江波龙</td><td>锐捷网络</td><td>浪潮信息</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>浪潮信息</td><td>星网锐捷</td><td>海光信息</td><td>佰维存储</td><td>江波龙</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>旭光电子</td><td>兆日科技</td><td>江波龙</td><td>苏州科达</td><td>香山股份</td></tr>
-    </tbody>
-  </table>
+      <div class="ml-name">林业 <span class="ml-meta">5日 +11.13%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：平潭发展、平潭发展、福建金森；核心梯队：福建金森、平潭发展、永安林业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +10.31 个百分点，核心个股近5日累计成交约 22 亿，领涨股 福建金森 近5日涨 +27.00%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
     </div><div class="ml">
-      <div class="ml-name">数字经济 <span class="ml-meta">5日 +4.36%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：数字中国与产业数字化政策推进，云计算与产业互联网景气，数据要素与AI赋能共振。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：海康威视（龙头），阳光电源、中兴通讯（中军），锐捷网络、浪潮信息、紫光股份、利欧股份、香山股份、城地香江、安妮股份、兆日科技、任子行（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近5日涨 +4.36%、更长周期（10日）+1.66%，趋势性/基本面驱动性质（长短周期共振向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。短中期方向共振、资金聚焦，延续性较好；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 5（前 18%），相对中证全指跑赢 +1.36 个百分点，核心个股近5日累计成交约 282.43 亿，领涨股 兆日科技 近5日涨 +29.11%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>海康威视</td><td>阳光电源</td><td>中兴通讯</td><td>锐捷网络</td><td>浪潮信息</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>浪潮信息</td><td>紫光股份</td><td>阳光电源</td><td>中兴通讯</td><td>利欧股份</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>兆日科技</td><td>香山股份</td><td>安妮股份</td><td>任子行</td><td>城地香江</td></tr>
-    </tbody>
-  </table>
+      <div class="ml-name">军贸概念 <span class="ml-meta">5日 +8.76%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：中航沈飞、长城军工、航天南湖；核心梯队：航天南湖、内蒙一机、长城军工</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 3（前 0.7%），相对中证全指跑赢 +7.94 个百分点，核心个股近5日累计成交约 94 亿，领涨股 航天南湖 近5日涨 +25.39%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
     </div>
   </div><div class="seg">
     <div class="seg-h">10日主线（按10日涨幅）</div>
     <div class="ml">
-      <div class="ml-name">黄金 <span class="ml-meta">10日 +6.82%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：全球央行购金与地缘避险需求，实际利率下行预期，金价中枢上移。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：山东黄金（龙头），中金黄金、赤峰黄金（中军），山金国际、湖南黄金、西部黄金、招金黄金、晓程科技（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近10日涨 +6.82%、更长周期（20日）+23.95%，趋势性/基本面驱动性质（长短周期共振向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。短中期方向共振、资金聚焦，延续性较好；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 1（前 4%），相对中证全指跑输 -2.59 个百分点，核心个股近5日累计成交约 187.35 亿，领涨股 招金黄金 近5日涨 +35.55%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>山东黄金</td><td>中金黄金</td><td>赤峰黄金</td><td>山金国际</td><td>湖南黄金</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>山东黄金</td><td>中金黄金</td><td>赤峰黄金</td><td>晓程科技</td><td>湖南黄金</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>招金黄金</td><td>西部黄金</td><td>晓程科技</td><td>山东黄金</td><td>湖南黄金</td></tr>
-    </tbody>
-  </table>
+      <div class="ml-name">种业 <span class="ml-meta">10日 +13.14%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：大北农、神农种业、万向德农；核心梯队：万向德农、敦煌种业、神农种业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +10.45 个百分点，核心个股近5日累计成交约 94 亿，领涨股 万向德农 近5日涨 +40.78%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
     </div><div class="ml">
-      <div class="ml-name">网络游戏 <span class="ml-meta">10日 +3.46%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：版号常态化发放，AI降本增效与小程序游戏出海，行业监管环境改善。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：协创数据（龙头），世纪华通、三六零（中军），昆仑万维、方正科技、芒果超媒、中文在线、亨通股份、儒意电影、天娱数科、中电电机、任子行（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近10日涨 +3.46%、更长周期（20日）+3.00%，趋势性/基本面驱动性质（长短周期共振向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。短中期方向共振、资金聚焦，延续性较好；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 2（前 7%），相对中证全指跑输 -5.95 个百分点，核心个股近5日累计成交约 264.53 亿，领涨股 方正科技 近5日涨 +29.21%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>协创数据</td><td>世纪华通</td><td>三六零</td><td>昆仑万维</td><td>方正科技</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>协创数据</td><td>芒果超媒</td><td>昆仑万维</td><td>中文在线</td><td>天娱数科</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>天娱数科</td><td>中电电机</td><td>方正科技</td><td>任子行</td><td>中文在线</td></tr>
-    </tbody>
-  </table>
+      <div class="ml-name">林业 <span class="ml-meta">10日 +13.14%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：平潭发展、平潭发展、福建金森；核心梯队：福建金森、平潭发展、永安林业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +9.64 个百分点，核心个股近5日累计成交约 22 亿，领涨股 福建金森 近5日涨 +27.00%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
     </div><div class="ml">
-      <div class="ml-name">数字经济 <span class="ml-meta">10日 +1.66%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：数字中国与产业数字化政策推进，云计算与产业互联网景气，数据要素与AI赋能共振。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：海康威视（龙头），阳光电源、中兴通讯（中军），锐捷网络、浪潮信息、紫光股份、利欧股份、香山股份、城地香江、安妮股份、兆日科技、任子行（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近10日涨 +1.66%、更长周期（20日）+3.36%，趋势性/基本面驱动性质（长短周期共振向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。短中期方向共振、资金聚焦，延续性较好；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 3（前 11%），相对中证全指跑输 -7.75 个百分点，核心个股近5日累计成交约 282.43 亿，领涨股 兆日科技 近5日涨 +29.11%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>海康威视</td><td>阳光电源</td><td>中兴通讯</td><td>锐捷网络</td><td>浪潮信息</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>浪潮信息</td><td>紫光股份</td><td>阳光电源</td><td>中兴通讯</td><td>利欧股份</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>安妮股份</td><td>利欧股份</td><td>任子行</td><td>城地香江</td><td>香山股份</td></tr>
-    </tbody>
-  </table>
+      <div class="ml-name">旅游 <span class="ml-meta">10日 +11.13%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：中国中免、中国中免、*ST西旅；核心梯队：*ST西旅、陕西旅游、云南旅游</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 3（前 0.7%），相对中证全指跑赢 +3.78 个百分点，核心个股近5日累计成交约 41 亿，领涨股 *ST西旅 近5日涨 +18.52%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
     </div>
   </div><div class="seg">
     <div class="seg-h">20日主线（按20日涨幅）</div>
     <div class="ml">
-      <div class="ml-name">黄金 <span class="ml-meta">20日 +23.95%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：全球央行购金与地缘避险需求，实际利率下行预期，金价中枢上移。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：山东黄金（龙头），中金黄金、赤峰黄金（中军），山金国际、湖南黄金、西部黄金、招金黄金、晓程科技（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近20日涨 +23.95%、更长周期（20日）—，震荡修复性质；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：一般。趋势尚未明确，以题材/事件驱动为主；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 1（前 4%），相对中证全指跑赢 +19.70 个百分点，核心个股近5日累计成交约 187.35 亿，领涨股 招金黄金 近5日涨 +35.55%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>山东黄金</td><td>中金黄金</td><td>赤峰黄金</td><td>山金国际</td><td>湖南黄金</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>山东黄金</td><td>中金黄金</td><td>赤峰黄金</td><td>晓程科技</td><td>湖南黄金</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>招金黄金</td><td>山东黄金</td><td>晓程科技</td><td>山金国际</td><td>西部黄金</td></tr>
-    </tbody>
-  </table>
+      <div class="ml-name">种业 <span class="ml-meta">20日 +33.77%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：大北农、神农种业、万向德农；核心梯队：万向德农、敦煌种业、神农种业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +9.76 个百分点，核心个股近5日累计成交约 94 亿，领涨股 万向德农 近5日涨 +40.78%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
     </div><div class="ml">
-      <div class="ml-name">共封装光模块(CPO) <span class="ml-meta">20日 +15.03%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：AI算力需求爆发，英伟达/博通CPO（共封装光学）量产提速、1.6T光模块迭代加速，光通信订单与业绩预期持续上修。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：工业富联（龙头），中际旭创、新易盛（中军），立讯精密、生益科技、天孚通信、亨通光电、科翔股份、华懋科技、中富电路、沃格光电、金禄电子（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近20日涨 +15.03%、更长周期（20日）—，震荡修复性质；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：一般。趋势尚未明确，以题材/事件驱动为主；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 2（前 7%），相对中证全指跑赢 +10.78 个百分点，核心个股近5日累计成交约 787.67 亿，领涨股 科翔股份 近5日涨 +60.69%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>工业富联</td><td>中际旭创</td><td>新易盛</td><td>立讯精密</td><td>生益科技</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>中际旭创</td><td>新易盛</td><td>天孚通信</td><td>亨通光电</td><td>生益科技</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>金禄电子</td><td>工业富联</td><td>立讯精密</td><td>华懋科技</td><td>中富电路</td></tr>
-    </tbody>
-  </table>
-    </div><div class="ml">
-      <div class="ml-name">消费电子 <span class="ml-meta">20日 +12.75%</span></div>
-      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">催化</span>：端侧AI（AI手机/AI PC）换机周期开启，折叠屏与MR新品催化，半导体复苏带动产业链回暖。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：工业富联（龙头），立讯精密、蓝思科技（中军），协创数据、华勤技术、利通电子、鸿富瀚、共达电声、昀冢科技、信濠光电、朗特智能（补涨）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：近20日涨 +12.75%、更长周期（20日）—，震荡修复性质；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：一般。趋势尚未明确，以题材/事件驱动为主；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 28 个题材中排名第 3（前 11%），相对中证全指跑赢 +8.50 个百分点，核心个股近5日累计成交约 235.83 亿，领涨股 信濠光电 近5日涨 +60.22%。</div></div>
-      <table class="ld-tbl">
-    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
-    <tbody>
-      <tr><td class="ld-cat">按市值</td><td>工业富联</td><td>立讯精密</td><td>蓝思科技</td><td>协创数据</td><td>华勤技术</td></tr>
-      <tr><td class="ld-cat">按成交额</td><td>协创数据</td><td>立讯精密</td><td>工业富联</td><td>利通电子</td><td>蓝思科技</td></tr>
-      <tr><td class="ld-cat">按涨幅</td><td>昀冢科技</td><td>信濠光电</td><td>朗特智能</td><td>利通电子</td><td>工业富联</td></tr>
-    </tbody>
-  </table>
+      <div class="ml-name">粮食概念 <span class="ml-meta">20日 +19.99%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：金龙鱼、金健米业、新赛股份；核心梯队：新赛股份、万向德农、金健米业</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +4.70 个百分点，核心个股近5日累计成交约 177 亿，领涨股 新赛股份 近5日涨 +55.88%。</div></div>
+      <div class="ld-empty">龙头个股数据当日缺失（行情源未返回市值/涨幅）</div>
     </div>
   </div>
+    <div class="pulse"><div class="pl-row"><span class="pl-k">两融</span><span class="pl-v">26,315.61亿</span><span class="pl-sep">·</span><span class="pl-ar down">▼53.54亿</span></div><div class="pl-row">
+      <span class="pl-k">涨跌</span>
+      <span class="pl-x up">1535</span><span class="pl-sep">/</span>
+      <span class="pl-x flat">105</span><span class="pl-sep">/</span>
+      <span class="pl-x down">3900</span><span class="pl-sep">·</span>
+      <span class="pl-x mut">总5540</span>
+    </div></div>
   </div>
 
   <div class="sec">
     <div class="sec-h">技术面选股 · 当日新增</div>
-    <div class="tech-sub">趋势突破（今日 6 只）</div>
-    <table class="mini-tbl"><thead><tr><th>名称</th><th>代码</th><th>涨幅</th><th>综合评分</th></tr></thead><tbody><tr><td>中国移动</td><td>600941</td><td class="num" style="color:#d63031">+0.91%</td><td class="num">77.04</td></tr><tr><td>高新发展</td><td>000628</td><td class="num" style="color:#d63031">+10.00%</td><td class="num">91.81</td></tr><tr><td>贵州燃气</td><td>600903</td><td class="num" style="color:#d63031">+9.95%</td><td class="num">69.44</td></tr><tr><td>华昌化工</td><td>002274</td><td class="num" style="color:#d63031">+10.05%</td><td class="num">91.55</td></tr><tr><td>青龙管业</td><td>002457</td><td class="num" style="color:#d63031">+4.63%</td><td class="num">83.85</td></tr><tr><td>中广天择</td><td>603721</td><td class="num" style="color:#d63031">+2.28%</td><td class="num">71.66</td></tr></tbody></table>
-    <div class="tech-sub">净利润断层（新增 0 只）</div>
-    <div class="ld-empty">净利润断层 今日无新增</div>
+    <div class="tech-sub">趋势突破（今日 0 只）</div>
+    <div class="ld-empty">趋势突破 今日 0 只</div>
+    <div class="tech-sub">净利润断层（新增 2 只）</div>
+    <table class="mini-tbl"><thead><tr><th>名称</th><th>代码</th><th>涨幅</th><th>净利润同比</th></tr></thead><tbody><tr><td>新赛股份</td><td>600540</td><td class="num" style="color:#d63031">+9.97%</td><td class="num">1819.7%</td></tr><tr><td>会稽山</td><td>601579</td><td class="num" style="color:#00b894">-4.19%</td><td class="num">37.0%</td></tr></tbody></table>
     <div class="tech-sub">ETF 5日最强（前 5）</div>
-    <table class="mini-tbl"><thead><tr><th>ETF名称</th><th>ETF代码</th><th>5日涨幅</th></tr></thead><tbody><tr><td>科创半导体ETF华夏</td><td>sh588170</td><td class="num" style="color:#d63031">+9.59%</td></tr><tr><td>科创创新药ETF国泰</td><td>sh589720</td><td class="num" style="color:#d63031">+9.43%</td></tr><tr><td>科创创新药ETF汇添富</td><td>sh589120</td><td class="num" style="color:#d63031">+9.36%</td></tr><tr><td>科创半导体设备ETF华泰柏瑞</td><td>sh588710</td><td class="num" style="color:#d63031">+9.16%</td></tr><tr><td>科创200ETF华泰柏瑞</td><td>sh588230</td><td class="num" style="color:#d63031">+8.11%</td></tr></tbody></table>
+    <table class="mini-tbl"><thead><tr><th>ETF名称</th><th>ETF代码</th><th>5日涨幅</th></tr></thead><tbody><tr><td>能源化工ETF建信</td><td>sz159981</td><td class="num" style="color:#d63031">+5.31%</td></tr><tr><td>机器人ETF鹏华</td><td>sz159278</td><td class="num" style="color:#d63031">+3.57%</td></tr><tr><td>机器人ETF富国</td><td>sz159272</td><td class="num" style="color:#d63031">+3.53%</td></tr><tr><td>机器人ETF景顺</td><td>sz159559</td><td class="num" style="color:#d63031">+3.53%</td></tr><tr><td>机器人ETF易方达</td><td>sz159530</td><td class="num" style="color:#d63031">+3.28%</td></tr></tbody></table>
   </div>
 
   <div class="ft">
-    📎 <a href="https://a370eac17bf645659375782958b12fb9.app.workbuddy.link/index.html">详情请看复盘中心</a>
+    📎 <a href="https://imfang77.github.io/market-review/index.html">详情请看复盘中心</a>
   </div>
 </div>
 </body></html>
