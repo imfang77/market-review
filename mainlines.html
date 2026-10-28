@@ -102,7 +102,19 @@
         }
         header += '<span class="arrow">&#8599;</span></div>';
 
-        var summaryText = (r.mainlineSummary || '').split('｜').join('<br>');
+        var summaryText = (r.mainlineSummary || '').split('｜').map(function(seg){
+          if (/^涨跌家数 /.test(seg)) {
+            return seg.replace(/(\d+)\/(\d+)\/(\d+)/, function(_, u, f, d){
+              return '<span style="color:#e5484d;font-weight:600">' + u + '</span>/<span style="color:#8b95a7">' + f + '</span>/<span style="color:#2f9e44;font-weight:600">' + d + '</span>';
+            });
+          }
+          if (/^(融资余额|两融) /.test(seg)) {
+            return seg.replace(/(▲|▼)([\d,\.]+亿)/, function(_, ar, v){
+              return '<span style="color:' + (ar === '▲' ? '#e5484d' : '#2f9e44') + ';font-weight:600">' + ar + v + '</span>';
+            });
+          }
+          return seg;
+        }).join('<br>');
         a.innerHTML = header + '<div class="summary">' + summaryText + '</div>';
         listEl.appendChild(a);
       });
