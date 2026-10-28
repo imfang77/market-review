@@ -51,8 +51,10 @@ thead th:nth-child(1),tbody td:nth-child(1){white-space:nowrap}
 .tblbox{padding:6px 16px 8px}
 .tbl{max-height:500px;overflow:auto;overflow-x:auto;border:1px solid #eef1f6;border-radius:10px}
 table{width:100%;border-collapse:collapse;font-size:14px}
-thead th{position:sticky;top:0;background:#f8fafc;color:#64748b;font-weight:600;text-align:right;padding:10px 14px;border-bottom:1px solid #e8edf5}
-thead th:nth-child(1){text-align:left}
+thead th{position:sticky;top:0;background:#f8fafc;color:#64748b;font-weight:600;text-align:center;padding:10px 14px;border-bottom:1px solid #e8edf5;cursor:pointer;user-select:none;white-space:nowrap}
+thead th:hover{color:#2f6bff;background:#eef3fb}
+thead th.sort-asc::after{content:" ▲";font-size:.72em;color:#2f6bff}
+thead th.sort-desc::after{content:" ▼";font-size:.72em;color:#2f6bff}
 tbody td{padding:9px 14px;border-bottom:1px solid #f3f5f9;text-align:right}
 tbody td:nth-child(1){text-align:left;color:#475569}
 tbody tr:hover{background:#f6f9ff}
@@ -152,6 +154,33 @@ const UD=["2015-01-06", "2015-01-07", "2015-01-08", "2015-01-09", "2015-01-12", 
 function fmt(v){return v.toLocaleString();}
 function fmt2(v){return v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
 function fi(v){return Math.round(v).toLocaleString();}
+var sortState={m:{col:0,asc:false},u:{col:0,asc:false}};
+function applySort(tbodyId){
+  var tbody=document.getElementById(tbodyId); if(!tbody) return;
+  var t=(tbodyId==='tbody-m')?'m':'u';
+  var st=sortState[t];
+  if(st.col===null) return;
+  var rows=Array.prototype.slice.call(tbody.querySelectorAll('tr'));
+  rows.sort(function(a,b){
+    var av=a.children[st.col].getAttribute('data-sort');
+    var bv=b.children[st.col].getAttribute('data-sort');
+    av=(av===null||av==='')?null:parseFloat(av);
+    bv=(bv===null||bv==='')?null:parseFloat(bv);
+    if(av===null&&bv===null) return 0;
+    if(av===null) return 1;
+    if(bv===null) return -1;
+    if(av===bv) return 0;
+    var cmp=av<bv?-1:1;
+    return st.asc?cmp:-cmp;
+  });
+  rows.forEach(function(r){tbody.appendChild(r);});
+  updateSortIndicators(tbodyId, st.col, st.asc);
+}
+function updateSortIndicators(tbodyId, col, asc){
+  var tbody=document.getElementById(tbodyId); if(!tbody) return;
+  var ths=tbody.closest('table').querySelectorAll('thead th');
+  ths.forEach(function(th,idx){ th.classList.remove('sort-asc','sort-desc'); if(idx===col) th.classList.add(asc?'sort-asc':'sort-desc'); });
+}
 function renderMTab(){
   var tb=document.getElementById('tbody-m'); tb.innerHTML='';
   var frag=document.createDocumentFragment();
@@ -176,19 +205,20 @@ function renderMTab(){
     var cls=(dv===null)?'':(dv>=0?'pos':'neg');
     var dtxt=(dv===null)?'—':((dv>=0?'+':'')+fmt2(dv));
     var tr=document.createElement('tr');
-    tr.innerHTML='<td>'+CD[i]+'</td><td class="num rzc">'+(CRZ[i]!==null?fmt2(CRZ[i]):'—')+'</td>'
-      +'<td class="num '+cls+'">'+dtxt+'</td><td class="num">'+(CZB[i]!==null?CZB[i].toFixed(2):'—')+'</td>';
+    tr.innerHTML='<td data-sort="'+i+'">'+CD[i]+'</td><td class="num rzc" data-sort="'+(CRZ[i]!==null?CRZ[i]:'')+'">'+(CRZ[i]!==null?fmt2(CRZ[i]):'—')+'</td>'
+      +'<td class="num '+cls+'" data-sort="'+(dv===null?'':dv)+'">'+dtxt+'</td><td class="num" data-sort="'+(CZB[i]!==null?CZB[i]:'')+'">'+(CZB[i]!==null?CZB[i].toFixed(2):'—')+'</td>';
     frag.appendChild(tr);
   }
   tb.appendChild(frag);
+  applySort('tbody-m');
 }
 function renderTables(){
   var tb, tr, i, frag;
   tb=document.getElementById('tbody-u'); frag=document.createDocumentFragment();
   for(i=N_U-1;i>=0;i--){
     tr=document.createElement('tr'); tr.dataset.idx=i;
-    tr.innerHTML='<td>'+UD[i]+'</td><td class="num upc">'+fi(UUP[i])+'</td><td class="num">'+fi(UFL[i])
-      +'</td><td class="num dnc">'+fi(UDN[i])+'</td><td class="num">'+fi(UTOT[i])+'</td><td class="num">'
+    tr.innerHTML='<td data-sort="'+i+'">'+UD[i]+'</td><td class="num upc" data-sort="'+UUP[i]+'">'+fi(UUP[i])+'</td><td class="num" data-sort="'+UFL[i]+'">'+fi(UFL[i])
+      +'</td><td class="num dnc" data-sort="'+UDN[i]+'">'+fi(UDN[i])+'</td><td class="num" data-sort="'+UTOT[i]+'">'+fi(UTOT[i])+'</td><td class="num" data-sort="'+(URAT[i]!=null?URAT[i]:'')+'">'
       +(URAT[i]?URAT[i].toFixed(3):'-')+'</td>';
     frag.appendChild(tr);
   }
@@ -392,8 +422,17 @@ document.querySelectorAll('.tbtn').forEach(function(b){
     document.getElementById('tpanel-'+b.dataset.t).style.display='block';
   });
 });
+document.querySelectorAll('.tbl thead th').forEach(function(th){
+  th.addEventListener('click', function(){
+    var tbody=th.closest('table').querySelector('tbody'); if(!tbody) return;
+    var tbodyId=tbody.id, t=(tbodyId==='tbody-m')?'m':'u', col=th.cellIndex, st=sortState[t];
+    if(st.col===col){ st.asc=!st.asc; } else { st.col=col; st.asc=false; }
+    applySort(tbodyId);
+  });
+});
 renderTables();
 renderMTab();
 filterTable('tbody-u',RANGES_U[DEF]);
+applySort('tbody-u');
 </script>
 </body></html>
