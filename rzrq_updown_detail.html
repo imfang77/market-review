@@ -31,6 +31,7 @@ thead th:nth-child(1),tbody td:nth-child(1){white-space:nowrap}
 .legend .lg{display:inline-flex;align-items:center;gap:4px}
 .legend .lg.blue{color:#2f6bff}.legend .lg.red{color:#c0392b}
 .legend .mut{color:#9aa3b2}
+.legend .mrow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .chartbox{position:relative;padding:6px 14px 8px}
 .tblsec{margin:16px 28px 0;border:1px solid #e8edf5;border-radius:12px;overflow:hidden}
 .descfold{margin:16px 28px 0;border:1px solid #e8edf5;border-radius:12px;background:#fbfcfe}
@@ -77,6 +78,7 @@ tbody tr:hover{background:#f6f9ff}
   .rngrow2 .rng-btn{flex:1;padding:6px 2px;font-size:11.5px;border-radius:8px;text-align:center}
   .legend{padding:4px 14px 0;font-size:11px;gap:3px}
   .legend .lrow{gap:8px;font-size:10.5px}
+  .legend .mrow{font-size:10.5px}
   .rngbar.gran{padding:4px 14px 0}
   .tbltabs{padding:10px 14px 0;gap:6px}
   .tbtn{font-size:12px;padding:7px 12px}
@@ -277,11 +279,12 @@ function draw(s){
 function drawLegend(){
   const A=G==='d'?null:gArr();
   const lab=G==='d'?'每日':(G==='w'?'周末快照':'月末快照');
+  const hint='鼠标/手指停在图上看当日明细'
+    +(A?(' · 蓝线只连每'+(G==='w'?'周':'月')+'最后一个交易日的快照点'):'');
   document.getElementById('lg').innerHTML=
     '<span class="lrow"><span class="lg blue">■ 融资余额（左轴·亿元·'+lab+'）</span>'
    +'<span class="lg red">■ 上涨家数（右轴·家·每日）</span></span>'
-   +(A?('<span class="mut">蓝线只连每'+(G==='w'?'周':'月')+'最后一个交易日的快照点</span>'):'')
-   +'<span class="mut">鼠标/手指停在图上看当日明细</span>';
+   +'<span class="mut mrow">'+hint+'</span>';
 }
 function snapAt(i){
   const A=gArr(); if(!A)return null;
