@@ -114,11 +114,10 @@ tbody tr:hover{background:#f6f9ff}
 </svg>
 <div id="tip"></div></div>
 <div class="legend" id="lg"></div>
-<details class="descfold"><summary>统计口径与数据说明（默认折叠，点击展开）</summary><div class="sub">默认区间：<b>3个月</b>（2026-07-29 ~ 2026-10-27，共 59 个交易日）；横轴刻度为完整日期「年-月-日」，最右端为上涨家数最新日。下方<b>每日明细表直接展示</b>。</div><div class="srcbar"><span class="s">融资余额最新：<b>2026-10-27</b>（东财 T+1 披露，不含融券）</span><span class="s">涨跌家数最新：<b>2026-10-27</b>（沪深京全市场口径）</span><span class="s">图表时间轴最新：<b>2026-10-27</b>（融资余额蓝线停在最近披露日）</span></div></details>
+<details class="descfold"><summary>统计口径与数据说明（默认折叠，点击展开）</summary><div class="sub">默认区间：<b>3个月</b>（2026-07-29 ~ 2026-10-27，共 59 个交易日）；横轴刻度为完整日期「年-月-日」，最右端为上涨家数最新日。下方<b>明细表直接展示</b>。</div><div class="srcbar"><span class="s">融资余额最新：<b>2026-10-27</b>（东财 T+1 披露，不含融券）</span><span class="s">涨跌家数最新：<b>2026-10-27</b>（沪深京全市场口径）</span><span class="s">图表时间轴最新：<b>2026-10-27</b>（融资余额蓝线停在最近披露日）</span></div></details>
 <div class="tblsec">
-<div class="tblsec-h">每日明细表<span class="fold-tip">（融资余额 / 涨跌家数 · 直接展示）</span></div>
 <div class="tbltabs">
-<button class="tbtn active" data-t="m">每日融资余额明细</button>
+<button class="tbtn active" data-t="m">每日融资余额</button>
 <button class="tbtn" data-t="u">每日涨跌家数明细</button>
 </div>
 <div class="tpanel" id="tpanel-m" style="display:block">
@@ -332,6 +331,7 @@ document.querySelectorAll('#segG button').forEach(function(b){
     document.querySelectorAll('#segG button').forEach(function(x){x.classList.remove('on');});
     b.classList.add('on');
     G=b.dataset.g;
+    document.querySelector('.tbtn[data-t="m"]').textContent={d:'每日融资余额',w:'每周融资余额',m:'每月融资余额'}[G];
     hideTips(); draw(cur);
   });
 });
