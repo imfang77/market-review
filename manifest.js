@@ -17,7 +17,7 @@ window.REPORTS = [
       "mainlineSummary": "5日主线:纺织机械/商品城/石油开采｜10日主线:石油开采/石油/白酒｜20日主线:石油开采/石油/电信运营",
       "mainlineConceptFile": "mainline_concept-20261027.html?v=1793096834",
       "conceptSummary": "5日主线:纺织机械/商品城/石油开采｜10日主线:石油开采/石油/白酒｜20日主线:石油开采/石油/电信运营",
-      "previewFile": "preview-20261027.html?v=1793145138"
+      "previewFile": "preview-20261027.html?v=1793148779"
     },
     {
       "date": "2026-10-26",
