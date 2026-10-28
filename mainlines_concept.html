@@ -130,8 +130,9 @@
         a.className = 'report-card';
         // manifest 里已带 ?v=<mtime> 缓存戳（2026-10-26 加），此处不再追加固定戳，
         // 否则会出现双 ?v= 导致取不到新版
-        // 2026-10-28 起：日历优先打开图文卡片页（含两融/涨跌两行），缺卡片页时回退完整主线报告
-        a.href = r.previewFile && r.previewFile.length > 0 ? r.previewFile : r.mainlineConceptFile;
+        // 2026-10-28 14:58 用户定稿：日历恢复直接打开完整主线报告（指数概览+时事背景那页）；
+        // 图文卡片页保留但不再是日历默认入口
+        a.href = r.mainlineConceptFile;
 
         var header = '<div class="card-header">' +
           '<span class="date-text">' + r.date + '</span>' +
