@@ -198,7 +198,8 @@ function positionTip(tip,box,cx,cy){tip.style.opacity=1;const br=box.getBounding
 function filterTable(id,start){document.querySelectorAll('#'+id+' tr').forEach(function(tr){tr.style.display=(parseInt(tr.dataset.idx)>=start)?'':'none';});}
 
 let G='d', cur=0, yloL=0,yhiL=1,yloR=0,yhiR=1;
-const W=1000,MT=46,PB=402,plotH=PB-MT;
+const W=1000;
+let MT=46,PB=402,plotH=PB-MT;
 let ML=70,MR=70,pw=W-ML-MR;
 const plot=document.getElementById('plot'), svg=document.getElementById('svg'),
       vline=document.getElementById('vline'), focusL=document.getElementById('focusL'),
@@ -226,6 +227,10 @@ function syncMTab(){
 function draw(s){
   cur=s;
   const m=metrics(), F=m.F, nl=m.nl;
+  // 边距与viewBox高度随字号F动态计算，保证手机大字号下顶部标题/底部日期不被截
+  ML=Math.round(F*3.8+12); MR=Math.round(F*3.2+10); pw=W-ML-MR;
+  MT=Math.round(F*1.35+26); PB=402; plotH=PB-MT;
+  svg.setAttribute('viewBox','0 0 1000 '+Math.round(PB+8+F*1.5));
   const cnt=N_C-s;
   if(cnt<=0) return;
   const pts=[];
