@@ -83,7 +83,7 @@
         <span class="date-text">融资余额 · 涨跌家数明细</span>
         <span class="arrow">&#8599;</span>
       </div>
-      <div class="summary">每日融资余额走势（两融 T+1 披露，不含融券）与全市场涨跌家数｜时间段 1个月/3个月/半年/今年以来/全部 切换｜明细表直接展示｜点击查看</div>
+      <div class="summary">每日融资余额走势（两融 T+1 披露，不含融券）与全市场涨跌家数</div>
     </a>
   </div>
 
@@ -130,7 +130,8 @@
         a.className = 'report-card';
         // manifest 里已带 ?v=<mtime> 缓存戳（2026-10-26 加），此处不再追加固定戳，
         // 否则会出现双 ?v= 导致取不到新版
-        a.href = r.mainlineConceptFile;
+        // 2026-10-28 起：日历优先打开图文卡片页（含两融/涨跌两行），缺卡片页时回退完整主线报告
+        a.href = r.previewFile && r.previewFile.length > 0 ? r.previewFile : r.mainlineConceptFile;
 
         var header = '<div class="card-header">' +
           '<span class="date-text">' + r.date + '</span>' +
