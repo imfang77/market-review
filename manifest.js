@@ -14,9 +14,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页最新20261027；基本面页数据截至最新季报；RPS选股页数据日期20261027（G2/G4净利润断层候选池因 earnings 源暂空，属基线）",
       "mainlineFile": "mainline-20261027.html?v=1793096834",
-      "mainlineSummary": "5日主线:纺织机械/商品城/石油开采｜10日主线:石油开采/石油/白酒｜20日主线:石油开采/石油/电信运营",
+      "mainlineSummary": "5日主线:纺织机械/商品城/石油开采｜10日主线:石油开采/石油/白酒｜20日主线:石油开采/石油/电信运营｜两融 23,809.87亿 · ▼160.82亿｜涨跌 606/42/4922 · 总5570",
       "mainlineConceptFile": "mainline_concept-20261027.html?v=1793096834",
-      "conceptSummary": "5日主线:纺织机械/商品城/石油开采｜10日主线:石油开采/石油/白酒｜20日主线:石油开采/石油/电信运营",
+      "conceptSummary": "5日主线:纺织机械/商品城/石油开采｜10日主线:石油开采/石油/白酒｜20日主线:石油开采/石油/电信运营｜两融 23,809.87亿 · ▼160.82亿｜涨跌 606/42/4922 · 总5570",
       "previewFile": "preview-20261027.html?v=1793148779"
     },
     {
@@ -27,9 +27,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面(趋势突破G1-15只/净利润断层G2-0只/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
       "mainlineFile": "mainline-20261026.html?v=1793038142",
-      "mainlineSummary": "5日主线:纺织机械/工业软件/外骨骼机器人｜10日主线:石油开采/石油/军贸概念｜20日主线:石油开采/石油/出版业",
+      "mainlineSummary": "5日主线:纺织机械/工业软件/外骨骼机器人｜10日主线:石油开采/石油/军贸概念｜20日主线:石油开采/石油/出版业｜两融 23,970.69亿 · ▼55.94亿｜涨跌 2250/161/3157 · 总5568",
       "mainlineConceptFile": "mainline_concept-20261026.html?v=1793038142",
-      "conceptSummary": "5日主线:纺织机械/工业软件/外骨骼机器人｜10日主线:石油开采/石油/军贸概念｜20日主线:石油开采/石油/出版业",
+      "conceptSummary": "5日主线:纺织机械/工业软件/外骨骼机器人｜10日主线:石油开采/石油/军贸概念｜20日主线:石油开采/石油/出版业｜两融 23,970.69亿 · ▼55.94亿｜涨跌 2250/161/3157 · 总5568",
       "previewFile": "preview-20261026.html?v=1793146495"
     },
     {
@@ -40,9 +40,9 @@ window.REPORTS = [
       "screeningFile": "screening_tech/fund.html",
       "screeningSummary": "G1趋势突破候选18只；ETF组合Top20已更新",
       "mainlineFile": "mainline-20261023.html",
-      "mainlineSummary": "5日主线:纺织机械/工业软件/减速器｜10日主线:石油开采/军贸概念/石油｜20日主线:石油开采/石油/出版业",
+      "mainlineSummary": "5日主线:纺织机械/工业软件/减速器｜10日主线:石油开采/军贸概念/石油｜20日主线:石油开采/石油/出版业｜两融 24,026.63亿 · ▼242.51亿｜涨跌 4516/137/913 · 总5566",
       "mainlineConceptFile": "mainline_concept-20261023.html",
-      "conceptSummary": "5日主线:纺织机械/工业软件/减速器｜10日主线:石油开采/军贸概念/石油｜20日主线:石油开采/石油/出版业",
+      "conceptSummary": "5日主线:纺织机械/工业软件/减速器｜10日主线:石油开采/军贸概念/石油｜20日主线:石油开采/石油/出版业｜两融 24,026.63亿 · ▼242.51亿｜涨跌 4516/137/913 · 总5566",
       "previewFile": "preview-20261023.html?v=1793145137"
     },
     {
@@ -53,9 +53,9 @@ window.REPORTS = [
       "screeningFile": "screening_tech/fund.html",
       "screeningSummary": "G1趋势突破候选3只；ETF组合Top20已更新",
       "mainlineFile": "mainline-20261022.html",
-      "mainlineSummary": "5日主线:军贸概念/农业综合/DRG-DIP｜10日主线:石油开采/出版业/石油｜20日主线:石油开采/石油/出版业",
+      "mainlineSummary": "5日主线:军贸概念/农业综合/DRG-DIP｜10日主线:石油开采/出版业/石油｜20日主线:石油开采/石油/出版业｜两融 24,269.14亿 · ▼233.63亿｜涨跌 533/36/4999 · 总5568",
       "mainlineConceptFile": "mainline_concept-20261022.html",
-      "conceptSummary": "5日主线:军贸概念/农业综合/DRG-DIP｜10日主线:石油开采/出版业/石油｜20日主线:石油开采/石油/出版业",
+      "conceptSummary": "5日主线:军贸概念/农业综合/DRG-DIP｜10日主线:石油开采/出版业/石油｜20日主线:石油开采/石油/出版业｜两融 24,269.14亿 · ▼233.63亿｜涨跌 533/36/4999 · 总5568",
       "previewFile": "preview-20261022.html?v=1793145137"
     },
     {
@@ -66,9 +66,9 @@ window.REPORTS = [
       "screeningFile": "screening_tech/fund.html",
       "screeningSummary": "趋势突破G1候选10只，ETF主线组合Top20",
       "mainlineFile": "mainline-20261021.html",
-      "mainlineSummary": "5日主线:DRG-DIP/军贸概念/电子身份证｜10日主线:石油开采/出版业/石油｜20日主线:出版业/石油开采/传媒娱乐",
+      "mainlineSummary": "5日主线:DRG-DIP/军贸概念/电子身份证｜10日主线:石油开采/出版业/石油｜20日主线:出版业/石油开采/传媒娱乐｜两融 24,502.77亿 · ▼9.68亿｜涨跌 1973/223/3370 · 总5566",
       "mainlineConceptFile": "mainline_concept-20261021.html",
-      "conceptSummary": "5日主线:DRG-DIP/军贸概念/电子身份证｜10日主线:石油开采/出版业/石油｜20日主线:出版业/石油开采/传媒娱乐",
+      "conceptSummary": "5日主线:DRG-DIP/军贸概念/电子身份证｜10日主线:石油开采/出版业/石油｜20日主线:出版业/石油开采/传媒娱乐｜两融 24,502.77亿 · ▼9.68亿｜涨跌 1973/223/3370 · 总5566",
       "previewFile": "preview-20261021.html?v=1793145136"
     },
     {
@@ -79,9 +79,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "趋势突破G1候选10只，ETF主线组合Top20",
       "mainlineFile": "mainline-20261020.html",
-      "mainlineSummary": "5日主线:石油开采/白酒/军贸概念｜10日主线:石油开采/铁路｜20日主线:石油开采/出版业",
+      "mainlineSummary": "5日主线:石油开采/白酒/军贸概念｜10日主线:石油开采/铁路｜20日主线:石油开采/出版业｜两融 24,512.45亿 · ▼21.29亿｜涨跌 3770/122/1673 · 总5565",
       "mainlineConceptFile": "mainline_concept-20261020.html",
-      "conceptSummary": "5日主线:石油开采/白酒/军贸概念｜10日主线:石油开采/铁路｜20日主线:石油开采/出版业",
+      "conceptSummary": "5日主线:石油开采/白酒/军贸概念｜10日主线:石油开采/铁路｜20日主线:石油开采/出版业｜两融 24,512.45亿 · ▼21.29亿｜涨跌 3770/122/1673 · 总5565",
       "previewFile": "preview-20261020.html?v=1793145136"
     },
     {
@@ -92,9 +92,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "G1趋势突破 9 只；ETF G3 Top20 已更新（含5/10/20日表现）",
       "mainlineFile": "mainline-20261019.html",
-      "mainlineSummary": "5日主线:军贸概念/石油开采/航空｜10日主线:出版业/石油开采｜20日主线:出版业/石油开采/分散染料",
+      "mainlineSummary": "5日主线:军贸概念/石油开采/航空｜10日主线:出版业/石油开采｜20日主线:出版业/石油开采/分散染料｜两融 24,533.74亿 · ▼63.31亿｜涨跌 2272/159/3130 · 总5561",
       "mainlineConceptFile": "mainline_concept-20261019.html",
-      "conceptSummary": "5日主线:军贸概念/石油开采/航空｜10日主线:出版业/石油开采｜20日主线:出版业/石油开采/分散染料",
+      "conceptSummary": "5日主线:军贸概念/石油开采/航空｜10日主线:出版业/石油开采｜20日主线:出版业/石油开采/分散染料｜两融 24,533.74亿 · ▼63.31亿｜涨跌 2272/159/3130 · 总5561",
       "previewFile": "preview-20261019.html?v=1793145135"
     },
     {
@@ -105,9 +105,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口:技术面(趋势突破G1-4只/净利润断层G2-0只/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
       "mainlineFile": "mainline-20261016.html",
-      "mainlineSummary": "5日主线:石油开采/出版业｜10日主线:石油开采/出版业｜20日主线:出版业/石油开采/传媒娱乐",
+      "mainlineSummary": "5日主线:石油开采/出版业｜10日主线:石油开采/出版业｜20日主线:出版业/石油开采/传媒娱乐｜两融 24,597.06亿 · ▼144.90亿｜涨跌 3282/138/2139 · 总5559",
       "mainlineConceptFile": "mainline_concept-20261016.html",
-      "conceptSummary": "5日主线:石油开采/出版业｜10日主线:石油开采/出版业｜20日主线:出版业/石油开采/传媒娱乐",
+      "conceptSummary": "5日主线:石油开采/出版业｜10日主线:石油开采/出版业｜20日主线:出版业/石油开采/传媒娱乐｜两融 24,597.06亿 · ▼144.90亿｜涨跌 3282/138/2139 · 总5559",
       "previewFile": "preview-20261016.html?v=1793145135"
     },
     {
@@ -118,9 +118,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口:技术面(趋势突破G1-3只/净利润断层G2-0只/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
       "mainlineFile": "mainline-20261015.html",
-      "mainlineSummary": "5日主线:出版业/传媒娱乐｜10日主线:石油开采/出版业｜20日主线:出版业/石油开采/传媒娱乐",
+      "mainlineSummary": "5日主线:出版业/传媒娱乐｜10日主线:石油开采/出版业｜20日主线:出版业/石油开采/传媒娱乐｜两融 24,741.96亿 · ▼313.60亿｜涨跌 425/26/5111 · 总5562",
       "mainlineConceptFile": "mainline_concept-20261015.html",
-      "conceptSummary": "5日主线:出版业/传媒娱乐｜10日主线:石油开采/出版业｜20日主线:出版业/石油开采/传媒娱乐",
+      "conceptSummary": "5日主线:出版业/传媒娱乐｜10日主线:石油开采/出版业｜20日主线:出版业/石油开采/传媒娱乐｜两融 24,741.96亿 · ▼313.60亿｜涨跌 425/26/5111 · 总5562",
       "previewFile": "preview-20261015.html?v=1793145135"
     },
     {
@@ -131,9 +131,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "",
       "mainlineFile": "mainline-20261014.html",
-      "mainlineSummary": "5日主线:石油开采/出版业/传媒娱乐｜10日主线:石油开采/出版业｜20日主线:石油开采/出版业/红黄酒",
+      "mainlineSummary": "5日主线:石油开采/出版业/传媒娱乐｜10日主线:石油开采/出版业｜20日主线:石油开采/出版业/红黄酒｜两融 25,055.55亿 · ▼107.23亿｜涨跌 974/88/4500 · 总5562",
       "mainlineConceptFile": "mainline_concept-20261014.html",
-      "conceptSummary": "5日主线:石油开采/出版业/传媒娱乐｜10日主线:石油开采/出版业｜20日主线:石油开采/出版业/红黄酒",
+      "conceptSummary": "5日主线:石油开采/出版业/传媒娱乐｜10日主线:石油开采/出版业｜20日主线:石油开采/出版业/红黄酒｜两融 25,055.55亿 · ▼107.23亿｜涨跌 974/88/4500 · 总5562",
       "previewFile": "preview-20261014.html?v=1793145134"
     },
     {
@@ -144,9 +144,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "",
       "mainlineFile": "mainline-20261013.html",
-      "mainlineSummary": "5日主线:分散染料/石油开采/影视音像｜10日主线:石油开采/分散染料/出版业｜20日主线:红黄酒/分散染料/石油开采",
+      "mainlineSummary": "5日主线:分散染料/石油开采/影视音像｜10日主线:石油开采/分散染料/出版业｜20日主线:红黄酒/分散染料/石油开采｜两融 25,162.78亿 · ▼90.17亿｜涨跌 2904/166/2488 · 总5558",
       "mainlineConceptFile": "mainline_concept-20261013.html",
-      "conceptSummary": "5日主线:分散染料/石油开采/影视音像｜10日主线:石油开采/分散染料/出版业｜20日主线:红黄酒/分散染料/石油开采",
+      "conceptSummary": "5日主线:分散染料/石油开采/影视音像｜10日主线:石油开采/分散染料/出版业｜20日主线:红黄酒/分散染料/石油开采｜两融 25,162.78亿 · ▼90.17亿｜涨跌 2904/166/2488 · 总5558",
       "previewFile": "preview-20261013.html?v=1793145134"
     },
     {
@@ -157,9 +157,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口:技术面(趋势突破G1-6只/净利润断层G2候选池暂缺/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
       "mainlineFile": "mainline-20261012.html",
-      "mainlineSummary": "5日主线:出版业/传媒娱乐｜10日主线:出版业/石油开采/传媒娱乐｜20日主线:红黄酒/出版业/传媒娱乐",
+      "mainlineSummary": "5日主线:出版业/传媒娱乐｜10日主线:出版业/石油开采/传媒娱乐｜20日主线:红黄酒/出版业/传媒娱乐｜两融 25,252.96亿 · ▼47.59亿｜涨跌 1166/69/4324 · 总5559",
       "mainlineConceptFile": "mainline_concept-20261012.html",
-      "conceptSummary": "5日主线:出版业/传媒娱乐｜10日主线:出版业/石油开采/传媒娱乐｜20日主线:红黄酒/出版业/传媒娱乐",
+      "conceptSummary": "5日主线:出版业/传媒娱乐｜10日主线:出版业/石油开采/传媒娱乐｜20日主线:红黄酒/出版业/传媒娱乐｜两融 25,252.96亿 · ▼47.59亿｜涨跌 1166/69/4324 · 总5559",
       "previewFile": "preview-20261012.html?v=1793145133"
     },
     {
@@ -170,9 +170,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "",
       "mainlineFile": "mainline-20261009.html",
-      "mainlineSummary": "5日主线:分散染料/石油开采/影视音像｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/出版业",
+      "mainlineSummary": "5日主线:分散染料/石油开采/影视音像｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/出版业｜两融 25,300.55亿 · ▼145.41亿｜涨跌 3293/118/2145 · 总5556",
       "mainlineConceptFile": "mainline_concept-20261009.html",
-      "conceptSummary": "5日主线:分散染料/石油开采/影视音像｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/出版业",
+      "conceptSummary": "5日主线:分散染料/石油开采/影视音像｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/出版业｜两融 25,300.55亿 · ▼145.41亿｜涨跌 3293/118/2145 · 总5556",
       "previewFile": "preview-20261009.html?v=1793145133"
     },
     {
@@ -183,9 +183,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "",
       "mainlineFile": "mainline-20261008.html",
-      "mainlineSummary": "5日主线:石油开采/分散染料｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/船舶/全国地产",
+      "mainlineSummary": "5日主线:石油开采/分散染料｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/船舶/全国地产｜两融 25,445.96亿 · ▲41.39亿｜涨跌 1695/111/3748 · 总5554",
       "mainlineConceptFile": "mainline_concept-20261008.html",
-      "conceptSummary": "5日主线:石油开采/分散染料｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/船舶/全国地产",
+      "conceptSummary": "5日主线:石油开采/分散染料｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/船舶/全国地产｜两融 25,445.96亿 · ▲41.39亿｜涨跌 1695/111/3748 · 总5554",
       "previewFile": "preview-20261008.html?v=1793145132"
     },
     {
@@ -196,9 +196,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口:技术面(趋势突破G1-8只/净利润断层G2-0只/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
       "mainlineFile": "mainline-20260930.html",
-      "mainlineSummary": "5日主线:房产服务/分散染料/园区开发｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/全国地产",
+      "mainlineSummary": "5日主线:房产服务/分散染料/园区开发｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/全国地产｜两融 25,404.57亿 · ▼392.32亿｜涨跌 2556/170/2830 · 总5556",
       "mainlineConceptFile": "mainline_concept-20260930.html",
-      "conceptSummary": "5日主线:房产服务/分散染料/园区开发｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/全国地产",
+      "conceptSummary": "5日主线:房产服务/分散染料/园区开发｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/全国地产｜两融 25,404.57亿 · ▼392.32亿｜涨跌 2556/170/2830 · 总5556",
       "previewFile": "preview-20260930.html?v=1793145132"
     },
     {
@@ -209,9 +209,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "",
       "mainlineFile": "mainline-20260929.html",
-      "mainlineSummary": "5日主线:房产服务/石油开采/出版业｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/全国地产",
+      "mainlineSummary": "5日主线:房产服务/石油开采/出版业｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/全国地产｜两融 25,796.89亿 · ▼20.05亿｜涨跌 3459/155/1940 · 总5554",
       "mainlineConceptFile": "mainline_concept-20260929.html",
-      "conceptSummary": "5日主线:房产服务/石油开采/出版业｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/全国地产",
+      "conceptSummary": "5日主线:房产服务/石油开采/出版业｜10日主线:红黄酒/房产服务/全国地产｜20日主线:红黄酒/林业/全国地产｜两融 25,796.89亿 · ▼20.05亿｜涨跌 3459/155/1940 · 总5554",
       "previewFile": "preview-20260929.html?v=1793145131"
     },
     {
@@ -222,9 +222,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口:技术面(趋势突破G1-3只/净利润断层G2动态筛选/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
       "mainlineFile": "mainline-20260928.html",
-      "mainlineSummary": "5日主线:红黄酒/房产服务/林业｜10日主线:红黄酒/林业/房产服务｜20日主线:红黄酒/林业/房产服务",
+      "mainlineSummary": "5日主线:红黄酒/房产服务/林业｜10日主线:红黄酒/林业/房产服务｜20日主线:红黄酒/林业/房产服务｜两融 25,816.94亿 · ▼261.76亿｜涨跌 896/105/4553 · 总5554",
       "mainlineConceptFile": "mainline_concept-20260928.html",
-      "conceptSummary": "5日主线:红黄酒/房产服务/林业｜10日主线:红黄酒/林业/房产服务｜20日主线:红黄酒/林业/房产服务",
+      "conceptSummary": "5日主线:红黄酒/房产服务/林业｜10日主线:红黄酒/林业/房产服务｜20日主线:红黄酒/林业/房产服务｜两融 25,816.94亿 · ▼261.76亿｜涨跌 896/105/4553 · 总5554",
       "previewFile": "preview-20260928.html?v=1793145131"
     },
     {
@@ -235,9 +235,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口:技术面(趋势突破G1/净利润断层G2/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
       "mainlineFile": "mainline-20260924.html",
-      "mainlineSummary": "5日主线:红黄酒/房产服务/全国地产｜10日主线:红黄酒/陶瓷/CXO概念｜20日主线:红黄酒/林业/房产服务",
+      "mainlineSummary": "5日主线:红黄酒/房产服务/全国地产｜10日主线:红黄酒/陶瓷/CXO概念｜20日主线:红黄酒/林业/房产服务｜两融 26,078.71亿 · ▼174.43亿｜涨跌 1112/132/4308 · 总5552",
       "mainlineConceptFile": "mainline_concept-20260924.html",
-      "conceptSummary": "5日主线:红黄酒/房产服务/全国地产｜10日主线:红黄酒/陶瓷/CXO概念｜20日主线:红黄酒/林业/房产服务",
+      "conceptSummary": "5日主线:红黄酒/房产服务/全国地产｜10日主线:红黄酒/陶瓷/CXO概念｜20日主线:红黄酒/林业/房产服务｜两融 26,078.71亿 · ▼174.43亿｜涨跌 1112/132/4308 · 总5552",
       "previewFile": "preview-20260924.html?v=1793145130"
     },
     {
@@ -248,9 +248,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "",
       "mainlineFile": "mainline-20260923.html",
-      "mainlineSummary": "5日主线:房产服务/红黄酒/CXO概念｜10日主线:红黄酒/陶瓷/玻璃｜20日主线:红黄酒/林业/培育钻石",
+      "mainlineSummary": "5日主线:房产服务/红黄酒/CXO概念｜10日主线:红黄酒/陶瓷/玻璃｜20日主线:红黄酒/林业/培育钻石｜两融 26,253.13亿 · ▼10.43亿｜涨跌 1879/100/3570 · 总5549",
       "mainlineConceptFile": "mainline_concept-20260923.html",
-      "conceptSummary": "5日主线:房产服务/红黄酒/CXO概念｜10日主线:红黄酒/陶瓷/玻璃｜20日主线:红黄酒/林业/培育钻石",
+      "conceptSummary": "5日主线:房产服务/红黄酒/CXO概念｜10日主线:红黄酒/陶瓷/玻璃｜20日主线:红黄酒/林业/培育钻石｜两融 26,253.13亿 · ▼10.43亿｜涨跌 1879/100/3570 · 总5549",
       "previewFile": "preview-20260923.html?v=1793145130"
     },
     {
@@ -261,9 +261,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口：技术面页最新20260922（G1趋势突破新增13只：华仁药业/中新赛克/黑猫股份/新华制药/南兴股份/联合光电 等）+ 基本面页数据截至最新季报",
       "mainlineFile": "mainline-20260922.html",
-      "mainlineSummary": "5日主线:红黄酒/房产服务/CXO概念｜10日主线:红黄酒/玻璃/MLCC概念｜20日主线:林业/红黄酒/石油贸易",
+      "mainlineSummary": "5日主线:红黄酒/房产服务/CXO概念｜10日主线:红黄酒/玻璃/MLCC概念｜20日主线:林业/红黄酒/石油贸易｜两融 26,263.57亿 · ▲33.95亿｜涨跌 2365/150/3034 · 总5549",
       "mainlineConceptFile": "mainline_concept-20260922.html",
-      "conceptSummary": "5日主线:红黄酒/房产服务/CXO概念｜10日主线:红黄酒/玻璃/MLCC概念｜20日主线:林业/红黄酒/石油贸易",
+      "conceptSummary": "5日主线:红黄酒/房产服务/CXO概念｜10日主线:红黄酒/玻璃/MLCC概念｜20日主线:林业/红黄酒/石油贸易｜两融 26,263.57亿 · ▲33.95亿｜涨跌 2365/150/3034 · 总5549",
       "previewFile": "preview-20260922.html?v=1793145129"
     },
     {
@@ -274,9 +274,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口：技术面页最新20260921（G1趋势突破新增16只：沃森生物/继峰股份/博腾股份/长白山 等）+ 基本面页数据截至最新季报",
       "mainlineFile": "mainline-20260921.html",
-      "mainlineSummary": "5日主线:红黄酒/半导体/房产服务｜10日主线:红黄酒/玻璃/石油贸易｜20日主线:林业/红黄酒/种业",
+      "mainlineSummary": "5日主线:红黄酒/半导体/房产服务｜10日主线:红黄酒/玻璃/石油贸易｜20日主线:林业/红黄酒/种业｜两融 26,229.62亿 · ▲142.67亿｜涨跌 4530/81/938 · 总5549",
       "mainlineConceptFile": "mainline_concept-20260921.html",
-      "conceptSummary": "5日主线:红黄酒/半导体/房产服务｜10日主线:红黄酒/玻璃/石油贸易｜20日主线:林业/红黄酒/种业",
+      "conceptSummary": "5日主线:红黄酒/半导体/房产服务｜10日主线:红黄酒/玻璃/石油贸易｜20日主线:林业/红黄酒/种业｜两融 26,229.62亿 · ▲142.67亿｜涨跌 4530/81/938 · 总5549",
       "previewFile": "preview-20260921.html?v=1793145129"
     },
     {
@@ -287,9 +287,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "条件选股三入口：技术面页最新20260918(G1/G2/ETF)；基本面页数据截至最新季报；RPS选股页数据日期20260918(已修复长期停留8/28的bug)。",
       "mainlineFile": "mainline_concept-20260918.html",
-      "mainlineSummary": "5日主线:红黄酒/次新股/先进封装｜10日主线:玻璃/石油贸易/CPO概念｜20日主线:林业/红黄酒/石油贸易",
+      "mainlineSummary": "5日主线:红黄酒/次新股/先进封装｜10日主线:玻璃/石油贸易/CPO概念｜20日主线:林业/红黄酒/石油贸易｜两融 26,086.95亿 · ▼11.68亿｜涨跌 4223/167/1159 · 总5549",
       "mainlineConceptFile": "mainline_concept-20260918.html",
-      "conceptSummary": "5日主线:红黄酒/次新股/先进封装｜10日主线:玻璃/石油贸易/CPO概念｜20日主线:林业/红黄酒/石油贸易",
+      "conceptSummary": "5日主线:红黄酒/次新股/先进封装｜10日主线:玻璃/石油贸易/CPO概念｜20日主线:林业/红黄酒/石油贸易｜两融 26,086.95亿 · ▼11.68亿｜涨跌 4223/167/1159 · 总5549",
       "previewFile": "preview-20260918.html?v=1793145128"
     },
     {
@@ -300,9 +300,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口：技术面页最新20260917（G1趋势突破12只：中视传媒/博瑞传播/龙版传媒/峰岹科技/华民股份 等）+ 基本面页数据截至最新季报",
       "mainlineFile": "mainline-20260917.html",
-      "mainlineSummary": "5日主线:玻璃/陶瓷/MLCC概念｜10日主线:林业/红黄酒/玻璃｜20日主线:林业/石油贸易/培育钻石",
+      "mainlineSummary": "5日主线:玻璃/陶瓷/MLCC概念｜10日主线:林业/红黄酒/玻璃｜20日主线:林业/石油贸易/培育钻石｜两融 26,098.64亿 · ▲23.24亿｜涨跌 2571/159/2821 · 总5551",
       "mainlineConceptFile": "mainline_concept-20260917.html",
-      "conceptSummary": "5日主线:玻璃/陶瓷/MLCC概念｜10日主线:林业/红黄酒/玻璃｜20日主线:林业/石油贸易/培育钻石",
+      "conceptSummary": "5日主线:玻璃/陶瓷/MLCC概念｜10日主线:林业/红黄酒/玻璃｜20日主线:林业/石油贸易/培育钻石｜两融 26,098.64亿 · ▲23.24亿｜涨跌 2571/159/2821 · 总5551",
       "previewFile": "preview-20260917.html?v=1793145128"
     },
     {
@@ -313,9 +313,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "",
       "mainlineFile": "mainline_concept-20260916.html",
-      "mainlineSummary": "5日主线:陶瓷/玻璃/MLCC概念｜10日主线:林业/培育钻石/红黄酒｜20日主线:林业/石油贸易/培育钻石",
+      "mainlineSummary": "5日主线:陶瓷/玻璃/MLCC概念｜10日主线:林业/培育钻石/红黄酒｜20日主线:林业/石油贸易/培育钻石｜两融 26,075.39亿 · ▲92.52亿｜涨跌 4162/191/1194 · 总5547",
       "mainlineConceptFile": "mainline_concept-20260916.html",
-      "conceptSummary": "5日主线:陶瓷/玻璃/MLCC概念｜10日主线:林业/培育钻石/红黄酒｜20日主线:林业/石油贸易/培育钻石",
+      "conceptSummary": "5日主线:陶瓷/玻璃/MLCC概念｜10日主线:林业/培育钻石/红黄酒｜20日主线:林业/石油贸易/培育钻石｜两融 26,075.39亿 · ▲92.52亿｜涨跌 4162/191/1194 · 总5547",
       "previewFile": "preview-20260916.html?v=1793145127"
     },
     {
@@ -326,9 +326,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口：技术面页最新20260915（G1趋势突破5只：中新赛克/中信出版/昌红科技/药石科技/中视传媒）+ 基本面页数据截至最新季报",
       "mainlineFile": "mainline_concept-20260915.html",
-      "mainlineSummary": "5日主线:玻璃/陶瓷/MLCC概念｜10日主线:船舶/培育钻石/石油贸易｜20日主线:林业/船舶/石油贸易",
+      "mainlineSummary": "5日主线:玻璃/陶瓷/MLCC概念｜10日主线:船舶/培育钻石/石油贸易｜20日主线:林业/船舶/石油贸易｜两融 25,982.87亿 · ▲6.32亿｜涨跌 1118/51/4377 · 总5546",
       "mainlineConceptFile": "mainline_concept-20260915.html",
-      "conceptSummary": "5日主线:玻璃/陶瓷/MLCC概念｜10日主线:船舶/培育钻石/石油贸易｜20日主线:林业/船舶/石油贸易",
+      "conceptSummary": "5日主线:玻璃/陶瓷/MLCC概念｜10日主线:船舶/培育钻石/石油贸易｜20日主线:林业/船舶/石油贸易｜两融 25,982.87亿 · ▲6.32亿｜涨跌 1118/51/4377 · 总5546",
       "previewFile": "preview-20260915.html?v=1793145127"
     },
     {
@@ -339,9 +339,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口：技术面（趋势突破G1/跳空缺口G2/ETF五日均强）+ 基本面（高盈利/高成长/高股息）",
       "mainlineFile": "mainline_concept-20260914.html",
-      "mainlineSummary": "5日主线:培育钻石/石油贸易/水力发电｜10日主线:林业/船舶/培育钻石｜20日主线:种业/林业",
+      "mainlineSummary": "5日主线:培育钻石/石油贸易/水力发电｜10日主线:林业/船舶/培育钻石｜20日主线:种业/林业｜两融 25,976.56亿 · ▼49.39亿｜涨跌 3124/200/2224 · 总5548",
       "mainlineConceptFile": "mainline_concept-20260914.html",
-      "conceptSummary": "5日主线:培育钻石/石油贸易/水力发电｜10日主线:林业/船舶/培育钻石｜20日主线:种业/林业",
+      "conceptSummary": "5日主线:培育钻石/石油贸易/水力发电｜10日主线:林业/船舶/培育钻石｜20日主线:种业/林业｜两融 25,976.56亿 · ▼49.39亿｜涨跌 3124/200/2224 · 总5548",
       "previewFile": "preview-20260914.html?v=1793145126"
     },
     {
@@ -352,9 +352,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面 G1 2只(鼎信通讯/中信出版) G2 0只 + 基本面",
       "mainlineFile": "mainline-20260911.html",
-      "mainlineSummary": "5日主线:玻璃/石油贸易/通信设备｜10日主线:船舶/知识付费/军贸概念｜20日主线:种业/粮食概念",
+      "mainlineSummary": "5日主线:玻璃/石油贸易/通信设备｜10日主线:船舶/知识付费/军贸概念｜20日主线:种业/粮食概念｜两融 26,025.95亿 · ▼145.94亿｜涨跌 639/38/4871 · 总5548",
       "mainlineConceptFile": "mainline_concept-20260911.html",
-      "conceptSummary": "5日主线:玻璃/石油贸易/通信设备｜10日主线:船舶/知识付费/军贸概念｜20日主线:种业/粮食概念",
+      "conceptSummary": "5日主线:玻璃/石油贸易/通信设备｜10日主线:船舶/知识付费/军贸概念｜20日主线:种业/粮食概念｜两融 26,025.95亿 · ▼145.94亿｜涨跌 639/38/4871 · 总5548",
       "previewFile": "preview-20260911.html?v=1793145126"
     },
     {
@@ -365,9 +365,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面(G1趋势突破/G2断层/G4 ETF5日强) + 基本面",
       "mainlineFile": "mainline-20260910.html",
-      "mainlineSummary": "5日主线:船舶/林业/渔业｜10日主线:林业/船舶/种业｜20日主线:种业/种植业/粮食概念",
+      "mainlineSummary": "5日主线:船舶/林业/渔业｜10日主线:林业/船舶/种业｜20日主线:种业/种植业/粮食概念｜两融 26,171.89亿 · ▼22.14亿｜涨跌 950/81/4514 · 总5545",
       "mainlineConceptFile": "mainline_concept-20260910.html",
-      "conceptSummary": "5日主线:船舶/林业/渔业｜10日主线:林业/船舶/种业｜20日主线:种业/种植业/粮食概念",
+      "conceptSummary": "5日主线:船舶/林业/渔业｜10日主线:林业/船舶/种业｜20日主线:种业/种植业/粮食概念｜两融 26,171.89亿 · ▼22.14亿｜涨跌 950/81/4514 · 总5545",
       "previewFile": "preview-20260910.html?v=1793145125"
     },
     {
@@ -378,9 +378,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口:技术面(G1趋势突破/G2业绩缺口/G4ETF五日均强) + 基本面(高盈利/高成长/高股息)",
       "mainlineFile": "mainline-20260909.html",
-      "mainlineSummary": "5日主线:种植业/渔业/船舶｜10日主线:种业/林业｜20日主线:种业/粮食概念",
+      "mainlineSummary": "5日主线:种植业/渔业/船舶｜10日主线:种业/林业｜20日主线:种业/粮食概念｜两融 26,194.03亿 · ▼32.31亿｜涨跌 1786/114/3647 · 总5547",
       "mainlineConceptFile": "mainline_concept-20260909.html",
-      "conceptSummary": "5日主线:种植业/渔业/船舶｜10日主线:种业/林业｜20日主线:种业/粮食概念",
+      "conceptSummary": "5日主线:种植业/渔业/船舶｜10日主线:种业/林业｜20日主线:种业/粮食概念｜两融 26,194.03亿 · ▼32.31亿｜涨跌 1786/114/3647 · 总5547",
       "previewFile": "preview-20260909.html?v=1793145125"
     },
     {
@@ -391,9 +391,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页最新20260908: G1趋势突破6只,G2跳空缺口4只,G3 ETF 5日最强,G4基本面双季扣非;基本面页数据截至2026中报",
       "mainlineFile": "mainline_concept-20260908.html",
-      "mainlineSummary": "5日主线:船舶/橡胶/培育钻石｜10日主线:种业/林业｜20日主线:种业/粮食概念",
+      "mainlineSummary": "5日主线:船舶/橡胶/培育钻石｜10日主线:种业/林业｜20日主线:种业/粮食概念｜两融 26,226.34亿 · ▲18.92亿｜涨跌 3412/105/2030 · 总5547",
       "mainlineConceptFile": "mainline_concept-20260908.html",
-      "conceptSummary": "5日主线:船舶/橡胶/培育钻石｜10日主线:种业/林业｜20日主线:种业/粮食概念",
+      "conceptSummary": "5日主线:船舶/橡胶/培育钻石｜10日主线:种业/林业｜20日主线:种业/粮食概念｜两融 26,226.34亿 · ▲18.92亿｜涨跌 3412/105/2030 · 总5547",
       "previewFile": "preview-20260908.html?v=1793145124"
     },
     {
@@ -404,9 +404,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口：技术面(趋势突破G1-1只/跳空缺口G2-0只/ETF五日均强20只)+基本面(高盈利/高成长/高股息三维度)",
       "mainlineFile": "mainline_concept-20260907.html",
-      "mainlineSummary": "5日主线:种业/林业/百货｜10日主线:种业/林业｜20日主线:种业/粮食概念",
+      "mainlineSummary": "5日主线:种业/林业/百货｜10日主线:种业/林业｜20日主线:种业/粮食概念｜两融 26,207.42亿 · ▲114.85亿｜涨跌 3160/186/2198 · 总5544",
       "mainlineConceptFile": "mainline_concept-20260907.html",
-      "conceptSummary": "5日主线:种业/林业/百货｜10日主线:种业/林业｜20日主线:种业/粮食概念",
+      "conceptSummary": "5日主线:种业/林业/百货｜10日主线:种业/林业｜20日主线:种业/粮食概念｜两融 26,207.42亿 · ▲114.85亿｜涨跌 3160/186/2198 · 总5544",
       "previewFile": "preview-20260907.html?v=1793145124"
     },
     {
@@ -417,9 +417,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口:技术面(G1趋势突破8只/G2跳空缺口候选池69只/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
       "mainlineFile": "mainline_concept-20260904.html",
-      "mainlineSummary": "5日主线:影视音像/红黄酒｜10日主线:种业/林业｜20日主线:种业/粮食概念",
+      "mainlineSummary": "5日主线:影视音像/红黄酒｜10日主线:种业/林业｜20日主线:种业/粮食概念｜两融 26,092.57亿 · ▼182.67亿｜涨跌 2441/189/2915 · 总5545",
       "mainlineConceptFile": "mainline_concept-20260904.html",
-      "conceptSummary": "5日主线:影视音像/红黄酒｜10日主线:种业/林业｜20日主线:种业/粮食概念",
+      "conceptSummary": "5日主线:影视音像/红黄酒｜10日主线:种业/林业｜20日主线:种业/粮食概念｜两融 26,092.57亿 · ▼182.67亿｜涨跌 2441/189/2915 · 总5545",
       "previewFile": "preview-20260904.html?v=1793145123"
     },
     {
@@ -430,9 +430,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页:趋势突破G1+净利润断层G2+ETF五日强;基本面页:高盈利/高成长/高股息",
       "mainlineFile": "mainline-20260903.html",
-      "mainlineSummary": "5日主线:军贸概念/影视音像/石油贸易｜10日主线:种业/石油贸易/保险｜20日主线:种业/粮食概念",
+      "mainlineSummary": "5日主线:军贸概念/影视音像/石油贸易｜10日主线:种业/石油贸易/保险｜20日主线:种业/粮食概念｜两融 26,275.24亿 · ▼40.38亿｜涨跌 1840/134/3573 · 总5547",
       "mainlineConceptFile": "mainline_concept-20260903.html",
-      "conceptSummary": "5日主线:军贸概念/影视音像/石油贸易｜10日主线:种业/石油贸易/保险｜20日主线:种业/粮食概念",
+      "conceptSummary": "5日主线:军贸概念/影视音像/石油贸易｜10日主线:种业/石油贸易/保险｜20日主线:种业/粮食概念｜两融 26,275.24亿 · ▼40.38亿｜涨跌 1840/134/3573 · 总5547",
       "previewFile": "preview-20260903.html?v=1793145123"
     },
     {
@@ -443,9 +443,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口:技术面(趋势突破G1/净利润断层G2/ETF五日均强) + 基本面(高盈利/高成长/高股息)",
       "mainlineFile": "mainline_concept-20260902.html",
-      "mainlineSummary": "5日主线:种业/林业/军贸概念｜10日主线:种业/林业/旅游｜20日主线:种业/粮食概念",
+      "mainlineSummary": "5日主线:种业/林业/军贸概念｜10日主线:种业/林业/旅游｜20日主线:种业/粮食概念｜两融 26,315.61亿 · ▼53.54亿｜涨跌 1535/105/3900 · 总5540",
       "mainlineConceptFile": "mainline_concept-20260902.html",
-      "conceptSummary": "5日主线:种业/林业/军贸概念｜10日主线:种业/林业/旅游｜20日主线:种业/粮食概念",
+      "conceptSummary": "5日主线:种业/林业/军贸概念｜10日主线:种业/林业/旅游｜20日主线:种业/粮食概念｜两融 26,315.61亿 · ▼53.54亿｜涨跌 1535/105/3900 · 总5540",
       "previewFile": "preview-20260902.html?v=1793145122"
     },
     {
@@ -456,9 +456,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页更新20260901(G1突破12只:金一文化/苏垦农发等;G2池0只;ETF5日最强20只) 基本面页数据截至最新季报",
       "mainlineFile": "mainline_concept-20260901.html",
-      "mainlineSummary": "5日主线:种业/种植业/林业｜10日主线:种业/焦炭加工/种植业｜20日主线:种业/种植业/粮食概念",
+      "mainlineSummary": "5日主线:种业/种植业/林业｜10日主线:种业/焦炭加工/种植业｜20日主线:种业/种植业/粮食概念｜两融 26,369.15亿 · ▲14.23亿｜涨跌 3377/119/2041 · 总5537",
       "mainlineConceptFile": "mainline_concept-20260901.html",
-      "conceptSummary": "5日主线:种业/种植业/林业｜10日主线:种业/焦炭加工/种植业｜20日主线:种业/种植业/粮食概念",
+      "conceptSummary": "5日主线:种业/种植业/林业｜10日主线:种业/焦炭加工/种植业｜20日主线:种业/种植业/粮食概念｜两融 26,369.15亿 · ▲14.23亿｜涨跌 3377/119/2041 · 总5537",
       "previewFile": "preview-20260901.html?v=1793145122"
     },
     {
@@ -469,9 +469,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口:技术面(G1突破7只:泸天化/黑芝麻/美格智能等,G2池364只,ETF5日均强20只)+基本面(高盈利/高成长/高股息三维度)",
       "mainlineFile": "mainline_concept-20260831.html",
-      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物｜两融 26,354.91亿 · ▲52.42亿｜涨跌 3178/144/2219 · 总5541",
       "mainlineConceptFile": "mainline_concept-20260831.html",
-      "conceptSummary": "5日主线:种业/林业/房产服务｜10日主线:种业/种植业/粮食概念｜20日主线:种业/CPO概念/复合铜箔",
+      "conceptSummary": "5日主线:种业/林业/房产服务｜10日主线:种业/种植业/粮食概念｜20日主线:种业/CPO概念/复合铜箔｜两融 26,354.91亿 · ▲52.42亿｜涨跌 3178/144/2219 · 总5541",
       "previewFile": "preview-20260831.html?v=1793145121"
     },
     {
@@ -482,9 +482,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页最新20260828（趋势突破G1+净利润断层G2+ETF五日均强）+基本面页（高盈利/高成长/高股息）",
       "mainlineFile": "mainline-20260828.html",
-      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物｜两融 26,302.50亿 · ▼61.59亿｜涨跌 3006/144/2393 · 总5543",
       "mainlineConceptFile": "mainline_concept-20260828.html",
-      "conceptSummary": "5日主线:种业/林业｜10日主线:种业/粮食概念｜20日主线:种业/黄金/CPO概念",
+      "conceptSummary": "5日主线:种业/林业｜10日主线:种业/粮食概念｜20日主线:种业/黄金/CPO概念｜两融 26,302.50亿 · ▼61.59亿｜涨跌 3006/144/2393 · 总5543",
       "cardTag": "（自今日起按通达信401个板块更新）",
       "previewFile": "preview-20260828.html?v=1793145121"
     },
@@ -496,9 +496,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "双入口:技术面(趋势突破G1+净利润断层G2+ETF5日均强20只 最新20260827) + 基本面(高盈利/高成长/高股息三维度 2026Q3季报)",
       "mainlineFile": "mainline-20260827.html",
-      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物｜两融 26,364.09亿 · ▲113.55亿｜涨跌 3389/209/1947 · 总5545",
       "mainlineConceptFile": "mainline_concept-20260827.html",
-      "conceptSummary": "5日主线:黄金/苹果概念｜10日主线:黄金/苹果概念｜20日主线:黄金/CRO/共封装光模块(CPO)",
+      "conceptSummary": "5日主线:黄金/苹果概念｜10日主线:黄金/苹果概念｜20日主线:黄金/CRO/共封装光模块(CPO)｜两融 26,364.09亿 · ▲113.55亿｜涨跌 3389/209/1947 · 总5545",
       "previewFile": "preview-20260827.html?v=1793145120"
     },
     {
@@ -509,9 +509,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页最新20260826 G1趋势突破7只(中信建投/伊利股份/太阳纸业/康恩贝/汇金科技/中关村/兆日科技)/G2净利润断层池28只/ETF五日均强20只｜基本面页数据截至最新季报",
       "mainlineFile": "mainline-20260826.html",
-      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物｜两融 26,250.54亿 · ▼33.23亿｜涨跌 2941/154/2450 · 总5545",
       "mainlineConceptFile": "mainline_concept-20260826.html",
-      "conceptSummary": "5日主线:黄金｜10日主线:黄金/苹果概念/共封装光模块(CPO)｜20日主线:黄金/CRO/共封装光模块(CPO)",
+      "conceptSummary": "5日主线:黄金｜10日主线:黄金/苹果概念/共封装光模块(CPO)｜20日主线:黄金/CRO/共封装光模块(CPO)｜两融 26,250.54亿 · ▼33.23亿｜涨跌 2941/154/2450 · 总5545",
       "previewFile": "preview-20260826.html?v=1793145120"
     },
     {
@@ -522,9 +522,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面(趋势突破G1+净利润断层G2+ETF五日均强)基本面(高盈利/高成长/高股息)双入口；数据截至2026-08-25",
       "mainlineFile": "mainline-20260825.html",
-      "mainlineSummary": "5日主线:贵金属/焦炭Ⅱ/其他家电Ⅱ｜10日主线:种植业/贵金属/房屋建设Ⅱ｜20日主线:贵金属/种植业/医疗服务",
+      "mainlineSummary": "5日主线:贵金属/焦炭Ⅱ/其他家电Ⅱ｜10日主线:种植业/贵金属/房屋建设Ⅱ｜20日主线:贵金属/种植业/医疗服务｜两融 26,283.77亿 · ▼6.98亿｜涨跌 4233/66/1245 · 总5544",
       "mainlineConceptFile": "mainline_concept-20260825.html",
-      "conceptSummary": "5日主线:黄金｜10日主线:黄金/共封装光模块(CPO)/苹果概念｜20日主线:黄金/CRO/苹果概念",
+      "conceptSummary": "5日主线:黄金｜10日主线:黄金/共封装光模块(CPO)/苹果概念｜20日主线:黄金/CRO/苹果概念｜两融 26,283.77亿 · ▼6.98亿｜涨跌 4233/66/1245 · 总5544",
       "previewFile": "preview-20260825.html?v=1793145119"
     },
     {
@@ -535,9 +535,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页最新20260824 G1趋势突破2只(蓝盾光电/中关村)/G2净利润断层0只/ETF五日均强20只｜基本面页数据截至最新季报",
       "mainlineFile": "mainline-20260824.html",
-      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物｜两融 26,290.75亿 · ▼42.40亿｜涨跌 1459/120/3965 · 总5544",
       "mainlineConceptFile": "mainline_concept-20260824.html",
-      "conceptSummary": "5日主线:黄金/苹果概念｜10日主线:黄金/CRO/共封装光模块(CPO)｜20日主线:黄金/CRO/共封装光模块(CPO)",
+      "conceptSummary": "5日主线:黄金/苹果概念｜10日主线:黄金/CRO/共封装光模块(CPO)｜20日主线:黄金/CRO/共封装光模块(CPO)｜两融 26,290.75亿 · ▼42.40亿｜涨跌 1459/120/3965 · 总5544",
       "previewFile": "preview-20260824.html?v=1793145119"
     },
     {
@@ -548,9 +548,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页最新20260821 G1趋势突破0只(当日无大票新上穿年线)/G2净利润断层当日新增5只(全历史累计,严筛1只)/ETF五日均强20只｜基本面页数据截至最新季报",
       "mainlineFile": "mainline-20260821.html",
-      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物｜两融 26,333.15亿 · ▼62.07亿｜涨跌 2503/175/2863 · 总5541",
       "mainlineConceptFile": "mainline_concept-20260821.html",
-      "conceptSummary": "5日主线:黄金｜10日主线:CRO/黄金/减肥药｜20日主线:CRO/黄金/医疗器械",
+      "conceptSummary": "5日主线:黄金｜10日主线:CRO/黄金/减肥药｜20日主线:CRO/黄金/医疗器械｜两融 26,333.15亿 · ▼62.07亿｜涨跌 2503/175/2863 · 总5541",
       "previewFile": "preview-20260821.html?v=1793145118"
     },
     {
@@ -561,9 +561,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页最新20260820 G1趋势突破11只(有效)/G2净利润断层当日新增27只(全历史129)/ETF五日均强20只｜基本面页数据截至最新季报",
       "mainlineFile": "mainline-20260820.html",
-      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物｜两融 26,395.22亿 · ▼16.30亿｜涨跌 4089/98/1350 · 总5537",
       "mainlineConceptFile": "mainline_concept-20260820.html",
-      "conceptSummary": "5日主线:｜10日主线:CRO/黄金/减肥药｜20日主线:CRO/黄金/医疗器械",
+      "conceptSummary": "5日主线:｜10日主线:CRO/黄金/减肥药｜20日主线:CRO/黄金/医疗器械｜两融 26,395.22亿 · ▼16.30亿｜涨跌 4089/98/1350 · 总5537",
       "previewFile": "preview-20260820.html?v=1793145118"
     },
     {
@@ -574,9 +574,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页最新20260819 G1趋势突破5只/G2净利润断层0只/ETF五日均强20只｜基本面页数据截至最新季报",
       "mainlineFile": "mainline-20260819.html",
-      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物｜两融 26,411.51亿 · ▼297.17亿｜涨跌 447/23/5068 · 总5538",
       "mainlineConceptFile": "mainline_concept-20260819.html",
-      "conceptSummary": "5日主线:共封装光模块(CPO)/半导体/苹果概念｜10日主线:CRO/共封装光模块(CPO)/半导体｜20日主线:CRO/黄金/机器人概念",
+      "conceptSummary": "5日主线:共封装光模块(CPO)/半导体/苹果概念｜10日主线:CRO/共封装光模块(CPO)/半导体｜20日主线:CRO/黄金/机器人概念｜两融 26,411.51亿 · ▼297.17亿｜涨跌 447/23/5068 · 总5538",
       "previewFile": "preview-20260819.html?v=1793145117"
     },
     {
@@ -587,9 +587,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页最新20260818 G1趋势突破7只/G2净利润断层0只/ETF五日均强20只｜基本面页数据截至最新季报",
       "mainlineFile": "mainline-20260818.html",
-      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物｜两融 26,708.69亿 · ▲51.98亿｜涨跌 2116/127/3293 · 总5536",
       "mainlineConceptFile": "mainline_concept-20260818.html",
-      "conceptSummary": "5日主线:共封装光模块(CPO)/CRO/半导体｜10日主线:CRO/共封装光模块(CPO)/半导体｜20日主线:黄金/CRO/共封装光模块(CPO)",
+      "conceptSummary": "5日主线:共封装光模块(CPO)/CRO/半导体｜10日主线:CRO/共封装光模块(CPO)/半导体｜20日主线:黄金/CRO/共封装光模块(CPO)｜两融 26,708.69亿 · ▲51.98亿｜涨跌 2116/127/3293 · 总5536",
       "previewFile": "preview-20260818.html?v=1793145117"
     },
     {
@@ -600,9 +600,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页最新20260817 G1突破0只G2断层候选池204池/严筛2只｜ETF五日均强20只｜基本面页数据截至2026Q3",
       "mainlineFile": "mainline-20260817.html",
-      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物｜两融 26,656.71亿 · ▲177.85亿｜涨跌 4333/140/1064 · 总5537",
       "mainlineConceptFile": "mainline_concept-20260817.html",
-      "conceptSummary": "5日主线:CRO/减肥药/创新药｜10日主线:CRO/共封装光模块(CPO)/减肥药｜20日主线:黄金/CRO/算力租赁",
+      "conceptSummary": "5日主线:CRO/减肥药/创新药｜10日主线:CRO/共封装光模块(CPO)/减肥药｜20日主线:黄金/CRO/算力租赁｜两融 26,656.71亿 · ▲177.85亿｜涨跌 4333/140/1064 · 总5537",
       "previewFile": "preview-20260817.html?v=1793145116"
     },
     {
@@ -613,9 +613,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面(趋势突破G1=16只累计·8/14当日新增0只/净利润断层G2=32只新增/ETF五日均强20只) + 基本面(高盈利/高成长/高股息三维度)",
       "mainlineFile": "mainline-20260814.html",
-      "mainlineSummary": "5日主线:医疗服务/医药商业/装修装饰Ⅱ｜10日主线:医疗服务/元件/电子化学品Ⅱ｜20日主线:贵金属/医疗服务/教育",
+      "mainlineSummary": "5日主线:医疗服务/医药商业/装修装饰Ⅱ｜10日主线:医疗服务/元件/电子化学品Ⅱ｜20日主线:贵金属/医疗服务/教育｜两融 26,478.86亿 · ▼18.55亿｜涨跌 2395/169/2974 · 总5538",
       "mainlineConceptFile": "mainline_concept-20260814.html",
-      "conceptSummary": "5日主线:CRO/减肥药/创新药｜10日主线:CRO/共封装光模块(CPO)/减肥药｜20日主线:黄金/CRO/算力租赁",
+      "conceptSummary": "5日主线:CRO/减肥药/创新药｜10日主线:CRO/共封装光模块(CPO)/减肥药｜20日主线:黄金/CRO/算力租赁｜两融 26,478.86亿 · ▼18.55亿｜涨跌 2395/169/2974 · 总5538",
       "previewFile": "preview-20260814.html?v=1793145116"
     },
     {
@@ -626,9 +626,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面(趋势突破G1=8只/净利润断层G2=167只/ETF五日均强20只)+基本面(高盈利/高成长/高股息三维度)",
       "mainlineFile": "mainline-20260813.html",
-      "mainlineSummary": "5日主线:医疗服务/生物制品/化学制药｜10日主线:医疗服务/通信设备/非金属材料Ⅱ｜20日主线:贵金属/教育/饮料乳品",
+      "mainlineSummary": "5日主线:医疗服务/生物制品/化学制药｜10日主线:医疗服务/通信设备/非金属材料Ⅱ｜20日主线:贵金属/教育/饮料乳品｜两融 26,497.41亿 · ▲23.57亿｜涨跌 1140/80/4318 · 总5538",
       "mainlineConceptFile": "mainline_concept-20260813.html",
-      "conceptSummary": "5日主线:CRO/减肥药/创新药｜10日主线:CRO/减肥药/AI应用｜20日主线:黄金/CRO/算力租赁",
+      "conceptSummary": "5日主线:CRO/减肥药/创新药｜10日主线:CRO/减肥药/AI应用｜20日主线:黄金/CRO/算力租赁｜两融 26,497.41亿 · ▲23.57亿｜涨跌 1140/80/4318 · 总5538",
       "previewFile": "preview-20260813.html?v=1793145115"
     },
     {
@@ -639,9 +639,9 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "条件选股已改为技术面/基本面双入口：技术面页(趋势突破/净利润断层/ETF5日最强·累计全交易日、按命中日期分行、样式冻结只更新内容)最新2026-08-12；基本面页(高盈利/高成长/高股息·三维度筛选)数据截至2026-08-11季度报",
       "mainlineFile": "mainline-20260812.html",
-      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物",
+      "mainlineSummary": "5日主线:机械设备/电子/电力设备｜10日主线:医药生物/机械设备/基础化工｜20日主线:机械设备/基础化工/医药生物｜两融 26,473.83亿 · ▲94.63亿｜涨跌 4124/131/1280 · 总5535",
       "mainlineConceptFile": "mainline_concept-20260812.html",
-      "conceptSummary": "5日主线:CRO/减肥药/半导体｜10日主线:CRO/AI应用/减肥药｜20日主线:黄金/CRO/数据要素",
+      "conceptSummary": "5日主线:CRO/减肥药/半导体｜10日主线:CRO/AI应用/减肥药｜20日主线:黄金/CRO/数据要素｜两融 26,473.83亿 · ▲94.63亿｜涨跌 4124/131/1280 · 总5535",
       "previewFile": "preview-20260812.html?v=1793145115"
     },
     {
@@ -652,9 +652,9 @@ window.REPORTS = [
       "screeningFile": "screening-20260811.html",
       "screeningSummary": "第一组2只(精确T-1→T上穿年线·前复权:华中数控[2/3/4年线]、花园生物[2年线]);第二组净利润断层36只(跳空日放量≥1.5+净利高增);第三组跳空缺口321只;第四组ETF五日均强20只",
       "mainlineFile": "mainline-20260811.html",
-      "mainlineSummary": "5-20日主线:5日黄金/CRO/数字经济,10日黄金/数字经济/数据要素,20日黄金/CRO/医疗器械;行业电子化学品/贵金属/元件强势;市场宽度5日1666涨",
+      "mainlineSummary": "5-20日主线:5日黄金/CRO/数字经济,10日黄金/数字经济/数据要素,20日黄金/CRO/医疗器械;行业电子化学品/贵金属/元件强势;市场宽度5日1666涨｜两融 26,379.20亿 · ▲13.04亿｜涨跌 1608/148/3779 · 总5535",
       "mainlineConceptFile": "mainline_concept-20260811.html",
-      "conceptSummary": "5日主线:CRO/半导体/共封装光模块(CPO)｜10日主线:CRO/黄金/AI应用｜20日主线:CRO/黄金/数字经济",
+      "conceptSummary": "5日主线:CRO/半导体/共封装光模块(CPO)｜10日主线:CRO/黄金/AI应用｜20日主线:CRO/黄金/数字经济｜两融 26,379.20亿 · ▲13.04亿｜涨跌 1608/148/3779 · 总5535",
       "previewFile": ""
     },
     {
@@ -665,9 +665,9 @@ window.REPORTS = [
       "screeningFile": "screening-20260810.html?v=20260816",
       "screeningSummary": "第一组4只(精确T-1上穿2/3/4年线·前复权:珈伟新能/信濠光电/万华化学/瑞康医药) 第二组(净利润断层·动态) 第三组(跳空缺口·动态) 第四组(ETF 5日最强·动态)",
       "mainlineFile": "mainline-20260810.html",
-      "mainlineSummary": "5日主线:电子化学品Ⅱ/电子、元件/电子、贵金属/有色金属｜10日主线:贵金属/有色金属、教育/社会服务、小金属/有色金属｜20日主线:贵金属/有色金属、教育/社会服务、医疗服务/医药生物",
+      "mainlineSummary": "5日主线:电子化学品Ⅱ/电子、元件/电子、贵金属/有色金属｜10日主线:贵金属/有色金属、教育/社会服务、小金属/有色金属｜20日主线:贵金属/有色金属、教育/社会服务、医疗服务/医药生物｜两融 26,366.16亿 · ▲140.72亿｜涨跌 4065/80/1391 · 总5536",
       "mainlineConceptFile": "mainline_concept-20260810.html",
-      "conceptSummary": "5日主线:CRO/半导体/共封装光模块(CPO)｜10日主线:CRO/黄金/AI应用｜20日主线:CRO/黄金/数字经济",
+      "conceptSummary": "5日主线:CRO/半导体/共封装光模块(CPO)｜10日主线:CRO/黄金/AI应用｜20日主线:CRO/黄金/数字经济｜两融 26,366.16亿 · ▲140.72亿｜涨跌 4065/80/1391 · 总5536",
       "previewFile": ""
     },
     {
@@ -678,9 +678,9 @@ window.REPORTS = [
       "screeningFile": "screening-20260807.html?v=18",
       "screeningSummary": "第一组2只(诺唯赞/药石科技) 第二组10只(景旺电子/云南锗业等跳空缺口未回补) 第三组20只ETF(科创成长领涨)",
       "mainlineFile": "mainline-20260807.html",
-      "mainlineSummary": "5日主线:元件/电子、非金属材料Ⅱ/基础化工、小金属/有色金属｜10日主线:教育/社会服务、广告营销/传媒、贵金属/有色金属｜20日主线:贵金属/有色金属、工业金属/有色金属、医疗服务/医药生物",
+      "mainlineSummary": "5日主线:元件/电子、非金属材料Ⅱ/基础化工、小金属/有色金属｜10日主线:教育/社会服务、广告营销/传媒、贵金属/有色金属｜20日主线:贵金属/有色金属、工业金属/有色金属、医疗服务/医药生物｜两融 26,225.44亿 · ▲69.78亿｜涨跌 2850/144/2539 · 总5533",
       "mainlineConceptFile": "mainline_concept-20260807.html",
-      "conceptSummary": "5日主线:CRO/CPO光模块/苹果概念｜10日主线:CRO/黄金/数据要素｜20日主线:黄金/CRO/锂电池",
+      "conceptSummary": "5日主线:CRO/CPO光模块/苹果概念｜10日主线:CRO/黄金/数据要素｜20日主线:黄金/CRO/锂电池｜两融 26,225.44亿 · ▲69.78亿｜涨跌 2850/144/2539 · 总5533",
       "previewFile": ""
     },
     {
@@ -691,9 +691,9 @@ window.REPORTS = [
       "screeningFile": "screening-20260806.html",
       "screeningSummary": "第一组2只(恒银科技/大晟文化) 第二组21只(8/4缺口未回补) 第三组20只ETF(软件/计算机领涨)",
       "mainlineFile": "mainline-20260806.html",
-      "mainlineSummary": "5日主线:元件/小金属/电子化学品Ⅱ｜10日主线:教育/广告营销/数字媒体｜20日主线:贵金属/工业金属/教育",
+      "mainlineSummary": "5日主线:元件/小金属/电子化学品Ⅱ｜10日主线:教育/广告营销/数字媒体｜20日主线:贵金属/工业金属/教育｜两融 26,155.66亿 · ▲110.29亿｜涨跌 2785/155/2590 · 总5530",
       "mainlineConceptFile": "mainline_concept-20260806.html",
-      "conceptSummary": "5日主线:CPO/机器人/AI应用｜10日主线:AI应用/数据要素/信创｜20日主线:黄金/CRO/数据要素",
+      "conceptSummary": "5日主线:CPO/机器人/AI应用｜10日主线:AI应用/数据要素/信创｜20日主线:黄金/CRO/数据要素｜两融 26,155.66亿 · ▲110.29亿｜涨跌 2785/155/2590 · 总5530",
       "previewFile": ""
     },
     {
@@ -704,9 +704,9 @@ window.REPORTS = [
       "screeningFile": "screening-20260805.html",
       "screeningSummary": "第一组2只(传智教育/泛微网络) 第二组0只 第三组20只ETF(传媒/游戏/软件领涨)",
       "mainlineFile": "mainline-20260805.html",
-      "mainlineSummary": "确认主线:贵金属黄金/算力CPO/CRO医疗服务",
+      "mainlineSummary": "确认主线:贵金属黄金/算力CPO/CRO医疗服务｜两融 26,045.37亿 · ▲122.23亿｜涨跌 3720/186/1621 · 总5527",
       "mainlineConceptFile": "mainline_concept-20260805.html",
-      "conceptSummary": "5日主线:AI应用/机器人/算力租赁｜10日主线:数据要素/数字经济/AI应用｜20日主线:黄金/CRO/数据要素",
+      "conceptSummary": "5日主线:AI应用/机器人/算力租赁｜10日主线:数据要素/数字经济/AI应用｜20日主线:黄金/CRO/数据要素｜两融 26,045.37亿 · ▲122.23亿｜涨跌 3720/186/1621 · 总5527",
       "previewFile": ""
     },
     {
@@ -717,7 +717,8 @@ window.REPORTS = [
       "screeningFile": "screening-20260804.html",
       "screeningSummary": "第一组1只(米奥会展) 第二组0只(成交额不足5亿) 第三组20只ETF(传媒/游戏领涨)",
       "mainlineConceptFile": "mainline-20260804.html",
-      "conceptSummary": "5日主线:算力光通信CPO｜10日主线:CRO医疗服务（原始8/4概念/题材思路，5-10日口径）",
+    "mainlineSummary": "｜两融 25,923.14亿 · ▲119.57亿｜涨跌 3638/140/1747 · 总5525",
+      "conceptSummary": "5日主线:算力光通信CPO｜10日主线:CRO医疗服务（原始8/4概念/题材思路，5-10日口径）｜两融 25,923.14亿 · ▲119.57亿｜涨跌 3638/140/1747 · 总5525",
       "previewFile": ""
     },
     {
@@ -727,6 +728,8 @@ window.REPORTS = [
       "reviewSummary": "沪指-0.59% 深成指-0.96% 创业板-1.24% | 核电板块领涨 主力净流入26亿 | 科创50重挫-5.08%",
       "screeningFile": "screening-20260803.html",
       "screeningSummary": "第一组9只(中国科传/传智教育/陆家嘴/神雾节能/兰州银行/紫金银行/瑞丰银行/大连热电/圣农发展) 第二组7只(美利云/锦和商管/富瀚微等) 第三组20只ETF(传媒/教育/游戏/软件/金融科技领涨)",
-      "previewFile": ""
+      "previewFile": "",
+    "mainlineSummary": "｜两融 25,803.56亿 · ▼87.61亿｜涨跌 4001/58/1468 · 总5527",
+    "conceptSummary": "｜两融 25,803.56亿 · ▼87.61亿｜涨跌 4001/58/1468 · 总5527"
     }
 ];
