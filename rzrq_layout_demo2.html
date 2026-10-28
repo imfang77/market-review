@@ -1,0 +1,136 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>设计稿v2：单图双轴（融资余额蓝线×上涨家数红柱）</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#eef1f6;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:#1f2937;padding:14px}
+.card{max-width:1020px;margin:0 auto;background:#fff;border-radius:14px;box-shadow:0 4px 20px rgba(31,41,55,.07);padding:14px 14px 8px}
+h2{font-size:16px;margin-bottom:6px}
+.desc{font-size:12.5px;color:#64748b;line-height:1.7;margin-bottom:8px}
+.rngbar{display:flex;gap:8px;align-items:center;padding:0 0 10px;flex-wrap:wrap}
+.lbl{font-size:13px;color:#64748b}
+.seg{display:inline-flex;border:1px solid #dbe3ef;border-radius:9px;overflow:hidden}
+.seg button{border:0;background:#fff;padding:7px 18px;font-size:13px;font-weight:700;color:#64748b;cursor:pointer}
+.seg button.on{background:#2f6bff;color:#fff}
+.seg button+button{border-left:1px solid #dbe3ef}
+.legend{display:flex;gap:16px;font-size:12px;color:#64748b;padding:2px 0 8px;flex-wrap:wrap}
+.lg{display:inline-flex;align-items:center;gap:5px}
+.sw{width:18px;height:4px;border-radius:2px;display:inline-block}
+.swb{background:#2f6bff}.swr{width:11px;height:11px;border-radius:2px;background:#e5484d}
+.tblsec{margin:10px 0 6px;border:1px solid #e8edf5;border-radius:12px;overflow:hidden}
+.tblsec-h{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 14px;background:#f8fafc;font-size:13.5px;font-weight:600;color:#334155}
+.tblsec-h .hint{font-weight:400;font-size:11.5px;color:#9aa3b2;text-align:right}
+.tblbox{max-height:300px;overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+thead th{position:sticky;top:0;background:#f8fafc;color:#64748b;font-weight:600;text-align:right;padding:8px 12px;border-bottom:1px solid #e8edf5;z-index:2}
+tbody td{padding:6px 12px;border-bottom:1px solid #f3f5f9;text-align:right}
+tbody td:nth-child(1){text-align:left;color:#475569;white-space:nowrap}
+tbody tr:hover{background:#f6f9ff}
+.num{font-variant-numeric:tabular-nums}
+.rzc{color:#2f6bff;font-weight:600}.upc{color:#c0392b}
+.note{padding:8px 2px 14px;color:#9aa3b2;font-size:11.5px;line-height:1.7}
+@media(max-width:600px){ body{padding:6px} .card{padding:10px 6px 4px} .seg button{padding:6px 13px;font-size:12px} }
+</style></head><body>
+<div class="card">
+<h2>设计稿 v2 · 单图双轴组合图</h2>
+<div class="desc">两个指标合成<b>一张图</b>：<span style="color:#2f6bff;font-weight:700">左轴（蓝）= 融资余额折线</span>，<span style="color:#c0392b;font-weight:700">右轴（红）= 上涨家数柱状图</span>——左蓝右红、一柱一线双重区分，不会混淆。<br>切 [日|周|月]：蓝线切快照（周=周末、月=月末最后交易日连线），<b>红柱恒为每日</b>；下方明细表<b>同步联动</b>（周/月模式只列周末/月末行的融资余额）。</div>
+<div class="rngbar"><span class="lbl">融资统计粒度：</span>
+<div class="seg" id="segG"><button data-g="d" class="on">日</button><button data-g="w">周</button><button data-g="m">月</button></div>
+</div>
+<div class="legend">
+<span class="lg"><span class="sw swb"></span>融资余额（亿元 · 左轴）</span>
+<span class="lg"><span class="sw swr"></span>上涨家数（家 · 右轴 · 每日）</span>
+</div>
+<svg id="svg" viewBox="0 0 1000 436" width="100%" xmlns="http://www.w3.org/2000/svg"></svg>
+
+<div class="tblsec">
+<div class="tblsec-h"><span>融资余额明细表</span><span class="hint" id="tblhint"></span></div>
+<div class="tblbox"><table>
+<thead><tr><th>日期</th><th>融资余额(亿)</th><th>上涨家数</th></tr></thead>
+<tbody id="tb"></tbody></table></div>
+</div>
+<div class="note">说明：① 红柱（上涨家数）在任何粒度下都按每日画，不做周/月加工；② 周/月粒度时蓝线只连该周期<b>最后一个交易日</b>的快照点；③ 明细表同步只显示对应粒度的行，融资余额数字即周末/月末当日实际值。正式页将保留「融资余额 / 涨跌家数」两个标签页，本设计稿为简化示意（上涨家数列仅供对照）。</div>
+</div>
+<script>
+var DATA = {"D": ["2026-07-24", "2026-07-27", "2026-07-28", "2026-07-29", "2026-07-30", "2026-07-31", "2026-08-03", "2026-08-04", "2026-08-05", "2026-08-06", "2026-08-07", "2026-08-10", "2026-08-11", "2026-08-12", "2026-08-13", "2026-08-14", "2026-08-17", "2026-08-18", "2026-08-19", "2026-08-20", "2026-08-21", "2026-08-24", "2026-08-25", "2026-08-26", "2026-08-27", "2026-08-28", "2026-08-31", "2026-09-01", "2026-09-02", "2026-09-03", "2026-09-04", "2026-09-07", "2026-09-08", "2026-09-09", "2026-09-10", "2026-09-11", "2026-09-14", "2026-09-15", "2026-09-16", "2026-09-17", "2026-09-18", "2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24", "2026-09-28", "2026-09-29", "2026-09-30", "2026-10-08", "2026-10-09", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-26", "2026-10-27"], "RZ": [26666.03, 26766.8, 26469.03, 26213.13, 25845.22, 25891.17, 25803.56, 25923.14, 26045.37, 26155.66, 26225.44, 26366.16, 26379.2, 26473.83, 26497.41, 26478.86, 26656.71, 26708.69, 26411.51, 26395.22, 26333.15, 26290.75, 26283.77, 26250.54, 26364.09, 26302.5, 26354.91, 26369.15, 26315.61, 26275.24, 26092.57, 26207.42, 26226.34, 26194.03, 26171.89, 26025.95, 25976.56, 25982.87, 26075.39, 26098.64, 26086.95, 26229.62, 26263.57, 26253.13, 26078.71, 25816.94, 25796.89, 25404.57, 25445.96, 25300.55, 25252.96, 25162.78, 25055.55, 24741.96, 24597.06, 24533.74, 24512.45, 24502.77, 24269.14, 24026.63, 23970.69, 23809.87], "UP": [554, 5188, 2594, 4248, 1758, 4681, 4001, 3638, 3720, 2785, 2850, 4065, 1608, 4124, 1140, 2395, 4333, 2116, 447, 4089, 2503, 1459, 4233, 2941, 3389, 3006, 3178, 3377, 1535, 1840, 2441, 3160, 3412, 1786, 950, 639, 3124, 1118, 4162, 2571, 4223, 4530, 2365, 1879, 1112, 896, 3459, 2556, 1695, 3293, 1166, 2904, 974, 425, 3282, 2272, 3770, 1973, 533, 4516, 2250, 606]};
+var CD = DATA.D, RZ = DATA.RZ, UP = DATA.UP, N = CD.length;
+var W=1000, ML=70, MR=70, MT=46, PB=402, plotH=PB-MT, pw=W-ML-MR;
+var mode = 'd';
+
+function weekKey(d){
+  var t=new Date(d+"T00:00:00Z"); var day=(t.getUTCDay()+6)%7;
+  t.setUTCDate(t.getUTCDate()-day); return t.toISOString().slice(0,10);
+}
+function snapshotIdx(m){
+  if(m==='d'){ var a=[]; for(var i=0;i<N;i++) if(RZ[i]!==null) a.push(i); return a; }
+  var map={};
+  for(var i=0;i<N;i++){ if(RZ[i]===null) continue;
+    var k = m==='w' ? weekKey(CD[i]) : CD[i].slice(0,7);
+    map[k]=i; }
+  return Object.keys(map).sort().map(function(k){return map[k];});
+}
+function fmtN(v){ return Math.round(v).toLocaleString('zh-CN'); }
+function fmt2(v){ return v.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+var el=document.getElementById('svg');
+function draw(){
+  var idx = snapshotIdx(mode);
+  var rv = idx.map(function(i){return RZ[i];});
+  var lo=Math.min.apply(null,rv), hi=Math.max.apply(null,rv);
+  var pad=(hi-lo)*0.14; if(pad<=0)pad=hi*0.02;
+  var yloL=lo-pad, yhiL=hi+pad;
+  var upmax=Math.max.apply(null,UP)*1.18;
+  function XL(v){return MT+plotH*((yhiL-v)/(yhiL-yloL));}
+  function YR(v){return PB-plotH*(v/upmax);}
+  function XX(i){return ML+pw*i/(N-1);}
+  var g='';
+  var step=Math.max(1,Math.floor((N-1)/6));
+  for(var k=0;k<5;k++){
+    var v=yloL+(yhiL-yloL)*k/4, y=XL(v);
+    g+='<line x1="'+ML+'" y1="'+y.toFixed(1)+'" x2="'+(W-MR)+'" y2="'+y.toFixed(1)+'" stroke="#eef1f6"/>';
+    g+='<text x="'+(ML-8)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end" font-size="12.5" fill="#2f6bff">'+fmtN(v)+'</text>';
+  }
+  for(var k2=1;k2<5;k2++){
+    var v2=upmax*k2/4, y2=YR(v2);
+    g+='<text x="'+(W-MR+8)+'" y="'+(y2+4).toFixed(1)+'" font-size="12.5" fill="#c0392b">'+fmtN(v2)+'</text>';
+  }
+  for(var i0=0;i0<N;i0+=step){
+    g+='<line x1="'+XX(i0).toFixed(1)+'" y1="'+MT+'" x2="'+XX(i0).toFixed(1)+'" y2="'+PB+'" stroke="#f6f8fb"/>';
+    g+='<text x="'+XX(i0).toFixed(1)+'" y="'+(PB+20)+'" text-anchor="middle" font-size="12" fill="#8b95a7">'+CD[i0]+'</text>';
+  }
+  g+='<line x1="'+ML+'" y1="'+PB+'" x2="'+(W-MR)+'" y2="'+PB+'" stroke="#c7cdda" stroke-width="1.2"/>';
+  g+='<line x1="'+ML+'" y1="'+MT+'" x2="'+ML+'" y2="'+PB+'" stroke="#bcd0f7" stroke-width="1.4"/>';
+  g+='<line x1="'+(W-MR)+'" y1="'+MT+'" x2="'+(W-MR)+'" y2="'+PB+'" stroke="#eec9c9" stroke-width="1.4"/>';
+  g+='<text x="14" y="'+(MT-24)+'" font-size="13" font-weight="700" fill="#2f6bff">← 融资余额（亿元 · 左轴）</text>';
+  g+='<text x="'+(W-14)+'" y="'+(MT-24)+'" text-anchor="end" font-size="13" font-weight="700" fill="#c0392b">上涨家数（家 · 右轴）→</text>';
+  var bw=Math.max(3,pw/N*0.55), bars='';
+  for(var i1=0;i1<N;i1++){
+    bars+='<rect x="'+(XX(i1)-bw/2).toFixed(1)+'" y="'+YR(UP[i1]).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(PB-YR(UP[i1])).toFixed(1)+'" fill="#e5484d" opacity="0.82" rx="1"/>';
+  }
+  g+=bars;
+  var seg='';
+  for(var q=0;q<idx.length;q++){ var i2=idx[q];
+    seg+=(q?' ':'')+XX(i2).toFixed(1)+','+XL(RZ[i2]).toFixed(1); }
+  g+='<polyline points="'+seg+'" fill="none" stroke="#2f6bff" stroke-width="2.6" stroke-linejoin="round"/>';
+  for(var q2=0;q2<idx.length;q2++){ var i3=idx[q2];
+    g+='<circle cx="'+XX(i3).toFixed(1)+'" cy="'+XL(RZ[i3]).toFixed(1)+'" r="3.2" fill="#2f6bff" stroke="#fff" stroke-width="1.2"/>'; }
+  el.innerHTML=g;
+  renderTable(idx);
+}
+function renderTable(idx){
+  var h='', show = idx.slice(-30).reverse();
+  for(var q=0;q<show.length;q++){ var i=show[q];
+    h+='<tr><td>'+CD[i]+'</td><td class="num rzc">'+(RZ[i]!==null?fmt2(RZ[i]):'—')+'</td><td class="num upc">'+UP[i]+'</td></tr>'; }
+  document.getElementById('tb').innerHTML=h;
+  var cap={d:'每日',w:'每周最后一个交易日（周末快照）',m:'每月最后一个交易日（月末快照）'}[mode];
+  document.getElementById('tblhint').textContent='当前粒度：'+cap+' · 显示最近30行 / 共'+idx.length+'行';
+}
+document.querySelectorAll('#segG button').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('#segG button').forEach(function(x){x.classList.remove('on');});
+    b.classList.add('on'); mode=b.dataset.g; draw();
+  });
+});
+draw();
+</script>
+</body></html>
