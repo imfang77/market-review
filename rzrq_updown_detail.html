@@ -434,5 +434,11 @@ renderTables();
 renderMTab();
 filterTable('tbody-u',RANGES_U[DEF]);
 applySort('tbody-u');
+// 标记卡片已读（供 5-20日主线分析页判断"有更新未查看"红点）
+try{
+  fetch('_rzrq_meta.json?t='+Date.now()).then(function(r){return r.json();}).then(function(m){
+    if(m&&m.builtAt) localStorage.setItem('rzrq_card_lastviewed', m.builtAt);
+  }).catch(function(){});
+}catch(e){}
 </script>
 </body></html>
