@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>2026-10-29 周四 A股复盘  · 恐贪指数 27 · 中性</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:#eef1f5;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#2d3436}
+  .card{max-width:480px;margin:14px auto;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.08)}
+  .hd{background:linear-gradient(135deg,#0984e3,#6c5ce7);color:#fff;padding:18px 20px}
+  .hd h1{margin:0;font-size:clamp(16px,5vw,21px);font-weight:800;white-space:nowrap;letter-spacing:-.3px;overflow:hidden}
+  .ct-fg{font-size:11px;font-weight:600;color:rgba(255,255,255,.92);margin-left:6px}
+  .sec{padding:16px 18px;border-bottom:1px solid #f0f1f3}
+  .sec:last-child{border-bottom:none}
+  .sec-h{font-size:14px;font-weight:800;color:#0984e3;margin:0 0 10px;display:flex;align-items:center;gap:6px}
+  .sec-h::before{content:"";width:4px;height:14px;background:#0984e3;border-radius:2px}
+  .gauge-wrap{background:#f8f9fb;border-radius:12px;padding:6px 0}
+  ul.concl{margin:0;padding-left:18px;font-size:13px;line-height:1.7}
+  ul.concl li{margin:4px 0}
+  .seg{margin:10px 0}
+  .seg-h{font-size:13px;font-weight:800;color:#2d3436;background:#eef3fb;border-left:4px solid #0984e3;padding:5px 10px;border-radius:4px;margin-bottom:8px}
+  .ml{background:#f8f9fb;border-radius:10px;padding:9px 10px;margin:8px 0}
+  .ml-name{font-size:14px;font-weight:700;margin-bottom:4px;color:#c0392b}
+  .ml-meta{font-size:11px;color:#636e72;font-weight:500;margin-left:6px}
+  .ml-desc{font-size:11.5px;line-height:1.55;color:#4b5563;background:#fff;border-radius:8px;padding:7px 9px;margin:5px 0}
+  .ml-seg{margin:4px 0;line-height:1.6}
+  .seg-dot{color:#2d3436;font-weight:700;margin-right:5px}
+  .seg-lab{color:#2d3436;font-weight:700;margin-right:1px}
+  .ld-tbl{width:100%;border-collapse:collapse;margin:7px 0 2px;font-size:11px;table-layout:fixed}
+  .ld-tbl th,.ld-tbl td{border:1px solid #e3e8ef;padding:4px 3px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ld-tbl th{background:#eef3fb;color:#0984e3;font-weight:700}
+  .ld-tbl td.ld-cat{background:#f3f7fd;color:#2d3436;font-weight:600;text-align:left;white-space:nowrap}
+  .ld-empty{font-size:11px;color:#b2bec3;text-align:center;padding:6px 0}
+  .tech-sub{font-size:12.5px;font-weight:800;color:#2d3436;margin:9px 0 3px;text-align:center}
+  .mini-tbl{width:100%;border-collapse:collapse;margin:4px 0 8px;font-size:12px}
+  .mini-tbl th,.mini-tbl td{border:1px solid #e3e8ef;padding:5px 7px;white-space:nowrap}
+  .mini-tbl th{background:#eef3fb;color:#0984e3;font-weight:700;font-size:11.5px;text-align:center}
+  .mini-tbl td{text-align:center}
+  .mini-tbl td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+  .mini-tbl td:first-child{font-weight:600;color:#2d3436}
+  .mini-tbl .subcode{font-size:10px;color:#636e72;font-weight:500}
+  ul.tech{margin:0;padding-left:16px;font-size:12.5px;line-height:1.75}
+  .ft{padding:14px 18px;background:#fafbfc;font-size:12px;color:#636e72;line-height:1.8;text-align:center}
+  .ft a{color:#0984e3;text-decoration:none;font-weight:700;font-size:13px}
+  .fg-card{background:#f8f9fb;border-radius:10px;padding:10px 12px;margin:2px 0}
+  .fg-top{display:flex;align-items:baseline;gap:8px}
+  .fg-num{font-size:26px;font-weight:800;color:#2d3436;line-height:1}
+  .fg-level{font-size:13px;font-weight:700;color:#0984e3}
+  .fg-desc{font-size:11px;color:#636e72;margin-top:6px;line-height:1.5}
+  .empty{color:#b2bec3;font-size:13px;text-align:center;padding:14px}
+  /* 市场脉搏：融资余额 / 涨跌家数（各一行，手机不折行） */
+  .pulse{background:#f8f9fb;border:1px solid #eef1f5;border-radius:10px;padding:8px 10px;margin:10px 0 2px}
+  .pl-row{display:flex;flex-wrap:nowrap;align-items:baseline;white-space:nowrap;overflow:hidden;font-size:12px;line-height:1.95;font-variant-numeric:tabular-nums}
+  .pl-k{color:#636e72;font-size:11.5px;font-weight:700;margin-right:4px;flex-shrink:0}
+  .pl-v{font-size:13px;font-weight:800;color:#2d3436;font-variant-numeric:tabular-nums;margin-right:2px}
+  .pl-sep{color:#dfe6e9;margin:0 4px;font-weight:400}
+  .pl-x{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+  .pl-x.up{color:#d63031}
+  .pl-x.down{color:#00b894}
+  .pl-x.flat{color:#b2bec3}
+  .pl-x.mut{color:#636e72;font-weight:500}
+  .pl-dt{color:#b2bec3;font-size:11px;font-variant-numeric:tabular-nums;margin-left:auto}
+  .pl-ar{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;margin-left:3px}
+  .pl-ar.up{color:#d63031}
+  .pl-ar.down{color:#00b894}
+  .pl-ar.flat{color:#b2bec3}
+</style></head>
+<body>
+<div class="card">
+  <div class="hd">
+    <h1>2026-10-29 周四 A股复盘<span class="ct-fg"> · 恐贪指数 27 · 中性</span></h1>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h">当日核心结论</div>
+    <ul class="concl"><li>市场：涨跌 756/4400 · 涨停 39只 · 成交 1.56万亿</li><li>三大指数分化，沪指 -0.82% 报 3651.43，深成指 -2.92%、创业板指 -4.45%、科创50 -4.27%、中证全指 -2.07%</li><li>两市成交约 1.56万亿，市场成交维持高位</li><li>能源 / 金融 领涨，当日主线资金主要集中于游戏等方向</li></ul>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h">5-20日主线（核心 · 9 · 通达信401板块口径）</div>
+    <div class="seg">
+    <div class="seg-h">5日主线（按5日涨幅）</div>
+    <div class="ml">
+      <div class="ml-name">纺织机械 <span class="ml-meta">5日 +11.33%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：杰克科技（中游·专用设备）；核心梯队：慈星股份（中游·专用设备）、方正电机（中游·电机）、大豪科技（中游·工控设备）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：短周期反弹性质（仅5日向上，更长周期未共振）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +11.36 个百分点，核心个股近5日累计成交约 39 亿，领涨股 杰克科技 近5日涨 +46.26%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>杰克科技</td><td>大豪科技</td><td>慈星股份</td><td>泰坦股份</td><td>卓郎智能</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>杰克科技</td><td>慈星股份</td><td>方正电机</td><td>上工申贝</td><td>泰坦股份</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>杰克科技</td><td>慈星股份</td><td>方正电机</td><td>大豪科技</td><td>卓郎智能</td></tr>
+    </tbody>
+  </table>
+    </div><div class="ml">
+      <div class="ml-name">石油开采 <span class="ml-meta">5日 +7.16%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：海油发展（中游·油服工程）、中国石油（上游·油气资源）；核心梯队：中海油服（中游·油服工程）、博迈科（中游·油服工程）、首华燃气（上游·油气资源）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +7.19 个百分点，核心个股近5日累计成交约 61 亿，领涨股 海油发展 近5日涨 +10.71%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>中国石油</td><td>中国海油</td><td>中海油服</td><td>海油发展</td><td>广汇能源</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>中国石油</td><td>中国海油</td><td>广汇能源</td><td>通源石油</td><td>海油发展</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>海油发展</td><td>中海油服</td><td>中国石油</td><td>博迈科</td><td>首华燃气</td></tr>
+    </tbody>
+  </table>
+    </div><div class="ml">
+      <div class="ml-name">石油 <span class="ml-meta">5日 +6.44%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：统一股份（上游·石化原料）、中国石油（上游·油气资源）；核心梯队：海油发展（中游·油服工程）、中海油服（中游·油服工程）、泰山石油（下游·石油贸易）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 3（前 0.7%），相对中证全指跑赢 +6.47 个百分点，核心个股近5日累计成交约 92 亿，领涨股 统一股份 近5日涨 +13.53%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>中国石油</td><td>中国海油</td><td>中国石化</td><td>恒力石化</td><td>中海油服</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>中国石油</td><td>中国石化</td><td>中国海油</td><td>博汇股份</td><td>广汇能源</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>统一股份</td><td>海油发展</td><td>中海油服</td><td>中国石油</td><td>泰山石油</td></tr>
+    </tbody>
+  </table>
+    </div>
+  </div><div class="seg">
+    <div class="seg-h">10日主线（按10日涨幅）</div>
+    <div class="ml">
+      <div class="ml-name">石油开采 <span class="ml-meta">10日 +7.72%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：海油发展（中游·油服工程）、中国石油（上游·油气资源）；核心梯队：中海油服（中游·油服工程）、博迈科（中游·油服工程）、首华燃气（上游·油气资源）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 3（前 0.7%），相对中证全指跑赢 +8.45 个百分点，核心个股近5日累计成交约 61 亿，领涨股 海油发展 近5日涨 +10.71%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>中国石油</td><td>中国海油</td><td>中海油服</td><td>海油发展</td><td>广汇能源</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>中国石油</td><td>中国海油</td><td>广汇能源</td><td>通源石油</td><td>海油发展</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>中国石油</td><td>海油发展</td><td>博迈科</td><td>中海油服</td><td>*ST准油</td></tr>
+    </tbody>
+  </table>
+    </div><div class="ml">
+      <div class="ml-name">石油 <span class="ml-meta">10日 +6.72%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：统一股份（上游·石化原料）、中国石油（上游·油气资源）；核心梯队：海油发展（中游·油服工程）、中海油服（中游·油服工程）、泰山石油（下游·石油贸易）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 4（前 1.0%），相对中证全指跑赢 +7.73 个百分点，核心个股近5日累计成交约 92 亿，领涨股 统一股份 近5日涨 +13.53%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>中国石油</td><td>中国海油</td><td>中国石化</td><td>恒力石化</td><td>中海油服</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>中国石油</td><td>中国石化</td><td>中国海油</td><td>博汇股份</td><td>广汇能源</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>博汇股份</td><td>统一股份</td><td>中国石油</td><td>海油发展</td><td>博迈科</td></tr>
+    </tbody>
+  </table>
+    </div><div class="ml">
+      <div class="ml-name">银行 <span class="ml-meta">10日 +3.68%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：建设银行（金融地产·银行）、招商银行（金融地产·银行）、青岛银行（金融地产·银行）；核心梯队：瑞丰银行（金融地产·银行）、江阴银行（金融地产·银行）、苏州银行（金融地产·银行）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 8（前 2.0%），相对中证全指跑赢 +3.69 个百分点，核心个股近5日累计成交约 197 亿，领涨股 青岛银行 近5日涨 +11.25%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>建设银行</td><td>工商银行</td><td>农业银行</td><td>中国银行</td><td>招商银行</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>招商银行</td><td>工商银行</td><td>交通银行</td><td>农业银行</td><td>中国银行</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>青岛银行</td><td>苏州银行</td><td>兴业银行</td><td>瑞丰银行</td><td>交通银行</td></tr>
+    </tbody>
+  </table>
+    </div>
+  </div><div class="seg">
+    <div class="seg-h">20日主线（按20日涨幅）</div>
+    <div class="ml">
+      <div class="ml-name">石油开采 <span class="ml-meta">20日 +23.57%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：海油发展（中游·油服工程）、中国石油（上游·油气资源）；核心梯队：中海油服（中游·油服工程）、博迈科（中游·油服工程）、首华燃气（上游·油气资源）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +14.13 个百分点，核心个股近5日累计成交约 61 亿，领涨股 海油发展 近5日涨 +10.71%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>中国石油</td><td>中国海油</td><td>中海油服</td><td>海油发展</td><td>广汇能源</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>中国石油</td><td>中国海油</td><td>广汇能源</td><td>通源石油</td><td>海油发展</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>中国石油</td><td>博迈科</td><td>海油发展</td><td>中海油服</td><td>中国海油</td></tr>
+    </tbody>
+  </table>
+    </div><div class="ml">
+      <div class="ml-name">石油 <span class="ml-meta">20日 +18.72%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：统一股份（上游·石化原料）、中国石油（上游·油气资源）；核心梯队：海油发展（中游·油服工程）、中海油服（中游·油服工程）、泰山石油（下游·石油贸易）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +13.41 个百分点，核心个股近5日累计成交约 92 亿，领涨股 统一股份 近5日涨 +13.53%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>中国石油</td><td>中国海油</td><td>中国石化</td><td>恒力石化</td><td>中海油服</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>中国石油</td><td>中国石化</td><td>中国海油</td><td>博汇股份</td><td>广汇能源</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>博汇股份</td><td>中国石油</td><td>博迈科</td><td>海油发展</td><td>中海油服</td></tr>
+    </tbody>
+  </table>
+    </div><div class="ml">
+      <div class="ml-name">电信运营 <span class="ml-meta">20日 +10.01%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：中国移动（下游·电信运营）、中国卫通（中游·航天装备）；核心梯队：中国电信（下游·电信运营）、中国联通（下游·电信运营）、线上线下（下游·电信运营）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 3（前 0.7%），相对中证全指跑赢 +10.65 个百分点，核心个股近5日累计成交约 42 亿，领涨股 中国卫通 近5日涨 +4.90%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>中国移动</td><td>中国电信</td><td>中国联通</td><td>中国卫通</td><td>线上线下</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>中国卫通</td><td>中国移动</td><td>中国电信</td><td>中国联通</td><td>线上线下</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>中国电信</td><td>中国联通</td><td>中国移动</td><td>中国卫通</td><td>线上线下</td></tr>
+    </tbody>
+  </table>
+    </div>
+  </div>
+    <div class="pulse"><div class="pl-row"><span class="pl-k">两融</span><span class="pl-x mut">待次日更新</span></div><div class="pl-row">
+      <span class="pl-k">涨跌</span>
+      <span class="pl-x up">779</span><span class="pl-sep">/</span>
+      <span class="pl-x flat">61</span><span class="pl-sep">/</span>
+      <span class="pl-x down">4728</span><span class="pl-sep">·</span>
+      <span class="pl-x mut">总5568</span>
+    </div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h">技术面选股 · 当日新增</div>
+    <div class="tech-sub">趋势突破（今日 8 只）</div>
+    <table class="mini-tbl"><thead><tr><th>名称</th><th>代码</th><th>涨幅</th><th>综合评分</th></tr></thead><tbody><tr><td>中国移动</td><td>600941</td><td class="num" style="color:#d63031">+2.10%</td><td class="num">80.07</td></tr><tr><td>中国石化</td><td>600028</td><td class="num" style="color:#d63031">+2.55%</td><td class="num">80.46</td></tr><tr><td>京沪高铁</td><td>601816</td><td class="num" style="color:#d63031">+1.17%</td><td class="num">73.90</td></tr><tr><td>新产业</td><td>300832</td><td class="num" style="color:#d63031">+3.59%</td><td class="num">87.22</td></tr><tr><td>达实智能</td><td>002421</td><td class="num" style="color:#d63031">+3.37%</td><td class="num">84.98</td></tr><tr><td>文投控股</td><td>600715</td><td class="num" style="color:#d63031">+10.19%</td><td class="num">98.67</td></tr><tr><td>东方海洋</td><td>002086</td><td class="num" style="color:#d63031">+9.83%</td><td class="num">88.43</td></tr><tr><td>龙江交通</td><td>601188</td><td class="num" style="color:#d63031">+10.06%</td><td class="num">89.73</td></tr></tbody></table>
+    <div class="tech-sub">净利润断层（新增 0 只）</div>
+    <div class="ld-empty">净利润断层 今日无新增</div>
+    <div class="tech-sub">ETF 5日最强（前 5）</div>
+    <table class="mini-tbl"><thead><tr><th>ETF名称</th><th>ETF代码</th><th>5日涨幅</th></tr></thead><tbody><tr><td>机器人ETF景顺</td><td>sz159559</td><td class="num" style="color:#d63031">+6.30%</td></tr><tr><td>机器人ETF鹏华</td><td>sz159278</td><td class="num" style="color:#d63031">+6.02%</td></tr><tr><td>机器人ETF易方达</td><td>sz159530</td><td class="num" style="color:#d63031">+5.93%</td></tr><tr><td>机器人ETF富国</td><td>sz159272</td><td class="num" style="color:#d63031">+5.85%</td></tr><tr><td>能源化工ETF建信</td><td>sz159981</td><td class="num" style="color:#d63031">+4.81%</td></tr></tbody></table>
+  </div>
+
+  <div class="ft">
+    📎 <a href="https://imfang77.github.io/market-review/mainline_concept-20261029.html">完整主线报告 ›</a> ｜ <a href="https://imfang77.github.io/market-review/index.html">详情请看复盘中心</a>
+  </div>
+</div>
+</body></html>
