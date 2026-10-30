@@ -104,6 +104,9 @@
   .idx-table { table-layout:auto; width:max-content; min-width:100%; }
   .idx-table th { white-space:nowrap; }
   .idx-table td { white-space:nowrap; }
+  .idx-table th:first-child, .idx-table td:first-child { position:sticky; left:0; z-index:1; box-shadow: inset -1px 0 0 #dee2e6; }
+  .idx-table th:first-child { background:#f8f9fa; }
+  .idx-table td:first-child { background:#fff; font-weight:600; }
   th, td { padding:8px 10px; text-align:center; border-bottom:1px solid #f1f3f5; vertical-align:middle; }
   th { white-space:normal; word-break:break-word; }
   td { white-space:nowrap; }

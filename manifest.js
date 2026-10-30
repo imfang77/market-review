@@ -13,9 +13,9 @@ window.REPORTS = [
       "reviewSummary": "沪指-0.82% 深成指-2.92% 创业板指-4.45% 沪深300-1.03% 中证全指-2.07%；两市成交约1.56万亿，涨跌家数756/4400(跌多涨少)；恐贪指数27(恐惧)",
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页最新20261029（G1趋势突破/净利润断层G2/跳空缺口G3/ETF五日均强）；基本面页数据截至最新季报；RPS选股页数据日期20261029",
-      "mainlineFile": "mainline-20261029.html?v=1793270207",
+      "mainlineFile": "mainline-20261029.html?v=1793347980",
       "mainlineSummary": "5日主线:纺织机械/石油开采/石油｜10日主线:石油开采/石油/银行｜20日主线:石油开采/石油/电信运营｜融资余额 23,567.38亿 · ▼262.80亿｜涨跌家数 779/61/4728 · 总5568",
-      "mainlineConceptFile": "mainline_concept-20261029.html?v=1793270207",
+      "mainlineConceptFile": "mainline_concept-20261029.html?v=1793347980",
       "conceptSummary": "5日主线:纺织机械/石油开采/石油｜10日主线:石油开采/石油/银行｜20日主线:石油开采/石油/电信运营｜融资余额 23,567.38亿 · ▼262.80亿｜涨跌家数 779/61/4728 · 总5568",
       "previewFile": "preview-20261029.html?v=1793337728"
     },
