@@ -81,7 +81,7 @@
 
   <div class="container">
     <div class="section-title">融资余额 · 涨跌家数</div>
-    <a class="report-card" href="rzrq_updown_detail.html">
+    <a class="report-card" href="rzrq_updown_detail.html" id="rzrq-card-link">
       <div class="card-header">
         <span class="date-text">融资余额 · 涨跌家数<span class="reddot" id="rzrq-reddot" title="卡片页有更新，未查看"></span></span>
         <span class="arrow">&#8599;</span>
@@ -181,6 +181,8 @@ var _hmt = _hmt || [];
 (function(){
   try{
     fetch('_rzrq_meta.json?v='+Date.now()).then(function(r){return r.json();}).then(function(m){
+      var link=document.getElementById('rzrq-card-link');
+      if(link && m && m.builtAt){ link.href='rzrq_updown_detail.html?v='+encodeURIComponent(m.builtAt); }
       if(!m||!m.builtAt) return;
       var lv=localStorage.getItem('rzrq_card_lastviewed');
       if(lv!==m.builtAt){
