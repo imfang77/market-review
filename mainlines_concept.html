@@ -70,9 +70,9 @@
 
   <div class="container">
     <div class="section-title">板块 RPS 分析</div>
-    <a class="report-card" href="board_rps.html?v=20261030a">
+    <a class="report-card" href="board_rps.html?v=20261030a" id="rps-card-link">
       <div class="card-header">
-        <span class="date-text">通达信板块 · 板块RPS 5/10/20</span>
+        <span class="date-text">通达信板块 · 板块RPS 5/10/20<span class="reddot" id="rps-reddot" title="RPS数据有更新，未查看"></span></span>
         <span class="arrow">&#8599;</span>
       </div>
       <div class="summary">共401 个板块，含通达信二级行业、三级细分行业和概念板块</div>
@@ -187,6 +187,21 @@ var _hmt = _hmt || [];
       var lv=localStorage.getItem('rzrq_card_lastviewed');
       if(lv!==m.builtAt){
         var d=document.getElementById('rzrq-reddot');
+        if(d) d.style.display='inline-block';
+      }
+    }).catch(function(){});
+  }catch(e){}
+})();
+// 板块RPS 卡片：RPS 数据有更新未查看 → 标题后红点
+(function(){
+  try{
+    fetch('_rps_meta.json?v='+Date.now()).then(function(r){return r.json();}).then(function(m){
+      var link=document.getElementById('rps-card-link');
+      if(link && m && m.builtAt){ link.href='board_rps.html?v='+encodeURIComponent(m.builtAt); }
+      if(!m||!m.builtAt) return;
+      var lv=localStorage.getItem('rps_card_lastviewed');
+      if(lv!==m.builtAt){
+        var d=document.getElementById('rps-reddot');
         if(d) d.style.display='inline-block';
       }
     }).catch(function(){});

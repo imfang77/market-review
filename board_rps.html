@@ -233,6 +233,16 @@ tr.three-yes:hover > td { background: #ffe8cc; }
 </style>
 <!-- ECharts 改为懒加载（首屏提速）：首次打开走势/K线弹窗时才加载 _echarts.min.js -->
 </head>
+<script>
+/* 卡片页"未读更新"机制：打开本页即把 _rps_meta.json 的 builtAt 记为已读 */
+(function(){
+  try{
+    fetch('_rps_meta.json?v='+Date.now()).then(function(r){return r.json();}).then(function(m){
+      if(m && m.builtAt){ try{ localStorage.setItem('rps_card_lastviewed', m.builtAt); }catch(e){} }
+    }).catch(function(){});
+  }catch(e){}
+})();
+</script>
 <body>
 <div class="header">
   <a class="back" href="mainlines_concept.html">&#8592; 返回</a>
