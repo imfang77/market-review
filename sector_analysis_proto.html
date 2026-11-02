@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>板块三季报深度分析（式样预览）</title>
+<style>
+* { box-sizing: border-box; }
+body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:#f5f6f8; color:#1a1a2e; }
+.enter-strip { background:#fffdf0; border-bottom:2px solid #f0c850; padding:8px 20px; font-size:13px; color:#6b5200; display:flex; align-items:center; gap:10px; }
+.enter-strip b { color:#1a237e; }
+.enter-strip a { color:#1565c0; font-weight:700; text-decoration:none; border:1px solid #b3d4f5; background:#eef4ff; padding:4px 12px; border-radius:8px; }
+.enter-strip a:hover { background:#e3edff; }
+.enter-strip .tag { font-size:11px; color:#888; }
+.header { background:linear-gradient(135deg,#1a237e,#283593); color:#fff; padding:18px 20px; }
+.header h1 { margin:0 0 4px; font-size:20px; }
+.header .sub { font-size:12px; opacity:.85; line-height:1.6; }
+.asof { display:inline-block; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.35); border-radius:10px; padding:2px 10px; font-size:11px; margin-top:6px; }
+.note { padding:8px 20px 10px; font-size:12px; color:#555; background:#fffdf5; border-bottom:1px solid #f0e6c8; line-height:1.8; }
+.note b { color:#3d3d3d; }
+.note .k { color:#1565c0; font-weight:700; }
+.toolbar { display:flex; flex-wrap:wrap; gap:14px; align-items:center; padding:10px 20px; background:#fafbff; border-bottom:1px solid #e3e6ea; font-size:13px; }
+.toolbar .grp { display:flex; gap:6px; align-items:center; }
+.toolbar label { color:#495057; font-weight:600; }
+.toolbar select { padding:5px 10px; border:1px solid #ced4da; border-radius:8px; font-size:13px; background:#fff; }
+.toolbar .chk { display:flex; align-items:center; gap:5px; cursor:pointer; user-select:none; }
+.toolbar .chk input { width:15px; height:15px; }
+.toolbar .info { margin-left:auto; color:#777; font-size:12px; }
+.view-btn { padding:5px 14px; border:1px solid #b3d4f5; background:#eef4ff; border-radius:8px; font-size:13px; cursor:pointer; color:#1a3a8a; font-weight:600; }
+.view-btn.active { background:#1a237e; color:#fff; border-color:#1a237e; }
+.wrap { padding:14px 12px 40px; overflow-x:auto; }
+table { border-collapse:collapse; width:100%; min-width:3400px; font-size:12px; background:#fff; }
+th,td { border:1px solid #e3e6ea; padding:6px 8px; text-align:left; }
+th { background:#eef1f8; position:sticky; top:0; user-select:none; vertical-align:middle; font-size:11.5px; }
+th .g { font-size:9px; font-weight:700; line-height:1.1; margin-bottom:2px; }
+th .m { font-size:11px; line-height:1.2; }
+.g-perf{color:#1565c0;} .g-qual{color:#6a1b9a;} .g-move{color:#e65100;} .g-sig{color:#2e7d32;}
+td { white-space:nowrap; }
+td.num { text-align:right; font-variant-numeric:tabular-nums; }
+.up { color:#c62828; }      /* 涨=红 */
+.down { color:#2e7d32; }    /* 跌=绿 */
+td.cnt { color:#888; font-size:11px; }
+.rank { font-weight:700; color:#1a237e; }
+.score-bar { display:inline-block; height:7px; border-radius:4px; background:#4263eb; vertical-align:middle; margin-right:5px; }
+#tbl th:nth-child(1), #tbl td:nth-child(1){ position:sticky; left:0; z-index:3; background:#fff; white-space:nowrap; max-width:180px; }
+#tbl thead th:nth-child(1){ z-index:5; background:#eef1f8; }
+#tbl tbody tr { cursor:pointer; }
+#tbl tbody tr:hover td { background:#f3f7ff; }
+#tbl tbody tr:hover td:nth-child(1){ background:#eef4ff; }
+.badge { display:inline-block; padding:1px 8px; border-radius:9px; font-size:10px; font-weight:700; }
+.badge-diff { background:#fff0e0; color:#b25e00; border:1px solid #f0c488; }
+.badge-hot { background:#fde8e8; color:#c62828; border:1px solid #f0b3b3; }
+.badge-cold { background:#e8f5ea; color:#2e7d32; border:1px solid #b3dfc0; }
+.legend { display:flex; flex-wrap:wrap; gap:14px; padding:8px 20px; font-size:11px; color:#666; background:#fff; border-bottom:1px solid #e3e6ea; }
+.legend .li { display:flex; align-items:center; gap:5px; }
+.legend .sw { width:12px; height:12px; border-radius:3px; display:inline-block; }
+.group-tag { font-size:11px; font-weight:700; padding:1px 8px; border-radius:6px; }
+.gt-perf{background:#e7f0ff;color:#1565c0;} .gt-qual{background:#f3e8ff;color:#6a1b9a;} .gt-move{background:#fff0e0;color:#e65100;} .gt-sig{background:#e8f5ea;color:#2e7d32;}
+.footer { padding:16px 20px; font-size:12px; color:#777; text-align:center; }
+.foot-tip { color:#b8860b; }
+.modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:100; }
+.modal.open { display:flex; align-items:flex-start; justify-content:center; padding:40px 16px; overflow:auto; }
+.modal-card { background:#fff; border-radius:12px; max-width:1000px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,.3); }
+.modal-head { display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid #e3e6ea; }
+.modal-head h3 { margin:0; font-size:16px; color:#1a237e; }
+.modal-head .cnt { font-size:12px; color:#888; }
+.modal-head .x { margin-left:auto; cursor:pointer; font-size:20px; color:#999; border:none; background:none; }
+.modal-head .x:hover { color:#c62828; }
+.modal-body { padding:10px 18px 18px; }
+.modal-body .hint { font-size:12px; color:#666; margin:4px 0 10px; }
+.drill-table { width:100%; border-collapse:collapse; font-size:12px; }
+.drill-table th, .drill-table td { border:1px solid #e3e6ea; padding:5px 8px; text-align:left; }
+.drill-table th { background:#eef1f8; position:sticky; top:0; }
+.drill-table td.num { text-align:right; }
+.drill-table .code { color:#888; font-size:10px; }
+.drill-401 { margin-top:14px; font-size:12px; color:#555; }
+.drill-401 b { color:#1a237e; }
+.drill-401 .chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+.drill-401 .chip { background:#eef3ff; border:1px solid #b9ccf5; color:#1a3a8a; border-radius:12px; padding:2px 10px; font-size:11px; }
+@media (max-width:700px){
+  .header h1{font-size:17px;} .toolbar{font-size:12px;} table{font-size:11px;}
+  .toolbar .info{display:none;}
+}
+</style></head><body>
+
+<!-- 入口条：预览 yjyg.html 顶部将新增的链接（真实上线时插入到 yjyg.html 的 <div class="summary"> 上方） -->
+<div class="enter-strip">
+  <span>📊 <b>正式报告 / 业绩预告</b> 顶部将新增入口 →</span>
+  <a href="sector_analysis.html">板块 · 2026三季报深度分析</a>
+  <span class="tag">（点此进入板块分析页；本红条仅预览用，上线时不显示）</span>
+</div>
+
+<div class="header">
+  <h1>板块 · 2026 三季报深度分析</h1>
+  <div class="sub">以<b>财报汇总数据为核心</b>：板块营收/净利润/扣非的<b>合计规模（可求和）</b>与<b>基于汇总的同比·环比增速</b>，叠加 ROE / 毛利率 / 现金流含量 / 股息率的<b>板块汇总值</b>；量价走势作为辅助并列。顶部可切换<b>申万一级(31)</b> 或 <b>题材板块(401)</b> 两种归口。<br>
+  下钻：点任意行 → 查看该板块成分股排序 ＋ 所属另一口径板块分布</div>
+  <span class="asof">数据截至 2026-10-30（示例预览版，数字为占位）</span>
+</div>
+
+<div class="note">
+  <b>口径说明：</b>① <span class="k">财报维度</span>取自<b>沪深 A 股（不含北交）已披露三季报公司</b>，按所选口径归口；规模列（营收合计/净利润合计/扣非合计）为<b>板块内成分股绝对额求和</b>，增速列为<b>按汇总值加权的同比/环比</b>（如板块营收同比 = (Σ本期营收 − Σ去年同期营收) / Σ去年同期营收），比率列（ROE/毛利率/现金流/股息率）为<b>Σ分子 / Σ分母</b>的板块汇总口径，<b>均非中位数</b>；② <span class="k">量价维度</span>——申万一级取<b>东方财富申万一级指数原值（全市场含北交）</b>，题材板块(401)取<b>本机 vipdoc 通达信板块指数(880xxx)</b>，均不加工；③ <span class="k">回撤</span>——年初至今回撤 = (今收 − 年内最高收) / 年内最高收；峰值回撤 = (今收 − 统计区间最高收) / 统计区间最高收；④ 综合评分 = 业绩强度×<b id="wPerf">0.4</b> ＋ 走势强度×<b id="wUp">0.4</b> ＋ 回撤可控×<b id="wDd">0.2</b>（权重为顶部常量，可微调）；⑤ 预期差 = 加速占比≥<b id="dAccel">50</b>% 且 年初至今涨幅&lt;<b id="dChg">30</b>%。
+</div>
+
+<div class="toolbar">
+  <div class="grp"><label>分析视角</label>
+    <button class="view-btn active" data-view="sw">申万一级(31)</button>
+    <button class="view-btn" data-view="bk">题材板块(401)</button>
+  </div>
+  <div class="grp"><label>排序</label>
+    <select id="sortSel">
+      <option value="score">综合评分（降）</option>
+      <option value="npSum">净利润合计（降）</option>
+      <option value="revSum">营收合计（降）</option>
+      <option value="dedSum">扣非合计（降）</option>
+      <option value="npYoy">归母净利润同比（降）</option>
+      <option value="revYoy">营收同比（降）</option>
+      <option value="dedYoy">扣非净利润同比（降）</option>
+      <option value="accel">加速增长占比（降）</option>
+      <option value="bo">净利润断层数（降）</option>
+      <option value="roeAgg">TTM-ROE汇总（降）</option>
+      <option value="divAgg">股息率汇总（降）</option>
+      <option value="ytd">年初至今涨幅（降）</option>
+      <option value="ytdDd">年初至今回撤（升，回撤小优先）</option>
+      <option value="peakDd">峰值回撤（升，回撤小优先）</option>
+      <option value="name">名称</option>
+    </select>
+  </div>
+  <label class="chk"><input type="checkbox" id="diffOnly"> 仅看「预期差」板块</label>
+  <span class="info" id="info"></span>
+</div>
+
+<div class="legend">
+  <span class="li"><span class="group-tag gt-perf">业绩汇总</span>营收/净利润/扣非 合计规模·加权同比·环比</span>
+  <span class="li"><span class="group-tag gt-qual">质量汇总</span>ROE·毛利率·现金流·股息率（Σ分子/Σ分母）</span>
+  <span class="li"><span class="group-tag gt-move">走势</span>年初至今/20日/60日·最大涨幅·年初至今回撤·峰值回撤</span>
+  <span class="li"><span class="group-tag gt-sig">信号</span>加速·断层·景气改善</span>
+  <span class="li"><span class="sw" style="background:#c62828"></span>涨幅正(红)</span>
+  <span class="li"><span class="sw" style="background:#2e7d32"></span>涨幅负(绿)</span>
+  <span class="li"><span class="sw" style="background:#fff0e0;border:1px solid #f0c488"></span>预期差：加速高 且 涨幅偏小</span>
+  <span class="li"><span class="sw" style="background:#fde8e8;border:1px solid #f0b3b3"></span>高热度：断层≥5</span>
+  <span class="li"><span class="sw" style="background:#e65100"></span>回撤越大越橙红（越差）</span>
+</div>
+
+<div class="wrap"><table id="tbl"><thead><tr id="theadRow"></tr></thead><tbody id="tbody"></tbody></table></div>
+
+<div class="footer">
+  <span class="foot-tip">⚠ 本页为式样预览，全部数字为示例占位。确认版式后将以真实东财/vipdoc 数据重建并部署到 sector_analysis.html。</span><br>
+  综合评分权重与预期差阈值已在页面标注为可调常量（确认阶段可微调）。
+</div>
+
+<!-- 下钻弹层 -->
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="mTitle">板块下钻</h3>
+      <span class="cnt" id="mCnt"></span>
+      <button class="x" id="mClose">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="hint">成分股按「加速增长 + 净利润断层 + 至今涨幅」综合排序（示例占位，真实版将接入 G2/G4 缺口判定与 RPS）。表内为个股财报数据。</div>
+      <table class="drill-table"><thead><tr>
+        <th>个股</th><th>至今涨幅</th><th>营收(亿)</th><th>营收同比</th><th>净利润(亿)</th><th>归母同比</th><th>扣非同比</th><th>加速</th><th>断层</th><th>RPS20</th><th>股息率</th>
+      </tr></thead><tbody id="drillBody"></tbody></table>
+      <div class="drill-401">
+        <b id="m401Title">所属 401 板块分布（点击右侧卡片页可继续下钻）：</b>
+        <div class="chips" id="m401"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============== 可调参数（确认阶段可微调） ==============
+const W_PERF=0.4, W_UP=0.4, W_DD=0.2;      // 综合评分权重
+const DIFF_ACCEL=50, DIFF_CHG=30;           // 预期差阈值：加速占比% / 年初至今涨幅%
+document.getElementById('wPerf').textContent=W_PERF;
+document.getElementById('wUp').textContent=W_UP;
+document.getElementById('wDd').textContent=W_DD;
+document.getElementById('dAccel').textContent=DIFF_ACCEL;
+document.getElementById('dChg').textContent=DIFF_CHG;
+
+// ============== 示例数据（确定性生成，数字均为占位） ==============
+// 数据模型（24 字段）：[name, count,
+//   revSum, revYoy, revQoQ,            // 营收合计(亿) / 加权同比% / 单季环比%
+//   npSum, npYoY, npQoQ,              // 归母净利润合计(亿) / 加权同比% / 单季环比%
+//   dedSum, dedYoY,                    // 扣非净利润合计(亿) / 加权同比%
+//   roeAgg, gmAgg, cashAgg, divAgg,    // TTM-ROE汇总% / 毛利率汇总% / 净利润现金含量× / 股息率汇总%
+//   ytd, d20, d60, ymax, ytdDd, peakDd, // 走势：年初至今% / 20日% / 60日% / 最大涨幅% / 年初至今回撤% / 峰值回撤%
+//   accel, bo, imp, score]            // 加速增长占比% / 净利润断层数 / 景气改善计数 / 综合分(占位, 由 process 重算)
+const INDUSTRIES=[
+ ['农林牧渔',105],['基础化工',431],['钢铁',45],['有色金属',138],['电子',486],
+ ['汽车',268],['家用电器',98],['食品饮料',128],['纺织服饰',109],['轻工制造',164],
+ ['医药生物',489],['公用事业',131],['交通运输',126],['房地产',109],['商贸零售',105],
+ ['社会服务',78],['银行',42],['非银金融',87],['综合',21],['建筑材料',77],
+ ['建筑装饰',162],['电力设备',362],['机械设备',561],['国防军工',140],['计算机',358],
+ ['传媒',130],['通信',129],['煤炭',38],['石油石化',47],['环保',135],['美容护理',31]
+];
+function hash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+function sample(name,count){
+  let h=hash(name);
+  const rnd=()=>{h=(Math.imul(h,1103515245)+12345)>>>0;return h/4294967296;};
+  const r=(a,b)=>a+(b-a)*rnd();
+  const R1=(a,b)=>Math.round(r(a,b));
+  const R2=(a,b)=>+(r(a,b)).toFixed(1);
+  return [
+    name, count,
+    R1(1500,85000), R2(-18,92), R2(-15,45),     // revSum/revYoY/revQoQ
+    R1(50,6500), R2(-32,125), R2(-25,62),        // npSum/npYoY/npQoQ
+    R1(40,6000), R2(-30,135),                    // dedSum/dedYoY
+    R2(3,22), R2(10,66), +r(0.4,2.6).toFixed(2), +r(0,5.2).toFixed(2), // roeAgg/gmAgg/cashAgg/divAgg
+    R2(-18,55), R2(-12,42), R2(-10,32), R2(0,78), R2(-35,-3), R2(-45,-8), // ytd/d20/d60/ymax/ytdDd/peakDd
+    R1(20,82), R1(0,36), R1(0,4), 0             // accel/bo/imp/score
+  ];
+}
+const SW_NAMES=INDUSTRIES.map(x=>x[0]);
+const SUB=['半导体','消费电子','PCB','面板','LED','被动元件','光学光电子','电池','光伏','风电','储能','电网','电机','军工电子','航空装备','航天装备','白酒','啤酒','乳制品','调味品','休闲食品','养殖','种植','医疗器械','医疗服务','生物制品','化学制药','中药','银行','券商','保险','地产','建筑','建材','钢铁','煤炭','石油','化工','有色','汽车整车','零部件','工程机械','家电','家居','服饰','商贸','物流','传媒','通信','计算机','软件','互联网','环保','公用'];
+const BK_NAMES=(function(){const out=[];for(let i=0;i<401;i++){out.push(SW_NAMES[i%31]+'·'+SUB[i%SUB.length]+' #'+(i+1));}return out;})();
+const SEC_SW=INDUSTRIES.map(([n,c])=>sample(n,c));
+const SEC_BK=BK_NAMES.map((n,i)=>sample(n, 3+(i*7%23)));
+
+// ============== 预计算：汇总字段 + 综合分 + 预期差 ==============
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function process(raws){
+  const arr=raws.map(r=>{
+    const o={}; o._name=r[0]; o.count=r[1];
+    o.revSum=r[2]; o.revYoy=r[3]; o.revQoQ=r[4];
+    o.npSum=r[5]; o.npYoy=r[6]; o.npQoQ=r[7];
+    o.dedSum=r[8]; o.dedYoy=r[9];
+    o.roeAgg=r[10]; o.gmAgg=r[11]; o.cashAgg=r[12]; o.divAgg=r[13];
+    o.ytd=r[14]; o.d20=r[15]; o.d60=r[16]; o.ymax=r[17]; o.ytdDd=r[18]; o.peakDd=r[19];
+    o.accel=r[20]; o.bo=r[21]; o.imp=r[22];
+    return o;
+  });
+  arr.forEach(o=>{
+    const perf=clamp((o.npYoy+o.dedYoy)/2/90*100+33,0,100);
+    const up=clamp((o.ytd+20)/100*100,0,100);
+    const ddOk=clamp((o.ytdDd+40)/40*100,0,100);
+    o.score=Math.round(perf*W_PERF+up*W_UP+ddOk*W_DD);
+    o._diff = o.accel>=DIFF_ACCEL && o.ytd<DIFF_CHG;
+    o._hot = o.bo>=5;
+    o._cold = o.ytdDd>=-10;
+  });
+  const ranked=[...arr].sort((a,b)=>b.score-a.score);
+  ranked.forEach((o,i)=>o._rank=i+1);
+  return arr;
+}
+
+// ============== 表头（财报汇总为核心，分组着色） ==============
+const COLS=[
+ {g:'', m:'行业 / 板块', key:'name'},
+ {g:'业绩汇总', m:'营收合计(亿)', key:'revSum'},
+ {g:'业绩汇总', m:'营收同比%', key:'revYoy'},
+ {g:'业绩汇总', m:'营收环比%<br>(单季)', key:'revQoQ'},
+ {g:'业绩汇总', m:'净利润合计(亿)', key:'npSum'},
+ {g:'业绩汇总', m:'净利润同比%', key:'npYoy'},
+ {g:'业绩汇总', m:'净利润环比%<br>(单季)', key:'npQoQ'},
+ {g:'业绩汇总', m:'扣非合计(亿)', key:'dedSum'},
+ {g:'业绩汇总', m:'扣非同比%', key:'dedYoy'},
+ {g:'质量汇总', m:'TTM-ROE<br>汇总%', key:'roeAgg'},
+ {g:'质量汇总', m:'毛利率<br>汇总%', key:'gmAgg'},
+ {g:'质量汇总', m:'净利润<br>现金含量×', key:'cashAgg'},
+ {g:'质量汇总', m:'股息率<br>汇总%', key:'divAgg'},
+ {g:'走势', m:'年初至今%', key:'ytd'},
+ {g:'走势', m:'20日%', key:'d20'},
+ {g:'走势', m:'60日%', key:'d60'},
+ {g:'走势', m:'最大涨幅%<br>(YTD)', key:'ymax'},
+ {g:'走势', m:'年初至今<br>回撤%', key:'ytdDd'},
+ {g:'走势', m:'峰值<br>回撤%', key:'peakDd'},
+ {g:'信号', m:'加速增长<br>占比%', key:'accel'},
+ {g:'信号', m:'净利润<br>断层数', key:'bo'},
+ {g:'信号', m:'景气改善<br>计数', key:'imp'},
+ {g:'', m:'综合评分<br>/ 排名', key:'score'},
+ {g:'', m:'预期差', key:'diff'},
+];
+function gClass(g){return g==='业绩汇总'?'g-perf':g==='质量汇总'?'g-qual':g==='走势'?'g-move':g==='信号'?'g-sig':'';}
+
+let MODE='sw', sortKey='score', sortAsc=false, diffOnly=false;
+function buildHead(){
+  const tr=document.getElementById('theadRow');
+  tr.innerHTML=COLS.map(c=>{
+    const arrow = c.key===sortKey ? (sortAsc?' ↑':' ↓') : '';
+    const sticky = c.key==='name' ? ' style="position:sticky;left:0;z-index:5;background:#eef1f8"' : '';
+    return `<th data-key="${c.key}"${sticky}><div class="g ${gClass(c.g)}">${c.g}</div><div class="m">${c.m}${arrow}</div></th>`;
+  }).join('');
+  tr.querySelectorAll('th').forEach(th=>{
+    th.onclick=()=>{
+      const k=th.dataset.key;
+      if(sortKey===k) sortAsc=!sortAsc; else {sortKey=k; sortAsc=(k==='name'||k==='ytdDd'||k==='peakDd');}
+      buildHead(); render();
+    };
+  });
+}
+
+function fmtPct(v){return (v>0?'+':'')+v.toFixed(1)+'%';}
+function fmtBig(v){return v.toLocaleString('zh-CN');}
+function cellPct(v){const cls=v>0?'up':(v<0?'down':'');return `<td class="num ${cls}">${fmtPct(v)}</td>`;}
+function cellNum(v,fmt){return `<td class="num">${fmt?fmt(v):v}</td>`;}
+function cellDd(v){const c=v<=-25?'#c62828':(v<0?'#e65100':'#2e7d32');return `<td class="num" style="color:${c}">${v>0?'+':''}${v.toFixed(1)}%</td>`;}
+
+function render(){
+  buildHead();
+  let rows=process(MODE==='sw'?SEC_SW:SEC_BK);
+  if(diffOnly) rows=rows.filter(s=>s._diff);
+  const dir=sortAsc?1:-1;
+  rows.sort((a,b)=>{
+    const va=(sortKey==='name')?a._name:a[sortKey];
+    const vb=(sortKey==='name')?b._name:b[sortKey];
+    if(typeof va==='string') return dir*(va<vb?-1:va>vb?1:0);
+    return dir*(va-vb);
+  });
+  const tb=document.getElementById('tbody');
+  tb.innerHTML=rows.map(s=>{
+    const badges=[];
+    if(s._diff) badges.push('<span class="badge badge-diff">预期差</span>');
+    if(s._hot) badges.push('<span class="badge badge-hot">高热度</span>');
+    if(s._cold) badges.push('<span class="badge badge-cold">低回撤</span>');
+    const scoreW=clamp(s.score/100*60,4,60);
+    return `<tr data-name="${s._name}">
+      <td><b>${s._name}</b> <span class="cnt">(${s.count})</span></td>
+      ${cellNum(s.revSum, fmtBig)}
+      ${cellPct(s.revYoy)}
+      ${cellPct(s.revQoQ)}
+      ${cellNum(s.npSum, fmtBig)}
+      ${cellPct(s.npYoy)}
+      ${cellPct(s.npQoQ)}
+      ${cellNum(s.dedSum, fmtBig)}
+      ${cellPct(s.dedYoy)}
+      <td class="num">${s.roeAgg.toFixed(1)}%</td>
+      <td class="num">${s.gmAgg.toFixed(1)}%</td>
+      <td class="num">${s.cashAgg.toFixed(2)}×</td>
+      <td class="num">${s.divAgg.toFixed(2)}%</td>
+      ${cellPct(s.ytd)}
+      ${cellPct(s.d20)}
+      ${cellPct(s.d60)}
+      ${cellPct(s.ymax)}
+      ${cellDd(s.ytdDd)}
+      ${cellDd(s.peakDd)}
+      <td class="num">${s.accel}%</td>
+      <td class="num">${s.bo}</td>
+      <td class="num">${s.imp}/4</td>
+      <td><span class="rank">#${s._rank}</span> <span class="score-bar" style="width:${scoreW}px"></span>${s.score}</td>
+      <td>${badges.join(' ')||'<span class="cnt">—</span>'}</td>
+    </tr>`;
+  }).join('');
+  tb.querySelectorAll('tr').forEach(tr=>{ tr.onclick=()=>openDrill(tr.dataset.name); });
+  document.getElementById('info').textContent=`共 ${rows.length} 个${MODE==='sw'?'行业':'题材板块'}${diffOnly?'（仅预期差）':''}`;
+}
+render();
+
+// ============== 视角切换 ==============
+document.querySelectorAll('.view-btn').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    MODE=btn.dataset.view;
+    sortKey='score'; sortAsc=false;
+    render();
+  };
+});
+
+// ============== 下钻：示例成分股 ==============
+const SAMPLE_STOCKS={
+  '电子':[['中芯国际','688981',42.1,28.5,128.4,88.5,76.2,70.5,1,1,92,1.2],['立讯精密','002475',28.6,34.2,302.1,34.2,30.1,28.0,1,1,85,0.8],['北方华创','002371',55.3,40.1,98.7,61.0,58.4,55.2,1,1,90,0.6],['沪电股份','002463',61.2,38.9,45.2,72.4,70.1,68.0,1,0,88,0.9],['澜起科技','688008',38.9,25.4,67.3,49.6,47.3,44.0,1,0,80,0.5]],
+  '医药生物':[['迈瑞医疗','300760',12.4,18.0,118.9,18.0,16.7,17.0,0,0,70,2.1],['恒瑞医药','600276',15.8,12.3,62.4,22.3,20.5,19.0,1,0,76,0.9],['药明康德','603259',9.1,11.2,91.5,16.7,15.2,14.0,1,0,64,1.3]],
+  '电力设备':[['宁德时代','300750',31.5,42.2,441.2,88.0,82.4,80.0,1,1,83,0.5],['阳光电源','300274',40.2,38.1,112.6,95.3,90.6,88.0,1,1,86,1.1],['隆基绿能','601012',-8.4,-12.1,-12.3,-52.1,-50.3,-48.0,0,0,40,1.8]],
+  '食品饮料':[['贵州茅台','600519',-4.2,16.5,894.1,15.0,14.8,14.5,0,0,55,3.2],['五粮液','000858',-7.8,11.2,281.4,11.2,10.9,10.5,0,0,50,2.8]],
+  '银行':[['招商银行','600036',14.2,5.1,1482.5,6.2,6.0,5.8,0,0,62,5.1],['工商银行','601398',12.8,3.4,3651.2,4.1,4.0,3.9,0,0,55,6.3]],
+};
+const SW_TO_401={ '电子':['半导体','消费电子','元件','光学光电子','电子化学品'],'医药生物':['化学制药','生物制品','医疗器械','医疗服务','中药'],'电力设备':['电池','光伏设备','风电设备','电网设备'],'食品饮料':['白酒','饮料乳品','调味发酵品'],'银行':['国有大型银行','股份制银行','城商行','农商行'] };
+function openDrill(name){
+  document.getElementById('mTitle').textContent=name+' · 成分股下钻（示例）';
+  const list=SAMPLE_STOCKS[name]||[['（示例）','600000',12.3,8.4,30.0,25.4,22.1,1,1,70,1.5],['（示例）','600001',-3.1,-5.2,12.0,-10.2,-9.8,0,0,45,0.8]];
+  document.getElementById('mCnt').textContent='样例 '+list.length+' 只（真实版将列出全部成分股）';
+  document.getElementById('drillBody').innerHTML=list.map(r=>{
+    const [nm,code,chg,rev,np,revYoy,npYoy,dedYoy,acc,bo,rps,div]=r;
+    return `<tr><td><b>${nm}</b> <span class="code">${code}</span></td>${cellPct(chg)}${cellNum(rev)}${cellPct(revYoy)}${cellNum(np)}${cellPct(npYoy)}${cellPct(dedYoy)}<td>${acc?'✓':'—'}</td><td>${bo?'跳空':'—'}</td><td class="num">${rps}</td><td class="num">${div}%</td></tr>`;
+  }).join('');
+  const m401=document.getElementById('m401'), m401Title=document.getElementById('m401Title');
+  if(MODE==='sw'){
+    m401Title.textContent='所属 401 板块分布（点击右侧卡片页可继续下钻）：';
+    const chips=SW_TO_401[name]||['（示例板块A）','（示例板块B）','（示例板块C）'];
+    m401.innerHTML=chips.map(c=>`<span class="chip">${c}</span>`).join('');
+  } else {
+    m401Title.textContent='当前为 401 题材板块（已是最细口径，下钻仅展示其成分股）：';
+    m401.innerHTML='';
+  }
+  document.getElementById('modal').classList.add('open');
+}
+document.getElementById('mClose').onclick=()=>document.getElementById('modal').classList.remove('open');
+document.getElementById('modal').onclick=(e)=>{if(e.target.id==='modal')e.currentTarget.classList.remove('open');};
+document.getElementById('sortSel').onchange=(e)=>{sortKey=e.target.value; sortAsc=(sortKey==='name'||sortKey==='ytdDd'||sortKey==='peakDd'); render();};
+document.getElementById('diffOnly').onchange=(e)=>{diffOnly=e.target.checked; render();};
+</script>
+</body></html>
