@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>融资余额 · 个股融资榜下钻（式样原型）</title>
+<style>
+  :root{
+    --blue:#2f6bff; --ink:#222; --mut:#888; --line:#eaeef5;
+    --red:#e5484d; --green:#2f9e44; --bg:#f5f6f8; --card:#fff;
+    --gold:#e6a23c; --orange:#f08c3a;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+  .wrap{max-width:1160px;margin:0 auto;padding:18px 14px 60px}
+  .head{background:linear-gradient(135deg,#1a237e,#283593);color:#fff;border-radius:14px;padding:16px 20px;margin-bottom:14px}
+  .head h1{margin:0 0 4px;font-size:18px}
+  .head .sub{font-size:12.5px;opacity:.85}
+  .note{background:#fffbe6;border:1px solid #ffe58f;color:#7a5b00;border-radius:8px;padding:8px 12px;font-size:12px;margin-bottom:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px}
+  .card h2{margin:0 0 10px;font-size:15px;color:var(--blue)}
+  /* 双轴图示意 */
+  .chart{height:200px;border:1px dashed #cfd8e6;border-radius:8px;display:flex;align-items:flex-end;gap:6px;padding:10px;overflow:hidden}
+  .bar{flex:1;background:linear-gradient(180deg,#9bb8ff,#2f6bff);border-radius:4px 4px 0 0;position:relative}
+  .bar .tip{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font-size:10px;color:var(--mut);white-space:nowrap;margin-bottom:2px}
+  /* 日期筹码 */
+  .dates{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 2px}
+  .dchip{padding:6px 12px;border:1px solid var(--line);border-radius:20px;cursor:pointer;font-size:13px;background:#fff;color:var(--ink);user-select:none}
+  .dchip:hover{border-color:var(--blue)}
+  .dchip.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .dchip .asof{font-size:10px;opacity:.7;margin-left:4px}
+  /* 下钻面板 */
+  .drill{margin-top:6px}
+  .ctrls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px}
+  .ctrls .grp{display:flex;align-items:center;gap:4px}
+  .ctrls label{font-size:12.5px;color:var(--mut)}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .seg button{border:0;background:#fff;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--ink)}
+  .seg button.on{background:var(--blue);color:#fff}
+  /* 表 */
+  .tbl{width:100%;border-collapse:collapse;font-size:14px}
+  .tbl thead th{position:sticky;top:0;background:#f8f9fa;text-align:center;padding:9px 8px;border-bottom:2px solid var(--line);cursor:pointer;white-space:nowrap}
+  .tbl thead th .ar{color:var(--mut);font-size:10px;margin-left:2px}
+  .tbl tbody td{padding:8px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+  .tbl tbody td.l{text-align:left}
+  .tbl tbody tr:hover{background:#f3f7ff}
+  .rank{display:inline-flex;width:22px;height:22px;border-radius:50%;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:#eef;color:#4250a0}
+  .rank.r1{background:#ffe9c7;color:#b8780a}
+  .rank.r2{background:#e8eef7;color:#5a6b86}
+  .rank.r3{background:#fff0e0;color:#c0852f}
+  .up{color:var(--red);font-weight:600}
+  .dn{color:var(--green);font-weight:600}
+  .zero{color:var(--mut)}
+  .fire{display:inline-block;background:#fff1e6;color:var(--orange);border-radius:6px;padding:1px 6px;font-size:12px;font-weight:600;margin-left:4px}
+  .chip{display:inline-block;background:#f0f3fa;border-radius:6px;padding:1px 7px;font-size:12px;color:#556;margin:1px}
+  @media(max-width:600px){.tbl{font-size:13.5px}.tbl thead th,.tbl tbody td{padding:7px 5px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>融资余额 · 涨跌家数 · 个股融资榜</h1>
+    <div class="sub">市场级汇总（双轴图）+ 按日期下钻至个股融资榜（式样原型·示例数据）</div>
+  </div>
+
+  <div class="note">
+    口径：沪深两融标的约 3600 只（天然不含北交 920）；融资余额 T+1 披露，故最新可选日期为最近交易日。
+    个股榜中「日增量」= 当日融资余额 − 前一日融资余额（存量变化，主指标）；「净买入」= 当日买入额 − 偿还额（当日流量，辅助列，用于识别新纳入/除权导致的被动跳变）。
+  </div>
+
+  <!-- 市场级汇总图（示意） -->
+  <div class="card">
+    <h2>全市场融资余额 / 涨跌家数（双轴示意）</h2>
+    <div class="chart" id="chart"></div>
+    <div style="font-size:12px;color:var(--mut);margin-top:8px">左轴蓝＝融资余额（示意柱），右轴红＝上涨家数。点击下方日期筹码，下钻该日个股融资榜。</div>
+  </div>
+
+  <!-- 日期下钻 -->
+  <div class="card">
+    <h2>按日期下钻 · 个股融资榜</h2>
+    <div class="dates" id="dates"></div>
+    <div class="drill">
+      <div class="ctrls">
+        <div class="grp">
+          <label>榜单</label>
+          <div class="seg" id="segType">
+            <button data-t="bal" class="on">融资余额最高</button>
+            <button data-t="inc">融资增量最高</button>
+            <button data-t="dec">融资减少最多</button>
+          </div>
+        </div>
+        <div class="grp">
+          <label>显示</label>
+          <div class="seg" id="segTop">
+            <button data-n="10">Top10</button>
+            <button data-n="20" class="on">Top20</button>
+            <button data-n="50">Top50</button>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--mut);margin-left:auto" id="asofLabel"></div>
+      </div>
+      <table class="tbl" id="tbl">
+        <thead><tr>
+          <th data-k="rank">#</th>
+          <th class="l" data-k="code">代码</th>
+          <th class="l" data-k="name">名称</th>
+          <th data-k="bal">融资余额(亿)<span class="ar">▼</span></th>
+          <th data-k="inc">日增量(亿)<span class="ar"></span></th>
+          <th data-k="net">净买入(亿)<span class="ar"></span></th>
+          <th data-k="pct">占流通市值%<span class="ar"></span></th>
+          <th data-k="streak">连续上榜<span class="ar"></span></th>
+          <th class="l" data-k="sw">申万行业</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== 示例数据 ===== */
+// 可点击的日期（最新披露日优先，演示用）
+const DATES = ['2026-10-27','2026-10-28','2026-10-29','2026-10-30'];
+// 每个日期下，个股榜快照（演示：不同日期不同排名）
+const STOCKS = {
+  '2026-10-30':[
+    ['600519','贵州茅台',184.2,3.1,3.0,0.31,5,'食品饮料'],
+    ['300750','宁德时代',161.8,12.4,11.9,1.62,4,'电力设备'],
+    ['601318','中国平安',248.6,5.6,5.5,1.18,6,'非银金融'],
+    ['002594','比亚迪',138.3,9.2,8.8,1.40,3,'汽车'],
+    ['600036','招商银行',92.1,2.0,1.9,0.42,2,'银行'],
+    ['000858','五粮液',71.5,1.8,1.7,0.55,2,'食品饮料'],
+    ['300059','东方财富',118.9,7.7,7.5,2.30,7,'非银金融'],
+    ['688981','中芯国际',64.2,4.1,3.9,1.05,3,'电子'],
+    ['600900','长江电力',58.7,-1.2,-1.1,0.28,1,'公用事业'],
+    ['601012','隆基绿能',49.3,-4.6,-4.4,1.12,0,'电力设备'],
+    ['000725','京东方A',88.4,3.3,3.1,1.88,2,'电子'],
+    ['600276','恒瑞医药',41.2,0.9,0.8,0.61,1,'医药生物'],
+    ['002475','立讯精密',79.6,6.0,5.8,1.34,5,'电子'],
+    ['601899','紫金矿业',96.8,5.4,5.2,1.06,4,'有色金属'],
+    ['000333','美的集团',83.5,2.2,2.1,0.49,2,'家用电器'],
+    ['600030','中信证券',112.7,8.1,7.9,2.05,6,'非银金融'],
+    ['300760','迈瑞医疗',38.9,0.6,0.5,0.40,1,'医药生物'],
+    ['601166','兴业银行',67.4,1.1,1.0,0.38,1,'银行'],
+    ['002230','科大讯飞',57.8,3.9,3.7,2.60,3,'计算机'],
+    ['600887','伊利股份',44.1,0.7,0.6,0.52,1,'食品饮料'],
+  ],
+  '2026-10-29':[
+    ['600519','贵州茅台',181.1,2.4,2.3,0.30,4,'食品饮料'],
+    ['300750','宁德时代',149.4,8.0,7.7,1.50,3,'电力设备'],
+    ['601318','中国平安',243.0,3.1,3.0,1.15,5,'非银金融'],
+    ['002594','比亚迪',129.1,5.5,5.3,1.30,2,'汽车'],
+    ['300059','东方财富',111.2,5.0,4.9,2.15,6,'非银金融'],
+    ['688981','中芯国际',60.1,2.8,2.6,0.98,2,'电子'],
+    ['002475','立讯精密',73.6,4.0,3.8,1.28,4,'电子'],
+    ['601899','紫金矿业',91.4,3.2,3.1,1.00,3,'有色金属'],
+    ['600030','中信证券',104.6,5.5,5.3,1.90,5,'非银金融'],
+    ['600276','恒瑞医药',40.3,0.5,0.4,0.60,1,'医药生物'],
+    ['000725','京东方A',85.1,2.0,1.9,1.81,1,'电子'],
+    ['002230','科大讯飞',53.9,2.5,2.4,2.45,2,'计算机'],
+    ['600036','招商银行',90.1,1.0,0.9,0.41,1,'银行'],
+    ['000858','五粮液',69.7,0.9,0.8,0.53,1,'食品饮料'],
+    ['601166','兴业银行',66.3,0.6,0.5,0.37,1,'银行'],
+    ['600900','长江电力',59.9,0.5,0.4,0.29,1,'公用事业'],
+    ['000333','美的集团',81.3,1.4,1.3,0.48,1,'家用电器'],
+    ['300760','迈瑞医疗',38.3,0.3,0.2,0.39,1,'医药生物'],
+    ['601012','隆基绿能',53.9,1.2,1.1,1.22,1,'电力设备'],
+    ['600887','伊利股份',43.4,0.3,0.2,0.51,1,'食品饮料'],
+  ],
+  '2026-10-28':[
+    ['600519','贵州茅台',178.7,1.5,1.4,0.30,3,'食品饮料'],
+    ['300750','宁德时代',141.4,4.2,4.0,1.42,2,'电力设备'],
+    ['601318','中国平安',239.9,1.8,1.7,1.13,4,'非银金融'],
+    ['002594','比亚迪',123.6,2.9,2.8,1.25,1,'汽车'],
+    ['300059','东方财富',106.2,3.1,3.0,2.05,5,'非银金融'],
+    ['688981','中芯国际',57.3,1.5,1.4,0.94,1,'电子'],
+    ['002475','立讯精密',69.6,2.2,2.1,1.22,3,'电子'],
+    ['601899','紫金矿业',88.2,1.9,1.8,0.97,2,'有色金属'],
+    ['600030','中信证券',99.1,3.0,2.9,1.80,4,'非银金融'],
+    ['002230','科大讯飞',51.4,1.4,1.3,2.33,1,'计算机'],
+    ['600276','恒瑞医药',39.8,0.2,0.2,0.59,1,'医药生物'],
+    ['000725','京东方A',83.1,1.0,0.9,1.77,1,'电子'],
+    ['600036','招商银行',89.1,0.4,0.4,0.40,1,'银行'],
+    ['000858','五粮液',68.8,0.3,0.3,0.52,1,'食品饮料'],
+    ['601166','兴业银行',65.7,0.2,0.2,0.37,1,'银行'],
+    ['600900','长江电力',59.4,0.1,0.1,0.29,1,'公用事业'],
+    ['000333','美的集团',79.9,0.7,0.7,0.47,1,'家用电器'],
+    ['300760','迈瑞医疗',38.0,0.1,0.1,0.39,1,'医药生物'],
+    ['601012','隆基绿能',52.7,0.3,0.3,1.19,1,'电力设备'],
+    ['600887','伊利股份',43.1,0.1,0.1,0.51,1,'食品饮料'],
+  ],
+  '2026-10-27':[
+    ['600519','贵州茅台',177.2,0.8,0.8,0.30,2,'食品饮料'],
+    ['300750','宁德时代',137.2,2.0,1.9,1.38,1,'电力设备'],
+    ['601318','中国平安',238.1,0.9,0.9,1.12,3,'非银金融'],
+    ['002594','比亚迪',120.7,1.3,1.2,1.22,1,'汽车'],
+    ['300059','东方财富',103.1,1.6,1.5,1.99,4,'非银金融'],
+    ['688981','中芯国际',55.8,0.7,0.7,0.91,1,'电子'],
+    ['002475','立讯精密',67.4,1.0,1.0,1.18,2,'电子'],
+    ['601899','紫金矿业',86.3,0.9,0.9,0.95,1,'有色金属'],
+    ['600030','中信证券',96.1,1.5,1.4,1.75,3,'非银金融'],
+    ['002230','科大讯飞',50.0,0.6,0.6,2.27,1,'计算机'],
+    ['600276','恒瑞医药',39.6,0.0,0.0,0.59,1,'医药生物'],
+    ['000725','京东方A',82.1,0.4,0.4,1.75,1,'电子'],
+    ['600036','招商银行',88.7,0.1,0.1,0.40,1,'银行'],
+    ['000858','五粮液',68.5,0.1,0.1,0.52,1,'食品饮料'],
+    ['601166','兴业银行',65.5,0.0,0.0,0.37,1,'银行'],
+    ['600900','长江电力',59.3,0.0,0.0,0.29,1,'公用事业'],
+    ['000333','美的集团',79.2,0.3,0.3,0.47,1,'家用电器'],
+    ['300760','迈瑞医疗',37.9,0.0,0.0,0.39,1,'医药生物'],
+    ['601012','隆基绿能',52.4,0.1,0.1,1.18,1,'电力设备'],
+    ['600887','伊利股份',43.0,0.0,0.0,0.51,1,'食品饮料'],
+  ],
+};
+// 连续上榜：演示用（基于股票名在最近 N 日同榜出现次数，这里直接给示意值已在数据第7列）
+// 演示图柱子
+const CHART = {'2026-10-27':17650,'2026-10-28':17890,'2026-10-29':18110,'2026-10-30':18420};
+
+/* ===== 状态 ===== */
+let curDate = DATES[DATES.length-1]; // 最新
+let curType = 'bal';
+let curTop = 20;
+let sortKey = 'bal', sortAsc = false;
+
+/* ===== 渲染 ===== */
+function renderChart(){
+  const c = document.getElementById('chart');
+  c.innerHTML='';
+  const max = Math.max(...Object.values(CHART));
+  DATES.forEach(d=>{
+    const h = 30 + CHART[d]/max*150;
+    const bar=document.createElement('div');
+    bar.className='bar'; bar.style.height=h+'px';
+    bar.innerHTML='<div class="tip">'+d.slice(5)+'</div>';
+    bar.title=d+': 融资余额 '+CHART[d]+'亿';
+    bar.onclick=()=>selectDate(d);
+    c.appendChild(bar);
+  });
+}
+function renderDates(){
+  const box=document.getElementById('dates');
+  box.innerHTML='';
+  DATES.forEach(d=>{
+    const chip=document.createElement('div');
+    chip.className='dchip'+(d===curDate?' on':'');
+    const isLatest = d===DATES[DATES.length-1];
+    chip.innerHTML = d + (isLatest?'<span class="asof">最新</span>':'');
+    chip.onclick=()=>selectDate(d);
+    box.appendChild(chip);
+  });
+  document.getElementById('asofLabel').textContent='数据截至：'+curDate+'（T+1 披露）';
+}
+function selectDate(d){ curDate=d; renderDates(); renderTable(); }
+
+function renderTable(){
+  const rows = STOCKS[curDate].slice();
+  // 榜单类型决定默认排序列
+  const keyMap={bal:'bal',inc:'inc',dec:'dec'};
+  if(curType==='bal') sortKey='bal';
+  else if(curType==='inc') sortKey='inc';
+  else sortKey='dec';
+  sortAsc = (curType==='dec'); // 减少最多按增量升序（最负在前）
+  rows.sort((a,b)=>{
+    let va=a[idx(sortKey)], vb=b[idx(sortKey)];
+    return sortAsc? va-vb : vb-va;
+  });
+  const top = rows.slice(0,curTop);
+  const tb=document.getElementById('tbody');
+  tb.innerHTML='';
+  top.forEach((r,i)=>{
+    const rank=i+1;
+    const [code,name,bal,inc,net,pct,streak,sw]=r;
+    const tr=document.createElement('tr');
+    const rcls = rank<=3?('r'+rank):'';
+    const incCls = inc>0?'up':(inc<0?'dn':'zero');
+    const netCls = net>0?'up':(net<0?'dn':'zero');
+    const streakHtml = streak>=3?('🔥'+streak):(streak||'—');
+    tr.innerHTML =
+      '<td><span class="rank '+rcls+'">'+rank+'</span></td>'+
+      '<td class="l">'+code+'</td>'+
+      '<td class="l">'+name+'</td>'+
+      '<td>'+bal.toFixed(1)+'</td>'+
+      '<td class="'+incCls+'">'+(inc>0?'+':'')+inc.toFixed(1)+'</td>'+
+      '<td class="'+netCls+'">'+(net>0?'+':'')+net.toFixed(1)+'</td>'+
+      '<td>'+pct.toFixed(2)+'</td>'+
+      '<td>'+(streak>=3?'<span class="fire">'+streakHtml+'</span>':streakHtml)+'</td>'+
+      '<td class="l"><span class="chip">'+sw+'</span></td>';
+    tb.appendChild(tr);
+  });
+  // 更新表头箭头
+  document.querySelectorAll('#tbl thead th').forEach(th=>{
+    const k=th.dataset.k, ar=th.querySelector('.ar');
+    if(ar){ ar.textContent = (k===sortKey)? (sortAsc?'▲':'▼') : ''; }
+  });
+}
+function idx(k){
+  // 行数组顺序: code,name,bal,inc,net,pct,streak,sw
+  return {code:0,name:1,bal:2,inc:3,net:4,pct:5,streak:6,sw:7}[k];
+}
+
+/* 控件 */
+document.getElementById('segType').addEventListener('click',e=>{
+  if(e.target.tagName!=='BUTTON')return;
+  document.querySelectorAll('#segType button').forEach(b=>b.classList.remove('on'));
+  e.target.classList.add('on');
+  curType=e.target.dataset.t; renderTable();
+});
+document.getElementById('segTop').addEventListener('click',e=>{
+  if(e.target.tagName!=='BUTTON')return;
+  document.querySelectorAll('#segTop button').forEach(b=>b.classList.remove('on'));
+  e.target.classList.add('on');
+  curTop=+e.target.dataset.n; renderTable();
+});
+document.querySelectorAll('#tbl thead th').forEach(th=>{
+  th.addEventListener('click',()=>{
+    const k=th.dataset.k;
+    if(['bal','inc','net','pct','streak'].includes(k)){
+      if(sortKey===k) sortAsc=!sortAsc; else { sortKey=k; sortAsc=false; }
+      renderTable();
+    }
+  });
+});
+
+renderChart(); renderDates(); renderTable();
+</script>
+</body>
+</html>

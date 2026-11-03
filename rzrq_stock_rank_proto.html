@@ -1,0 +1,272 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>个股融资榜（式样原型）</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}
+body{background:#eef1f6;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:#1f2937;padding:22px}
+.wrap{max-width:1180px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 6px 28px rgba(31,41,55,.08);overflow:hidden}
+.hd{padding:20px 28px 4px}
+.hd h1{font-size:21px;font-weight:700;letter-spacing:.5px}
+.hd .sub{color:#94a3b8;font-size:13px;margin-top:5px;line-height:1.8}
+.hd .sub b{color:#475569}
+.asof{font-size:12.5px;font-weight:700;color:#2f6bff;background:#eaf1ff;border-radius:20px;padding:5px 14px;display:inline-block;margin-bottom:10px}
+.asof b{font-variant-numeric:tabular-nums}
+/* —— 顶部标签页（新增：个股融资榜 与 现有融资余额/涨跌家数 并列）—— */
+.maintabs{display:flex;gap:0;padding:14px 28px 0;flex-wrap:wrap;border-bottom:1px solid #eef1f6}
+.mtab{border:1px solid #dbe3ef;border-bottom:0;background:#fff;color:#475569;font-size:13.5px;padding:10px 20px;cursor:pointer;transition:.15s;border-radius:12px 12px 0 0;margin-bottom:-1px}
+.mtab:hover{color:#2f6bff;border-color:#bcd0ff}
+.mtab.active{background:#1f2937;border-color:#1f2937;color:#fff;font-weight:600}
+/* —— 个股榜控制条 —— */
+.stockctrl{padding:16px 28px 4px;display:flex;flex-direction:column;gap:12px}
+.ctrlrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ctrlrow .lbl{font-size:13px;color:#64748b;white-space:nowrap}
+.seg{display:inline-flex;border:1px solid #dbe3ef;border-radius:9px;overflow:hidden}
+.seg button{border:0;background:#fff;padding:7px 16px;font-size:13px;font-weight:700;color:#64748b;cursor:pointer}
+.seg button.on{background:#2f6bff;color:#fff}
+.seg button+button{border-left:1px solid #dbe3ef}
+select{font-size:13px;padding:7px 12px;border:1px solid #dbe3ef;border-radius:9px;color:#475569;background:#fff;cursor:pointer}
+.hint{font-size:12px;color:#9aa3b2}
+/* —— 表格（沿用现有 tbl 风格）—— */
+.tblsec{margin:14px 28px 0;border:1px solid #e8edf5;border-radius:12px;overflow:hidden}
+.tbl{max-height:560px;overflow:auto;overflow-x:auto;border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+thead th{position:sticky;top:0;background:#f8fafc;color:#64748b;font-weight:600;text-align:center;padding:10px 14px;border-bottom:1px solid #e8edf5;cursor:pointer;user-select:none;white-space:nowrap}
+thead th:hover{color:#2f6bff;background:#eef3fb}
+thead th.sort-asc::after{content:" ▲";font-size:.72em;color:#2f6bff}
+thead th.sort-desc::after{content:" ▼";font-size:.72em;color:#2f6bff}
+tbody td{padding:9px 14px;border-bottom:1px solid #f3f5f9;text-align:right}
+tbody td:nth-child(1){text-align:left;color:#475569}
+tbody td:nth-child(2){text-align:left;color:#334155;font-variant-numeric:tabular-nums}
+tbody td:nth-child(3){text-align:left;font-weight:600;color:#1f2937}
+tbody tr:hover{background:#f6f9ff}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.pos{color:#e5484d}.neg{color:#2f9e44}
+.rank{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;font-size:12px;font-weight:700;background:#f1f5f9;color:#64748b}
+.rank.top1{background:#fff1ed;color:#e5484d}.rank.top2{background:#fff7e6;color:#e8920c}.rank.top3{background:#eef6ff;color:#2f6bff}
+.badge{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;color:#e8920c;background:#fff4e0;border-radius:6px;padding:1px 6px;white-space:nowrap}
+.stk{font-size:12px;color:#94a3b8;margin-left:6px}
+.note{padding:12px 28px 22px;color:#9aa3b2;font-size:12px;line-height:1.9}
+.note b{color:#64748b}
+.placeholder{padding:40px 28px;color:#94a3b8;font-size:14px;text-align:center}
+@media(max-width:600px){
+  body{padding:10px}
+  .hd{padding:14px 14px 2px}.hd h1{font-size:17px}.hd .sub{font-size:11.5px}
+  .asof{font-size:11.5px;padding:4px 10px}
+  .maintabs{padding:10px 14px 0;gap:0}
+  .mtab{font-size:12px;padding:8px 12px}
+  .stockctrl{padding:12px 14px 2px;gap:8px}
+  .ctrlrow{gap:6px}.ctrlrow .lbl{font-size:11px}
+  .seg button{padding:6px 12px;font-size:12px}
+  .tblsec{margin:12px 14px 0}
+  .tbl{max-height:64vh;overflow-x:auto}
+  table{font-size:13.5px}
+  thead th{padding:9px 10px}tbody td{padding:8px 10px}
+  .note{padding:10px 14px 16px;font-size:11px}
+}
+</style></head>
+<body><div class="wrap">
+<div class="hd">
+<div class="asof">数据最新：<b>2026-11-03</b>（沪深 · 个股两融 T+1 披露）</div>
+<h1>A股 · 融资余额（日/周/月） &amp; 上涨家数</h1>
+<div class="sub">原标题下新增「个股融资榜」标签页。下列为<b>点击「个股融资榜」后的式样</b>（数字均为示例占位）。</div>
+</div>
+
+<!-- 顶部标签页：现有两个 + 新增一个 -->
+<div class="maintabs">
+  <button class="mtab" data-tab="trend">融资余额 &amp; 涨跌家数</button>
+  <button class="mtab active" data-tab="stock">个股融资榜</button>
+</div>
+
+<!-- 个股融资榜 面板 -->
+<div id="panel-stock">
+  <div class="stockctrl">
+    <div class="ctrlrow">
+      <span class="lbl">日期：</span>
+      <select id="dtSel">
+        <option value="2026-11-03">2026-11-03（最新披露）</option>
+        <option value="2026-10-30">2026-10-30</option>
+        <option value="2026-10-29">2026-10-29</option>
+        <option value="2026-10-28">2026-10-28</option>
+        <option value="2026-10-27">2026-10-27</option>
+      </select>
+      <span class="hint">每日 T+1 自动存档，可回看历史任一日</span>
+    </div>
+    <div class="ctrlrow">
+      <span class="lbl">榜单：</span>
+      <div class="seg" id="kindSeg">
+        <button data-kind="bal" class="on">融资余额最高</button>
+        <button data-kind="inc">融资增量最高</button>
+        <button data-kind="dec">融资减少最多</button>
+      </div>
+      <span class="lbl" style="margin-left:14px">显示：</span>
+      <div class="seg" id="topSeg">
+        <button data-top="10">Top10</button>
+        <button data-top="20" class="on">Top20</button>
+        <button data-top="50">Top50</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tblsec">
+    <div class="tbl">
+      <table id="rankTbl">
+        <thead><tr>
+          <th data-c="rank">#</th>
+          <th data-c="code">代码</th>
+          <th data-c="name">名称</th>
+          <th data-c="rzye">融资余额(亿)</th>
+          <th data-c="inc">日增量(亿)</th>
+          <th data-c="net">净买入(亿)</th>
+          <th data-c="pct">占流通市值%</th>
+          <th data-c="streak">连续上榜</th>
+          <th data-c="sw">申万行业</th>
+        </tr></thead>
+        <tbody id="rankBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>口径说明（式样）：</b>① 榜单范围＝沪深两融标的（约 3600 只，天然不含北交所）；②「日增量」＝融资余额日环比（今余额−昨余额，口径A）；③「净买入」＝当日融资买入−偿还；④「连续上榜」＝基于每日存档、连续 N 日进入同类型榜单（≥3 日标 🔥）；⑤ 数据 T+1 披露，最新日＝交易日次日；⑥ 新纳入两融标的首日余额跳变会致增量虚高，已自动剔除。
+  </div>
+</div>
+
+<!-- 其他标签页占位（点击可切换，原型仅示意） -->
+<div id="panel-trend" class="placeholder" style="display:none">「融资余额 &amp; 涨跌家数」原图表与明细（现有内容，此处省略）</div>
+
+<script>
+// 示例数据：[code,name,rzye(亿),inc(亿日增量),net(亿净买入),pct(占流通市值%),streak(连续上榜天),sw(申万)]
+const STOCKS=[
+ ['600519','贵州茅台',214.6,3.2,2.8,0.21,6,'食品饮料'],
+ ['300750','宁德时代',188.3,5.6,5.1,1.12,9,'电力设备'],
+ ['601318','中国平安',176.9,-2.1,-2.4,1.84,0,'非银金融'],
+ ['600036','招商银行',154.2,1.4,1.2,0.97,4,'银行'],
+ ['300059','东方财富',142.7,8.9,8.3,3.41,12,'非银金融'],
+ ['600900','长江电力',98.5,0.6,0.5,0.41,3,'公用事业'],
+ ['601012','隆基绿能',86.3,-4.7,-4.9,2.93,0,'电力设备'],
+ ['002594','比亚迪',121.8,-1.8,-1.6,1.05,2,'汽车'],
+ ['688981','中芯国际',95.4,6.7,6.2,2.88,7,'电子'],
+ ['688256','寒武纪',78.9,12.4,11.8,4.62,15,'电子'],
+ ['601398','工商银行',89.1,0.9,0.8,0.33,2,'银行'],
+ ['000858','五粮液',81.6,2.3,2.0,0.62,5,'食品饮料'],
+ ['300308','中际旭创',73.2,9.1,8.7,3.05,11,'通信'],
+ ['300502','新易盛',61.7,7.8,7.4,4.18,10,'通信'],
+ ['601127','赛力斯',58.4,-3.2,-3.5,2.41,0,'汽车'],
+ ['002475','立讯精密',112.5,4.1,3.8,1.66,8,'电子'],
+ ['002371','北方华创',69.3,5.2,4.9,2.27,6,'电子'],
+ ['002463','沪电股份',44.8,3.6,3.3,3.74,9,'电子'],
+ ['601899','紫金矿业',108.2,2.9,2.6,1.41,4,'有色金属'],
+ ['000333','美的集团',76.5,1.1,1.0,0.78,3,'家用电器'],
+ ['000651','格力电器',64.3,-1.4,-1.2,1.12,0,'家用电器'],
+ ['600276','恒瑞医药',53.7,2.7,2.5,1.03,5,'医药生物'],
+ ['688041','海光信息',71.9,6.3,5.9,3.52,13,'电子'],
+ ['600030','中信证券',117.4,-2.8,-3.1,2.31,0,'非银金融'],
+ ['000725','京东方A',92.6,4.8,4.5,2.94,7,'电子'],
+ ['601138','工业富联',83.1,5.9,5.5,1.18,8,'电子'],
+ ['600309','万华化学',57.8,1.7,1.5,1.27,2,'基础化工'],
+ ['300760','迈瑞医疗',49.2,0.8,0.7,0.69,3,'医药生物'],
+ ['002230','科大讯飞',58.9,3.3,3.0,3.21,6,'计算机'],
+ ['601888','中国中免',61.4,-2.2,-2.0,1.49,0,'商贸零售']
+];
+let state={tab:'stock',kind:'bal',top:20,dt:'2026-11-03',sort:{c:'rzye',asc:false}};
+
+function val(s){return {
+  code:s[0],name:s[1],rzye:s[2],inc:s[3],net:s[4],pct:s[5],streak:s[6],sw:s[7]
+};}
+
+function rowsFor(){
+  const arr=STOCKS.map(val);
+  let out;
+  if(state.kind==='bal') out=arr.slice().sort((a,b)=>b.rzye-a.rzye);
+  else if(state.kind==='inc') out=arr.slice().sort((a,b)=>b.inc-a.inc);
+  else out=arr.slice().sort((a,b)=>a.inc-b.inc); // 减少最多＝增量升序
+  return out.slice(0,state.top);
+}
+
+function render(){
+  const rows=rowsFor();
+  const tb=document.getElementById('rankBody');
+  tb.innerHTML='';
+  rows.forEach((r,i)=>{
+    const rankCls=i<3?('rank top'+(i+1)):'rank';
+    const incCls=r.inc>=0?'pos':'neg';
+    const incStr=(r.inc>=0?'+':'')+r.inc.toFixed(1);
+    const netStr=(r.net>=0?'+':'')+r.net.toFixed(1);
+    const streak=r.streak>=3?('<span class="badge">🔥'+r.streak+'日</span>'):(r.streak>0?('×'+r.streak):'—');
+    const tr=document.createElement('tr');
+    tr.innerHTML=
+      '<td><span class="'+rankCls+'">'+(i+1)+'</span></td>'+
+      '<td class="num">'+r.code+'</td>'+
+      '<td>'+r.name+'</td>'+
+      '<td class="num">'+r.rzye.toFixed(1)+'</td>'+
+      '<td class="num '+incCls+'">'+incStr+'</td>'+
+      '<td class="num '+incCls+'">'+netStr+'</td>'+
+      '<td class="num">'+r.pct.toFixed(2)+'</td>'+
+      '<td>'+streak+'</td>'+
+      '<td>'+r.sw+'</td>';
+    tb.appendChild(tr);
+  });
+  // 更新表头排序指示
+  document.querySelectorAll('#rankTbl thead th').forEach(th=>{
+    th.classList.remove('sort-asc','sort-desc');
+    if(th.dataset.c===state.sort.c) th.classList.add(state.sort.asc?'sort-asc':'sort-desc');
+  });
+}
+
+// 交互：榜单切换
+document.getElementById('kindSeg').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  document.querySelectorAll('#kindSeg button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');state.kind=b.dataset.kind;
+  const map={bal:'rzye',inc:'inc',dec:'inc'};
+  state.sort={c:map[state.kind],asc:state.kind==='dec'};
+  render();
+});
+// TopN 切换
+document.getElementById('topSeg').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  document.querySelectorAll('#topSeg button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');state.top=+b.dataset.top;render();
+});
+// 日期切换（原型：仅最新日有示例数据，其余提示）
+document.getElementById('dtSel').addEventListener('change',e=>{
+  state.dt=e.target.value;
+  if(state.dt!=='2026-11-03'){
+    document.getElementById('rankBody').innerHTML='<tr><td colspan="9" style="text-align:center;color:#94a3b8;padding:30px">示例原型仅展示最新日（2026-11-03）数据，真实页面可回看历史任一日。</td></tr>';
+  } else render();
+});
+// 表头排序
+document.getElementById('rankTbl').addEventListener('click',e=>{
+  const th=e.target.closest('th');if(!th||!th.dataset.c||th.dataset.c==='rank')return;
+  const c=th.dataset.c;
+  if(state.sort.c===c) state.sort.asc=!state.sort.asc;
+  else state.sort={c:c,asc:false};
+  const arr=STOCKS.map(val).sort((a,b)=>{
+    let x=a[c],y=b[c];
+    if(typeof x==='string')return state.sort.asc?x.localeCompare(y):y.localeCompare(x);
+    return state.sort.asc?x-y:y-x;
+  });
+  const tb=document.getElementById('rankBody');tb.innerHTML='';
+  const shown=arr.slice(0,state.top);
+  shown.forEach((r,i)=>{
+    const rankCls=i<3?('rank top'+(i+1)):'rank';
+    const incCls=r.inc>=0?'pos':'neg';
+    const incStr=(r.inc>=0?'+':'')+r.inc.toFixed(1);
+    const netStr=(r.net>=0?'+':'')+r.net.toFixed(1);
+    const streak=r.streak>=3?('<span class="badge">🔥'+r.streak+'日</span>'):(r.streak>0?('×'+r.streak):'—');
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td><span class="'+rankCls+'">'+(i+1)+'</span></td><td class="num">'+r.code+'</td><td>'+r.name+'</td><td class="num">'+r.rzye.toFixed(1)+'</td><td class="num '+incCls+'">'+incStr+'</td><td class="num '+incCls+'">'+netStr+'</td><td class="num">'+r.pct.toFixed(2)+'</td><td>'+streak+'</td><td>'+r.sw+'</td>';
+    tb.appendChild(tr);
+  });
+  document.querySelectorAll('#rankTbl thead th').forEach(th=>{th.classList.remove('sort-asc','sort-desc');if(th.dataset.c===c)th.classList.add(state.sort.asc?'sort-asc':'sort-desc');});
+});
+// 顶部大标签切换
+document.querySelectorAll('.mtab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.mtab').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  const t=b.dataset.tab;
+  document.getElementById('panel-stock').style.display=(t==='stock')?'block':'none';
+  document.getElementById('panel-trend').style.display=(t==='stock')?'none':'block';
+}));
+render();
+</script>
+</body></html>
