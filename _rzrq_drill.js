@@ -50,7 +50,7 @@
     + '.d-q{border:1px solid #e3e8f0;border-radius:7px;padding:5px 9px;font-size:12.5px;width:160px;outline:none;color:#1f2a44;background:#fff}'
     + '.d-q:focus{border-color:#2f6bff;box-shadow:0 0 0 2px rgba(47,107,255,.12)}'
     + '.d-q::placeholder{color:#aab4c5}'
-    + '.drill-qnote{font-size:12px;color:#66708a;margin:6px 2px 0}'
+    + '.drill-qnote{font-size:12px;color:#66708a;margin:0 2px 6px}'
     + '.drill-qnote b{color:#2f6bff}'
     + '.drill-tblwrap{overflow-x:auto;margin-top:8px}'
     + '.drill-tblwrap table{border-collapse:collapse;width:100%;font-size:13.5px}'
@@ -194,8 +194,7 @@
       if (st1.sort && st1.sort.idx === i) cl += ' ' + (st1.sort.asc ? 'sort-asc' : 'sort-desc');
       return '<th class="' + cl.trim() + '" data-col="' + i + '">' + txt + '</th>';
     };
-    var html = qnote
-      + '<div class="drill-tblwrap"><table><thead><tr>'
+    var html = '<div class="drill-tblwrap">' + qnote + '<table><thead><tr>'
       + mk(0, '#') + mk(1, '名称') + mk(2, '融资余额(亿)') + mk(3, '融资净买入(亿)')
       + mk(4, '占流通市值(%)') + mk(5, '连续上榜') + mk(6, lastHead)
       + '</tr></thead><tbody>';
@@ -418,10 +417,12 @@
     if (e.target.closest('#drill-m2 .drill-x') || e.target.id === 'drill-m2') { m2.classList.remove('show'); return; }
     if (e.target.closest('#drill-m1 .drill-x') || e.target.id === 'drill-m1') { m1.classList.remove('show'); m2.classList.remove('show'); }
   });
+  var qTimer = null;
   document.addEventListener('input', function (e) {
     if (e.target && e.target.classList && e.target.classList.contains('d-q')) {
       st1.q = e.target.value.trim();
-      refresh1(true);
+      if (qTimer) clearTimeout(qTimer);
+      qTimer = setTimeout(function () { refresh1(true); }, 250); // 防抖：停顿 250ms 才刷新
     }
   });
   document.addEventListener('keydown', function (e) {
