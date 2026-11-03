@@ -47,6 +47,11 @@
     + '.dseg button{border:0;background:#fff;padding:5px 11px;font-size:12.5px;color:#66708a;cursor:pointer}'
     + '.dseg button.on{background:#2f6bff;color:#fff;font-weight:600}'
     + '.dseg button:hover:not(.on){color:#2f6bff}'
+    + '.d-q{border:1px solid #e3e8f0;border-radius:7px;padding:5px 9px;font-size:12.5px;width:160px;outline:none;color:#1f2a44;background:#fff}'
+    + '.d-q:focus{border-color:#2f6bff;box-shadow:0 0 0 2px rgba(47,107,255,.12)}'
+    + '.d-q::placeholder{color:#aab4c5}'
+    + '.drill-qnote{font-size:12px;color:#66708a;margin:6px 2px 0}'
+    + '.drill-qnote b{color:#2f6bff}'
     + '.drill-tblwrap{overflow-x:auto;margin-top:8px}'
     + '.drill-tblwrap table{border-collapse:collapse;width:100%;font-size:13.5px}'
     + '.drill-tblwrap th,.drill-tblwrap td{border-bottom:1px solid #eef1f6;padding:6px 9px;text-align:right;white-space:nowrap}'
@@ -59,6 +64,18 @@
     + '.drill-tblwrap .subcode{display:block;font-family:"SF Mono",Consolas,monospace;font-size:11px;color:#868e96;margin-top:2px;white-space:nowrap;font-weight:400}'
     + '.drill-tblwrap .fire{color:#ff7a18;font-weight:700}'
     + '.drill-tblwrap td.themes{text-align:left;max-width:240px;white-space:normal;line-height:1.45;font-size:12px;color:#66708a}'
+    + '.drill-tblwrap th[data-col="1"],.drill-tblwrap td.nm{text-align:center}'
+    + '.drill-tblwrap td.nm .nmz{color:#2f6bff}'
+    + /* 手机端：紧凑列距，保证融资余额与融资净买入两列数字完整可见（题材列隐藏，可在桌面端查看） */
+      '@media (max-width:620px){'
+    + '.drill-tblwrap th,.drill-tblwrap td{padding:5px 4px;font-size:12px}'
+    + '.drill-tblwrap table{font-size:12px}'
+    + '.drill-tblwrap td.themes,.drill-tblwrap th[data-col="6"]{display:none}'
+    + '.drill-tblwrap td.nm{max-width:96px;overflow:hidden;text-overflow:ellipsis}'
+    + '.drill-tblwrap .subcode{font-size:9.5px;margin-top:1px}'
+    + '.drill-tblwrap .rk{padding-right:2px}'
+    + '.d-q{width:126px;padding:5px 7px}'
+    + '.drill-body{padding:10px 10px 16px}}'
     + '.drill-tblwrap tbody tr.srow{cursor:pointer}'
     + '.drill-tblwrap tbody tr.srow:hover{background:#f3f7ff}'
     + '.drill-tblwrap tbody tr.srow .name{color:#2f6bff}'
@@ -100,7 +117,7 @@
   var m2 = mkModal('drill-m2');
 
   /* ---------- 状态 ---------- */
-  var st1 = { view: 'etf', rank: 'j', topn: 20, sort: null, date: null, gran: 'd' };
+  var st1 = { view: 'etf', rank: 'j', topn: 20, sort: null, date: null, gran: 'd', q: '' };
   var st2 = { code: '', name: '', isEtf: false, gran: 'd', sort: null, geo: null };
 
   /* ---------- 弹窗1：某期个股/ETF 融资榜 ---------- */
@@ -122,16 +139,36 @@
     if (!t || !t.length) return '—';
     return t[0] + (t.length > 1 ? '<span style="color:#9aa3b5"> 等' + t.length + '个</span>' : '');
   }
-  function body1(data, allThemes) {
-    var viewOn = function (v) { return st1.view === v ? 'on' : ''; };
-    var rankOn = function (r) { return st1.rank === r ? 'on' : ''; };
-    var topOn = function (n) { return st1.topn === n ? 'on' : ''; };
+  function qMatch(x, q) {
+    return x.c.indexOf(q) >= 0 || (x.n || '').toLowerCase().indexOf(q) >= 0;
+  }
+  function autoView(data) {
+    var q = (st1.q || '').toLowerCase(); if (!q) return;
+    var cnt = function (etf) {
+      return (data.rows || []).filter(function (x) { return etf ? isEtf(x.c) : !isEtf(x.c); })
+        .filter(function (x) { return qMatch(x, q); }).length;
+    };
+    var curEtf = st1.view === 'etf';
+    if (cnt(curEtf) === 0 && cnt(!curEtf) > 0) {
+      st1.view = curEtf ? 'stock' : 'etf';
+      var segView = m1.querySelector('.d-view');
+      if (segView) segView.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.v === st1.view); });
+    }
+  }
+  function tbl1(data, allThemes) {
     var rows = (data.rows || []).filter(function (x) { return st1.view === 'etf' ? isEtf(x.c) : !isEtf(x.c); });
     rows.forEach(function (x) { x._etf = isEtf(x.c); });
     if (st1.rank === 'r') rows.sort(function (a, b) { return b.r - a.r; });
     else if (st1.rank === 'j') rows.sort(function (a, b) { return (b.j == null ? -1e9 : b.j) - (a.j == null ? -1e9 : a.j); });
     else rows.sort(function (a, b) { return (a.j == null ? 1e9 : a.j) - (b.j == null ? 1e9 : b.j); });
     rows.forEach(function (x, i) { x._ord = i; });
+    /* 关键词筛选在全量排序后、TopN 截断前 —— 保证任意代码/名称都能被搜到 */
+    var q = (st1.q || '').toLowerCase(), matched = rows.length, qnote = '';
+    if (q) {
+      rows = rows.filter(function (x) { return qMatch(x, q); });
+      matched = rows.length;
+      qnote = '<div class="drill-qnote">筛选 “<b>' + st1.q.replace(/</g, '&lt;') + '</b>”：' + matched + ' 只匹配' + (matched ? '' : '，试试切换 ETF/个股 或 清空关键词') + '</div>';
+    }
     rows = rows.slice(0, st1.topn);
     if (st1.sort) {
       var idx = st1.sort.idx, asc = st1.sort.asc;
@@ -153,15 +190,12 @@
     }
     var lastHead = st1.view === 'stock' ? '401题材' : '类型';
     var mk = function (i, txt, c) {
-      var cl = (c || '') + (i === 1 || i === 6 ? ' l' : '');
+      var cl = (c || '') + (i === 6 ? ' l' : '');
       if (st1.sort && st1.sort.idx === i) cl += ' ' + (st1.sort.asc ? 'sort-asc' : 'sort-desc');
       return '<th class="' + cl.trim() + '" data-col="' + i + '">' + txt + '</th>';
     };
-    var html = '<div class="drill-ctrls" style="margin-bottom:8px">'
-      + '<div class="dseg d-view"><button data-v="etf" class="' + viewOn('etf') + '">ETF</button><button data-v="stock" class="' + viewOn('stock') + '">个股</button></div>'
-      + '<div class="dseg d-rank"><button data-r="j" class="' + rankOn('j') + '">净买入最高</button><button data-r="dc" class="' + rankOn('dc') + '">减少最多</button><button data-r="r" class="' + rankOn('r') + '">余额最高</button></div>'
-      + '<div class="dseg d-topn"><button data-n="10" class="' + topOn(10) + '">Top10</button><button data-n="20" class="' + topOn(20) + '">Top20</button><button data-n="50" class="' + topOn(50) + '">Top50</button></div>'
-      + '</div><div class="drill-tblwrap"><table><thead><tr>'
+    var html = qnote
+      + '<div class="drill-tblwrap"><table><thead><tr>'
       + mk(0, '#') + mk(1, '名称') + mk(2, '融资余额(亿)') + mk(3, '融资净买入(亿)')
       + mk(4, '占流通市值(%)') + mk(5, '连续上榜') + mk(6, lastHead)
       + '</tr></thead><tbody>';
@@ -172,7 +206,7 @@
         : '<td class="l">' + (x.tp || '—') + '</td>';
       html += '<tr class="srow" data-code="' + x.c + '" data-name="' + x.n + '" data-etf="' + (x._etf ? '1' : '0') + '" data-r="' + (x.r != null ? x.r : '0') + '">'
         + '<td class="l rk">' + (i + 1) + '</td>'
-        + '<td class="l nm">' + x.n + '<span class="subcode">' + x.c + '</span></td>'
+        + '<td class="nm"><span class="nmz">' + x.n + '</span><span class="subcode">' + x.c + '</span></td>'
         + '<td>' + (x.r != null ? x.r.toFixed(2) : '—') + '</td>'
         + '<td class="' + cls(x.j) + '">' + fmt2(x.j) + '</td>'
         + '<td>' + (x.z != null ? x.z.toFixed(2) : '—') + '</td>'
@@ -181,6 +215,21 @@
     });
     html += '</tbody></table></div>';
     return html;
+  }
+  function ctrls1() {
+    var viewOn = function (v) { return st1.view === v ? 'on' : ''; };
+    var rankOn = function (r) { return st1.rank === r ? 'on' : ''; };
+    var topOn = function (n) { return st1.topn === n ? 'on' : ''; };
+    return '<div class="drill-ctrls" style="margin-bottom:8px">'
+      + '<div class="dseg d-view"><button data-v="etf" class="' + viewOn('etf') + '">ETF</button><button data-v="stock" class="' + viewOn('stock') + '">个股</button></div>'
+      + '<input class="d-q" type="text" placeholder="输代码或名称筛选" value="' + (st1.q || '').replace(/"/g, '&quot;') + '" spellcheck="false" autocomplete="off">'
+      + '<div class="dseg d-rank"><button data-r="j" class="' + rankOn('j') + '">净买入最高</button><button data-r="dc" class="' + rankOn('dc') + '">减少最多</button><button data-r="r" class="' + rankOn('r') + '">余额最高</button></div>'
+      + '<div class="dseg d-topn"><button data-n="10" class="' + topOn(10) + '">Top10</button><button data-n="20" class="' + topOn(20) + '">Top20</button><button data-n="50" class="' + topOn(50) + '">Top50</button></div>'
+      + '</div>';
+  }
+  function body1(data, allThemes) {
+    autoView(data);
+    return ctrls1() + tbl1(data, allThemes);
   }
   function openModal1(date, gran) {
     st1.date = date; st1.gran = gran; st1.sort = null;
@@ -369,17 +418,33 @@
     if (e.target.closest('#drill-m2 .drill-x') || e.target.id === 'drill-m2') { m2.classList.remove('show'); return; }
     if (e.target.closest('#drill-m1 .drill-x') || e.target.id === 'drill-m1') { m1.classList.remove('show'); m2.classList.remove('show'); }
   });
+  document.addEventListener('input', function (e) {
+    if (e.target && e.target.classList && e.target.classList.contains('d-q')) {
+      st1.q = e.target.value.trim();
+      refresh1(true);
+    }
+  });
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
     if (m2.classList.contains('show')) m2.classList.remove('show');
     else if (m1.classList.contains('show')) m1.classList.remove('show');
   });
-  function refresh1() {
+  function refresh1(keepInput) {
     var box = m1.querySelector('.drill-body');
-    if (!box.querySelector('.drill-tblwrap')) return; // 还在加载中
+    var cur = box.querySelector('.drill-tblwrap');
+    if (!cur) return; // 还在加载中
+    var inp = keepInput ? box.querySelector('.d-q') : null;
+    var pos = (inp && inp.selectionStart != null) ? [inp.selectionStart, inp.selectionEnd] : null;
     Promise.all([loadJSON(stockFile(st1.gran, st1.date)), themes()]).then(function (rs) {
-      box.innerHTML = body1(rs[0], rs[1]);
+      if (!document.body.contains(cur)) return; // 已被更新的重绘替换
+      autoView(rs[0]);
+      var wrap = box.querySelector('.drill-tblwrap');
+      if (wrap) wrap.outerHTML = tbl1(rs[0], rs[1]);
       m1.querySelector('.drill-title').innerHTML = title1(st1.date);
+      if (inp) {
+        var inp2 = box.querySelector('.d-q');
+        if (inp2) { inp2.focus(); if (pos) { try { inp2.setSelectionRange(pos[0], pos[1]); } catch (_) {} } }
+      }
     });
   }
 })();
