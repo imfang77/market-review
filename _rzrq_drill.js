@@ -56,6 +56,7 @@
     + '.drill-tblwrap .pos{color:#e23b3b}.drill-tblwrap .neg{color:#16a34a}'
     + '.drill-tblwrap .rk{color:#9aa3b5;font-variant-numeric:tabular-nums}'
     + '.drill-tblwrap .code{font-family:ui-monospace,Menlo,Consolas,monospace;color:#66708a}'
+    + '.drill-tblwrap .subcode{display:block;font-family:"SF Mono",Consolas,monospace;font-size:11px;color:#868e96;margin-top:2px;white-space:nowrap;font-weight:400}'
     + '.drill-tblwrap .fire{color:#ff7a18;font-weight:700}'
     + '.drill-tblwrap td.themes{text-align:left;max-width:240px;white-space:normal;line-height:1.45;font-size:12px;color:#66708a}'
     + '.drill-tblwrap tbody tr.srow{cursor:pointer}'
@@ -137,10 +138,10 @@
       var getv = function (x) {
         if (idx === 0) return x._ord;
         if (idx === 1) return parseFloat(x.c) || 0;
-        if (idx === 3) return x.r == null ? -1e18 : x.r;
-        if (idx === 4) return x.j == null ? -1e18 : x.j;
-        if (idx === 5) return x.z == null ? -1e18 : x.z;
-        if (idx === 6) return x.s == null ? -1e18 : x.s;
+        if (idx === 2) return x.r == null ? -1e18 : x.r;
+        if (idx === 3) return x.j == null ? -1e18 : x.j;
+        if (idx === 4) return x.z == null ? -1e18 : x.z;
+        if (idx === 5) return x.s == null ? -1e18 : x.s;
         return (x.n || x.tp || '').toString();
       };
       rows.sort(function (a, b) {
@@ -152,7 +153,7 @@
     }
     var lastHead = st1.view === 'stock' ? '401题材' : '类型';
     var mk = function (i, txt, c) {
-      var cl = (c || '') + (i === 1 || i === 2 || i === 7 ? ' l' : '');
+      var cl = (c || '') + (i === 1 || i === 6 ? ' l' : '');
       if (st1.sort && st1.sort.idx === i) cl += ' ' + (st1.sort.asc ? 'sort-asc' : 'sort-desc');
       return '<th class="' + cl.trim() + '" data-col="' + i + '">' + txt + '</th>';
     };
@@ -161,8 +162,8 @@
       + '<div class="dseg d-rank"><button data-r="j" class="' + rankOn('j') + '">净买入最高</button><button data-r="dc" class="' + rankOn('dc') + '">减少最多</button><button data-r="r" class="' + rankOn('r') + '">余额最高</button></div>'
       + '<div class="dseg d-topn"><button data-n="10" class="' + topOn(10) + '">Top10</button><button data-n="20" class="' + topOn(20) + '">Top20</button><button data-n="50" class="' + topOn(50) + '">Top50</button></div>'
       + '</div><div class="drill-tblwrap"><table><thead><tr>'
-      + mk(0, '#') + mk(1, '代码') + mk(2, '名称') + mk(3, '融资余额(亿)') + mk(4, '融资净买入(亿)')
-      + mk(5, '占流通市值(%)') + mk(6, '连续上榜') + mk(7, lastHead)
+      + mk(0, '#') + mk(1, '名称') + mk(2, '融资余额(亿)') + mk(3, '融资净买入(亿)')
+      + mk(4, '占流通市值(%)') + mk(5, '连续上榜') + mk(6, lastHead)
       + '</tr></thead><tbody>';
     rows.forEach(function (x, i) {
       var fire = (x.s >= 3) ? '<span class="fire">🔥' + x.s + '</span>' : (x.s ? x.s : '—');
@@ -171,8 +172,7 @@
         : '<td class="l">' + (x.tp || '—') + '</td>';
       html += '<tr class="srow" data-code="' + x.c + '" data-name="' + x.n + '" data-etf="' + (x._etf ? '1' : '0') + '" data-r="' + (x.r != null ? x.r : '0') + '">'
         + '<td class="l rk">' + (i + 1) + '</td>'
-        + '<td class="l code">' + x.c + '</td>'
-        + '<td class="l name">' + x.n + '</td>'
+        + '<td class="l nm">' + x.n + '<span class="subcode">' + x.c + '</span></td>'
         + '<td>' + (x.r != null ? x.r.toFixed(2) : '—') + '</td>'
         + '<td class="' + cls(x.j) + '">' + fmt2(x.j) + '</td>'
         + '<td>' + (x.z != null ? x.z.toFixed(2) : '—') + '</td>'
