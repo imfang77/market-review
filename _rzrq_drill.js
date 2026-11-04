@@ -10,11 +10,16 @@
   var GRAN_TXT = { d: '日', w: '周', m: '月' };
   var cache = {};
   var themesPromise = null;
-  function loadJSON(url) {
-    if (!cache[url]) {
+  function loadJSON(url, retry) {
+    retry = retry || 0;
+    if (cache[url] === undefined) {
       cache[url] = fetch(url, { cache: 'no-cache' }).then(function (r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
+        if (!r.ok) throw new Error(url + ' HTTP ' + r.status);
         return r.json();
+      }).catch(function (e) {
+        delete cache[url]; // 失败不缓存，允许后续请求重试（避免偶发网络失败被永久缓存）
+        if (retry < 2) return loadJSON(url, retry + 1); // 弱网/大文件偶发失败时自动重试
+        throw new Error(url + ' 加载失败：' + (e && e.message ? e.message : '未知错误'));
       });
     }
     return cache[url];
