@@ -27,6 +27,9 @@ body{background:#eef1f6;font-family:-apple-system,"PingFang SC","Microsoft YaHei
 .rng-btn:hover{border-color:#2f6bff;color:#2f6bff}
 .rng-btn.active{background:#2f6bff;border-color:#2f6bff;color:#fff;font-weight:600}
 thead th:nth-child(1),tbody td:nth-child(1){white-space:nowrap}
+/* 融资余额表日期单元格：蓝色+手型，引导点击下钻 */
+#tbody-m td.drill-date{color:#2f6bff;cursor:pointer;font-weight:600;font-variant-numeric:tabular-nums}
+#tbody-m td.drill-date:hover{text-decoration:underline}
 .legend{padding:4px 28px 0;font-size:12px;color:#64748b;display:flex;flex-direction:column;gap:4px}
 .legend .lrow{display:flex;gap:14px;flex-wrap:wrap}
 .legend .lg{display:inline-flex;align-items:center;gap:4px}
@@ -207,7 +210,7 @@ function renderMTab(){
     var cls=(dv===null)?'':(dv>=0?'pos':'neg');
     var dtxt=(dv===null)?'—':((dv>=0?'+':'')+fmt2(dv));
     var tr=document.createElement('tr');
-    tr.innerHTML='<td data-sort="'+i+'">'+CD[i]+'</td><td class="num rzc" data-sort="'+(CRZ[i]!==null?CRZ[i]:'')+'">'+(CRZ[i]!==null?fmt2(CRZ[i]):'—')+'</td>'
+    tr.innerHTML='<td class="drill-date" data-sort="'+i+'">'+CD[i]+'</td><td class="num rzc" data-sort="'+(CRZ[i]!==null?CRZ[i]:'')+'">'+(CRZ[i]!==null?fmt2(CRZ[i]):'—')+'</td>'
       +'<td class="num '+cls+'" data-sort="'+(dv===null?'':dv)+'">'+dtxt+'</td><td class="num" data-sort="'+(CZB[i]!==null?CZB[i]:'')+'">'+(CZB[i]!==null?CZB[i].toFixed(2):'—')+'</td>';
     frag.appendChild(tr);
   }
