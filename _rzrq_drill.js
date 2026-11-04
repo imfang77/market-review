@@ -58,8 +58,8 @@
     + '.drill-qnote{font-size:12px;color:#66708a;margin:0 2px 6px}'
     + '.drill-qnote b{color:#2f6bff}'
     + '.drill-tblwrap{overflow-x:auto;margin-top:8px}'
-    + '.drill-tblwrap table{border-collapse:collapse;width:100%;font-size:13.5px}'
-    + '.drill-tblwrap th,.drill-tblwrap td{border-bottom:1px solid #eef1f6;padding:6px 9px;text-align:right;white-space:nowrap}'
+    + '.drill-tblwrap table{border-collapse:collapse;width:100%;font-size:12px}'
+    + '.drill-tblwrap th,.drill-tblwrap td{border-bottom:1px solid #eef1f6;padding:4px 7px;text-align:right;white-space:nowrap}'
     + '.drill-tblwrap th{background:#f1f5fb;color:#66708a;font-weight:600;position:sticky;top:0;cursor:pointer;user-select:none}'
     + '.drill-tblwrap th:hover{color:#2f6bff}'
     + '.drill-tblwrap th.l,.drill-tblwrap td.l{text-align:left}'
@@ -99,8 +99,8 @@
     + '.chart-tip{position:absolute;pointer-events:none;background:rgba(31,42,68,.95);color:#fff;font-size:12px;line-height:1.55;padding:6px 9px;border-radius:7px;opacity:0;transition:opacity .08s;z-index:5;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.28)}'
     + '.chart-tip b{color:#ffd479}'
     + '.mini-tbl{margin-top:8px;max-height:240px;overflow:auto;border:1px solid #e3e8f0;border-radius:8px;background:#fff}'
-    + '.mini-tbl table{font-size:12.5px}'
-    + '.mini-tbl th,.mini-tbl td{padding:4px 8px;text-align:right;border-bottom:1px solid #eef1f6;white-space:nowrap}'
+    + '.mini-tbl table{font-size:11.5px}'
+    + '.mini-tbl th,.mini-tbl td{padding:3px 6px;text-align:right;border-bottom:1px solid #eef1f6;white-space:nowrap}'
     + '.mini-tbl th{background:#f1f5fb;color:#66708a;position:sticky;top:0;cursor:pointer;user-select:none}'
     + '.mini-tbl th:hover{color:#2f6bff}'
     + '.mini-tbl th.l,.mini-tbl td.l{text-align:left}'
@@ -200,7 +200,7 @@
       return '<th class="' + cl.trim() + '" data-col="' + i + '">' + txt + '</th>';
     };
     var html = '<div class="drill-tblwrap">' + qnote + '<table><thead><tr>'
-      + mk(0, '#') + mk(1, '名称') + mk(2, '融资余额(亿)') + mk(3, '融资净买入(亿)')
+      + mk(0, '#') + mk(1, '名称') + mk(2, '融资余额(亿)') + mk(3, '融资净买入(亿)·' + GRAN_TXT[st1.gran])
       + mk(4, '占流通市值(%)') + mk(5, '连续上榜') + mk(6, lastHead)
       + '</tr></thead><tbody>';
     rows.forEach(function (x, i) {
@@ -307,7 +307,7 @@
       if (st2.sort && st2.sort.col === i) c += ' ' + (st2.sort.asc ? 'sort-asc' : 'sort-desc');
       return '<th class="' + c.trim() + '" data-col="' + i + '">' + txt + '</th>';
     };
-    var tbl = '<div class="mini-tbl"><table><thead><tr>' + mk2(0, '日期') + mk2(1, '融资余额(亿)') + mk2(2, '融资净买入(亿)') + mk2(3, '占流通市值(%)') + '</tr></thead><tbody>';
+    var tbl = '<div class="mini-tbl"><table><thead><tr>' + mk2(0, '日期') + mk2(1, '融资余额(亿)') + mk2(2, '融资净买入(亿)·' + GRAN_TXT[st2.gran]) + mk2(3, '占流通市值(%)') + '</tr></thead><tbody>';
     rows.forEach(function (x) {
       tbl += '<tr><td class="l">' + x.dt + '</td><td>' + (x.r == null ? '—' : x.r.toFixed(2)) + '</td>'
         + '<td class="' + cls(x.j) + '">' + fmt2(x.j) + '</td>'
