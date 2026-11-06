@@ -521,7 +521,7 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
   var NOTE = '① 数据源为东方财富个股两融明细，底层单位「亿元」；本页与下钻弹窗表格按上方单位档换算显示（默认档 1亿 = 10,000，切「亿元」档为 1亿 = 1）。融资余额/占流通市值为期末快照，融资净买入为当期（日/周/月）累计。<br>'
     + '② 跟随页面「融资统计粒度」与「时间段」：日/周/月分别读取对应历史序列。<br>'
     + '③ 本页日期仅作展示，不支持下钻；点表头可排序，默认按日期降序。<br>'
-    + '④ 鼠标悬停（手机点按）表格任意行 → 浮出该期明细：融资余额 / <b>融资净买入</b> / 占流通市值，金额均按上方单位档换算；表格同时常驻显示融资净买入列。<br>'
+    + '④ 表格四列（日期 / 融资余额 / <b>融资净买入</b> / 占流通市值）常驻显示，点表头可排序；表格行不再弹出悬浮明细。<br>'
     + '⑤ 走势图蓝线 = 融资余额、红绿柱 = <b>融资净买入</b>（红正绿负），二者与悬停明细<b>统一使用上方选中的单位档</b>（默认「千万元」，可切「亿元」）；鼠标悬停（手机点按/滑动）图上任意一期 → 浮出当期数字明细。';
 
   /* ---------- 样式 ---------- */
@@ -545,8 +545,8 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
     + '.rzq-st-hint{font-size:12px;color:#9aa3b5}'
     + '.rzq-st-hint b{color:#2f6bff}'
     + '.rzq-st-chart{border:1px solid #eef1f6;border-radius:10px;padding:10px 10px 6px;margin-bottom:10px;background:#fff}'
-    + '.rzq-st-chart svg{max-width:780px;margin:0 auto}'
-    + '.rzq-st-legend{display:flex;flex-wrap:wrap;gap:3px 12px;align-items:center;font-size:11.5px;color:#64748b;padding:2px 4px 0;line-height:1.5}'
+    + '.rzq-st-chart svg{max-width:900px;margin:0 auto}'
+    + '.rzq-st-legend{display:flex;flex-wrap:wrap;gap:3px 12px;align-items:center;font-size:12px;color:#64748b;padding:2px 4px 0;line-height:1.5}'
     + '.rzq-st-legend .lg{display:inline-flex;align-items:center;gap:5px;white-space:normal}'
     + '.rzq-st-legend i{display:inline-block;width:13px;height:3px;border-radius:2px;flex:0 0 auto}'
     + '.rzq-st-legend i.ln{background:#2f6bff}'
@@ -558,9 +558,8 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
     + '.rzq-st-tbl td{font-size:12.5px;padding:5px 9px}'
     + '.rzq-st-tbl .num{font-variant-numeric:tabular-nums;white-space:nowrap}'
     + '.rzq-st-tbl td.st-dt{color:#1f2937;font-weight:500;text-align:left;white-space:nowrap}'
-    + '.rzq-st-tbl tbody tr.rzq-st-row{cursor:help}'
-    + '.rzq-st-tbl tbody tr.rzq-st-row:hover{background:#eaf1ff}'
-    + '.rzq-st-tip{position:fixed;z-index:70;pointer-events:none;opacity:0;transition:opacity .08s;background:rgba(31,42,68,.96);color:#fff;font-size:12px;line-height:1.65;padding:8px 11px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.28);white-space:nowrap;max-width:calc(100vw - 20px)}'
+    + /* 表格行不弹悬浮明细（仅走势图提供悬停浮层）：无 help 光标、无强调 hover */
+      '.rzq-st-tip{position:fixed;z-index:70;pointer-events:none;opacity:0;transition:opacity .08s;background:rgba(31,42,68,.96);color:#fff;font-size:12px;line-height:1.65;padding:8px 11px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.28);white-space:nowrap;max-width:calc(100vw - 20px)}'
     + '.rzq-st-tip.show{opacity:1}'
     + '.rzq-st-tip b{color:#ffd479;font-size:12.5px}'
     + '.rzq-st-tip .k{display:inline-block;min-width:76px;color:#b9c6de}'
@@ -574,7 +573,7 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
     + '.rzq-st-q{width:158px;font-size:12.5px}'
     + '.rzq-st-ac{width:246px}'
     + '.rzq-st-chart{padding:6px 4px 4px}'
-    + '.rzq-st-legend{font-size:10.5px;gap:2px 8px}'
+    + '.rzq-st-legend{font-size:11px;gap:2px 8px}'
     /* 手机端四列全显且不截断：短表头 + 小字号 + 窄内边距，确保「融资净买入」在首屏可见 */
     + '.rzq-st-tbl thead th{font-size:10.5px;padding:5px 3px;white-space:normal;line-height:1.25}'
     + '.rzq-st-tbl td{padding:4px 3px;font-size:11px}'
@@ -616,17 +615,10 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
   var ac = panel.querySelector('.rzq-st-ac');
   var S = { gran: 'd', range: 'm3', code: '', name: '', h: {}, idx: null, sort: { col: 0, asc: false }, busy: false };
 
-  /* ---------- 表格行明细浮层（桌面鼠标悬停 / 手机点按） ---------- */
+  /* ---------- 走势图悬停明细浮层（表格行不再弹出浮层，2026-11-06 定稿） ---------- */
   var tip = panel.querySelector('.rzq-st-tip');
   document.body.appendChild(tip); // 移出 .tblsec(overflow:hidden)，fixed 浮层不被裁剪
   var tipRow = null, tipPinned = false;
-  function numAttr(tr, k) {
-    var s = tr.dataset[k];
-    if (s == null || s === '') return null;
-    var v = parseFloat(s);
-    return isNaN(v) ? null : v;
-  }
-  /* 表格行浮层与走势图悬停浮层共用同一套明细内容 */
   function detailHTML(x) {
     var u = RZQ.uLabel();
     var jc = (x.j == null || isNaN(x.j)) ? '' : (x.j >= 0 ? 'pos' : 'neg');
@@ -634,9 +626,6 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
       + '<div><span class="k">融资余额</span><span class="v">' + RZQ.uVal(x.r) + '</span> ' + u + '</div>'
       + '<div><span class="k">融资净买入</span><span class="v ' + jc + '">' + RZQ.uSigned(x.j) + '</span> ' + u + ' · ' + G[S.gran] + '</div>'
       + '<div><span class="k">占流通市值</span><span class="v">' + (x.z == null || isNaN(x.z) ? '—' : x.z.toFixed(2)) + '</span> %</div>';
-  }
-  function tipHTML(tr) {
-    return detailHTML({ dt: tr.dataset.dt, r: numAttr(tr, 'r'), j: numAttr(tr, 'j'), z: numAttr(tr, 'z') });
   }
   function placeTip(x, y) {
     var w = tip.offsetWidth, h = tip.offsetHeight;
@@ -647,21 +636,7 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
     if (top < 8) top = 8;
     tip.style.left = left + 'px'; tip.style.top = top + 'px';
   }
-  function showTip(tr, x, y) {
-    if (!tr || !tr.classList.contains('rzq-st-row')) return;
-    if (tr !== tipRow) { tip.innerHTML = tipHTML(tr); tipRow = tr; }
-    tip.classList.add('show');
-    placeTip(x, y);
-  }
   function hideTip() { tip.classList.remove('show'); tipRow = null; tipPinned = false; }
-  var tbodyS = panel.querySelector('#tbody-s');
-  tbodyS.addEventListener('mousemove', function (e) {
-    var tr = e.target.closest && e.target.closest('tr.rzq-st-row');
-    if (!tr) { if (!tipPinned) hideTip(); return; }
-    tipPinned = false;
-    showTip(tr, e.clientX, e.clientY);
-  });
-  tbodyS.addEventListener('mouseleave', function () { if (!tipPinned) hideTip(); });
   document.addEventListener('click', function (e) {
     if (e.target && e.target.closest && !e.target.closest('#tpanel-s')) hideTip();
   });
@@ -793,7 +768,8 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
   function spark(rows) {
     var vals = rows.map(function (x) { return x.r; }).filter(function (v) { return v != null && !isNaN(v); });
     if (vals.length < 2) { S.geo = null; return ''; }
-    var W = 520, H = 232, pl = 112, pr = 16, pt = 24, pb = 30;
+    /* 放大版：viewBox 560×320（原 520×232），桌面最大宽 900px；字号/线宽随比例同步放大 */
+    var W = 560, H = 320, pl = 120, pr = 18, pt = 28, pb = 34;
     var iw = W - pl - pr, ih = H - pt - pb, bottom = pt + ih;
     var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
     var pad = (mx - mn) * 0.12 || Math.abs(mx || 1) * 0.02;
@@ -810,12 +786,12 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
     for (var k = 0; k <= 2; k++) {
       var gv = lo + (hi - lo) * k / 2;
       grid += '<line x1="' + pl + '" y1="' + yy(gv).toFixed(1) + '" x2="' + (pl + iw) + '" y2="' + yy(gv).toFixed(1) + '" stroke="#eef1f6" stroke-width="1"/>'
-        + '<text x="' + (pl - 8) + '" y="' + (yy(gv) + 4).toFixed(1) + '" font-size="11" fill="#9aa3b5" text-anchor="end">' + RZQ.uVal(gv) + '</text>';
+        + '<text x="' + (pl - 8) + '" y="' + (yy(gv) + 4).toFixed(1) + '" font-size="12.5" fill="#9aa3b5" text-anchor="end">' + RZQ.uVal(gv) + '</text>';
     }
     var bars = '';
     rows.forEach(function (x, i) {
       if (x.j == null || isNaN(x.j)) return;
-      var bw = Math.max(2, iw / rows.length * 0.5);
+      var bw = Math.max(2.5, iw / rows.length * 0.56);
       var bh = Math.max(0.8, Math.abs(x.j) / dabs * barH);
       var by = x.j >= 0 ? zeroY - bh : zeroY;
       bars += '<rect x="' + (xx(i) - bw / 2).toFixed(1) + '" y="' + by.toFixed(1) + '" width="' + bw.toFixed(1)
@@ -828,14 +804,14 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
       + '<line x1="' + pl + '" y1="' + zeroY.toFixed(1) + '" x2="' + (pl + iw) + '" y2="' + zeroY.toFixed(1) + '" stroke="#d7dde8" stroke-dasharray="3 3"/>'
       + bars
       + '<polygon points="' + area + '" fill="rgba(47,107,255,.09)"/>'
-      + '<polyline points="' + pstr + '" fill="none" stroke="#2f6bff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'
-      + '<circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="3.8" fill="#2f6bff"/>'
-      + '<text x="' + pl + '" y="' + (pt - 8) + '" font-size="11" fill="#2f6bff">融资余额 · ' + RZQ.uLabel() + ' · 共 ' + rows.length + ' 期</text>'
-      + '<text x="' + (pl + iw) + '" y="' + (pt - 8) + '" font-size="10.5" fill="#9aa3b5" text-anchor="end">融资净买入 · ' + RZQ.uLabel() + ' · 红正/绿负</text>'
-      + '<text x="' + pl + '" y="' + (H - 8) + '" font-size="11" fill="#9aa3b5">' + rows[0].dt + '</text>'
-      + '<text x="' + (pl + iw) + '" y="' + (H - 8) + '" font-size="11" fill="#9aa3b5" text-anchor="end">' + rows[rows.length - 1].dt + '</text>'
-      + '<line class="st-cursor" x1="0" y1="' + pt + '" x2="0" y2="' + bottom + '" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" style="opacity:0"/>'
-      + '<circle class="st-dot" r="4" cx="0" cy="0" fill="#2f6bff" stroke="#fff" stroke-width="1.5" style="opacity:0"/>'
+      + '<polyline points="' + pstr + '" fill="none" stroke="#2f6bff" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'
+      + '<circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="4.5" fill="#2f6bff"/>'
+      + '<text x="' + pl + '" y="' + (pt - 9) + '" font-size="12.5" fill="#2f6bff">融资余额 · ' + RZQ.uLabel() + ' · 共 ' + rows.length + ' 期</text>'
+      + '<text x="' + (pl + iw) + '" y="' + (pt - 9) + '" font-size="12" fill="#9aa3b5" text-anchor="end">融资净买入 · ' + RZQ.uLabel() + ' · 红正/绿负</text>'
+      + '<text x="' + pl + '" y="' + (H - 10) + '" font-size="12.5" fill="#9aa3b5">' + rows[0].dt + '</text>'
+      + '<text x="' + (pl + iw) + '" y="' + (H - 10) + '" font-size="12.5" fill="#9aa3b5" text-anchor="end">' + rows[rows.length - 1].dt + '</text>'
+      + '<line class="st-cursor" x1="0" y1="' + pt + '" x2="0" y2="' + bottom + '" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3" style="opacity:0"/>'
+      + '<circle class="st-dot" r="5" cx="0" cy="0" fill="#2f6bff" stroke="#fff" stroke-width="1.5" style="opacity:0"/>'
       + '<rect class="st-ovl" x="0" y="0" width="' + W + '" height="' + H + '" fill="transparent" pointer-events="all"/>'
       + '</svg>';
     S.geo = {
@@ -911,10 +887,7 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
     var sorted = rows.slice().sort(cmp);
     tbody.innerHTML = sorted.length
       ? sorted.map(function (x) {
-          return '<tr class="rzq-st-row" data-dt="' + x.dt + '"'
-            + ' data-r="' + (x.r == null || isNaN(x.r) ? '' : x.r) + '"'
-            + ' data-j="' + (x.j == null || isNaN(x.j) ? '' : x.j) + '"'
-            + ' data-z="' + (x.z == null || isNaN(x.z) ? '' : x.z) + '">'
+          return '<tr>'
             + '<td class="st-dt">' + x.dt + '</td>'
             + '<td class="num">' + RZQ.uVal(x.r) + '</td>'
             + '<td class="num ' + jcls(x.j) + '">' + RZQ.uSigned(x.j) + '</td>'
@@ -939,15 +912,7 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
       render(); return;
     }
     if (e.target.closest('.rzq-st-chart')) return; // 走势图内点击/触屏由图表悬停逻辑接管，不关闭浮层
-    // 触屏无 hover：点按任意数据行固定显示该期明细浮层，点别处关闭
-    var tr = e.target.closest('.rzq-st-tbl tbody tr.rzq-st-row');
-    if (tr) {
-      var rc = tr.getBoundingClientRect();
-      tipPinned = true;
-      showTip(tr, rc.left + Math.min(rc.width / 2, 110), rc.bottom);
-      return;
-    }
-    hideTip();
+    hideTip(); // 表格行点击不再弹出明细浮层（2026-11-06 用户定稿）
   });
   document.querySelectorAll('#segG button').forEach(function (b) {
     b.addEventListener('click', function () { S.gran = b.dataset.g; if (isActive()) ensureLoad(); });
