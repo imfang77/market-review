@@ -2,7 +2,7 @@
    挂接：#tbody-m 日期行点击 → 弹窗1 该期个股/ETF融资榜 → 点行 → 弹窗2 历史走势（方案A：跟随入口粒度）
    数据：_rzrq_stock[_w|_m]_<日期>.json · _rzrq_hist_d|w|m.json · _code_themes.json（懒加载+内存缓存）
    箭头约定与全站一致：默认 ⇅(灰)，升序 ↑(蓝)，降序 ↓(蓝)，不用 ▲/▼ */
-/* 全局共享：金额单位（a=自动[默认] / w=万 / q=千万 / y=亿）+ 个股标签页状态与刷新钩子
+/* 全局共享：金额单位（w=万 / q=千万 / y=亿；未手动选档时系统按个股市值自动匹配对应档）+ 个股标签页状态与刷新钩子
    数据底层单位恒为「亿元」。
    口径定稿（2026-11-06 用户拍板）：三档单位 = 万 / 千万 / 亿，
    换算 1亿 = 10,000万 = 10千万 = 1亿；融资余额与融资净买入共用同一单位（不分开选档）。
@@ -17,13 +17,14 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   if (document.getElementById('drill-css')) return; // 幂等
 
   var RZQ = window.RZQ;
-  if (RZQ.unit === 'w') RZQ.unit = 'a'; // 兼容旧版脚本残留的「万元」档（已并入自动档）
+  if (RZQ.unit && ['a', 'w', 'q', 'y'].indexOf(RZQ.unit) < 0) RZQ.unit = 'a'; // 仅兜底未知档位归自动；w/q/y 为有效手动档
   var UNITS = {
     w: { key: 'w', label: '万',   mul: 1e4, dec: 2 },  // 1亿 = 10,000万
     q: { key: 'q', label: '千万', mul: 10,  dec: 2 },  // 1亿 = 10千万
     y: { key: 'y', label: '亿',   mul: 1,   dec: 2 }   // 1亿 = 1亿
   };
-  var BTN_LABEL = { a: '自动', w: '万', q: '千万', y: '亿' };
+  // 无「自动」按钮：选项只有 万/千万/亿；未手动选档时(RZQ.unit==='a')由系统按个股市值自动匹配对应档并显示该档
+  var BTN_LABEL = { w: '万', q: '千万', y: '亿' };
   function maxAbs(a) {
     var m = 0;
     (a || []).forEach(function (v) { if (v != null && !isNaN(v)) m = Math.max(m, Math.abs(v)); });
@@ -50,16 +51,28 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     if (v == null || isNaN(v)) return '—';
     return (v >= 0 ? '+' : '-') + fmtVal(Math.abs(v), u);
   }
-  function uLabel(u) { return u ? u.label : (BTN_LABEL[RZQ.unit] || '自动'); }
+  // 当前生效单位的中文标签：优先用传入单位对象，否则用最近一次渲染生效单位(RZQ._lastU)，再否则按空窗口自动档(万)
+  function uLabel(u) { return (u && u.label) || (RZQ._lastU && RZQ._lastU.label) || (RZQ.effUnit && RZQ.effUnit([]).label) || '万'; }
   function uVal(v, u) { return fmtVal(v, u); }
   function uSigned(v, u) { return fmtSigned(v, u); }
   RZQ.uLabel = uLabel; RZQ.uVal = uVal; RZQ.uSigned = uSigned;
   RZQ.effUnit = effUnit; RZQ.UNITS = UNITS; RZQ.BTN_LABEL = BTN_LABEL;
-  function unitBtns() {
-    return ['a', 'w', 'q', 'y'].map(function (u) {
-      return '<button data-u="' + u + '" class="' + (RZQ.unit === u ? 'on' : '') + '">' + BTN_LABEL[u] + '</button>';
+  // 单位按钮：只渲染 万/千万/亿 三档，不出现「自动」。activeKey 决定高亮项——
+  // 未手动选档时传「自动匹配出的档位」，手动选档时传 RZQ.unit，使高亮=当前实际生效档。
+  function unitBtns(activeKey) {
+    activeKey = activeKey || (RZQ.unit !== 'a' ? RZQ.unit : (RZQ._lastU && RZQ._lastU.key) || 'w');
+    return ['w', 'q', 'y'].map(function (u) {
+      return '<button data-u="' + u + '" class="' + (activeKey === u ? 'on' : '') + '">' + BTN_LABEL[u] + '</button>';
     }).join('');
   }
+  // 同步单位按钮高亮（弹窗与个股标签页共用同一 RZQ.unit 状态）；U 为当前生效单位对象，root 限定作用域避免互相覆盖
+  RZQ.syncUnitBtn = function (U, root) {
+    var key = (U && U.key) || (RZQ.unit !== 'a' ? RZQ.unit : (RZQ._lastU && RZQ._lastU.key) || 'w');
+    var scope = root || document;
+    scope.querySelectorAll('.dseg.d-unit button').forEach(function (b) {
+      b.classList.toggle('on', b.getAttribute('data-u') === key);
+    });
+  };
   RZQ.unitBtns = unitBtns;
 
   /* ---------- 工具 ---------- */
@@ -279,23 +292,28 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
         + lastVal + '</tr>';
     });
     html += '</tbody></table></div>';
+    RZQ.syncUnitBtn && RZQ.syncUnitBtn(U, m1);
     return html;
   }
-  function ctrls1() {
+  function effUForView(data) {
+    var rows = (data.rows || []).filter(function (x) { return st1.view === 'etf' ? isEtf(x.c) : !isEtf(x.c); });
+    return RZQ.effUnit(rows.map(function (x) { return x.r; }));
+  }
+  function ctrls1(U) {
     var viewOn = function (v) { return st1.view === v ? 'on' : ''; };
     var rankOn = function (r) { return st1.rank === r ? 'on' : ''; };
     var topOn = function (n) { return st1.topn === n ? 'on' : ''; };
     return '<div class="drill-ctrls" style="margin-bottom:8px">'
       + '<div class="dseg d-view"><button data-v="etf" class="' + viewOn('etf') + '">ETF</button><button data-v="stock" class="' + viewOn('stock') + '">个股</button></div>'
       + '<input class="d-q" type="text" placeholder="输代码或名称筛选" value="' + (st1.q || '').replace(/"/g, '&quot;') + '" spellcheck="false" autocomplete="off">'
-      + '<div class="dseg d-unit">' + unitBtns() + '</div>'
+      + '<div class="dseg d-unit">' + unitBtns(U && U.key) + '</div>'
       + '<div class="dseg d-rank"><button data-r="j" class="' + rankOn('j') + '">净买入最高</button><button data-r="dc" class="' + rankOn('dc') + '">减少最多</button><button data-r="r" class="' + rankOn('r') + '">余额最高</button></div>'
       + '<div class="dseg d-topn"><button data-n="10" class="' + topOn(10) + '">Top10</button><button data-n="20" class="' + topOn(20) + '">Top20</button><button data-n="50" class="' + topOn(50) + '">Top50</button></div>'
       + '</div>';
   }
   function body1(data, allThemes) {
     autoView(data);
-    return ctrls1() + tbl1(data, allThemes);
+    return ctrls1(effUForView(data)) + tbl1(data, allThemes);
   }
   function openModal1(date, gran, q) {
     if (q !== undefined) st1.q = q; // 个股标签页点日期时预填该代码；主表点日期传 '' 清空
@@ -568,7 +586,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '② 跟随页面「融资统计粒度」与「时间段」：日/周/月分别读取对应历史序列。<br>'
     + '③ 本页日期仅作展示，不支持下钻；点表头可排序，默认按日期降序。<br>'
     + '④ 表格四列（日期 / 融资余额 / <b>融资净买入</b> / 占流通市值）常驻显示，点表头可排序；表格行不再弹出悬浮明细。<br>'
-    + '⑤ <b>金额单位默认「自动」</b>：融资余额与融资净买入共用同一单位，按该股票融资余额规模自动选 万 / 千万 / 亿 档（如四千万显示「四千」、净买入两百万显示「两百」），小额个股不再被压成 0；切换标的、粒度或时间段时重算一次。也可手动锁定「万 / 千万 / 亿」。<br>'
+    + '⑤ <b>金额单位（万 / 千万 / 亿）</b>：融资余额与融资净买入共用同一单位，系统按该股票融资余额规模自动选档（如四千万显示「四千」、净买入两百万显示「两百」），小额个股不再被压成 0；切换标的、粒度或时间段时重算。也可手动点选「万 / 千万 / 亿」锁定该档。<br>'
     + '⑥ 走势图蓝线 = 融资余额、红绿柱 = <b>融资净买入</b>（红正绿负），图内 / 图例 / 悬停明细均按当前单位标注；鼠标悬停（手机点按/滑动）图上任意一期 → 浮出当期数字明细。';
 
   /* ---------- 样式 ---------- */
@@ -646,8 +664,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '<div class="rzq-st-ctrls">'
     + '<div class="rzq-st-search"><input class="rzq-st-q" type="text" placeholder="输入股票/ETF 代码或名称" spellcheck="false" autocomplete="off">'
     + '<button class="rzq-st-clear" type="button">清除</button><div class="rzq-st-ac"></div></div>'
-    + '<div class="dseg d-unit">' + RZQ.unitBtns() + '</div>'
-    + '<span class="rzq-st-hint">金额单位：<b class="rzq-unit-txt">' + (RZQ.unit === 'a' ? '自动 · ' + U0.label : RZQ.uLabel()) + '</b>（余额与净买入同单位；表格/走势/下钻表格同步）</span>'
+    + '<div class="dseg d-unit">' + RZQ.unitBtns(U0.key) + '</div>'
+    + '<span class="rzq-st-hint">金额单位：<b class="rzq-unit-txt">' + U0.label + '</b>（余额与净买入同单位，系统按个股市值自动选 万/千万/亿 档；表格/走势/下钻表格同步）</span>'
     + '</div>'
     + '<div class="rzq-st-chart"></div>'
     + '<div class="rzq-st-tbl"><table><thead><tr>'
@@ -926,6 +944,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     panel.querySelectorAll('.rzq-st-tbl thead th').forEach(function (th, i) { if (HL[i] != null) th.textContent = HL[i]; });
     syncHeadSort();
     RZQ.syncUnitCaps && RZQ.syncUnitCaps();
+    RZQ.syncUnitBtn && RZQ.syncUnitBtn(U, panel);
 
     if (noPick || !rows.length) {
       chartBox.style.display = 'none'; chartBox.innerHTML = '';
@@ -978,18 +997,15 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   /* ---------- 与下钻弹窗共享：单位切换 / 说明文案 ---------- */
   RZQ.rerender = render;
   RZQ.syncUnitCaps = function () {
-    var txt = RZQ.uLabel();              /* 自动 / 万 / 千万 / 亿 */
-    var U = RZQ._lastU, auto = (RZQ.unit === 'a');
-    var stTxt = (auto && U) ? ('自动 · ' + U.label) : txt;
-    document.querySelectorAll('.rzq-unit-txt').forEach(function (el) { el.textContent = stTxt; });
+    var U = RZQ._lastU || (RZQ.effUnit && RZQ.effUnit([])) || { label: '万' };
+    var txt = U.label;
+    document.querySelectorAll('.rzq-unit-txt').forEach(function (el) { el.textContent = txt; });
     document.querySelectorAll('.drill-unitcap').forEach(function (el) {
-      el.innerHTML = '金额单位：<b>' + txt + '</b>'
-        + (auto ? '（余额与净买入同单位，按个股市值自动选 万/千万/亿 档；切换标的/榜单/粒度会重算）' : '')
-        + '；走势图柱高为相对比例，纵轴刻度随档位换算';
+      el.innerHTML = '金额单位：<b>' + txt + '</b>（余额与净买入同单位，系统按个股市值自动选 万/千万/亿 档；切换标的/榜单/粒度会重算）；走势图柱高为相对比例，纵轴刻度随档位换算';
     });
   };
   RZQ.applyUnit = function (u) {
-    if (!/^(a|w|q|y)$/.test(u) || RZQ.unit === u) return;
+    if (!/^(w|q|y)$/.test(u) || RZQ.unit === u) return;
     RZQ.unit = u;
     document.querySelectorAll('.dseg.d-unit button').forEach(function (b) { b.classList.toggle('on', b.dataset.u === u); });
     if (RZQ.rerender) RZQ.rerender();
@@ -1001,7 +1017,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     var dnote = document.querySelector('.descfold .note');
     if (dnote && (dnote.innerHTML || '').indexOf('个股融资余额') < 0) {
       dnote.innerHTML = (dnote.innerHTML || '').replace('「融资余额 / 涨跌家数」', '「每日融资余额 / 个股融资余额 / 涨跌家数」')
-        + '<br>⑤ <b>个股融资余额</b>标签页可查询个股/ETF 的日/周/月融资余额与融资净买入；金额单位默认「自动」——按该股票的融资余额规模自动选 万/千万/亿 档，且融资余额与融资净买入共用同一单位（如四千万显示「四千」、净买入两百万显示「两百」）；也可手动锁定「万/千万/亿」，下钻弹窗表格与走势图刻度同步。';
+        + '<br>⑤ <b>个股融资余额</b>标签页可查询个股/ETF 的日/周/月融资余额与融资净买入；金额单位（万/千万/亿）——系统按该股票的融资余额规模自动选档，且融资余额与融资净买入共用同一单位（如四千万显示「四千」、净买入两百万显示「两百」）；也可手动点选「万/千万/亿」锁定该档，下钻弹窗表格与走势图刻度同步。';
     }
   } catch (e) {}
   render();
