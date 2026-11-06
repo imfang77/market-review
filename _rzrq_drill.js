@@ -521,8 +521,8 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
   var NOTE = '① 数据源为东方财富个股两融明细，底层单位「亿元」；本页与下钻弹窗表格按上方单位档换算显示（默认档 1亿 = 10,000，切「亿元」档为 1亿 = 1）。融资余额/占流通市值为期末快照，融资净买入为当期（日/周/月）累计。<br>'
     + '② 跟随页面「融资统计粒度」与「时间段」：日/周/月分别读取对应历史序列。<br>'
     + '③ 本页日期仅作展示，不支持下钻；点表头可排序，默认按日期降序。<br>'
-    + '④ 鼠标悬停（手机点按）表格任意行 → 浮出该期完整明细：融资余额 / <b>融资净买入</b> / 占流通市值 / 原始亿元值；表格同时常驻显示融资净买入列。<br>'
-    + '⑤ 走势图蓝线 = 融资余额，红绿柱 = <b>融资净买入</b>（红为正、绿为负）；鼠标悬停（手机点按/滑动）图上任意一期 → 浮出当期数字明细，单位随上方档位换算。';
+    + '④ 鼠标悬停（手机点按）表格任意行 → 浮出该期明细：融资余额 / <b>融资净买入</b> / 占流通市值，金额均按上方单位档换算；表格同时常驻显示融资净买入列。<br>'
+    + '⑤ 走势图蓝线 = 融资余额、红绿柱 = <b>融资净买入</b>（红正绿负），二者与悬停明细<b>统一使用上方选中的单位档</b>（默认「千万元」，可切「亿元」）；鼠标悬停（手机点按/滑动）图上任意一期 → 浮出当期数字明细。';
 
   /* ---------- 样式 ---------- */
   var css = ''
@@ -633,9 +633,7 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
     return '<b>' + esc(x.dt || '') + '</b>'
       + '<div><span class="k">融资余额</span><span class="v">' + RZQ.uVal(x.r) + '</span> ' + u + '</div>'
       + '<div><span class="k">融资净买入</span><span class="v ' + jc + '">' + RZQ.uSigned(x.j) + '</span> ' + u + ' · ' + G[S.gran] + '</div>'
-      + '<div><span class="k">占流通市值</span><span class="v">' + (x.z == null || isNaN(x.z) ? '—' : x.z.toFixed(2)) + '</span> %</div>'
-      + '<div class="u">原始值（亿元）：余额 ' + (x.r == null || isNaN(x.r) ? '—' : x.r.toFixed(4))
-      + ' · 净买入 ' + (x.j == null || isNaN(x.j) ? '—' : x.j.toFixed(4)) + '</div>';
+      + '<div><span class="k">占流通市值</span><span class="v">' + (x.z == null || isNaN(x.z) ? '—' : x.z.toFixed(2)) + '</span> %</div>';
   }
   function tipHTML(tr) {
     return detailHTML({ dt: tr.dataset.dt, r: numAttr(tr, 'r'), j: numAttr(tr, 'j'), z: numAttr(tr, 'z') });
@@ -833,7 +831,7 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
       + '<polyline points="' + pstr + '" fill="none" stroke="#2f6bff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'
       + '<circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="3.8" fill="#2f6bff"/>'
       + '<text x="' + pl + '" y="' + (pt - 8) + '" font-size="11" fill="#2f6bff">融资余额 · ' + RZQ.uLabel() + ' · 共 ' + rows.length + ' 期</text>'
-      + '<text x="' + (pl + iw) + '" y="' + (pt - 8) + '" font-size="11" fill="#9aa3b5" text-anchor="end">融资净买入 · 红正/绿负</text>'
+      + '<text x="' + (pl + iw) + '" y="' + (pt - 8) + '" font-size="10.5" fill="#9aa3b5" text-anchor="end">融资净买入 · ' + RZQ.uLabel() + ' · 红正/绿负</text>'
       + '<text x="' + pl + '" y="' + (H - 8) + '" font-size="11" fill="#9aa3b5">' + rows[0].dt + '</text>'
       + '<text x="' + (pl + iw) + '" y="' + (H - 8) + '" font-size="11" fill="#9aa3b5" text-anchor="end">' + rows[rows.length - 1].dt + '</text>'
       + '<line class="st-cursor" x1="0" y1="' + pt + '" x2="0" y2="' + bottom + '" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" style="opacity:0"/>'
@@ -874,10 +872,11 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
     ovl.addEventListener('touchmove', onMove, { passive: true });
   }
   function stLegend() {
+    var u = RZQ.uLabel();
     return '<div class="rzq-st-legend">'
-      + '<span class="lg"><i class="ln"></i>蓝线：融资余额</span>'
-      + '<span class="lg"><i class="bp"></i>柱：融资净买入（红=正 / 绿=负）</span>'
-      + '<span class="mut">悬停图上任意一期看当期数字明细</span></div>';
+      + '<span class="lg"><i class="ln"></i>蓝线：融资余额（' + u + '）</span>'
+      + '<span class="lg"><i class="bp"></i>柱：融资净买入（' + u + ' · 红=正 / 绿=负）</span>'
+      + '<span class="mut">悬停图上任意一期看当期数字明细（' + u + '）</span></div>';
   }
   function headLabels() {
     var mob = window.matchMedia && window.matchMedia('(max-width:620px)').matches;
@@ -963,7 +962,7 @@ window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
     var txt = RZQ.uLabel();
     document.querySelectorAll('.rzq-unit-txt').forEach(function (el) { el.textContent = txt; });
     document.querySelectorAll('.drill-unitcap').forEach(function (el) {
-      el.innerHTML = '表格与悬停明细单位：<b>' + txt + '</b>；走势图纵轴/柱按「亿元」示意趋势（默认档数值为亿元档的 10,000 倍）';
+      el.innerHTML = '表格、悬停明细与走势图标注单位：<b>' + txt + '</b>（走势图柱高为相对比例，纵轴为紧凑刻度示意）';
     });
   };
   RZQ.applyUnit = function (u) {
