@@ -2,16 +2,19 @@
    挂接：#tbody-m 日期行点击 → 弹窗1 该期个股/ETF融资榜 → 点行 → 弹窗2 历史走势（方案A：跟随入口粒度）
    数据：_rzrq_stock[_w|_m]_<日期>.json · _rzrq_hist_d|w|m.json · _code_themes.json（懒加载+内存缓存）
    箭头约定与全站一致：默认 ⇅(灰)，升序 ↑(蓝)，降序 ↓(蓝)，不用 ▲/▼ */
-/* 全局共享：金额单位（w=万元 / q=千万元 / y=亿元，默认万元）+ 个股标签页状态与刷新钩子
-   数据底层单位恒为「亿元」，显示层按 RZQ.unit 换算（1亿=10000万元=10千万元） */
-window.RZQ = window.RZQ || { unit: 'w', code: '', name: '' };
+/* 全局共享：金额单位（默认档 q=标签「千万元」 / y=亿元）+ 个股标签页状态与刷新钩子
+   数据底层单位恒为「亿元」。
+   口径定稿（2026-11-06 用户拍板）：默认档标签沿用「千万元」，但换算按 1亿 = 10,000 显示，
+   与「亿元」档（1亿 = 1）差 4 位小数点；单位按钮只保留这两档。 */
+window.RZQ = window.RZQ || { unit: 'q', code: '', name: '' };
 (function () {
   'use strict';
   if (document.getElementById('drill-css')) return; // 幂等
 
   var RZQ = window.RZQ;
-  var UNITS = { w: { label: '万元', mul: 1e4, dec: 0 }, q: { label: '千万元', mul: 10, dec: 2 }, y: { label: '亿元', mul: 1, dec: 2 } };
-  function uInfo() { return UNITS[RZQ.unit] || UNITS.w; }
+  if (RZQ.unit === 'w') RZQ.unit = 'q'; // 兼容旧版脚本残留的「万元」档
+  var UNITS = { q: { label: '千万元', mul: 1e4, dec: 2 }, y: { label: '亿元', mul: 1, dec: 2 } };
+  function uInfo() { return UNITS[RZQ.unit] || UNITS.q; }
   function uLabel() { return uInfo().label; }
   function uVal(v) {
     if (v == null || isNaN(v)) return '—';
@@ -24,7 +27,7 @@ window.RZQ = window.RZQ || { unit: 'w', code: '', name: '' };
   }
   RZQ.uLabel = uLabel; RZQ.uVal = uVal; RZQ.uSigned = uSigned;
   function unitBtns() {
-    return ['w', 'q', 'y'].map(function (u) {
+    return ['q', 'y'].map(function (u) {
       return '<button data-u="' + u + '" class="' + (RZQ.unit === u ? 'on' : '') + '">' + UNITS[u].label + '</button>';
     }).join('');
   }
@@ -505,8 +508,8 @@ window.RZQ = window.RZQ || { unit: 'w', code: '', name: '' };
 /* ==========================================================================
    「个股融资余额」标签页 —— 插在「每日融资余额」与「每日涨跌家数」之间
    数据：_rzrq_hist_d|w|m.json（底层单位「亿元」，显示层按 RZQ.unit 换算）
-   交互：代码/名称联想 → 选中标的 → 明细表（格式同每日融资余额，表头可排序）
-        跟随页面「融资统计粒度」日/周/月 与「时间段」；点蓝色日期下钻该期融资榜
+   交互：代码/名称联想 → 选中标的 → 走势图 + 明细表（格式同每日融资余额，表头可排序）
+        跟随页面「融资统计粒度」日/周/月 与「时间段」；本页日期不提供下钻
    注：整段自注入，不改动生成器的 HTML 骨架，重建页面时不会丢失
    ========================================================================== */
 (function () {
@@ -515,10 +518,9 @@ window.RZQ = window.RZQ || { unit: 'w', code: '', name: '' };
   var RZQ = window.RZQ;
   if (!RZQ || !RZQ.load) return;
   var G = { d: '日', w: '周', m: '月' };
-  var EXAMPLES = [['601318', '中国平安'], ['300308', '中际旭创'], ['511360', '短融ETF'], ['518880', '黄金ETF']];
-  var NOTE = '① 数据源为东方财富个股两融明细，底层单位「亿元」；本页与下钻弹窗表格按上方单位换算（1亿 = 10,000万元 = 10千万元）。融资余额/占流通市值为期末快照，融资净买入为' + '当期（日/周/月）累计' + '。<br>'
-    + '② 跟随页面「融资统计粒度」与「时间段」：日/周/月分别读取对应历史序列，覆盖期数见上方信息条。<br>'
-    + '③ 点<b>蓝色日期</b>可下钻该期全市场融资榜并自动按当前代码筛选；点表头排序，默认按日期降序。';
+  var NOTE = '① 数据源为东方财富个股两融明细，底层单位「亿元」；本页与下钻弹窗表格按上方单位档换算显示（默认档 1亿 = 10,000，切「亿元」档为 1亿 = 1）。融资余额/占流通市值为期末快照，融资净买入为当期（日/周/月）累计。<br>'
+    + '② 跟随页面「融资统计粒度」与「时间段」：日/周/月分别读取对应历史序列。<br>'
+    + '③ 本页日期仅作展示，不支持下钻；点表头可排序，默认按日期降序。';
 
   /* ---------- 样式 ---------- */
   var css = ''
@@ -540,27 +542,20 @@ window.RZQ = window.RZQ || { unit: 'w', code: '', name: '' };
     + '.rzq-st-ac .empty{padding:10px;font-size:12px;color:#9aa3b5}'
     + '.rzq-st-hint{font-size:12px;color:#9aa3b5}'
     + '.rzq-st-hint b{color:#2f6bff}'
-    + '.rzq-st-ex{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}'
-    + '.rzq-st-ex button{border:1px solid #e8edf5;background:#fff;color:#64748b;font-size:11.5px;padding:4px 9px;border-radius:14px;cursor:pointer}'
-    + '.rzq-st-ex button:hover{border-color:#2f6bff;color:#2f6bff}'
-    + '.rzq-st-info{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}'
-    + '.rzq-st-info .k{background:#f8fafc;border:1px solid #eef1f6;border-radius:8px;padding:6px 10px;font-size:12.5px;color:#64748b}'
-    + '.rzq-st-info .k b{color:#1f2937;font-variant-numeric:tabular-nums}'
-    + '.rzq-st-info .k.hi{background:#eaf1ff;border-color:#d7e4ff;color:#2f6bff}'
-    + '.rzq-st-info .k.hi b{color:#2f6bff}'
-    + '.rzq-st-chart{border:1px solid #eef1f6;border-radius:10px;padding:4px 6px;margin-bottom:8px;background:#fff}'
+    + '.rzq-st-chart{border:1px solid #eef1f6;border-radius:10px;padding:10px 10px 6px;margin-bottom:10px;background:#fff}'
+    + '.rzq-st-chart svg{max-width:780px;margin:0 auto}'
     + '.rzq-st-tbl{max-height:430px;overflow:auto;border:1px solid #eef1f6;border-radius:10px}'
     + '.rzq-st-tbl table{font-size:13.5px}'
     + '.rzq-st-tbl thead th{font-size:12.5px}'
     + '.rzq-st-tbl td{font-size:13px;padding:7px 12px}'
-    + '.rzq-st-tbl td.st-date{color:#2f6bff;cursor:pointer;font-weight:600;text-align:left;white-space:nowrap}'
-    + '.rzq-st-tbl td.st-date:hover{text-decoration:underline}'
+    + '.rzq-st-tbl td.st-dt{color:#1f2937;font-weight:500;text-align:left;white-space:nowrap}'
     + '.rzq-st-msg{padding:26px 10px!important;text-align:center!important;color:#9aa3b5;font-size:13px;line-height:1.9}'
     + '.rzq-st-note{font-size:11.5px;color:#9aa3b5;line-height:1.8;margin-top:8px}'
     + '@media(max-width:620px){'
     + '.rzq-st-wrap{padding:8px 12px 12px}'
     + '.rzq-st-q{width:158px;font-size:12.5px}'
     + '.rzq-st-ac{width:246px}'
+    + '.rzq-st-chart{padding:6px 4px 4px}'
     + '.rzq-st-tbl td{padding:6px 7px;font-size:12px}'
     + '.rzq-st-tbl table{font-size:12px}'
     + '.dseg.d-unit button{padding:5px 6px;font-size:11.5px}}';
@@ -584,8 +579,6 @@ window.RZQ = window.RZQ || { unit: 'w', code: '', name: '' };
     + '<div class="dseg d-unit">' + RZQ.unitBtns() + '</div>'
     + '<span class="rzq-st-hint">金额单位：<b class="rzq-unit-txt">' + RZQ.uLabel() + '</b>（表格/走势/下钻表格同步）</span>'
     + '</div>'
-    + '<div class="rzq-st-ex"></div>'
-    + '<div class="rzq-st-info"></div>'
     + '<div class="rzq-st-chart"></div>'
     + '<div class="rzq-st-tbl"><table><thead><tr>'
     + '<th data-col="0">日期</th><th data-col="1">融资余额(' + RZQ.uLabel() + ')</th>'
@@ -608,19 +601,25 @@ window.RZQ = window.RZQ || { unit: 'w', code: '', name: '' };
   function esc(s) { return String(s == null ? '' : s).replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
   /* ---------- 载入历史序列（懒加载，按粒度缓存） ---------- */
+  function showMsg(txt) {
+    var tb = panel.querySelector('#tbody-s');
+    if (tb) tb.innerHTML = '<tr><td colspan="4" class="rzq-st-msg">' + txt + '</td></tr>';
+    var cb = panel.querySelector('.rzq-st-chart');
+    if (cb) { cb.style.display = 'none'; cb.innerHTML = ''; }
+  }
   function ensureLoad() {
     S.gran = granNow();
     if (S.h[S.gran]) { S.idx = buildIndex(S.h[S.gran]); render(); return; }
     if (S.busy) return;
     S.busy = true;
-    panel.querySelector('.rzq-st-info').innerHTML = '<div class="k">个股历史序列加载中…</div>';
+    showMsg('个股历史序列加载中…');
     RZQ.load('_rzrq_hist_' + S.gran + '.json').then(function (h) {
       S.busy = false; S.h[S.gran] = h; S.idx = buildIndex(h); S.gran = granNow();
       render();
       if (q.value.trim() && !S.code) showAc(q.value.trim());
     }).catch(function (e) {
       S.busy = false;
-      panel.querySelector('.rzq-st-info').innerHTML = '<div class="k" style="color:#e23b3b">数据加载失败：' + esc(e.message) + '</div>';
+      showMsg('<span style="color:#e23b3b">数据加载失败：' + esc(e.message) + '</span>');
     });
   }
   function activate(t) {
@@ -711,25 +710,39 @@ window.RZQ = window.RZQ || { unit: 'w', code: '', name: '' };
   function spark(rows) {
     var vals = rows.map(function (x) { return x.r; }).filter(function (v) { return v != null && !isNaN(v); });
     if (vals.length < 2) return '';
-    var W = 900, H = 118, pl = 92, pr = 14, pt = 10, pb = 20, iw = W - pl - pr, ih = H - pt - pb;
+    var W = 520, H = 232, pl = 112, pr = 16, pt = 24, pb = 30;
+    var iw = W - pl - pr, ih = H - pt - pb, bottom = pt + ih;
     var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
+    var pad = (mx - mn) * 0.12 || Math.abs(mx || 1) * 0.02;
+    var lo = mn - pad, hi = mx + pad;
     var xx = function (i) { return pl + iw * i / (rows.length - 1); };
-    var yy = function (v) { return pt + ih - ih * ((v - mn) / ((mx - mn) || 1)); };
+    var yy = function (v) { return pt + ih - ih * ((v - lo) / ((hi - lo) || 1)); };
     var pts = [];
-    rows.forEach(function (x, i) { if (x.r != null && !isNaN(x.r)) pts.push(xx(i).toFixed(1) + ',' + yy(x.r).toFixed(1)); });
+    rows.forEach(function (x, i) {
+      if (x.r != null && !isNaN(x.r)) pts.push([xx(i), yy(x.r)]);
+    });
+    var pstr = pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ');
+    var grid = '';
+    for (var k = 0; k <= 2; k++) {
+      var gv = lo + (hi - lo) * k / 2;
+      grid += '<line x1="' + pl + '" y1="' + yy(gv).toFixed(1) + '" x2="' + (pl + iw) + '" y2="' + yy(gv).toFixed(1) + '" stroke="#eef1f6" stroke-width="1"/>'
+        + '<text x="' + (pl - 8) + '" y="' + (yy(gv) + 4).toFixed(1) + '" font-size="12" fill="#9aa3b5" text-anchor="end">' + RZQ.uVal(gv) + '</text>';
+    }
+    var first = pts[0], last = pts[pts.length - 1];
+    var area = pstr + ' ' + last[0].toFixed(1) + ',' + bottom + ' ' + first[0].toFixed(1) + ',' + bottom;
     return '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" preserveAspectRatio="xMidYMid meet" style="display:block">'
-      + '<line x1="' + pl + '" y1="' + (pt + ih) + '" x2="' + (pl + iw) + '" y2="' + (pt + ih) + '" stroke="#e8edf5"/>'
-      + '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#2f6bff" stroke-width="2"/>'
-      + '<text x="' + (pl - 6) + '" y="' + (pt + 9) + '" font-size="10" fill="#9aa3b5" text-anchor="end">' + RZQ.uVal(mx) + '</text>'
-      + '<text x="' + (pl - 6) + '" y="' + (pt + ih) + '" font-size="10" fill="#9aa3b5" text-anchor="end">' + RZQ.uVal(mn) + '</text>'
-      + '<text x="' + pl + '" y="' + (H - 5) + '" font-size="10" fill="#9aa3b5">' + rows[0].dt + '</text>'
-      + '<text x="' + (pl + iw) + '" y="' + (H - 5) + '" font-size="10" fill="#9aa3b5" text-anchor="end">' + rows[rows.length - 1].dt + '</text>'
-      + '<text x="' + (pl + iw) + '" y="' + (pt + 9) + '" font-size="10" fill="#2f6bff" text-anchor="end">融资余额 · ' + RZQ.uLabel() + '</text>'
+      + grid
+      + '<line x1="' + pl + '" y1="' + bottom + '" x2="' + (pl + iw) + '" y2="' + bottom + '" stroke="#dbe3ef"/>'
+      + '<polygon points="' + area + '" fill="rgba(47,107,255,.09)"/>'
+      + '<polyline points="' + pstr + '" fill="none" stroke="#2f6bff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'
+      + '<circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="3.8" fill="#2f6bff"/>'
+      + '<text x="' + pl + '" y="' + (H - 8) + '" font-size="12" fill="#9aa3b5">' + rows[0].dt + '</text>'
+      + '<text x="' + (pl + iw) + '" y="' + (H - 8) + '" font-size="12" fill="#9aa3b5" text-anchor="end">' + rows[rows.length - 1].dt + '</text>'
+      + '<text x="' + (pl + iw) + '" y="' + (pt - 8) + '" font-size="12" fill="#2f6bff" text-anchor="end">融资余额 · ' + RZQ.uLabel() + ' · 共 ' + rows.length + ' 期</text>'
       + '</svg>';
   }
   function render() {
     if (!panel) return;
-    var info = panel.querySelector('.rzq-st-info');
     var chartBox = panel.querySelector('.rzq-st-chart');
     var tbody = panel.querySelector('#tbody-s');
     var th1 = panel.querySelector('th[data-col="1"]'), th2 = panel.querySelector('th[data-col="2"]');
@@ -738,38 +751,20 @@ window.RZQ = window.RZQ || { unit: 'w', code: '', name: '' };
     syncHeadSort();
     RZQ.syncUnitCaps && RZQ.syncUnitCaps();
 
-    // 示例按钮
-    var exBox = panel.querySelector('.rzq-st-ex');
-    if (S.idx) {
-      var hit = {}; S.idx.forEach(function (x) { hit[x.c] = 1; });
-      exBox.innerHTML = EXAMPLES.filter(function (e) { return hit[e[0]]; }).map(function (e) {
-        return '<button data-c="' + e[0] + '">' + esc(e[1]) + ' ' + e[0] + '</button>';
-      }).join('');
-    }
-
     var h = S.h[S.gran];
     if (!h || !S.code || !h.stocks[S.code]) {
-      info.innerHTML = '<div class="k">未选中标的 · 输入代码或名称查询</div>';
-      chartBox.style.display = 'none';
+      chartBox.style.display = 'none'; chartBox.innerHTML = '';
       tbody.innerHTML = '<tr><td colspan="4" class="rzq-st-msg">输入 6 位代码或名称（支持个股与 ETF）<br>例如 601318 / 中国平安 / 511360 / 短融ETF，选中后展示' + G[S.gran] + '度融资余额明细</td></tr>';
       return;
     }
     var rec = h.stocks[S.code], ds = h.dates, si = startIdx(h), rows = [];
     for (var i = si; i < ds.length; i++) rows.push({ dt: ds[i], r: rec.r[i], j: rec.j[i], z: rec.z[i] });
-    var last = rows.length ? rows[rows.length - 1] : null;
-    var sum = 0; rows.forEach(function (x) { if (x.j != null && !isNaN(x.j)) sum += x.j; });
-    info.innerHTML = '<div class="k hi">' + esc(S.name) + ' <b>' + S.code + '</b> · ' + (isEtf(S.code) ? 'ETF' : '个股') + '</div>'
-      + '<div class="k">最新日期 <b>' + (last ? last.dt : '—') + '</b></div>'
-      + '<div class="k">融资余额 <b>' + (last ? RZQ.uVal(last.r) : '—') + '</b> ' + RZQ.uLabel() + '</div>'
-      + '<div class="k">区间净买入累计 <b>' + (rows.length ? RZQ.uSigned(sum) : '—') + '</b> ' + RZQ.uLabel() + '</div>'
-      + '<div class="k">占流通市值 <b>' + (last && last.z != null ? last.z.toFixed(2) : '—') + '%</b></div>'
-      + '<div class="k">共 <b>' + rows.length + '</b> 期（' + G[S.gran] + '度）</div>';
     chartBox.style.display = rows.length > 1 ? 'block' : 'none';
     chartBox.innerHTML = rows.length > 1 ? spark(rows) : '';
     var sorted = rows.slice().sort(cmp);
     tbody.innerHTML = sorted.length
       ? sorted.map(function (x) {
-          return '<tr><td class="st-date" data-dt="' + x.dt + '">' + x.dt + '</td>'
+          return '<tr><td class="st-dt">' + x.dt + '</td>'
             + '<td class="num">' + RZQ.uVal(x.r) + '</td>'
             + '<td class="num ' + jcls(x.j) + '">' + RZQ.uSigned(x.j) + '</td>'
             + '<td class="num">' + (x.z == null || isNaN(x.z) ? '—' : x.z.toFixed(2)) + '</td></tr>';
@@ -782,8 +777,6 @@ window.RZQ = window.RZQ || { unit: 'w', code: '', name: '' };
     if (!e.target || !e.target.closest) return;
     var hit = e.target.closest('.rzq-st-ac .it');
     if (hit) { pick(hit.dataset.c); return; }
-    var ex = e.target.closest('.rzq-st-ex button');
-    if (ex) { q.value = ex.dataset.c; pick(ex.dataset.c); return; }
     if (e.target.closest('.rzq-st-clear')) {
       q.value = ''; S.code = ''; S.name = ''; RZQ.code = ''; RZQ.name = '';
       ac.classList.remove('show'); render(); return;
@@ -794,8 +787,6 @@ window.RZQ = window.RZQ || { unit: 'w', code: '', name: '' };
       if (S.sort.col === col) S.sort.asc = !S.sort.asc; else S.sort = { col: col, asc: false };
       render(); return;
     }
-    var td = e.target.closest('.rzq-st-tbl td.st-date');
-    if (td && S.code && RZQ.openStockDate) { RZQ.openStockDate(td.dataset.dt, S.code); }
   });
   document.querySelectorAll('#segG button').forEach(function (b) {
     b.addEventListener('click', function () { S.gran = b.dataset.g; if (isActive()) ensureLoad(); });
@@ -810,11 +801,11 @@ window.RZQ = window.RZQ || { unit: 'w', code: '', name: '' };
     var txt = RZQ.uLabel();
     document.querySelectorAll('.rzq-unit-txt').forEach(function (el) { el.textContent = txt; });
     document.querySelectorAll('.drill-unitcap').forEach(function (el) {
-      el.innerHTML = '表格与悬停明细单位：<b>' + txt + '</b>；走势图纵轴/柱为「亿元」仅示意趋势（1亿=10,000万元）';
+      el.innerHTML = '表格与悬停明细单位：<b>' + txt + '</b>；走势图纵轴/柱按「亿元」示意趋势（默认档数值为亿元档的 10,000 倍）';
     });
   };
   RZQ.applyUnit = function (u) {
-    if (!/^(w|q|y)$/.test(u) || RZQ.unit === u) return;
+    if (!/^(q|y)$/.test(u) || RZQ.unit === u) return;
     RZQ.unit = u;
     document.querySelectorAll('.dseg.d-unit button').forEach(function (b) { b.classList.toggle('on', b.dataset.u === u); });
     if (RZQ.rerender) RZQ.rerender();
@@ -826,7 +817,7 @@ window.RZQ = window.RZQ || { unit: 'w', code: '', name: '' };
     var dnote = document.querySelector('.descfold .note');
     if (dnote && (dnote.innerHTML || '').indexOf('个股融资余额') < 0) {
       dnote.innerHTML = (dnote.innerHTML || '').replace('「融资余额 / 涨跌家数」', '「每日融资余额 / 个股融资余额 / 涨跌家数」')
-        + '<br>⑤ <b>个股融资余额</b>标签页可查询个股/ETF 的日/周/月融资余额与融资净买入；金额单位可在标签页内切换（默认万元，1亿=10,000万元），下钻弹窗表格单位同步。';
+        + '<br>⑤ <b>个股融资余额</b>标签页可查询个股/ETF 的日/周/月融资余额与融资净买入；金额单位可切换（默认「千万元」档：1亿 = 10,000；「亿元」档：1亿 = 1），下钻弹窗表格单位同步。';
     }
   } catch (e) {}
   render();
