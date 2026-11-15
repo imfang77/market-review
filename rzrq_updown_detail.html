@@ -39,10 +39,11 @@ thead th:nth-child(1),tbody td:nth-child(1){white-space:nowrap}
 .legend .mut{color:#9aa3b2}
 .legend .mrow{white-space:normal;overflow:visible}
 .chartbox{position:relative;padding:6px 14px 8px}
-.etfchart-sec{margin:18px 28px 0;border:1px solid #e8edf5;border-radius:12px;overflow:hidden;background:#fcfdff}
+.etfchart-sec{margin:18px 28px 0}
 .etfchart-hd{padding:14px 18px 4px}
 .etfchart-title{font-size:16px;font-weight:700;color:#1f2a44}
 .etfchart-sub{font-size:12px;color:#94a3b8;margin-top:4px;line-height:1.6}
+.etfchart-sec .descfold{margin:8px 0 0}
 #etip{position:absolute;pointer-events:none;opacity:0;transition:opacity .08s;background:rgba(255,255,255,.97);border:1px solid #e2e8f0;border-radius:10px;box-shadow:0 6px 20px rgba(31,41,55,.14);padding:10px 14px;font-size:12px;min-width:185px;z-index:5}
 #etip .t-d{font-weight:700;font-size:13px;margin-bottom:6px;color:#1f2937}
 #etip .t-r{display:flex;justify-content:space-between;gap:18px;line-height:1.7;color:#64748b}
@@ -134,7 +135,7 @@ tbody tr:hover{background:#f6f9ff}
 <div class="etfchart-sec">
 <div class="etfchart-hd">
 <div class="etfchart-title">宽基 ETF 资金流（全市场净申购）</div>
-<div class="etfchart-sub">12 宽基指数 · 30 只头部 ETF · <b>一级市场申赎口径</b>（累计净申购＝2012 年前置锚点＋全历史逐日净申购累加；早期仅当时已成立的 ETF 参与）· <b>不含二级市场买卖</b>，故与「国家队持仓」不等价：2024 年单年 +8,349 亿、2026 上半年 −16,946 亿对应中央汇金两轮申购/减持（紫色阶梯线为第三方估算的汇金持仓市值，存量口径）· 全市场净申购，非汇金独占 · <b style="color:#ea580c">橙色线＝上证指数</b>（最右轴·点），用于对照资金流与指数走势</div>
+<div class="etfchart-sub">12 宽基指数 · 30 只头部 ETF · 全历史逐日净申购（口径与数据说明见图表下方）</div>
 </div>
 <div class="rngbar" id="eRng"><div class="rngrow rngrow2"><span class="lbl rng-lbl">时间段：</span>
 <button class="rng-btn" data-range="m1">1个月</button>
@@ -151,6 +152,13 @@ tbody tr:hover{background:#f6f9ff}
 </svg>
 <div id="etip"></div></div>
 <div class="legend" id="elg"></div>
+<details class="descfold etf-desc"><summary>口径与数据说明（默认折叠，点击展开）</summary>
+<div class="sub">
+<div><b>指标口径</b>：蓝线＝<b>累计净申购</b>（2012 前置锚点＋全历史逐日净申购累加，早期仅当时已成立的 ETF 参与）；红绿柱＝当日净申购（红正绿负）；紫色阶梯线＝汇金持股票 ETF 市值（第三方季报估算，存量口径）；<b style="color:#ea580c">橙色线＝上证指数</b>（最右轴·点，东方财富日线收盘），用于对照资金流与指数走势。</div>
+<div style="margin-top:6px"><b>为何与「国家队持仓」不等价</b>：本图为<b>一级市场申赎口径</b>，<b>不含二级市场买卖</b> —— 国家队经二级市场受让份额不产生净申购数据，故蓝线平坦不能推出「国家队没持有」。全市场净申购，非汇金独占。</div>
+<div style="margin-top:6px"><b>关键事件</b>：2024-02-06 汇金公告增持四大行及多只 ETF（2024 年一级净申购 +8,349 亿）｜ 2026-01-14 沪指冲高 4190 点、汇金启动大规模减持（2026 上半年 −16,946 亿）｜ 2026-06-08 汇金重启增持，宽基 ETF 转净流入（7–11 月 +7,121 亿）。汇金减持的是波段仓位，六大行等永久底仓约 3.37 万亿未动。</div>
+<div style="margin-top:6px"><b>数据来源</b>：iFinD 基金日频净流入额（30 只宽基 ETF，逐只按 ≤100 日历天窗口拉取，902 个窗口），已用 iFinD「区间净流入额」全历史锚点逐只对账（30/30 通过）；上证指数为东方财富历史日线。累计值为<b>净流量累计</b>而非 ETF 规模存量，早期为负属真实数据。</div>
+</div></details>
 </div>
 <div class="rngbar gran unigran">
 <div class="rngrow"><span class="lbl">统计粒度：</span>
@@ -492,8 +500,9 @@ try{
   if(!svg||!plot) return;
   var W=1000, MT=46, PB=402;
   var ML=70, MR=112, pw=W-ML-MR, plotH=PB-MT;
-  var G='d', cur=0, def='m3';
+  var G='d', def='m3';
   var ER=(typeof ETF_RANGES!=='undefined')?ETF_RANGES:{m3:0,all:0};
+  var cur=ER[def]||0;   /* 默认3个月：显示区间与按钮高亮一致 */
   var ED=(typeof ETF_D!=='undefined')?ETF_D:[];
   var EA=(typeof ETF_ACC!=='undefined')?ETF_ACC:[];
   var EN=(typeof ETF_NET!=='undefined')?ETF_NET:[];
@@ -538,8 +547,9 @@ try{
     var accArr=v.acc.filter(function(x){return x!=null;});if(!accArr.length)return;
     /* 汇金持仓阶梯线（存量口径·第三方估算）参与左轴量程，保证不被裁切 */
     function dIdx(ddArr,ds){for(var k=0;k<ddArr.length;k++){if(ddArr[k]>=ds)return k;}return -1;}
+    var vFirst0=v.dd[0],vLast0=v.dd[v.dd.length-1];
     var hjIn=[];
-    HJS.forEach(function(h){var k=dIdx(v.dd,h[0]);if(k>=0)hjIn.push(h[1]);});
+    HJS.forEach(function(h){if(h[0]>=vFirst0&&h[0]<=vLast0)hjIn.push(h[1]);});
     var mn=Math.min.apply(null,accArr.concat(hjIn)),mx=Math.max.apply(null,accArr.concat(hjIn));
     var pad=(mx-mn)*0.12;if(pad<=0)pad=Math.max(1,mx*0.02);
     yloL=mn-pad;yhiL=mx+pad;
@@ -624,7 +634,7 @@ try{
     /* 汇金持股票ETF市值阶梯线（第三方估算·存量口径·左轴） */
     if(HJS.length){
       var hp=[];
-      HJS.forEach(function(h){var k=dIdx(v.dd,h[0]);if(k>=0)hp.push({x:Xi2(k),y:YL2(h[1]),v:h[1],d:h[0]});});
+      HJS.forEach(function(h){if(h[0]>=vFirst&&h[0]<=vLast){var k=dIdx(v.dd,h[0]);if(k>=0)hp.push({x:Xi2(k),y:YL2(h[1]),v:h[1],d:h[0]});}});
       if(hp.length>=2){
         var sp='';
         for(var i=0;i<hp.length;i++){
@@ -638,7 +648,7 @@ try{
     plot.innerHTML=g;
     ov.setAttribute('x',ML);ov.setAttribute('width',pw);ov.setAttribute('y',MT);ov.setAttribute('height',PB-MT);
     vline.setAttribute('y1',MT);vline.setAttribute('y2',PB);
-    if(legend)legend.innerHTML='<span class="lrow"><span class="lg blue">■ 累计净申购（左轴·亿元）</span><span class="lg red">■ 当日净申购（右轴·亿元·红正绿负）</span><span class="lg" style="color:#7c3aed">┄ 汇金持股票ETF市值（左轴·亿元·第三方季报估算·存量口径）</span><span class="lg" style="color:#ea580c">— 上证指数（最右轴·点·东方财富日线收盘）</span></span><span class="mut mrow">口径：<b>一级市场净申购</b>（不含二级市场买卖），与「国家队持仓」不等价 —— 国家队经二级市场受让份额不体现在本图 · 累计净申购＝2012 年前置锚点＋全历史逐日净申购累加（早期仅当时已成立的 ETF 参与）· 全市场净申购，非汇金独占</span><span class="mut mrow" style="color:#7c3aed">关键事件：2024-02-06 汇金公告增持四大行及多只ETF ｜ 2026-01-14 沪指冲高4190点·汇金启动大规模减持 ｜ 2026-06-08 汇金重启增持·宽基ETF转净流入</span>';
+    if(legend)legend.innerHTML='<span class="lrow"><span class="lg blue">■ 累计净申购（左轴·亿元）</span><span class="lg red">■ 当日净申购（右轴·亿元·红正绿负）</span><span class="lg" style="color:#7c3aed">┄ 汇金持股票ETF市值（第三方估算·存量口径）</span><span class="lg" style="color:#ea580c">— 上证指数（最右轴·点）</span></span>';
     v.start=cur; window._etfView=v;
   }
   function pick(clientX,clientY){
@@ -680,5 +690,5 @@ try{
   drawE(cur);
 })();
 </script>
-<script src="_rzrq_drill.js?v=202611160714"></script>
+<script src="_rzrq_drill.js?v=202611160748"></script>
 </body></html>
