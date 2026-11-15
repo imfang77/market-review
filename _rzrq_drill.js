@@ -1070,10 +1070,10 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   panel.className='tpanel'; panel.id='tpanel-e'; panel.style.display='none';
   panel.innerHTML =
     '<div class="etf-top">'
-    + '<div class="etf-note2">12 宽基指数 · 30 只头部 ETF 每日净申购明细（全市场净申购，非汇金独占）。点击日期行查看当日各指数，再点指数看逐只 ETF。图表见页面上方「宽基 ETF 资金流」。</div>'
+    + '<div class="etf-note2">12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。跟随图表下方的「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计；累计净申购取周期末快照。点击日期行看各指数，再点指数看逐只 ETF。</div>'
     + '</div>'
-    + '<div class="tblbox"><div class="etf-tblwrap"><table class="etf-table"><thead><tr>'
-    +   '<th>日期</th><th>累计净申购(亿)</th><th>当日净申购(亿)</th><th>总份额(亿份)</th><th>纳入指数</th>'
+    + '<div class="tblbox"><div class="etf-tblwrap"><table class="etf-table"><thead><tr id="etfHead">'
+    +   '<th>日期</th><th>累计净申购(亿)</th><th>当日净申购(亿)</th><th>纳入指数</th>'
     + '</tr></thead><tbody id="etfTbody"></tbody></table></div></div>';
   sec.appendChild(panel);
 
@@ -1082,45 +1082,79 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   function fmtAxis(v){ if(v==null) return '—'; var a=Math.abs(v); if(a>=10000) return (v/10000).toFixed(2)+'万亿'; return v.toFixed(2); }
   function sign2(v){ if(v==null) return '—'; return (v>=0?'+':'')+v.toFixed(2); }
   function cls2(v){ return v==null?'':(v>=0?'etf-pos':'etf-neg'); }
+  function gran(){
+    var on=document.querySelector('#segG button.on');
+    return (on && on.dataset.g) || 'd';
+  }
+  function gtxt(g){ return g==='d'?'当日':(g==='w'?'本周':'本月'); }
+
+  /* 周期切片：锚点直接取图表 window._etfView 的周期末索引，保证表格与图表粒度/时间段口径一致 */
+  function slices(){
+    if(!DATA) return [];
+    var v=window._etfView;
+    if(v && v.idx && v.idx.length && v.idx[0] < DATA.dates.length){
+      var out=[], prev=(v.start!=null?v.start-1:-1);
+      v.idx.forEach(function(gi){
+        var days=[];
+        for(var i=prev+1;i<=gi && i<DATA.dates.length;i++) days.push(i);
+        out.push({gi:gi,days:days});
+        prev=gi;
+      });
+      return out;
+    }
+    var all=[]; for(var i=0;i<DATA.dates.length;i++) all.push({gi:i,days:[i]}); return all;
+  }
+  /* sum=true 取周期内累加（净申购）；sum=false 取周期末快照（余额/累计） */
+  function agg(arr, sl, sum){
+    if(!arr) return sl.map(function(){return null;});
+    return sl.map(function(s){
+      if(!sum) return arr[s.gi];
+      var t=0; s.days.forEach(function(i){t+=(arr[i]||0);});
+      return Math.round(t*100)/100;
+    });
+  }
 
   function renderTable(){
     if(!DATA) return;
-    var d=DATA.dates, acc=DATA.total.acc, net=DATA.total.net, sh=DATA.total.sh, nidx=DATA.total.nidx;
+    var sl=slices(), g=gran(), gt=gtxt(g);
+    var acc=agg(DATA.total.acc,sl,false), net=agg(DATA.total.net,sl,true), nidx=DATA.total.nidx;
+    var head=panel.querySelector('#etfHead');
+    if(head) head.innerHTML='<th>日期</th><th>累计净申购(亿)</th><th>'+gt+'净申购(亿)</th><th>纳入指数</th>';
     var rows=[];
-    for(var i=d.length-1;i>=0;i--){
-      rows.push('<tr class="daterow" data-gi="'+i+'"><td>'+d[i]+'</td>'
-        +'<td>'+fmtAxis(acc[i])+'</td>'
-        +'<td class="'+cls2(net[i])+'">'+sign2(net[i])+'</td>'
-        +'<td>'+(sh[i]==null?'—':sh[i].toFixed(1))+'</td>'
-        +'<td>'+(nidx[i]==null?'—':nidx[i])+'</td></tr>');
+    for(var k=sl.length-1;k>=0;k--){
+      var s=sl[k];
+      rows.push('<tr class="daterow" data-k="'+k+'"><td>'+DATA.dates[s.gi]+'</td>'
+        +'<td>'+fmtAxis(acc[k])+'</td>'
+        +'<td class="'+cls2(net[k])+'">'+sign2(net[k])+'</td>'
+        +'<td>'+(nidx[s.gi]==null?'—':nidx[s.gi])+'</td></tr>');
     }
     tbody.innerHTML=rows.join('');
   }
 
   function ensure(){
     if(DATA){ renderTable(); return; }
-    tbody.innerHTML='<tr><td colspan="5" class="etf-msg">宽基 ETF 资金流数据加载中…</td></tr>';
+    tbody.innerHTML='<tr><td colspan="4" class="etf-msg">宽基 ETF 资金流数据加载中…</td></tr>';
     RZQ.load('_etf_flow.json').then(function(d){ DATA=d; renderTable(); }).catch(function(e){
-      tbody.innerHTML='<tr><td colspan="5" class="etf-msg">数据暂未就绪。'+(e&&e.message?('<br>'+e.message):'')+'</td></tr>';
+      tbody.innerHTML='<tr><td colspan="4" class="etf-msg">数据暂未就绪。'+(e&&e.message?('<br>'+e.message):'')+'</td></tr>';
     });
   }
 
-  /* 下钻：日期行 → 12 指数表；指数行 → 逐只 ETF 表（gi 直接存全局索引，不再依赖 rangeCount） */
+  /* 下钻：日期行 → 12 指数表；指数行 → 逐只 ETF 表（k=周期切片索引，gi=周期末全局索引，均按统一粒度聚合） */
   tbody.addEventListener('click', function(e){
     var tr=e.target.closest('tr.daterow'); if(!tr) return;
-    var gi=+tr.dataset.gi;
+    var k=+tr.dataset.k, sl=slices(), s=sl[k]; if(!s) return;
     var next=tr.nextElementSibling;
     if(next && next.classList.contains('etf-sub') && next.dataset.level==='idx'){ next.remove(); return; }
     if(next && next.classList.contains('etf-sub')) next.remove();
-    var d=DATA.dates[gi];
-    var html='<tr class="etf-sub" data-level="idx"><td colspan="5"><div style="padding:2px 4px">';
-    html+='<div style="font-size:12px;color:#66708a;margin:4px 2px">'+d+' · 12 宽基指数净申购（当日 / 累计）</div>';
-    html+='<table><thead><tr><th>宽基指数</th><th>当日净申购(亿)</th><th>累计净申购(亿)</th><th>ETF数</th></tr></thead><tbody>';
+    var gt=gtxt(gran());
+    var html='<tr class="etf-sub" data-level="idx"><td colspan="4"><div style="padding:2px 4px">';
+    html+='<div style="font-size:12px;color:#66708a;margin:4px 2px">截至 '+DATA.dates[s.gi]+' · 12 宽基指数净申购（'+gt+' / 累计）</div>';
+    html+='<table><thead><tr><th>宽基指数</th><th>'+gt+'净申购(亿)</th><th>累计净申购(亿)</th><th>ETF数</th></tr></thead><tbody>';
     IDX.forEach(function(name){
       var id=DATA.idx[name]; if(!id) return;
-      var net=id.net[gi], acc=id.acc[gi];
+      var net=agg(id.net,sl,true)[k], acc=agg(id.acc,sl,false)[k];
       var nec=(id.etf&&id.etf.length)||0;
-      html+='<tr class="idxrow" data-name="'+name+'"><td>'+name+'</td><td class="'+cls2(net)+'">'+sign2(net)+'</td><td>'+fmtAxis(acc)+'</td><td>'+nec+'</td></tr>';
+      html+='<tr class="idxrow" data-name="'+name+'" data-k="'+k+'"><td>'+name+'</td><td class="'+cls2(net)+'">'+sign2(net)+'</td><td>'+fmtAxis(acc)+'</td><td>'+nec+'</td></tr>';
     });
     html+='</tbody></table></div></td></tr>';
     tr.insertAdjacentHTML('afterend', html);
@@ -1128,22 +1162,26 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
 
   tbody.addEventListener('click', function(e){
     var ir=e.target.closest('tr.idxrow'); if(!ir) return;
-    var name=ir.dataset.name;
+    var name=ir.dataset.name, k=+ir.dataset.k, sl=slices();
     var next=ir.nextElementSibling;
     if(next && next.classList.contains('etf-sub') && next.dataset.level==='etf'){ next.remove(); return; }
     if(next && next.classList.contains('etf-sub')) next.remove();
-    var dtr=ir.closest('tr.etf-sub').previousElementSibling;
-    while(dtr && !dtr.classList.contains('daterow')) dtr=dtr.previousElementSibling;
-    var gi=dtr?+dtr.dataset.gi:(DATA.dates.length-1);
+    var gt=gtxt(gran());
     var etfs=DATA.etf.filter(function(x){return x.idx===name;});
-    var html='<tr class="etf-sub" data-level="etf"><td colspan="5"><div style="padding:2px 16px"><table><thead><tr><th>ETF代码</th><th>简称</th><th>当日净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
+    var html='<tr class="etf-sub" data-level="etf"><td colspan="4"><div style="padding:2px 16px"><table><thead><tr><th>ETF代码</th><th>简称</th><th>'+gt+'净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
     etfs.forEach(function(x){
-      var net=x.net[gi], acc=x.acc[gi];
+      var net=agg(x.net,sl,true)[k], acc=agg(x.acc,sl,false)[k];
       html+='<tr><td class="code">'+x.code+'</td><td>'+x.name+'</td><td class="'+cls2(net)+'">'+sign2(net)+'</td><td>'+fmtAxis(acc)+'</td></tr>';
     });
     html+='</tbody></table></div></td></tr>';
     ir.insertAdjacentHTML('afterend', html);
   });
+
+  /* 跟随统一统计粒度 #segG 与 ETF 图时间段 #eRng 重绘。
+     事件注册晚于图表脚本，故触发时 window._etfView 已是新周期的切片。 */
+  function refresh(){ if(DATA) setTimeout(renderTable, 0); }
+  document.querySelectorAll('#segG button').forEach(function(b){ b.addEventListener('click', refresh); });
+  document.querySelectorAll('#eRng button').forEach(function(b){ b.addEventListener('click', refresh); });
 
   /* 关键：本 IIFE 在 HTML 内联脚本(只绑静态 m/u)与个股 IIFE(activate 私有)之后才运行，
      eBtn 不会被它们绑定。必须在此显式完成「全量切 active + 全量切 tpanel」。 */

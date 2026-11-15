@@ -14,6 +14,8 @@ body{background:#eef1f6;font-family:-apple-system,"PingFang SC","Microsoft YaHei
 .srcbar .s b{color:#1f2937}
 .rngbar{display:flex;flex-direction:column;gap:8px;padding:14px 28px 4px}
 .rngbar.gran{padding:6px 28px 2px}
+.unigran{border-top:1px solid #eef1f6;margin-top:8px}
+.gran-hint{font-size:12px;color:#94a3b8;margin-left:12px}
 .rngrow{display:flex;align-items:center;gap:8px}
 .rngrow2{flex-wrap:nowrap}
 .asof{font-size:12.5px;font-weight:700;color:#2f6bff;background:#eaf1ff;border-radius:20px;padding:5px 14px;display:inline-block;margin-bottom:10px}
@@ -129,11 +131,6 @@ tbody tr:hover{background:#f6f9ff}
 </svg>
 <div id="tip"></div></div>
 <div class="legend" id="lg"></div>
-<div class="rngbar gran">
-<div class="rngrow"><span class="lbl">融资统计粒度：</span>
-<div class="seg" id="segG"><button data-g="d" class="on">日</button><button data-g="w">周</button><button data-g="m">月</button></div>
-</div>
-</div>
 <div class="etfchart-sec">
 <div class="etfchart-hd">
 <div class="etfchart-title">宽基 ETF 资金流（全市场净申购）</div>
@@ -146,9 +143,6 @@ tbody tr:hover{background:#f6f9ff}
 <button class="rng-btn" data-range="ytd">今年以来</button>
 <button class="rng-btn" data-range="all">全部</button>
 </div></div>
-<div class="rngbar gran"><div class="rngrow"><span class="lbl">ETF 统计粒度：</span>
-<div class="seg" id="eSeg"><button data-g="d" class="on">日</button><button data-g="w">周</button><button data-g="m">月</button></div>
-</div></div>
 <div class="chartbox" id="ebox">
 <svg id="esvg" viewBox="0 0 1000 436" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
 <g id="eplot"></g>
@@ -157,6 +151,12 @@ tbody tr:hover{background:#f6f9ff}
 </svg>
 <div id="etip"></div></div>
 <div class="legend" id="elg"></div>
+</div>
+<div class="rngbar gran unigran">
+<div class="rngrow"><span class="lbl">统计粒度：</span>
+<div class="seg" id="segG"><button data-g="d" class="on">日</button><button data-g="w">周</button><button data-g="m">月</button></div>
+<span class="gran-hint">上方图表与下方表格统一跟随</span>
+</div>
 </div>
 <div class="tblsec">
 <div class="tbltabs">
@@ -582,7 +582,7 @@ try{
     ov.setAttribute('x',ML);ov.setAttribute('width',pw);ov.setAttribute('y',MT);ov.setAttribute('height',PB-MT);
     vline.setAttribute('y1',MT);vline.setAttribute('y2',PB);
     if(legend)legend.innerHTML='<span class="lrow"><span class="lg blue">■ 累计净申购（左轴·亿元）</span><span class="lg red">■ 当日净申购（右轴·亿元·红正绿负）</span></span><span class="mut mrow">鼠标/手指停在图上看当日明细 · 口径：全市场净申购（非汇金独占）</span>';
-    window._etfView=v;
+    v.start=cur; window._etfView=v;
   }
   function pick(clientX,clientY){
     var r=svg.getBoundingClientRect();if(!r.width)return;
@@ -612,12 +612,12 @@ try{
     document.querySelectorAll('#eRng button').forEach(function(x){x.classList.remove('active');});b.classList.add('active');
     cur=ER[b.dataset.range]||0;hideTips();drawE(cur);
   });});
-  document.querySelectorAll('#eSeg button').forEach(function(b){b.addEventListener('click',function(){
-    document.querySelectorAll('#eSeg button').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
+  /* 统计粒度已统一：跟随图表下方唯一 #segG（.on 高亮由主图脚本切换，此处只更新自身 G 并重绘） */
+  document.querySelectorAll('#segG button').forEach(function(b){b.addEventListener('click',function(){
     G=b.dataset.g;hideTips();drawE(cur);
   });});
   drawE(cur);
 })();
 </script>
-<script src="_rzrq_drill.js?v=202611152309"></script>
+<script src="_rzrq_drill.js?v=202611152323"></script>
 </body></html>
