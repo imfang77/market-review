@@ -1251,5 +1251,12 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     ir.insertAdjacentHTML('afterend', html);
   });
 
-  eBtn.addEventListener('click', function(){ ensure(); });
+  /* 关键：本 IIFE 在 HTML 内联脚本(只绑静态 m/u)与个股 IIFE(activate 私有)之后才运行，
+     eBtn 不会被它们绑定。必须在此显式完成「全量切 active + 全量切 tpanel」，
+     否则点击「宽基ETF净资金流」只加载数据、不切换面板 → 点了没反应、看不到图表。 */
+  eBtn.addEventListener('click', function(){
+    document.querySelectorAll('.tbtn').forEach(function(b){ b.classList.toggle('active', b.dataset.t === 'e'); });
+    document.querySelectorAll('.tpanel').forEach(function(p){ p.style.display = (p.id === 'tpanel-e') ? 'block' : 'none'; });
+    ensure();
+  });
 })();
