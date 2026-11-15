@@ -1070,7 +1070,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   panel.className='tpanel'; panel.id='tpanel-e'; panel.style.display='none';
   panel.innerHTML =
     '<div class="etf-top">'
-    + '<div class="etf-note2">12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。跟随图表下方的「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计；累计净申购取周期末快照。点击日期行看各指数，再点指数看逐只 ETF。</div>'
+    + '<div class="etf-note2">12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。<b>累计净申购含各 ETF 成立／有数据首日起的全部历史净申购</b>（iFinD 区间净流入额锚点，截至 2026-08-16），逐日明细自 2026-08-17 起。跟随图表下方「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计；累计取周期末快照。点击日期行看各指数，再点指数看逐只 ETF。</div>'
     + '</div>'
     + '<div class="tblbox"><div class="etf-tblwrap"><table class="etf-table"><thead><tr id="etfHead">'
     +   '<th>日期</th><th>累计净申购(亿)</th><th>当日净申购(亿)</th><th>纳入指数</th>'
