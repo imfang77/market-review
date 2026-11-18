@@ -156,7 +156,7 @@ tbody tr:hover{background:#f6f9ff}
 <div class="legend" id="elg"></div>
 <details class="descfold etf-desc"><summary>口径与数据说明（默认折叠，点击展开）</summary>
 <div class="sub">
-<div><b>① 指标口径</b>：蓝线＝<b>累计净申购</b>（2012 前置锚点＋全历史逐日净申购累加，早期仅当时已成立的 ETF 参与）；红绿柱＝当日净申购（红正绿负）；紫色阶梯线＝汇金持股票 ETF 市值（第三方季报估算，存量口径）；<b style="color:#ea580c">橙色线＝上证指数</b>（最右轴·点，东方财富日线收盘），用于对照资金流与指数走势。</div>
+<div><b>① 指标口径</b>：蓝线＝<b>累计净申购</b>（2012 前置锚点＋全历史逐日净申购累加，早期仅当时已成立的 ETF 参与）；红绿柱＝当日净申购（红正绿负）；紫色阶梯线＝汇金持股票 ETF 市值（第三方季报估算，存量口径；仅所选区间含对应日期时显示）；<b style="color:#0f766e">青色线＝上证指数</b>（最右轴·点，东方财富日线收盘），用于对照资金流与指数走势。</div>
 <div><b>② 为何与「国家队持仓」不等价</b>：本图为<b>一级市场申赎口径</b>，<b>不含二级市场买卖</b> —— 国家队经二级市场受让份额不产生净申购数据，故蓝线平坦不能推出「国家队没持有」。全市场净申购，非汇金独占。</div>
 <div><b>③ 关键事件</b>：2024-02-06 汇金公告增持四大行及多只 ETF（2024 年一级净申购 +8,349 亿）；2026-01-14 沪指冲高 4190 点、汇金启动大规模减持（2026 上半年 −16,946 亿）；2026-06-08 汇金重启增持，宽基 ETF 转净流入（7–11 月 +7,121 亿）。汇金减持的是波段仓位，六大行等永久底仓约 3.37 万亿未动。</div>
 <div><b>④ 数据来源</b>：iFinD 基金日频净流入额（30 只宽基 ETF，逐只按 ≤100 日历天窗口拉取，902 个窗口），已用 iFinD「区间净流入额」全历史锚点逐只对账（30/30 通过）；上证指数为东方财富历史日线。累计值为<b>净流量累计</b>而非 ETF 规模存量，早期为负属真实数据。</div>
@@ -347,13 +347,13 @@ function draw(s){
   // 红线：上涨家数（恒为日，右轴）
   let pu='';
   for(let i=s;i<N_C;i++) if(CUP[i]!==null) pu+=(pu?' ':'')+Xi(i).toFixed(1)+','+YR(CUP[i]).toFixed(1);
-  g+='<polyline points="'+pu+'" fill="none" stroke="#c0392b" stroke-width="2.2" stroke-linejoin="round"/>';
+  g+='<polyline points="'+pu+'" fill="none" stroke="#c0392b" stroke-width="2.8" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';
   if(cnt<=130){ for(let i=s;i<N_C;i++) if(CUP[i]!==null) g+='<circle cx="'+Xi(i).toFixed(1)+'" cy="'+YR(CUP[i]).toFixed(1)+'" r="2.6" fill="#c0392b"/>'; }
   // 蓝线：融资余额（随粒度快照，左轴）
   const poly=pts.map(p=>Xi(p[0]).toFixed(1)+','+YL(p[1]).toFixed(1)).join(' ');
   const firstP=pts[0], lastP=pts[pts.length-1];
   g+='<polygon points="'+poly+' '+Xi(lastP[0]).toFixed(1)+','+PB+' '+Xi(firstP[0]).toFixed(1)+','+PB+'" fill="rgba(47,107,255,.08)"/>';
-  g+='<polyline points="'+poly+'" fill="none" stroke="#2f6bff" stroke-width="2.6" stroke-linejoin="round"/>';
+  g+='<polyline points="'+poly+'" fill="none" stroke="#2f6bff" stroke-width="2.8" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';
   if(pts.length<=130){ for(let q=0;q<pts.length;q++){ g+='<circle cx="'+Xi(pts[q][0]).toFixed(1)+'" cy="'+YL(pts[q][1]).toFixed(1)+'" r="3.2" fill="#2f6bff" stroke="#fff" stroke-width="1.2"/>'; } }
   g+='<circle cx="'+Xi(lastP[0]).toFixed(1)+'" cy="'+YL(lastP[1]).toFixed(1)+'" r="4.5" fill="#2f6bff" stroke="#fff" stroke-width="1.5"/>';
   plot.innerHTML=g;
@@ -542,7 +542,7 @@ try{
     cur=s;
     if(N===0) return;
     var m=metrics(),F=m.F,nl=m.nl;
-    ML=Math.round(F*3.8+12);MR=Math.round(F*3.2+52);pw=W-ML-MR;
+    ML=Math.round(F*3.8+12);MR=Math.round(F*6.8+28);pw=W-ML-MR;
     MT=Math.round(F*1.35+26);PB=402;plotH=PB-MT;
     svg.setAttribute('viewBox','0 0 1000 '+Math.round(PB+8+F*1.5));
     var v=buildView();if(!v.idx.length)return;
@@ -581,7 +581,7 @@ try{
       var t2=yhiR-(yhiR-yloR)*k/4,y2=MT+plotH*k/4;
       g+='<text x="'+(W-MR+8)+'" y="'+(y2+F*0.35).toFixed(1)+'" font-size="'+F.toFixed(1)+'" fill="#c0392b">'+Math.round(t2).toLocaleString('zh-CN')+'</text>';
       var t3=shi-(shi-slo)*k/4;
-      g+='<text x="'+(W-6)+'" y="'+(y2+F*0.35).toFixed(1)+'" text-anchor="end" font-size="'+F.toFixed(1)+'" fill="#ea580c">'+Math.round(t3).toLocaleString('zh-CN')+'</text>';
+      g+='<text x="'+(W-6)+'" y="'+(y2+F*0.35).toFixed(1)+'" text-anchor="end" font-size="'+F.toFixed(1)+'" fill="#0f766e">'+Math.round(t3).toLocaleString('zh-CN')+'</text>';
     }
     for(var j=0;j<nl;j++){
       var kk=Math.round(j*(cnt-1)/((nl-1)||1)),xx=Xi2(kk);
@@ -590,8 +590,8 @@ try{
       g+='<text x="'+xx.toFixed(1)+'" y="'+(PB+8+F*1.05).toFixed(1)+'" text-anchor="middle" font-size="'+F.toFixed(1)+'" fill="#8b95a7">'+lab.slice(2)+'</text>';
     }
     g+='<text x="14" y="'+(MT-22)+'" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#2f6bff">← 累计净申购（亿元 · 左轴）</text>';
-    g+='<text x="'+(W-MR-6)+'" y="'+(MT-22)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#c0392b">当日净申购（亿元 · 红正绿负）→</text>';
-    g+='<text x="'+(W-4)+'" y="'+(MT-8)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#ea580c">上证指数（点）→</text>';
+    g+='<text x="'+(W-MR-6)+'" y="'+(MT-12)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#c0392b">当日净申购（亿元 · 红正绿负）→</text>';
+    g+='<text x="'+(W-4)+'" y="'+(MT-12)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#0f766e">上证指数（点）→</text>';
     g+='<line x1="'+ML+'" y1="'+MT+'" x2="'+ML+'" y2="'+PB+'" stroke="#bcd0f7" stroke-width="1.4"/>';
     g+='<line x1="'+(W-MR)+'" y1="'+MT+'" x2="'+(W-MR)+'" y2="'+PB+'" stroke="#eec9c9" stroke-width="1.4"/>';
     g+='<line x1="'+ML+'" y1="'+PB+'" x2="'+(W-MR)+'" y2="'+PB+'" stroke="#c7cdda" stroke-width="1.2"/>';
@@ -608,17 +608,17 @@ try{
     if(poly){
       var fp=poly.split(' ')[0].split(','),lp=poly.split(' ')[poly.split(' ').length-1].split(',');
       g+='<polygon points="'+poly+' '+lp[0]+','+PB+' '+fp[0]+','+PB+'" fill="rgba(47,107,255,.08)"/>';
-      g+='<polyline points="'+poly+'" fill="none" stroke="#2f6bff" stroke-width="2.6" stroke-linejoin="round"/>';
+      g+='<polyline points="'+poly+'" fill="none" stroke="#2f6bff" stroke-width="2.8" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';
       if(cnt<=130){var pp=poly.split(' ');for(var q=0;q<pp.length;q++){var xy=pp[q].split(',');g+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="3.2" fill="#2f6bff" stroke="#fff" stroke-width="1.2"/>';}}
       g+='<circle cx="'+lp[0]+'" cy="'+lp[1]+'" r="4.5" fill="#2f6bff" stroke="#fff" stroke-width="1.5"/>';
     }
-    /* 上证指数线（橙色·最右轴·点）：与净申购同 x 轴对照，不改任何资金口径 */
+    /* 上证指数线（青色·最右轴·点）：与净申购同 x 轴对照，不改任何资金口径 */
     var shp='';
     for(var k=0;k<cnt;k++) if(v.sh[k]!=null) shp+=(shp?' ':'')+Xi2(k).toFixed(1)+','+YS(v.sh[k]).toFixed(1);
     if(shp){
-      g+='<polyline points="'+shp+'" fill="none" stroke="#ea580c" stroke-width="1.9" stroke-linejoin="round" opacity=".9"/>';
+      g+='<polyline points="'+shp+'" fill="none" stroke="#0f766e" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" opacity=".9" vector-effect="non-scaling-stroke"/>';
       var shLast=shp.split(' ')[shp.split(' ').length-1].split(',');
-      g+='<circle cx="'+shLast[0]+'" cy="'+shLast[1]+'" r="4" fill="#ea580c" stroke="#fff" stroke-width="1.4"/>';
+      g+='<circle cx="'+shLast[0]+'" cy="'+shLast[1]+'" r="4" fill="#0f766e" stroke="#fff" stroke-width="1.4"/>';
     }
     /* 事件竖线标注（中央汇金关键操作时点）—— 仅画落在当前视窗内的事件 */
     var evs=[], vFirst=v.dd[0], vLast=v.dd[v.dd.length-1];
@@ -633,24 +633,28 @@ try{
       g+='<line x1="'+e.x.toFixed(1)+'" y1="'+MT+'" x2="'+e.x.toFixed(1)+'" y2="'+PB+'" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="3 3" opacity=".45"/>';
       g+='<text x="'+tx.toFixed(1)+'" y="'+ty.toFixed(1)+'" text-anchor="'+anch+'" font-size="'+(F*1.0).toFixed(1)+'" font-weight="500" fill="#7c3aed" stroke="#fcfdff" stroke-width="3" paint-order="stroke">'+e.d+' '+e.t+'</text>';
     });
-    /* 汇金持股票ETF市值阶梯线（第三方估算·存量口径·左轴） */
+    /* 汇金持股票ETF市值阶梯线（第三方估算·存量口径·左轴）；仅画视窗内 ≥2 节点 */
+    var hjDrawn=false;
     if(HJS.length){
       var hp=[];
       HJS.forEach(function(h){if(h[0]>=vFirst&&h[0]<=vLast){var k=dIdx(v.dd,h[0]);if(k>=0)hp.push({x:Xi2(k),y:YL2(h[1]),v:h[1],d:h[0]});}});
       if(hp.length>=2){
+        hjDrawn=true;
         var sp='';
         for(var i=0;i<hp.length;i++){
           if(i===0) sp+=hp[i].x.toFixed(1)+','+hp[i].y.toFixed(1);
           else{ sp+=' '+hp[i].x.toFixed(1)+','+hp[i-1].y.toFixed(1); sp+=' '+hp[i].x.toFixed(1)+','+hp[i].y.toFixed(1); }
         }
-        g+='<polyline points="'+sp+'" fill="none" stroke="#7c3aed" stroke-width="2.2" stroke-dasharray="7 4" opacity=".9" stroke-linejoin="round"/>';
+        g+='<polyline points="'+sp+'" fill="none" stroke="#7c3aed" stroke-width="2.8" stroke-dasharray="7 4" opacity=".9" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';
         hp.forEach(function(p){g+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="3.6" fill="#7c3aed" stroke="#fff" stroke-width="1.3"/>';});
       }
     }
     plot.innerHTML=g;
     ov.setAttribute('x',ML);ov.setAttribute('width',pw);ov.setAttribute('y',MT);ov.setAttribute('height',PB-MT);
     vline.setAttribute('y1',MT);vline.setAttribute('y2',PB);
-    if(legend)legend.innerHTML='<span class="lrow"><span class="lg blue">■ 累计净申购（左轴·亿元）</span><span class="lg red">■ 当日净申购（右轴·亿元·红正绿负）</span><span class="lg" style="color:#7c3aed">┄ 汇金持股票ETF市值（第三方估算·存量口径）</span><span class="lg" style="color:#ea580c">— 上证指数（最右轴·点）</span></span>';
+    if(legend)legend.innerHTML='<span class="lrow"><span class="lg blue">■ 累计净申购（左轴·亿元）</span><span class="lg red">■ 当日净申购（右轴·亿元·红正绿负）</span>'
+      +(hjDrawn?'<span class="lg" style="color:#7c3aed">┄ 汇金持股票ETF市值（第三方估算·存量口径）</span>':'')
+      +'<span class="lg" style="color:#0f766e">— 上证指数（最右轴·点）</span></span>';
     v.start=cur; window._etfView=v;
   }
   function pick(clientX,clientY){
@@ -668,7 +672,7 @@ try{
     tip.innerHTML='<div class="t-d">'+dd+'</div>'
       +'<div class="t-r"><span style="color:#2f6bff">● 累计净申购</span><b style="color:#2f6bff">'+fmt(accV)+' 亿</b></div>'
       +'<div class="t-r"><span style="color:#c0392b">● 当日净申购</span><b style="color:'+(netV>=0?'#c0392b':'#2f9e44')+'">'+(netV>=0?'+':'')+fmt(netV)+' 亿</b></div>'
-      +'<div class="t-r"><span style="color:#ea580c">● 上证指数</span><b style="color:#ea580c">'+(shV!=null?shV.toFixed(2)+' 点':'—')+(shPct!=null?'（'+(shPct>=0?'+':'')+shPct.toFixed(2)+'%）':'')+'</b></div>';
+      +'<div class="t-r"><span style="color:#0f766e">● 上证指数</span><b style="color:#0f766e">'+(shV!=null?shV.toFixed(2)+' 点':'—')+(shPct!=null?'（'+(shPct>=0?'+':'')+shPct.toFixed(2)+'%）':'')+'</b></div>';
     var bx=box.getBoundingClientRect(),left=clientX-bx.left+14,top=clientY-bx.top-10;
     if(left+200>bx.width)left=clientX-bx.left-200;
     if(top<0)top=0;
@@ -692,5 +696,5 @@ try{
   drawE(cur);
 })();
 </script>
-<script src="_rzrq_drill.js?v=202611190725"></script>
+<script src="_rzrq_drill.js?v=202611190753"></script>
 </body></html>
