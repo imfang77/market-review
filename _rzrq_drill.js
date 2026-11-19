@@ -1051,17 +1051,18 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + 'table.etf-table tbody tr.daterow td:first-child{color:#2f6bff;font-weight:600}'
     + '.etf-pos{color:#e5484d}.etf-neg{color:#2f9e44}'
     + '.etf-sub{background:#fafbfe}'
-    + '.etf-sub table{font-size:12.5px;border-collapse:collapse;width:100%}'
-    + '.etf-sub th,.etf-sub td{padding:6px 10px;border-bottom:1px solid #eef1f5;text-align:right;white-space:nowrap}'
-    + '.etf-sub th{background:#f1f5fb;color:#66708a;font-weight:600}'
-    + '.etf-sub th:first-child,.etf-sub td:first-child{text-align:left}'
+    + '.etf-sub table{font-size:14px;border-collapse:collapse;width:100%}'
+    + '.etf-sub table th,.etf-sub table td{padding:9px 14px;border-bottom:1px solid #eef1f5;text-align:right;white-space:nowrap}'
+    + '.etf-sub table th{background:#f1f5fb;color:#66708a;font-weight:600}'
+    + '.etf-sub table th:first-child,.etf-sub table td:first-child{text-align:left}'
+    + '.etf-sub-in{max-width:100%;overflow-x:auto}'
     + '.etf-sub tr.idxrow{cursor:pointer}.etf-sub tr.idxrow:hover{background:#f3f7ff}.etf-sub tr.idxrow td:first-child{color:#2f6bff}'
     + '.etf-sub .etf-pos{color:#e5484d}.etf-sub .etf-neg{color:#2f9e44}'
     + '.etf-sub .code{font-family:ui-monospace,Menlo,Consolas,monospace;color:#66708a}'
     + '.etf-msg{padding:18px;color:#66708a;font-size:13px;text-align:center}'
     + '.eth-mini{display:none}'
-    + '@media(max-width:620px){table.etf-table th,table.etf-table td{padding:2px 3px;font-size:13.5px}.eth-full{display:none}.eth-mini{display:inline}.etf-tblwrap{max-height:440px}#tpanel-e .tblbox{padding:6px 8px 8px}}'
-    + '@media(max-width:360px){table.etf-table th,table.etf-table td{padding:2px 1px}#tpanel-e .tblbox{padding:6px 0 8px}}';
+    + '@media(max-width:620px){table.etf-table{table-layout:fixed}table.etf-table th:first-child,table.etf-table td:first-child{width:32%}table.etf-table th,table.etf-table td{padding:8px 3px;font-size:13.5px}.etf-sub table th,.etf-sub table td{padding:8px 4px;font-size:13.5px}.eth-full{display:none}.eth-mini{display:inline}.etf-tblwrap{max-height:440px}#tpanel-e .tblbox{padding:6px 8px 8px}}'
+    + '@media(max-width:360px){table.etf-table th,table.etf-table td{padding:8px 1px}#tpanel-e .tblbox{padding:6px 0 8px}}';
   if (!document.getElementById('etf-tab-css')) {
     var st = document.createElement('style'); st.id='etf-tab-css'; st.textContent = css; document.head.appendChild(st);
   }
@@ -1149,7 +1150,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     if(next && next.classList.contains('etf-sub') && next.dataset.level==='idx'){ next.remove(); return; }
     if(next && next.classList.contains('etf-sub')) next.remove();
     var gt=gtxt(gran());
-    var html='<tr class="etf-sub" data-level="idx"><td colspan="4"><div style="padding:2px 4px">';
+    var html='<tr class="etf-sub" data-level="idx"><td colspan="4"><div class="etf-sub-in" style="padding:2px 4px">';
     html+='<div style="font-size:12px;color:#66708a;margin:4px 2px">截至 '+DATA.dates[s.gi]+' · 12 宽基指数净申购（'+gt+' / 累计）</div>';
     html+='<table><thead><tr><th>宽基指数</th><th>'+gt+'净申购(亿)</th><th>累计净申购(亿)</th><th>ETF数</th></tr></thead><tbody>';
     IDX.forEach(function(name){
@@ -1170,7 +1171,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     if(next && next.classList.contains('etf-sub')) next.remove();
     var gt=gtxt(gran());
     var etfs=DATA.etf.filter(function(x){return x.idx===name;});
-    var html='<tr class="etf-sub" data-level="etf"><td colspan="4"><div style="padding:2px 16px"><table><thead><tr><th>ETF代码</th><th>简称</th><th>'+gt+'净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
+    var html='<tr class="etf-sub" data-level="etf"><td colspan="4"><div class="etf-sub-in" style="padding:2px 16px"><table><thead><tr><th>ETF代码</th><th>简称</th><th>'+gt+'净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
     etfs.forEach(function(x){
       var net=agg(x.net,sl,true)[k], acc=agg(x.acc,sl,false)[k];
       html+='<tr><td class="code">'+x.code+'</td><td>'+x.name+'</td><td class="'+cls2(net)+'">'+sign2(net)+'</td><td>'+fmtAxis(acc)+'</td></tr>';
