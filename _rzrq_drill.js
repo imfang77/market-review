@@ -1038,7 +1038,9 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
 
   var css = ''
     + '.etf-top{padding:6px 2px 2px}'
-    + '.etf-note2{font-size:12px;color:#66708a;line-height:1.6;margin:2px 0 8px}'
+    + '.etf-note2{font-size:12px;color:#66708a;line-height:1.6;margin:8px 2px 0}'
+    + '.etf-note2 summary{cursor:pointer;font-weight:600;color:#475569;padding:6px 2px}'
+    + '.etf-note2[open] summary{margin-bottom:4px}'
     + '.etf-tblwrap{max-height:520px;overflow:auto;border:1px solid #eef1f6;border-radius:10px}'
     + 'table.etf-table{border-collapse:collapse;width:100%;font-size:14px}'
     + 'table.etf-table th,table.etf-table td{padding:9px 14px;border-bottom:1px solid #eef1f5;white-space:nowrap;text-align:right}'
@@ -1058,8 +1060,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.etf-sub .code{font-family:ui-monospace,Menlo,Consolas,monospace;color:#66708a}'
     + '.etf-msg{padding:18px;color:#66708a;font-size:13px;text-align:center}'
     + '.eth-mini{display:none}'
-    + '@media(max-width:620px){table.etf-table th,table.etf-table td{padding:4px 4px;font-size:11.5px}.eth-full{display:none}.eth-mini{display:inline}.etf-tblwrap{max-height:440px}#tpanel-e .tblbox{padding:6px 8px 8px}}'
-    + '@media(max-width:360px){table.etf-table th,table.etf-table td{padding:3px 2px;font-size:11px}}';
+    + '@media(max-width:620px){table.etf-table th,table.etf-table td{padding:2px 3px;font-size:13.5px}.eth-full{display:none}.eth-mini{display:inline}.etf-tblwrap{max-height:440px}#tpanel-e .tblbox{padding:6px 8px 8px}}'
+    + '@media(max-width:360px){table.etf-table th,table.etf-table td{padding:2px 1px}#tpanel-e .tblbox{padding:6px 0 8px}}';
   if (!document.getElementById('etf-tab-css')) {
     var st = document.createElement('style'); st.id='etf-tab-css'; st.textContent = css; document.head.appendChild(st);
   }
@@ -1071,12 +1073,10 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   var panel = document.createElement('div');
   panel.className='tpanel'; panel.id='tpanel-e'; panel.style.display='none';
   panel.innerHTML =
-    '<div class="etf-top">'
-    + '<div class="etf-note2">12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。<b>累计净申购含各 ETF 成立／有数据首日起的全部历史净申购</b>（iFinD 区间净流入额锚点，截至 2026-08-16），逐日明细自 2026-08-17 起。跟随图表下方「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计；累计取周期末快照。点击日期行看各指数，再点指数看逐只 ETF。</div>'
-    + '</div>'
-    + '<div class="tblbox"><div class="etf-tblwrap"><table class="etf-table"><thead><tr id="etfHead">'
+    '<div class="tblbox"><div class="etf-tblwrap"><table class="etf-table"><thead><tr id="etfHead">'
     +   '<th>日期</th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">当日净申购(亿)</span><span class="eth-mini">当日(亿)</span></th><th><span class="eth-full">纳入指数</span><span class="eth-mini">指数</span></th>'
-    + '</tr></thead><tbody id="etfTbody"></tbody></table></div></div>';
+    + '</tr></thead><tbody id="etfTbody"></tbody></table></div></div>'
+    + '<details class="etf-note2"><summary>表格口径与数据说明（默认折叠，点击展开）</summary><div>12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。<b>累计净申购含各 ETF 成立／有数据首日起的全部历史净申购</b>（iFinD 区间净流入额锚点，截至 2026-08-16），逐日明细自 2026-08-17 起。跟随图表下方「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计；累计取周期末快照。点击日期行看各指数，再点指数看逐只 ETF。</div></details>';
   sec.appendChild(panel);
 
   var DATA=null, tbody=panel.querySelector('#etfTbody');
