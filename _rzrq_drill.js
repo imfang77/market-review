@@ -1061,6 +1061,13 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.etf-sub .code{font-family:ui-monospace,Menlo,Consolas,monospace;color:#66708a}'
     + '.etf-msg{padding:18px;color:#66708a;font-size:13px;text-align:center}'
     + '.eth-mini{display:none}'
+    + '.etf-dim{display:flex;gap:6px;align-items:center;padding:8px 2px 0}'
+    + '.etf-dim .lbl{font-size:12px;color:#64748b;margin-right:2px}'
+    + '.etf-dim button{font-size:12px;padding:4px 12px;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:6px;cursor:pointer}'
+    + '.etf-dim button.on{background:#2f6bff;color:#fff;border-color:#2f6bff}'
+    + '.etf-subtabs{display:flex;gap:6px;margin:4px 2px 6px}'
+    + '.etf-subtabs button{font-size:11.5px;padding:3px 10px;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:5px;cursor:pointer}'
+    + '.etf-subtabs button.on{background:#0f766e;color:#fff;border-color:#0f766e}'
     + '@media(max-width:620px){table.etf-table{table-layout:fixed}table.etf-table th:first-child,table.etf-table td:first-child{width:32%}table.etf-table th,table.etf-table td{padding:8px 3px;font-size:13.5px}.etf-sub table th,.etf-sub table td{padding:8px 4px;font-size:13.5px}.eth-full{display:none}.eth-mini{display:inline}.etf-tblwrap{max-height:440px}#tpanel-e .tblbox{padding:6px 8px 8px}}'
     + '@media(max-width:360px){table.etf-table th,table.etf-table td{padding:8px 1px}#tpanel-e .tblbox{padding:6px 0 8px}}';
   if (!document.getElementById('etf-tab-css')) {
@@ -1074,13 +1081,14 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   var panel = document.createElement('div');
   panel.className='tpanel'; panel.id='tpanel-e'; panel.style.display='none';
   panel.innerHTML =
-    '<div class="tblbox"><div class="etf-tblwrap"><table class="etf-table"><thead><tr id="etfHead">'
+    '<div class="etf-dim"><span class="lbl">整理维度：</span><button data-dim="d" class="on">按日期</button><button data-dim="i">按宽基指数</button></div>'
+    + '<div class="tblbox"><div class="etf-tblwrap"><table class="etf-table"><thead><tr id="etfHead">'
     +   '<th>日期</th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">当日净申购(亿)</span><span class="eth-mini">当日(亿)</span></th><th><span class="eth-full">纳入指数</span><span class="eth-mini">指数</span></th>'
     + '</tr></thead><tbody id="etfTbody"></tbody></table></div></div>'
-    + '<details class="etf-note2"><summary>表格口径与数据说明（默认折叠，点击展开）</summary><div>12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。<b>累计净申购含各 ETF 成立／有数据首日起的全部历史净申购</b>（iFinD 区间净流入额锚点，截至 2026-08-16），逐日明细自 2026-08-17 起。跟随图表下方「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计；累计取周期末快照。点击日期行看各指数，再点指数看逐只 ETF。</div></details>';
+    + '<details class="etf-note2"><summary>表格口径与数据说明（默认折叠，点击展开）</summary><div>12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。<b>累计净申购含各 ETF 成立／有数据首日起的全部历史净申购</b>（iFinD 区间净流入额锚点，截至 2026-08-16），逐日明细自 2026-08-17 起。跟随图表下方「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计；累计取周期末快照。<b>整理维度</b>默认按日期，可切「按宽基指数」：点指数后可选按日期或按该指数成分 ETF 整理。</div></details>';
   sec.appendChild(panel);
 
-  var DATA=null, tbody=panel.querySelector('#etfTbody');
+  var DATA=null, tbody=panel.querySelector('#etfTbody'), dim='d';
 
   function fmtAxis(v){ if(v==null) return '—'; var a=Math.abs(v); if(a>=10000) return (v/10000).toFixed(2)+'万亿'; return v.toFixed(2); }
   function sign2(v){ if(v==null) return '—'; return (v>=0?'+':'')+v.toFixed(2); }
@@ -1117,8 +1125,49 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     });
   }
 
+  /* 按宽基指数：每行一个指数，区间净申购=所选视窗内逐周期累加，累计=视窗末快照 */
+  function renderIndexTable(){
+    var sl=slices(), g=gran(), gt=gtxt(g);
+    var head=panel.querySelector('#etfHead');
+    if(head) head.innerHTML='<th>宽基指数</th><th><span class="eth-full">区间净申购(亿)</span><span class="eth-mini">区间(亿)</span></th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">ETF数</span><span class="eth-mini">只数</span></th>';
+    var rows=[];
+    IDX.forEach(function(name){
+      var id=DATA.idx[name]; if(!id) return;
+      var net=agg(id.net,sl,true), acc=agg(id.acc,sl,false);
+      var t=0; net.forEach(function(x){t+=(x||0);}); t=Math.round(t*100)/100;
+      var last=acc.length?acc[acc.length-1]:null;
+      rows.push('<tr class="idxmain" data-name="'+name+'"><td>'+name+'</td><td class="'+cls2(t)+'">'+sign2(t)+'</td><td>'+fmtAxis(last)+'</td><td>'+((id.etf&&id.etf.length)||0)+'</td></tr>');
+    });
+    tbody.innerHTML=rows.join('');
+  }
+  /* 指数下钻：mode=d 按日期（周期切片），mode=e 按该指数成分 ETF（视窗内累加/末快照） */
+  function renderIdxSub(subTr, name, mode){
+    var sl=slices(), g=gran(), gt=gtxt(g), body=subTr.querySelector('.etf-sub-body');
+    var id=DATA.idx[name];
+    if(!id){ body.innerHTML='<div class="etf-msg">无数据</div>'; return; }
+    var h='';
+    if(mode==='d'){
+      var acc=agg(id.acc,sl,false), net=agg(id.net,sl,true);
+      h='<table><thead><tr><th>日期</th><th>累计净申购(亿)</th><th>'+gt+'净申购(亿)</th></tr></thead><tbody>';
+      for(var k=sl.length-1;k>=0;k--){
+        h+='<tr><td>'+DATA.dates[sl[k].gi]+'</td><td>'+fmtAxis(acc[k])+'</td><td class="'+cls2(net[k])+'">'+sign2(net[k])+'</td></tr>';
+      }
+    }else{
+      var etfs=DATA.etf.filter(function(x){return x.idx===name;});
+      h='<table><thead><tr><th>ETF代码</th><th>简称</th><th>区间净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
+      etfs.forEach(function(x){
+        var net=agg(x.net,sl,true), acc=agg(x.acc,sl,false);
+        var t=0; net.forEach(function(v){t+=(v||0);}); t=Math.round(t*100)/100;
+        var last=acc.length?acc[acc.length-1]:null;
+        h+='<tr><td class="code">'+x.code+'</td><td>'+x.name+'</td><td class="'+cls2(t)+'">'+sign2(t)+'</td><td>'+fmtAxis(last)+'</td></tr>';
+      });
+    }
+    body.innerHTML=h+'</tbody></table>';
+  }
+
   function renderTable(){
     if(!DATA) return;
+    if(dim==='i'){ renderIndexTable(); return; }
     var sl=slices(), g=gran(), gt=gtxt(g);
     var acc=agg(DATA.total.acc,sl,false), net=agg(DATA.total.net,sl,true), nidx=DATA.total.nidx;
     var head=panel.querySelector('#etfHead');
@@ -1142,8 +1191,18 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     });
   }
 
+  /* 维度切换：按日期 / 按宽基指数 */
+  panel.querySelectorAll('.etf-dim button').forEach(function(b){
+    b.addEventListener('click',function(){
+      dim=b.dataset.dim;
+      panel.querySelectorAll('.etf-dim button').forEach(function(x){x.classList.toggle('on',x===b);});
+      renderTable();
+    });
+  });
+
   /* 下钻：日期行 → 12 指数表；指数行 → 逐只 ETF 表（k=周期切片索引，gi=周期末全局索引，均按统一粒度聚合） */
   tbody.addEventListener('click', function(e){
+    if(dim!=='d') return;
     var tr=e.target.closest('tr.daterow'); if(!tr) return;
     var k=+tr.dataset.k, sl=slices(), s=sl[k]; if(!s) return;
     var next=tr.nextElementSibling;
@@ -1178,6 +1237,27 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     });
     html+='</tbody></table></div></td></tr>';
     ir.insertAdjacentHTML('afterend', html);
+  });
+
+  /* 指数维度：点指数行 → 下钻切换「按日期 / 按ETF」 */
+  tbody.addEventListener('click', function(e){
+    if(dim!=='i') return;
+    var ir=e.target.closest('tr.idxmain'); if(!ir) return;
+    var next=ir.nextElementSibling;
+    if(next && next.classList.contains('etf-sub')){ next.remove(); return; }
+    var name=ir.dataset.name;
+    var html='<tr class="etf-sub" data-level="idxmain"><td colspan="4"><div class="etf-sub-in" style="padding:2px 4px">'
+      +'<div class="etf-subtabs"><button data-sub="d" class="on">按日期</button><button data-sub="e">按ETF</button></div>'
+      +'<div class="etf-sub-body"></div></div></td></tr>';
+    ir.insertAdjacentHTML('afterend', html);
+    renderIdxSub(ir.nextElementSibling, name, 'd');
+  });
+  tbody.addEventListener('click', function(e){
+    var b=e.target.closest('.etf-subtabs button'); if(!b) return;
+    var subTr=b.closest('tr.etf-sub'), mainTr=subTr.previousElementSibling;
+    if(!mainTr || !mainTr.dataset.name) return;
+    subTr.querySelectorAll('.etf-subtabs button').forEach(function(x){x.classList.toggle('on',x===b);});
+    renderIdxSub(subTr, mainTr.dataset.name, b.dataset.sub);
   });
 
   /* 跟随统一统计粒度 #segG 与 ETF 图时间段 #eRng 重绘。
