@@ -1085,7 +1085,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '<div class="tblbox"><div class="etf-tblwrap"><table class="etf-table"><thead><tr id="etfHead">'
     +   '<th>日期</th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">当日净申购(亿)</span><span class="eth-mini">当日(亿)</span></th><th><span class="eth-full">纳入指数</span><span class="eth-mini">指数</span></th>'
     + '</tr></thead><tbody id="etfTbody"></tbody></table></div></div>'
-    + '<details class="etf-note2"><summary>表格口径与数据说明（默认折叠，点击展开）</summary><div>12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。<b>累计净申购含各 ETF 成立／有数据首日起的全部历史净申购</b>（iFinD 区间净流入额锚点，截至 2026-08-16），逐日明细自 2026-08-17 起。跟随图表下方「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计；累计取周期末快照。<b>整理维度</b>默认按日期，可切「按宽基指数」：点指数后可选按日期或按该指数成分 ETF 整理。</div></details>';
+    + '<details class="etf-note2"><summary>表格口径与数据说明（默认折叠，点击展开）</summary><div>12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。<b>累计净申购含各 ETF 成立／有数据首日起的全部历史净申购</b>（iFinD 区间净流入额锚点，截至 2026-08-16），逐日明细自 2026-08-17 起。跟随图表下方「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计；累计取周期末快照。<b>整理维度</b>默认按日期（跟随统计粒度与ETF图时间段）；切「按宽基指数」则<b>固定按最新交易日</b>：当日＝该交易日净申购，累计＝2012 前置锚点＋逐日净申购累加（<b>净流量累计、非规模存量，故各指数有正有负</b>，如沪深300 因成分 ETF 内有大额申赎对冲而累计值较小）。点指数后可选「按日期」（视窗内逐日明细，固定按日）或「按ETF」（成分 ETF 当日/累计）。</div></details>';
   sec.appendChild(panel);
 
   var DATA=null, tbody=panel.querySelector('#etfTbody'), dim='d';
@@ -1125,41 +1125,37 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     });
   }
 
-  /* 按宽基指数：每行一个指数，区间净申购=所选视窗内逐周期累加，累计=视窗末快照 */
+  /* 按宽基指数：固定最新交易日 —— 当日净申购 / 累计净申购 / ETF数（不随周/月粒度与时间段时间段变化） */
   function renderIndexTable(){
-    var sl=slices(), g=gran(), gt=gtxt(g);
+    var li=DATA.dates.length-1;
     var head=panel.querySelector('#etfHead');
-    if(head) head.innerHTML='<th>宽基指数</th><th><span class="eth-full">区间净申购(亿)</span><span class="eth-mini">区间(亿)</span></th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">ETF数</span><span class="eth-mini">只数</span></th>';
+    if(head) head.innerHTML='<th>宽基指数</th><th><span class="eth-full">当日净申购(亿)</span><span class="eth-mini">当日(亿)</span></th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">ETF数</span><span class="eth-mini">只数</span></th>';
     var rows=[];
     IDX.forEach(function(name){
       var id=DATA.idx[name]; if(!id) return;
-      var net=agg(id.net,sl,true), acc=agg(id.acc,sl,false);
-      var t=0; net.forEach(function(x){t+=(x||0);}); t=Math.round(t*100)/100;
-      var last=acc.length?acc[acc.length-1]:null;
-      rows.push('<tr class="idxmain" data-name="'+name+'"><td>'+name+'</td><td class="'+cls2(t)+'">'+sign2(t)+'</td><td>'+fmtAxis(last)+'</td><td>'+((id.etf&&id.etf.length)||0)+'</td></tr>');
+      var dn=id.net[li], da=id.acc[li];
+      rows.push('<tr class="idxmain" data-name="'+name+'"><td>'+name+'</td><td class="'+cls2(dn)+'">'+sign2(dn)+'</td><td>'+fmtAxis(da)+'</td><td>'+((id.etf&&id.etf.length)||0)+'</td></tr>');
     });
     tbody.innerHTML=rows.join('');
   }
-  /* 指数下钻：mode=d 按日期（周期切片），mode=e 按该指数成分 ETF（视窗内累加/末快照） */
+  /* 指数下钻：mode=d 视窗内逐日明细（固定按日），mode=e 成分 ETF 的当日/累计（固定最新交易日） */
   function renderIdxSub(subTr, name, mode){
-    var sl=slices(), g=gran(), gt=gtxt(g), body=subTr.querySelector('.etf-sub-body');
+    var li=DATA.dates.length-1, body=subTr.querySelector('.etf-sub-body');
     var id=DATA.idx[name];
     if(!id){ body.innerHTML='<div class="etf-msg">无数据</div>'; return; }
     var h='';
     if(mode==='d'){
-      var acc=agg(id.acc,sl,false), net=agg(id.net,sl,true);
-      h='<table><thead><tr><th>日期</th><th>累计净申购(亿)</th><th>'+gt+'净申购(亿)</th></tr></thead><tbody>';
-      for(var k=sl.length-1;k>=0;k--){
-        h+='<tr><td>'+DATA.dates[sl[k].gi]+'</td><td>'+fmtAxis(acc[k])+'</td><td class="'+cls2(net[k])+'">'+sign2(net[k])+'</td></tr>';
+      var days=[]; slices().forEach(function(s){ s.days.forEach(function(i){days.push(i);}); });
+      h='<table><thead><tr><th>日期</th><th>当日净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
+      for(var j=days.length-1;j>=0;j--){
+        var d=days[j];
+        h+='<tr><td>'+DATA.dates[d]+'</td><td class="'+cls2(id.net[d])+'">'+sign2(id.net[d])+'</td><td>'+fmtAxis(id.acc[d])+'</td></tr>';
       }
     }else{
       var etfs=DATA.etf.filter(function(x){return x.idx===name;});
-      h='<table><thead><tr><th>ETF代码</th><th>简称</th><th>区间净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
+      h='<table><thead><tr><th>ETF代码</th><th>简称</th><th>当日净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
       etfs.forEach(function(x){
-        var net=agg(x.net,sl,true), acc=agg(x.acc,sl,false);
-        var t=0; net.forEach(function(v){t+=(v||0);}); t=Math.round(t*100)/100;
-        var last=acc.length?acc[acc.length-1]:null;
-        h+='<tr><td class="code">'+x.code+'</td><td>'+x.name+'</td><td class="'+cls2(t)+'">'+sign2(t)+'</td><td>'+fmtAxis(last)+'</td></tr>';
+        h+='<tr><td class="code">'+x.code+'</td><td>'+x.name+'</td><td class="'+cls2(x.net[li])+'">'+sign2(x.net[li])+'</td><td>'+fmtAxis(x.acc[li])+'</td></tr>';
       });
     }
     body.innerHTML=h+'</tbody></table>';
