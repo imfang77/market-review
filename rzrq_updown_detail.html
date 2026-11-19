@@ -683,8 +683,10 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     var m=metrics(),F=m.F,nl=m.nl;
     /* 有点位线时右边距放宽（第三轴刻度），无则收窄让绘图区向右扩展 */
     ML=Math.round(F*3.8+12);MR=pointSel.length?Math.round(F*6.8+28):Math.round(F*3.6+14);pw=W-ML-MR;
-    MT=Math.round(F*1.35+26);PB=402;plotH=PB-MT;
-    svg.setAttribute('viewBox','0 0 1000 '+Math.round(PB+8+F*1.5));
+    MT=Math.round(F*1.35+26);PB=402;
+    if(pointSel.length)MT+=Math.round(F*2.6);   /* 点位轴标题独占一行：预留两行标题空间（F 自适应，横竖屏都不叠） */
+    plotH=PB-MT;
+    svg.setAttribute('viewBox','0 0 1000 '+Math.round(PB+9+F*1.8));
     var v=buildView();if(!v.idx.length)return;
     var accArr=v.acc.filter(function(x){return x!=null;});if(!accArr.length)return;
     /* 左轴量程=全市场累计；汇金线为全市场存量口径，不参与量程且不画到图外 */
@@ -732,12 +734,17 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       var kk=Math.round(j*(cnt-1)/((nl-1)||1)),xx=Xi2(kk);
       g+='<line x1="'+xx.toFixed(1)+'" y1="'+MT+'" x2="'+xx.toFixed(1)+'" y2="'+PB+'" stroke="#f4f6fa"/>';
       var lab=v.dd[kk];if(G!=='d')lab=lab.slice(0,7);
-      g+='<text x="'+xx.toFixed(1)+'" y="'+(PB+8+F*1.05).toFixed(1)+'" text-anchor="middle" font-size="'+F.toFixed(1)+'" fill="#8b95a7">'+lab.slice(2)+'</text>';
+      g+='<text x="'+xx.toFixed(1)+'" y="'+(PB+9+F*1.2).toFixed(1)+'" text-anchor="middle" font-size="'+F.toFixed(1)+'" fill="#8b95a7">'+lab.slice(2)+'</text>';
     }
-    g+='<text x="14" y="'+(MT-22)+'" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#2f6bff">累计净申购（亿元）</text>';
-    g+='<text x="'+(W-14)+'" y="'+(MT-22)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#94a3b8">当日净申购·12指数构成（亿元）</text>';
-    if(pointSel.length===1) g+='<text x="'+(W-4)+'" y="'+(MT-12)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="'+iCol(pointSel[0])+'">'+pointSel[0]+(normMode?'（归一化·基期=100）':'（点）')+'</text>';
-    else if(pointSel.length>1) g+='<text x="'+(W-4)+'" y="'+(MT-12)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#64748b">'+(normMode?'指数（归一化·基期=100）':'指数点位（点）')+'</text>';
+    /* 标题两行制：主标题行(左+右)；有点位线时点位轴标题独占更上一行，行距随 F 缩放防重叠 */
+    var tMainY=pointSel.length?(MT-F*1.5):(MT-22);
+    g+='<text x="14" y="'+tMainY.toFixed(1)+'" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#2f6bff">累计净申购（亿元）</text>';
+    g+='<text x="'+(W-14)+'" y="'+tMainY.toFixed(1)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#94a3b8">当日净申购·12指数构成（亿元）</text>';
+    if(pointSel.length){
+      var tIdxY=MT-F*2.85;
+      if(pointSel.length===1) g+='<text x="'+(W-4)+'" y="'+tIdxY.toFixed(1)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="'+iCol(pointSel[0])+'">'+pointSel[0]+(normMode?'（归一化·基期=100）':'（点）')+'</text>';
+      else g+='<text x="'+(W-4)+'" y="'+tIdxY.toFixed(1)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#64748b">'+(normMode?'指数（归一化·基期=100）':'指数点位（点）')+'</text>';
+    }
     g+='<line x1="'+ML+'" y1="'+MT+'" x2="'+ML+'" y2="'+PB+'" stroke="#bcd0f7" stroke-width="1.4"/>';
     g+='<line x1="'+(W-MR)+'" y1="'+MT+'" x2="'+(W-MR)+'" y2="'+PB+'" stroke="#eec9c9" stroke-width="1.4"/>';
     g+='<line x1="'+ML+'" y1="'+PB+'" x2="'+(W-MR)+'" y2="'+PB+'" stroke="#c7cdda" stroke-width="1.2"/>';
@@ -764,7 +771,8 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       if(cnt<=130){var pp=poly.split(' ');for(var q=0;q<pp.length;q++){var xy=pp[q].split(',');g+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="3.2" fill="#2f6bff" stroke="#fff" stroke-width="1.2"/>';}}
       g+='<circle cx="'+lp[0]+'" cy="'+lp[1]+'" r="4.5" fill="#2f6bff" stroke="#fff" stroke-width="1.5"/>';
     }
-    /* 所选指数点位线（归一化或真实点位·各指数专属色·最右轴）：恒不改资金口径 */
+    /* 所选指数点位线（归一化或真实点位·各指数专属色·最右轴）：恒不改资金口径；线尾加指数名标签便于多线识别 */
+    var tags=[];
     pointSel.forEach(function(nm){
       var arr=shD[nm]||[],shp='';
       for(var k=0;k<cnt;k++) if(arr[k]!=null) shp+=(shp?' ':'')+Xi2(k).toFixed(1)+','+YS(arr[k]).toFixed(1);
@@ -773,8 +781,27 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
         g+='<polyline points="'+shp+'" fill="none" stroke="'+col+'" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" opacity=".92" vector-effect="non-scaling-stroke"/>';
         var last=shp.split(' ')[shp.split(' ').length-1].split(',');
         g+='<circle cx="'+last[0]+'" cy="'+last[1]+'" r="4" fill="'+col+'" stroke="#fff" stroke-width="1.4"/>';
+        tags.push({nm:nm,col:col,x:parseFloat(last[0]),y:parseFloat(last[1])});
       }
     });
+    /* 线尾标签：右端内侧右对齐；可用高度内受限重排（间距不够自动压缩+字号缩小），双向推挤不溢出不重叠 */
+    var nT=tags.length;
+    if(nT){
+      tags.sort(function(a,b){return a.y-b.y;});
+      var tagLo=MT+F*0.6, tagHi=PB-F*1.2;
+      var tagGap=F*1.4;
+      if((nT-1)*tagGap>tagHi-tagLo) tagGap=(tagHi-tagLo)/Math.max(1,nT-1);
+      var tagFs=Math.min(F*0.95,tagGap*0.78);
+      tags[0].y=Math.max(tags[0].y,tagLo);
+      for(var ti=1;ti<nT;ti++){ if(tags[ti].y<tags[ti-1].y+tagGap) tags[ti].y=tags[ti-1].y+tagGap; }
+      if(tags[nT-1].y>tagHi){   /* 底部溢出：锚定底边倒序上推（gap 已压缩，数学上保证落在 [lo,hi] 内且无重叠） */
+        tags[nT-1].y=tagHi;
+        for(var tj=nT-2;tj>=0;tj--){ if(tags[tj].y>tags[tj+1].y-tagGap) tags[tj].y=tags[tj+1].y-tagGap; }
+      }
+      tags.forEach(function(t){
+        g+='<text x="'+(t.x-6).toFixed(1)+'" y="'+(t.y+F*0.35).toFixed(1)+'" text-anchor="end" font-size="'+tagFs.toFixed(1)+'" font-weight="600" fill="'+t.col+'" stroke="#fcfdff" stroke-width="3" paint-order="stroke">'+t.nm+'</text>';
+      });
+    }
     /* 事件竖线标注（中央汇金关键操作时点）—— 仅画落在当前视窗内的事件 */
     var vFirst=v.dd[0], vLast=v.dd[v.dd.length-1];
     var evs=[];
@@ -932,5 +959,5 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   drawE(cur);
 })();
 </script>
-<script src="_rzrq_drill.js?v=202611191559"></script>
+<script src="_rzrq_drill.js?v=202611191650"></script>
 </body></html>
