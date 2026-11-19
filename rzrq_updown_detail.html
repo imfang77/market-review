@@ -173,7 +173,7 @@ tbody tr:hover{background:#f6f9ff}
 </div>
 <div class="rngrow idx-sel-row"><span class="lbl rng-lbl">对标指数：</span>
 <div class="idxdd" id="idxDd"><button class="idx-btn" id="eIdxBtn" type="button">全部汇总(12指数)</button>
-<div class="idx-panel" id="eIdxPanel"><div class="idx-pact"><button type="button" data-act="all">全选</button><button type="button" data-act="none">清空</button><button type="button" data-act="ok">完成</button></div><div class="idx-plist" id="eIdxList"></div></div>
+<div class="idx-panel" id="eIdxPanel"><div class="idx-pact"><button type="button" data-act="all">全选</button><button type="button" data-act="none">清空</button></div><div class="idx-plist" id="eIdxList"></div></div>
 <input type="hidden" id="eIdxSel" value="__ALL__">
 </div>
 </div>
@@ -606,8 +606,8 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
 })();
 </script>
 <script>/* ===== 宽基ETF净资金流 图表（复用主图双轴样式；蓝线=累计净申购余额 左轴，红绿柱=当日净申购 右轴） ===== */
-/* 语义（11-19 定稿）：柱/蓝线恒为全市场合计（12指数堆叠）；「对标指数」多选=在图上同时画所选指数的点位线（各指数专属色·最右轴）；
-   默认只勾「全部」=无点位线；勾任一指数自动取消「全部」。 */
+/* 语义（11-19 定稿）：柱/蓝线恒为全市场合计（12指数堆叠）；「对标指数」多选=在图上同时画所选指数的归一化点位线（视窗首个有值日=基期100，各指数专属色·最右轴）；
+   默认只勾「全部」=无点位线；勾任一指数自动取消「全部」。面板无「完成」按钮，勾选立即生效。 */
 (function(){
   var box=document.getElementById('ebox'); if(!box) return;
   var svg=document.getElementById('esvg'), plot=document.getElementById('eplot'),
@@ -694,9 +694,12 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     v.parts.forEach(function(ps){var p=0,n=0;if(ps)ps.forEach(function(x){if(x>0)p+=x;else n+=x;});nmax=Math.max(nmax,Math.abs(p),Math.abs(n));});
     if(!isFinite(nmax)||nmax<=0)nmax=1;
     yloR=-nmax*1.1;yhiR=nmax*1.1;
-    /* 点位第三轴（最右）：量程=所选各指数点位序列的并集 */
+    /* 点位线归一化（最右第三轴）：各指数以视窗内首个有值日为基期=100，多指数同尺度可比涨跌强弱 */
+    function normSeries(arr){var base=null,out=[];for(var q=0;q<arr.length;q++){var x=arr[q];if(x==null){out.push(null);continue;}if(base==null)base=x;out.push(base?x/base*100:null);}return out;}
+    var shN={};pointSel.forEach(function(nm){shN[nm]=normSeries(v.sh[nm]||[]);});
+    v.shN=shN;
     var allSh=[];
-    pointSel.forEach(function(nm){(v.sh[nm]||[]).forEach(function(x){if(x!=null)allSh.push(x);});});
+    pointSel.forEach(function(nm){shN[nm].forEach(function(x){if(x!=null)allSh.push(x);});});
     var slo=0,shi=1;
     if(allSh.length){
       var smn=Math.min.apply(null,allSh),smx=Math.max.apply(null,allSh);
@@ -727,9 +730,9 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       g+='<text x="'+xx.toFixed(1)+'" y="'+(PB+8+F*1.05).toFixed(1)+'" text-anchor="middle" font-size="'+F.toFixed(1)+'" fill="#8b95a7">'+lab.slice(2)+'</text>';
     }
     g+='<text x="14" y="'+(MT-22)+'" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#2f6bff">累计净申购（亿元）</text>';
-    g+='<text x="'+(W-MR-6)+'" y="'+(MT-12)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#94a3b8">当日净申购·12指数构成（亿元）</text>';
-    if(pointSel.length===1) g+='<text x="'+(W-4)+'" y="'+(MT-12)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="'+iCol(pointSel[0])+'">'+pointSel[0]+'（点）</text>';
-    else if(pointSel.length>1) g+='<text x="'+(W-4)+'" y="'+(MT-12)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#64748b">指数点位（点）</text>';
+    g+='<text x="'+(W-14)+'" y="'+(MT-22)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#94a3b8">当日净申购·12指数构成（亿元）</text>';
+    if(pointSel.length===1) g+='<text x="'+(W-4)+'" y="'+(MT-12)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="'+iCol(pointSel[0])+'">'+pointSel[0]+'（归一化·基期=100）</text>';
+    else if(pointSel.length>1) g+='<text x="'+(W-4)+'" y="'+(MT-12)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="700" fill="#64748b">指数（归一化·基期=100）</text>';
     g+='<line x1="'+ML+'" y1="'+MT+'" x2="'+ML+'" y2="'+PB+'" stroke="#bcd0f7" stroke-width="1.4"/>';
     g+='<line x1="'+(W-MR)+'" y1="'+MT+'" x2="'+(W-MR)+'" y2="'+PB+'" stroke="#eec9c9" stroke-width="1.4"/>';
     g+='<line x1="'+ML+'" y1="'+PB+'" x2="'+(W-MR)+'" y2="'+PB+'" stroke="#c7cdda" stroke-width="1.2"/>';
@@ -756,9 +759,9 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       if(cnt<=130){var pp=poly.split(' ');for(var q=0;q<pp.length;q++){var xy=pp[q].split(',');g+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="3.2" fill="#2f6bff" stroke="#fff" stroke-width="1.2"/>';}}
       g+='<circle cx="'+lp[0]+'" cy="'+lp[1]+'" r="4.5" fill="#2f6bff" stroke="#fff" stroke-width="1.5"/>';
     }
-    /* 所选指数点位线（各指数专属色·最右轴·点）：恒不改资金口径 */
+    /* 所选指数归一化点位线（基期=100·各指数专属色·最右轴）：恒不改资金口径 */
     pointSel.forEach(function(nm){
-      var arr=v.sh[nm]||[],shp='';
+      var arr=shN[nm]||[],shp='';
       for(var k=0;k<cnt;k++) if(arr[k]!=null) shp+=(shp?' ':'')+Xi2(k).toFixed(1)+','+YS(arr[k]).toFixed(1);
       if(shp){
         var col=iCol(nm);
@@ -806,7 +809,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       var lg='<span class="lrow"><span class="lg blue">■ 全市场累计净申购（左轴·亿元）</span>'
         +'<span class="lg" style="color:#94a3b8">■ 当日净申购·12指数构成（右轴·红涨绿跌·深浅=指数，悬停看明细）</span>';
       if(hjDrawn) lg+='<span class="lg" style="color:#7c3aed">┄ 汇金持股票ETF市值（第三方估算·存量口径）</span>';
-      pointSel.forEach(function(nm){lg+='<span class="lg" style="color:'+iCol(nm)+'">— '+nm+'点位（最右轴·点）</span>';});
+      pointSel.forEach(function(nm){lg+='<span class="lg" style="color:'+iCol(nm)+'">— '+nm+'（归一化·基期=100）</span>';});
       legend.innerHTML=lg+'</span>';
     }
     v.start=cur; window._etfView=v;
@@ -837,11 +840,8 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
         html+='<div class="t-r" style="font-size:11px"><span style="color:'+oc+'">■ '+o.n+'</span><b style="color:'+oc+'">'+(o.v>=0?'+':'')+fmt(o.v)+' 亿</b></div>';});
     }
     pointSel.forEach(function(nm){
-      var arr=v.sh[nm]||[],shV=arr[k];
-      var shBase=null;
-      for(var q=0;q<arr.length;q++){if(arr[q]!=null){shBase=arr[q];break;}}
-      var shPct=(shV!=null&&shBase)?((shV/shBase-1)*100):null;
-      html+='<div class="t-r" style="font-size:11px"><span style="color:'+iCol(nm)+'">— '+nm+'</span><b style="color:'+iCol(nm)+'">'+(shV!=null?shV.toFixed(2)+' 点':'—')+(shPct!=null?'（'+(shPct>=0?'+':'')+shPct.toFixed(2)+'%）':'')+'</b></div>';
+      var arr=(v.shN&&v.shN[nm])||[],nv=arr[k];
+      html+='<div class="t-r" style="font-size:11px"><span style="color:'+iCol(nm)+'">— '+nm+'</span><b style="color:'+iCol(nm)+'">'+(nv!=null?nv.toFixed(1)+'（'+(nv-100>=0?'+':'')+(nv-100).toFixed(2)+'%）':'—')+'</b></div>';
     });
     tip.innerHTML=html;
     var tx,ty;
@@ -865,7 +865,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   ov.addEventListener('touchend',hideTips);
   var rt=null;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){drawE(cur);},180);});
   /* 对标指数多选面板：首项「全部」=默认视图(无点位线)；勾任一指数自动取消「全部」，勾「全部」自动清指数。
-     全选=勾12指数；清空=回到「全部」。完成才应用。
+     全选=勾12指数；清空=回到「全部」。无「完成」按钮：勾选立即应用。
      兼容层：隐藏 #eIdxSel（value=__ALL__|逗号列表）+ change 事件，供测试脚本使用 */
   var compat=document.getElementById('eIdxSel'),btn=document.getElementById('eIdxBtn'),
       panel=document.getElementById('eIdxPanel'),list=document.getElementById('eIdxList');
@@ -879,10 +879,14 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       c.addEventListener('change',function(){
         if(c.value===ALLKEY){ if(c.checked) list.querySelectorAll('input').forEach(function(x){if(x.value!==ALLKEY)x.checked=false;}); }
         else if(c.checked){ var a=list.querySelector('input[value="'+ALLKEY+'"]'); if(a)a.checked=false; }
+        /* 选即应用：勾选立即生效，无「完成」按钮 */
+        syncSel();applySel();
       });
     });
   }}
   function applySel(){hideTips();syncCompat();buildPanel();if(btn)btn.textContent=btnLabel();drawE(cur);}
+  /* 从面板勾选状态同步 pointSel（选即应用的关键：先同步再 applySel，否则重建面板会覆盖勾选） */
+  function syncSel(){var sel=list.querySelectorAll('input:checked');pointSel=[];sel.forEach(function(c){if(c.value!==ALLKEY&&IDXN.indexOf(c.value)>=0)pointSel.push(c.value);});}
   function setSel(v){
     if(v==null||v===ALLKEY||v==='') pointSel=[];
     else if(typeof v==='string') pointSel=(IDXN.indexOf(v)>=0)?[v]:[];
@@ -899,18 +903,12 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     document.addEventListener('click',function(){panel.classList.remove('open');});
     panel.querySelectorAll('.idx-pact button').forEach(function(b){b.addEventListener('click',function(){
       var act=b.dataset.act,all=list.querySelector('input[value="'+ALLKEY+'"]');
-      if(act==='all'){ list.querySelectorAll('input').forEach(function(c){c.checked=(c.value!==ALLKEY);}); if(all)all.checked=false; }
-      else if(act==='none'){ list.querySelectorAll('input').forEach(function(c){c.checked=(c.value===ALLKEY);}); }
-      else if(act==='ok'){
-        var sel=list.querySelectorAll('input:checked');
-        pointSel=[];
-        sel.forEach(function(c){if(c.value!==ALLKEY&&IDXN.indexOf(c.value)>=0)pointSel.push(c.value);});
-        applySel();panel.classList.remove('open');
-      }
+      if(act==='all'){ list.querySelectorAll('input').forEach(function(c){c.checked=(c.value!==ALLKEY);}); if(all)all.checked=false; syncSel();applySel(); }
+      else if(act==='none'){ list.querySelectorAll('input').forEach(function(c){c.checked=(c.value===ALLKEY);}); syncSel();applySel(); }
     });});
   }
   syncCompat();buildPanel();if(btn)btn.textContent=btnLabel();
-  /* 只绑时间段按钮(.rng-btn)——面板的 全选/清空/完成 按钮也在 #eRng 内,若绑 #eRng button 会把 cur 误置 0 */
+  /* 只绑时间段按钮(.rng-btn)——面板的 全选/清空 按钮也在 #eRng 内,若绑 #eRng button 会把 cur 误置 0 */
   document.querySelectorAll('#eRng .rng-btn').forEach(function(b){b.addEventListener('click',function(){
     document.querySelectorAll('#eRng .rng-btn').forEach(function(x){x.classList.remove('active');});b.classList.add('active');
     cur=ER[b.dataset.range]||0;hideTips();drawE(cur);
@@ -922,5 +920,5 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   drawE(cur);
 })();
 </script>
-<script src="_rzrq_drill.js?v=202611191455"></script>
+<script src="_rzrq_drill.js?v=202611191527"></script>
 </body></html>
