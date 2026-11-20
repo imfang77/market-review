@@ -164,7 +164,6 @@ tbody tr:hover{background:#f6f9ff}
 @media(max-width:600px){.sbtop h1{font-size:18px}}
 </style></head>
 <body><div class="wrap">
-<div class="sbtop"><a class="back" href="sentiment_board.html">&#8592; 返回情绪看板</a><h1>融资余额 · 涨跌家数 · 个股融资余额</h1></div>
 <div id="sbViewRz"><div class="hd">
 <div class="asof">行情最新：<b>2026-11-19</b>（涨跌家数） · 融资余额最新披露：<b>2026-11-18</b>（两融 T+1 披露）</div>
 <h1>融资余额 · 涨跌家数 · 个股融资余额</h1>
@@ -1215,8 +1214,11 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   var kind='rz';
   vr.className = kind==='rz' ? '' : 'sb-hidden';
   ve.className = kind==='etf' ? '' : 'sb-hidden';
-  var hide=document.querySelector('.tbtn[data-t="'+(kind==='etf'?'m':'e')+'"]');
-  if(hide) hide.style.display='none';
+  /* ETF 页只留 ETF 表按钮；融资页隐藏 ETF 表按钮，保留融资/涨跌/个股三表 */
+  document.querySelectorAll('.tbtn').forEach(function(b){
+    var t=b.getAttribute('data-t');
+    if(kind==='etf' ? t!=='e' : t==='e') b.style.display='none';
+  });
   var b=document.querySelector('.tbtn[data-t="'+(kind==='etf'?'e':'m')+'"]');
   if(b) b.click();
 })();

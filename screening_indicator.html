@@ -56,7 +56,7 @@ tr:hover td{background:#fafbff}
 </style>
 </head>
 <body>
-<div class="header"><a class="back" href="screening.html">&#8592; 返回</a>
+<div class="header">
 <h1>按指标选股</h1>
 <div class="subtitle">全市场 · 任意区间夏普 / 收益率排名 · <span id="data-date">加载中…</span></div>
 </div>
@@ -72,12 +72,12 @@ tr:hover td{background:#fafbff}
       <span class="toggle" id="tg-more">更多筛选 ▾</span>
     </div>
     <div class="row" style="margin-top:14px">
-      <div class="fld"><span>时间范围</span><div class="seg" id="ranges">
-        <button type="button" data-r="m1">近1月</button><button type="button" data-r="m3">近3月</button>
-        <button type="button" data-r="m6">近6月</button><button type="button" data-r="y1" class="on">近1年</button>
-        <button type="button" data-r="y3">近3年</button><button type="button" data-r="y5">近5年</button>
-        <button type="button" data-r="y10">近10年</button><button type="button" data-r="custom">自定义</button>
-      </div></div>
+      <div class="fld"><span>时间范围</span><select id="sel-range">
+        <option value="m1">近1月</option><option value="m3">近3月</option>
+        <option value="m6">近6月</option><option value="y1">近1年</option>
+        <option value="y3">近3年</option><option value="y5">近5年</option>
+        <option value="y10" selected>近10年</option><option value="custom">自定义日期</option>
+      </select></div>
       <div class="datepair" id="datepair">
         <div class="fld"><span>开始日期</span><input type="date" id="d1"></div>
         <div class="fld"><span>结束日期</span><input type="date" id="d2"></div>
@@ -242,13 +242,11 @@ function run(){
   });
 }
 function bind(){
-  document.querySelectorAll('#ranges button').forEach(function(b){
-    b.addEventListener('click',function(){
-      document.querySelectorAll('#ranges button').forEach(function(x){x.classList.remove('on');});
-      b.classList.add('on');S.range=b.dataset.r;
-      $('datepair').classList.toggle('on',S.range==='custom');
-      if(S.range==='custom'){$('d1').value=M.dates[Math.max(0,M.dates.length-252)];$('d2').value=M.dates[M.dates.length-1];}
-    });
+  $('sel-range').addEventListener('change',function(){
+    S.range=this.value;
+    $('datepair').classList.toggle('on',S.range==='custom');
+    if(S.range==='custom'){$('d1').value=M.dates[Math.max(0,M.dates.length-252)];$('d2').value=M.dates[M.dates.length-1];}
+    run();
   });
   $('go').addEventListener('click',run);
   $('metric').addEventListener('change',function(){S.metric=this.value;SORT.k='';render();});
@@ -270,7 +268,7 @@ function bind(){
     });
   });
 }
-var S={range:'y1',metric:'sh',s:0,e:0};
+var S={range:'y10',metric:'sh',s:0,e:0};
 var metaSrcs=IS_LOCAL?['_series_meta.json?v='+Date.now()]:[MIRROR+'_series_meta.json','_series_meta.json?v='+Date.now()];
 function loadMeta(i){
   if(i>=metaSrcs.length)return Promise.reject(new Error('元数据加载失败'));
