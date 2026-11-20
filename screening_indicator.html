@@ -30,22 +30,36 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif
 .more-row{margin-top:12px;padding-top:12px;border-top:1px dashed #e9ecef;display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
 .more-row[hidden]{display:none}
 .toggle{font-size:12px;color:#4263eb;cursor:pointer;user-select:none;margin-top:13px}
-.note{font-size:12px;color:#adb5bd;line-height:1.65;margin-top:10px}
+.cal-fold{border-top:1px solid #eef1f8;background:#fcfcfe}
+.cal-fold>summary{padding:11px 18px;font-size:12px;color:#868e96;cursor:pointer;user-select:none}
+.cal-fold[open]>summary{border-bottom:1px solid #f1f3f8}
+.cal-list{padding:10px 18px 16px}
+.cal-line{font-size:12px;color:#868e96;line-height:1.7;padding:6px 0;border-bottom:1px dashed #f1f3f8}
+.cal-line:last-child{border-bottom:0}
+.cal-line b{color:#495057}
 .res{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)}
 .res-h{padding:12px 18px;border-bottom:1px solid #eef1f8;font-size:13px;color:#495057;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .cnt{color:#4263eb;font-weight:700}
 .tag{background:#f1f3f5;color:#868e96;border-radius:5px;padding:2px 7px;font-size:12px}
-.tblbox{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:13px}
+.tblbox{overflow:auto;max-width:100%}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:860px;font-size:13px}
 th{background:#f8f9fc;color:#495057;font-weight:600;text-align:right;padding:9px 12px;white-space:nowrap;cursor:pointer;user-select:none;border-bottom:1px solid #eef1f8}
-th:first-child,th:nth-child(2),th:nth-child(3){text-align:left}
+th:first-child,th:nth-child(2){text-align:left}
 th:hover{color:#4263eb}
 th::after{content:" ⇅";font-size:.72em;color:#aab4c5}
 th.asc::after{content:" ↑";color:#2f6bff}th.desc::after{content:" ↓";color:#2f6bff}
 td{padding:8px 12px;border-bottom:1px solid #f4f5f8;text-align:right;white-space:nowrap}
-td:first-child,td:nth-child(2),td:nth-child(3){text-align:left}
+td:first-child,td:nth-child(2){text-align:left}
+/* 排名 + 名称/代码双列冻结：排名贴左边，名称列贴排名右侧 */
+th:first-child,td:first-child{position:sticky;left:0;width:52px;min-width:52px;max-width:52px;padding-left:6px;padding-right:6px;text-align:center;background:#f8f9fc;z-index:4}
+td:first-child{background:#fff;z-index:2}
+th:nth-child(2),td:nth-child(2){position:sticky;left:52px;min-width:170px;max-width:210px;white-space:normal;background:#f8f9fc;box-shadow:1px 0 0 #eef1f8;z-index:4}
+td:nth-child(2){background:#fff;z-index:2}
 td.nm{font-weight:600}
+td.nm .nmt{display:block;line-height:1.35;word-break:break-all}
+td.nm .subcode{display:block;margin-top:2px;font-size:11px;color:#868e96;font-weight:400;font-variant-numeric:tabular-nums}
 tr:hover td{background:#fafbff}
+tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
 .up{color:#e5484d;font-weight:600}.dn{color:#2f9e44;font-weight:600}
 .rk{color:#868e96}
 .loading{text-align:center;padding:48px;color:#868e96;line-height:2}
@@ -53,7 +67,7 @@ tr:hover td{background:#fafbff}
 .statline{font-size:12px;color:#868e96;margin-left:auto}
 .res-foot{padding:12px 18px;border-top:1px solid #eef1f8;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
 .hintline{font-size:12px;color:#adb5bd}
-@media(max-width:600px){.header{padding:14px 10px}.wrap{margin:14px auto;padding:0 8px}.panel{padding:12px}.row{gap:10px}.fld select,.fld input{min-width:88px}.seg button{padding:0 8px;font-size:12px}table{font-size:12px}th,td{padding:7px 8px}.statline{margin-left:0}}
+@media(max-width:600px){.header{padding:14px 10px}.wrap{margin:14px auto;padding:0 8px}.panel{padding:12px}.row{gap:10px}.fld select,.fld input{min-width:88px}.seg button{padding:0 8px;font-size:12px}table{font-size:12px;min-width:760px}th,td{padding:7px 8px}th:first-child,td:first-child{left:0;width:44px;min-width:44px;max-width:44px}th:nth-child(2),td:nth-child(2){left:44px;min-width:130px;max-width:160px}.statline{margin-left:0}.cal-list{padding:8px 12px 14px}}
 </style>
 </head>
 <body>
@@ -94,7 +108,6 @@ tr:hover td{background:#fafbff}
       <div class="fld"><span>代码/名称</span><input type="text" id="q" placeholder="搜索" style="min-width:130px"></div>
       <button class="btn" id="reset" type="button">重置</button>
     </div>
-    <div class="note" id="note">口径：夏普 = 日均收益 / 标准差 × √252（剔除单日涨跌超30%的异常日）；区间收益 = 日收益累乘 − 1；年化收益 = (1+区间收益)^(252/区间交易日) − 1；最大回撤 = 区间累计净值自峰值最大回落。上市日期默认随所选区间起点联动，可手动改；仅统计上市日期不晚于该日的股票。按未复权日K计算，除权除息日可能失真；结果仅供参考，不构成投资建议。</div>
   </div>
 
   <div class="res">
@@ -102,13 +115,22 @@ tr:hover td{background:#fafbff}
       <span class="statline" id="statline"></span>
       <button class="btn" id="export" type="button">导出 Excel</button></div>
     <div class="tblbox"><table id="tb"><thead><tr>
-      <th data-k="rank" style="width:52px">排名</th><th data-k="code">代码</th><th data-k="name">名称</th>
+      <th data-k="rank" style="width:52px">排名</th><th data-k="name">名称 / 代码</th>
       <th data-k="sh">夏普比率</th><th data-k="ann">年化收益</th><th data-k="ret">区间收益</th>
       <th data-k="mdd">最大回撤</th><th data-k="n">有效交易日</th><th data-k="first">上市日期</th>
     </tr></thead><tbody id="tbody"></tbody></table></div>
     <div class="loading" id="loading" hidden>正在计算，请稍候…</div>
     <div class="res-foot"><button class="btn" id="more" type="button" hidden>查看更多 ▾</button>
       <span class="hintline" id="more-hint"></span></div>
+    <details class="cal-fold" id="cal-fold"><summary>计算口径与数据说明（默认折叠，点击展开）</summary><div class="cal-list">
+      <div class="cal-line"><b>夏普比率（年化）</b>：日均收益 ÷ 日收益标准差 × √252。√252 是把日频均值与波动换算到年度（252 个交易日）的系数；这里按无风险利率 = 0 处理，衡量每承担一单位年化波动能获得多少年化超额回报。它不是“把区间收益率年化”，而是风险调整后的年化指标。</div>
+      <div class="cal-line"><b>年化收益</b>：(1 + 区间收益)^(252 / 区间交易日数) − 1，把区间累计收益折算成等效年化收益。</div>
+      <div class="cal-line"><b>区间收益</b>：区间内各日收益累乘 − 1；日线未复权，除权除息日跳空可能使收益失真。</div>
+      <div class="cal-line"><b>最大回撤</b>：区间累计净值相对此前峰值的最大回落幅度，表中以负号展示。</div>
+      <div class="cal-line"><b>有效交易日</b>：实际参与夏普计算的日收益样本数；至少 20 日且不少于区间交易日的 60%，单日涨跌幅绝对值超过 30% 的异常日剔除（仍计入区间收益与回撤）。</div>
+      <div class="cal-line"><b>上市日期</b>：来自通达信基础库 SSDATE 字段，筛选条件为上市日期不晚于所选日期；默认随区间起点联动，手动修改后不再覆盖。基础库无记录的少数退市证券显示“—”。</div>
+      <div class="cal-line"><b>数据用途</b>：结果仅供研究参考，不构成投资建议。</div>
+    </div></details>
   </div>
 </div>
 
@@ -250,11 +272,11 @@ function render(){
   $('statline').textContent='样本 '+rows.length+' · 夏普中位 '+fmtNum(quantile(shs,.5))+' · 正收益 '+(rets.length?(rets.filter(function(v){return v>0;}).length/rets.length*100).toFixed(1)+'%':'—');
   var h='';
   for(var i=0;i<shown.length;i++){var r=shown[i];
-    h+='<tr><td class="rk">'+(i+1)+'</td><td class="rk">'+r.code+'</td><td class="nm">'+r.name+'</td>'+
+    h+='<tr><td class="rk">'+(i+1)+'</td><td class="nm"><span class="nmt">'+r.name+'</span><span class="subcode">'+r.code+'</span></td>'+
        '<td>'+fmtNum(r.sh)+'</td><td class="'+cls(r.ann)+'">'+fmtPct(r.ann)+'</td><td class="'+cls(r.ret)+'">'+fmtPct(r.ret)+'</td>'+
        '<td class="dn">−'+(r.mdd*100).toFixed(2)+'%</td><td class="rk">'+r.n+'</td><td class="rk">'+(r.first&&r.first!=='1900-01-01'?r.first:'—')+'</td></tr>';
   }
-  $('tbody').innerHTML=h||'<tr><td colspan="9" class="empty">无符合条件的股票</td></tr>';
+  $('tbody').innerHTML=h||'<tr><td colspan="8" class="empty">无符合条件的股票</td></tr>';
   $('more').hidden=SHOWN>=rows.length;
   $('more-hint').textContent=SHOWN<rows.length?('已显示 '+shown.length+' / '+rows.length+' 只'):'';
   document.querySelectorAll('#tb thead th').forEach(function(th){
@@ -273,19 +295,19 @@ function run(){
   compute(S.s,S.e).then(function(rows){
     RESULT=rows;SORT.k='';SORT.asc=false;$('loading').hidden=true;render();
   }).catch(function(err){
-    $('loading').hidden=true;$('tbody').innerHTML='<tr><td colspan="9" class="empty">计算失败：'+err.message+'</td></tr>';
+    $('loading').hidden=true;$('tbody').innerHTML='<tr><td colspan="8" class="empty">计算失败：'+err.message+'</td></tr>';
     console.error(err);
   });
 }
 function exportXls(){
   var rows=filtered(),key=SORT.k||S.metric;
   rows.sort(function(a,b){var x=a[key],y=b[key];if(typeof x==='string')return x.localeCompare(y);return y-x;});
-  var head=['排名','代码','名称','夏普比率','年化收益','区间收益','最大回撤','有效交易日','上市日期'];
+  var head=['排名','名称','代码','夏普比率','年化收益','区间收益','最大回撤','有效交易日','上市日期'];
   var esc=function(v){var s=String(v===null||v===undefined?'':v);return '"'+s.replace(/"/g,'""')+'"';};
   var lines=[head.map(esc).join(',')];
   var pct=function(v){return (v===null||!isFinite(v))?'':(v*100).toFixed(2)+'%';};
   for(var i=0;i<rows.length;i++){var r=rows[i];
-    lines.push([i+1,r.code,r.name,r.sh.toFixed(3),pct(r.ann),pct(r.ret),r.mdd>0?('-'+pct(r.mdd)):'0.00%',r.n,r.first].map(esc).join(','));
+    lines.push([i+1,r.name,r.code,r.sh.toFixed(3),pct(r.ann),pct(r.ret),r.mdd>0?('-'+pct(r.mdd)):'0.00%',r.n,r.first].map(esc).join(','));
   }
   var blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);
@@ -337,7 +359,7 @@ function loadMeta(i){
 }
 loadMeta(0).then(function(d){
   M=d;M.years.forEach(function(y){YEAR_INFO[y.y]=y;});
-  $('data-date').textContent='数据至 '+M.date+' · '+M.codes.length+' 只A股';
+  $('data-date').textContent='数据至 '+M.date+' · '+M.codes.length+' 只';
   $('d1').min=M.start;$('d1').max=M.date;$('d2').min=M.start;$('d2').max=M.date;
   $('fdate').min=M.start;$('fdate').max=M.date;
   bind();run();

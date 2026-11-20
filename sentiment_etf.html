@@ -162,12 +162,17 @@ tbody tr:hover{background:#f6f9ff}
 .sbtop h1{font-size:21px;font-weight:800;letter-spacing:.5px}
 .sb-hidden{position:absolute!important;left:-10000px!important;top:0;width:100%;visibility:hidden;pointer-events:none}
 .hd h1{text-align:center!important}
-@media(max-width:600px){.sbtop h1{font-size:18px}}
+.hd .asof-line{display:block;width:fit-content;max-width:calc(100% - 56px);margin:0 auto 6px;text-align:center}
+/* ETF 页标题上移：压缩页面上边距、图区顶部留白与标题内边距 */
+body.sb-etf{padding-top:8px}
+body.sb-etf #sbViewEtf .etfchart-sec{margin-top:0}
+body.sb-etf #sbEtfHd{padding:8px 28px 2px}
+@media(max-width:600px){.sbtop h1{font-size:18px}.hd .asof-line{max-width:calc(100% - 28px);margin-bottom:5px}body.sb-etf{padding-top:6px}body.sb-etf #sbEtfHd{padding:6px 14px 2px}}
 </style></head>
 <body><div class="wrap">
 <div id="sbViewRz"><div class="hd">
 <h1>宽基 ETF 资金流</h1>
-<div class="asof">行情最新：<b>2026-11-19</b>（涨跌家数） · 融资余额最新披露：<b>2026-11-18</b>（两融 T+1 披露）</div>
+<div class="asof asof-line">行情最新：<b>2026-11-19</b>（涨跌家数）</div><div class="asof asof-line">融资余额最新披露：<b>2026-11-18</b>（两融 T+1 披露）</div>
 <div class="sub">单图双轴：左轴（蓝刻度）=融资余额蓝线（随粒度切快照），右轴（红刻度）=上涨家数红线（恒为每日）。</div>
 </div>
 <div class="rngbar" id="mRng">
@@ -1211,6 +1216,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
 /* 详情页只展示一种视图；隐藏视图保持可测量宽度（不用 display:none），
    否则另一张图初始化时 clientWidth=0 会画成空白。 */
 (function(){
+  document.body.classList.add('etf'==='etf'?'sb-etf':'sb-rz');
   var vr=document.getElementById('sbViewRz'), ve=document.getElementById('sbViewEtf');
   var kind='etf';
   vr.className = kind==='rz' ? '' : 'sb-hidden';
@@ -1239,7 +1245,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       var box=document.createElement('div');
       box.id='sbEtfHd';box.className='hd';
       var ed=(typeof ETF_D!=='undefined'&&ETF_D.length)?ETF_D[ETF_D.length-1]:'—';
-      box.innerHTML='<h1>宽基 ETF 资金流</h1><div class="asof">行情最新：<b>'+ed+'</b>（ETF 净申购）</div>';
+      box.innerHTML='<h1>宽基 ETF 资金流</h1><div class="asof asof-line">行情最新：<b>'+ed+'</b>（ETF 净申购）</div>';
       sec.insertBefore(box,sec.firstChild);
       var oldhd=sec.querySelector('.etfchart-hd');
       if(oldhd) oldhd.style.display='none';
