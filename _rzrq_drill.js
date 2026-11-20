@@ -1043,6 +1043,9 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.etf-note2[open] summary{margin-bottom:4px}'
     + '.etf-tblwrap{max-height:520px;overflow:auto;border:1px solid #eef1f6;border-radius:10px}'
     + 'table.etf-table{border-collapse:collapse;width:100%;font-size:14px}'
+    + 'table.etf-table.dim-etf{min-width:960px}'
+    + 'table.etf-table.dim-etf th,table.etf-table.dim-etf td{padding:9px 7px}'
+    + 'table.etf-table.dim-etf td.chg{font-variant-numeric:tabular-nums}'
     + 'table.etf-table th,table.etf-table td{padding:9px 14px;border-bottom:1px solid #eef1f5;white-space:nowrap;text-align:right}'
     + 'table.etf-table th{background:#f8fafc;color:#64748b;font-weight:600;text-align:center;position:sticky;top:0;cursor:default}'
     + 'table.etf-table th:first-child,table.etf-table td:first-child{text-align:left}'
@@ -1079,7 +1082,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.etf-subtabs button{font-size:11.5px;padding:3px 10px;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:5px;cursor:pointer}'
     + '.etf-subtabs button.on{background:#0f766e;color:#fff;border-color:#0f766e}'
     + '@media(max-width:620px){table.etf-table{table-layout:fixed}table.etf-table th:first-child,table.etf-table td:first-child{width:32%}table.etf-table.dim-etf th:first-child,table.etf-table.dim-etf td:first-child{width:44%}table.etf-table.dim-etf td.nm{white-space:normal;line-height:1.35}table.etf-table.dim-etf td.nm .nmt{display:block}table.etf-table th,table.etf-table td{padding:8px 3px;font-size:13.5px}.etf-sub table th,.etf-sub table td{padding:8px 4px;font-size:13.5px}.eth-full{display:none}.eth-mini{display:inline}.etf-tblwrap{max-height:440px}#tpanel-e .tblbox{padding:6px 8px 8px}}'
-    + '@media(max-width:360px){table.etf-table th,table.etf-table td{padding:8px 1px}#tpanel-e .tblbox{padding:6px 0 8px}}';
+    + '@media(max-width:360px){table.etf-table th,table.etf-table td{padding:8px 1px}#tpanel-e .tblbox{padding:6px 0 8px}}'
+    + '@media(max-width:620px){table.etf-table.dim-etf{min-width:900px}table.etf-table.dim-etf td.chg{font-size:13px}}';
   if (!document.getElementById('etf-tab-css')) {
     var st = document.createElement('style'); st.id='etf-tab-css'; st.textContent = css; document.head.appendChild(st);
   }
@@ -1095,7 +1099,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '<div class="tblbox"><div class="etf-tblwrap"><table class="etf-table"><thead><tr id="etfHead">'
     +   '<th>日期</th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">当日净申购(亿)</span><span class="eth-mini">当日(亿)</span></th><th><span class="eth-full">纳入指数</span><span class="eth-mini">指数</span></th>'
     + '</tr></thead><tbody id="etfTbody"></tbody></table></div></div>'
-    + '<details class="etf-note2"><summary>表格口径与数据说明（默认折叠，点击展开）</summary><div>12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。<b>累计净申购含各 ETF 成立／有数据首日起的全部历史净申购</b>（iFinD 区间净流入额锚点，截至 2026-08-16），逐日明细自 2026-08-17 起。跟随图表下方「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计；累计取周期末快照。<b>整理维度</b>默认按日期（跟随统计粒度与ETF图时间段）；切「按宽基指数」则<b>固定按最新交易日</b>：当日＝该交易日净申购，累计＝2012 前置锚点＋逐日净申购累加（<b>净流量累计、非规模存量，故各指数有正有负</b>，如沪深300 因成分 ETF 内有大额申赎对冲而累计值较小）。点指数后可选「按日期」（视窗内逐日明细，固定按日）或「按ETF」（成分 ETF 当日/累计）。<b>点任一 ETF 名称</b>（按ETF维度／按日期下钻第2层／按宽基指数下钻的ETF子表）可展开<b>该 ETF 逐日明细</b>（视窗内、固定按日：日期／当日净申购／累计净申购）。</div></details>';
+    + '<details class="etf-note2"><summary>表格口径与数据说明（默认折叠，点击展开）</summary><div>12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。<b>累计净申购含各 ETF 成立／有数据首日起的全部历史净申购</b>（iFinD 区间净流入额锚点，截至 2026-08-16），逐日明细自 2026-08-17 起。跟随图表下方「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计；累计取周期末快照。<b>整理维度</b>默认按日期（跟随统计粒度与ETF图时间段）；切「按宽基指数」则<b>固定按最新交易日</b>：当日＝该交易日净申购，累计＝2012 前置锚点＋逐日净申购累加（<b>净流量累计、非规模存量，故各指数有正有负</b>，如沪深300 因成分 ETF 内有大额申赎对冲而累计值较小）。点指数后可选「按日期」（视窗内逐日明细，固定按日）或「按ETF」（成分 ETF 当日/累计）。<b>点任一 ETF 名称</b>（按ETF维度／按日期下钻第2层／按宽基指数下钻的ETF子表）可展开<b>该 ETF 逐日明细</b>（视窗内、固定按日：日期／当日净申购／累计净申购）。<b>「按ETF」维度</b>在累计净申购后附 <b>当日／5日／10日／20日／60日／120日／250日涨幅</b>（前复权净值，截至数据最新交易日；当日＝相对上一交易日、N日＝相对 N 个交易日前，上市不足显示「—」），各列均可点表头排序、首次降序。</div></details>';
   sec.appendChild(panel);
 
   var DATA=null, tbody=panel.querySelector('#etfTbody'), dim='d';
@@ -1103,6 +1107,35 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   function fmtAxis(v){ if(v==null) return '—'; var a=Math.abs(v); if(a>=10000) return (v/10000).toFixed(2)+'万亿'; return v.toFixed(2); }
   function sign2(v){ if(v==null) return '—'; return (v>=0?'+':'')+v.toFixed(2); }
   function cls2(v){ return v==null?'':(v>=0?'etf-pos':'etf-neg'); }
+  /* ===== ETF 区间涨幅（前复权净值，截至数据最新交易日）=====
+     优先用 HTML 注入的 ETF_CLOSES；若其长度与资金流日期轴不一致（净值先更新/HTML未重建），
+     则按需拉取 _etf_close_2012.json，加载完成后自动重绘按ETF表。 */
+  var CHG=null, CLOSING=false;
+  function ensureCloses(){
+    if(CHG) return;
+    if(typeof ETF_CLOSES!=='undefined' && ETF_CLOSES && DATA){
+      var c=DATA.etf&&DATA.etf[0]&&DATA.etf[0].code, a=c&&ETF_CLOSES[c];
+      if(a && a.length>=DATA.dates.length && a[a.length-1]!=null){ CHG=ETF_CLOSES; return; }
+    }
+    if(CLOSING) return;
+    CLOSING=true;
+    RZQ.load('_etf_close_2012.json').then(function(d){ CHG=d||{}; })
+      .catch(function(){ CHG={}; })
+      .then(function(){ if(DATA && dim==='e') renderTable(); });
+  }
+  /* n=1 当日（最近交易日相对上一交易日）；n=5/10/… 相对 n 个交易日前。新ETF不足历史返回 null */
+  function chgOf(code,n){
+    if(!CHG) return null;
+    var a=CHG[code]; if(!a||!a.length) return null;
+    var e=-1;
+    for(var i=a.length-1;i>=0;i--){ if(a[i]!=null){ e=i; break; } }
+    if(e<0) return null;
+    var j=e-n; if(j<0) return null;
+    while(j>=0 && a[j]==null) j--;
+    if(j<0 || !a[j] || !a[e]) return null;
+    return (a[e]/a[j]-1)*100;
+  }
+  function pct2(v){ return v==null?'—':((v>=0?'+':'')+v.toFixed(2)+'%'); }
   function gran(){
     var on=document.querySelector('#segG button.on');
     return (on && on.dataset.g) || 'd';
@@ -1154,16 +1187,23 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   }
   /* 按 ETF：全部 30 只，跟随统计粒度/时间段的最新周期，按该周期净申购降序（净流入多在前） */
   function renderEtfTable(){
+    ensureCloses();
     var sl=slices(), k=sl.length-1, g=gran(), gt=gtxt(g);
     var head=panel.querySelector('#etfHead');
-    if(head) head.innerHTML='<th>ETF（名称 / 代码）</th><th><span class="eth-full">'+gt+'净申购(亿)</span><span class="eth-mini">'+gt+'(亿)</span></th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">所属宽基指数</span><span class="eth-mini">指数</span></th>';
+    if(head) head.innerHTML='<th>ETF（名称 / 代码）</th><th><span class="eth-full">'+gt+'净申购(亿)</span><span class="eth-mini">'+gt+'(亿)</span></th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th>'
+      + '<th>当日</th><th>5日</th><th>10日</th><th>20日</th><th>60日</th><th>120日</th><th>250日</th>'
+      + '<th><span class="eth-full">所属宽基指数</span><span class="eth-mini">指数</span></th>';
+    var CHGDAYS=[1,5,10,20,60,120,250];
     var rows=[];
     DATA.etf.forEach(function(x){
-      rows.push({x:x, net:agg(x.net,sl,true)[k], acc:agg(x.acc,sl,false)[k]});
+      rows.push({x:x, net:agg(x.net,sl,true)[k], acc:agg(x.acc,sl,false)[k],
+                 chg:CHGDAYS.map(function(n){ return chgOf(x.code,n); })});
     });
     rows.sort(function(a,b){ return (b.net==null?-Infinity:b.net)-(a.net==null?-Infinity:a.net); });
     tbody.innerHTML=rows.map(function(r){
-      return '<tr class="etfdrill" data-code="'+r.x.code+'"><td class="nm"><span class="nmt">'+r.x.name+'</span><span class="subcode">'+r.x.code+'</span></td><td class="'+cls2(r.net)+'">'+sign2(r.net)+'</td><td>'+fmtAxis(r.acc)+'</td><td>'+r.x.idx+'</td></tr>';
+      return '<tr class="etfdrill" data-code="'+r.x.code+'"><td class="nm"><span class="nmt">'+r.x.name+'</span><span class="subcode">'+r.x.code+'</span></td><td class="'+cls2(r.net)+'">'+sign2(r.net)+'</td><td>'+fmtAxis(r.acc)+'</td>'
+        + r.chg.map(function(v){ return '<td class="chg '+cls2(v)+'">'+pct2(v)+'</td>'; }).join('')
+        + '<td>'+r.x.idx+'</td></tr>';
     }).join('');
     var et1=panel.querySelector('table.etf-table'); if(et1) et1._sk=null;
     markSortableHeaders();
@@ -1243,7 +1283,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     var mul=1;
     if(/万亿/.test(s)){ mul=10000; s=s.replace(/万亿/g,''); }
     else if(/亿/.test(s)){ s=s.replace(/亿/g,''); }
-    s=s.replace(/[+,]/g,'').replace(/\s/g,'');
+    s=s.replace(/%/g,'').replace(/[+,]/g,'').replace(/\s/g,'');
     if(!/^-?\d+(\.\d+)?$/.test(s)) return null;
     var v=parseFloat(s);
     return isNaN(v)?null:v*mul;
