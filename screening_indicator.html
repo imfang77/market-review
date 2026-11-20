@@ -326,7 +326,10 @@ function bind(){
   });
 }
 var S={range:'y10',metric:'sh',s:0,e:0};
-var metaSrcs=IS_LOCAL?['_series_meta.json?v='+Date.now()]:[MIRROR+'_series_meta.json','_series_meta.json?v='+Date.now()];
+/* meta 含上市首日等字段且仅约250KB，必须同源优先：
+   jsdelivr @main 对 meta 的缓存可能滞后于 Pages，旧版无 first 字段会让成立日期筛选失效。
+   大体积 .gz 分片才走镜像加速。 */
+var metaSrcs=IS_LOCAL?['_series_meta.json?v='+Date.now()]:['_series_meta.json?v='+Date.now(),MIRROR+'_series_meta.json?v='+Date.now()];
 function loadMeta(i){
   if(i>=metaSrcs.length)return Promise.reject(new Error('元数据加载失败'));
   return fetchBuf(metaSrcs[i],IS_LOCAL?60000:25000).then(function(buf){return JSON.parse(new TextDecoder().decode(buf));})
