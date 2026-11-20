@@ -1049,6 +1049,12 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + 'table.etf-table th,table.etf-table td{padding:9px 14px;border-bottom:1px solid #eef1f5;white-space:nowrap;text-align:right}'
     + 'table.etf-table th{background:#f8fafc;color:#64748b;font-weight:600;text-align:center;position:sticky;top:0;cursor:default}'
     + 'table.etf-table th:first-child,table.etf-table td:first-child{text-align:left}'
+    /* 第一列冻结：横向滚动时名称/日期/指数列固定；表头左上角同时粘住 top+left */
+    + 'table.etf-table th{z-index:3}'
+    + 'table.etf-table th:first-child,table.etf-table td:first-child{position:sticky;left:0;z-index:2;background:#fff;box-shadow:1px 0 0 #eef1f5}'
+    + 'table.etf-table th:first-child{z-index:4;background:#f8fafc}'
+    + 'table.etf-table tbody tr:hover td:first-child{background:#f3f7ff}'
+    + 'table.etf-table tbody tr.etf-sub td:first-child{position:static;box-shadow:none;background:#fafbfe}'
     /* ETF表头排序：⇅灰(可排)/↓蓝(降)/↑蓝(升)，禁▲▼ */
     + '#tpanel-e thead th[data-sk]{cursor:pointer;user-select:none}'
     + '#tpanel-e thead th[data-sk]::after{content:" ⇅";font-size:.72em;color:#aab4c5;margin-left:3px;font-weight:400}'
