@@ -217,7 +217,7 @@ tbody tr:hover{background:#f6f9ff}
 </div>
 <div class="tpanel" id="tpanel-m" style="display:block">
 <div class="tblbox"><div class="tbl"><table>
-<thead><tr><th>日期</th><th>融资余额(亿)</th><th id="th-diff">融资净买入(亿)</th><th>占流通市值(%)</th></tr></thead>
+<thead><tr><th>日期</th><th id="th-diff">融资净买入(亿)</th><th>融资余额(亿)</th><th>占流通市值(%)</th></tr></thead>
 <tbody id="tbody-m"></tbody></table></div></div>
 </div>
 <div class="tpanel" id="tpanel-u" style="display:none">
@@ -305,8 +305,9 @@ function renderMTab(){
     var cls=(dv===null)?'':(dv>=0?'pos':'neg');
     var dtxt=(dv===null)?'—':((dv>=0?'+':'')+fmt2(dv));
     var tr=document.createElement('tr');
-    tr.innerHTML='<td class="drill-date" data-sort="'+i+'">'+CD[i]+'</td><td class="num rzc" data-sort="'+(CRZ[i]!==null?CRZ[i]:'')+'">'+(CRZ[i]!==null?fmt2(CRZ[i]):'—')+'</td>'
-      +'<td class="num '+cls+'" data-sort="'+(dv===null?'':dv)+'">'+dtxt+'</td><td class="num" data-sort="'+(CZB[i]!==null?CZB[i]:'')+'">'+(CZB[i]!==null?CZB[i].toFixed(2):'—')+'</td>';
+    tr.innerHTML='<td class="drill-date" data-sort="'+i+'">'+CD[i]+'</td>'
+      +'<td class="num '+cls+'" data-sort="'+(dv===null?'':dv)+'">'+dtxt+'</td><td class="num rzc" data-sort="'+(CRZ[i]!==null?CRZ[i]:'')+'">'+(CRZ[i]!==null?fmt2(CRZ[i]):'—')+'</td>'
+      +'<td class="num" data-sort="'+(CZB[i]!==null?CZB[i]:'')+'">'+(CZB[i]!==null?CZB[i].toFixed(2):'—')+'</td>';
     frag.appendChild(tr);
   }
   tb.appendChild(frag);
