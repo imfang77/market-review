@@ -919,8 +919,19 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       var lg='<span class="lrow"><span class="lg blue" data-lg="acc" title="悬停高亮该线">■ 全市场累计净申购（左轴·亿元）</span>'
         +'<span class="lg" data-lg="bars" style="color:#94a3b8" title="悬停高亮该柱">■ 当日净申购·'+scopeTxt+'构成（右轴·红涨绿跌·深浅=指数，悬停看明细）</span>';
       if(hjDrawn) lg+='<span class="lg" data-lg="hj" style="color:#7c3aed" title="悬停高亮该线">┄ 汇金持股票ETF市值（第三方估算·存量口径）</span>';
-      pointSel.forEach(function(nm){lg+='<span class="lg" data-lg="idx:'+nm+'" style="color:'+iCol(nm)+'" title="悬停高亮该线">— '+nm+(en?'（归一化·基期=100）':'（最右轴·点）')+'</span>';});
-      etfSel.forEach(function(c,oi){lg+='<span class="lg" data-lg="etf:'+c+'" style="color:'+eCol(c,oi)+'" title="悬停高亮该线">┄ '+eLabel(c)+'（净值归一化·基期=100）</span>';});
+      /* 对标线收益率=所选时间段首末有效值涨跌%；图例按收益率降序（高在前），颜色仍按原始选择序取以保证与线一致；
+         「归一化基期=100」这类共性说明从每条图例拎出，统一写一次 */
+      function segRet(arr){var base=null,last=null;for(var z=0;z<arr.length;z++){if(arr[z]!=null){if(base==null)base=arr[z];last=arr[z];}}return (base!=null&&last!=null)?((last/base-1)*100):null;}
+      function retTxt(r){return r==null?'':(' '+(r>=0?'+':'')+r.toFixed(2)+'%');}
+      var ir={},er2={},items=[];
+      pointSel.forEach(function(nm){ir[nm]=segRet(v.sh[nm]||[]);items.push({ret:ir[nm],html:'<span class="lg" data-lg="idx:'+nm+'" style="color:'+iCol(nm)+'" title="悬停高亮该线">— '+nm+retTxt(ir[nm])+'</span>'});});
+      etfSel.forEach(function(c){er2[c]=segRet(v.ec[c]||[]);items.push({ret:er2[c],html:'<span class="lg" data-lg="etf:'+c+'" style="color:'+eCol(c,etfSel.indexOf(c))+'" title="悬停高亮该线">┄ '+eLabel(c)+retTxt(er2[c])+'</span>'});});
+      items.sort(function(a,b){return (b.ret==null?-Infinity:b.ret)-(a.ret==null?-Infinity:a.ret);});  /* 指数+ETF统一按所选时间段收益率降序 */
+      items.forEach(function(it){lg+=it.html;});
+      if(items.length){
+        var note=en?'（对标线归一化·基期=100；右侧%为所选时间段收益率）':'（指数真实点位·点；右侧%为所选时间段收益率）';
+        lg+='<span class="lg" style="color:#94a3b8">'+note+'</span>';
+      }
       legend.innerHTML=lg+'</span>';
     }
     v.start=cur; window._etfView=v;
