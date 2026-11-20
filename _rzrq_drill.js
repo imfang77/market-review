@@ -1059,6 +1059,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.etf-sub tr.idxrow{cursor:pointer}.etf-sub tr.idxrow:hover{background:#f3f7ff}.etf-sub tr.idxrow td:first-child{color:#2f6bff}'
     + '.etf-sub .etf-pos{color:#e5484d}.etf-sub .etf-neg{color:#2f9e44}'
     + '.etf-sub .code{font-family:ui-monospace,Menlo,Consolas,monospace;color:#66708a}'
+    + '.etf-sub td.nm .nmt{font-weight:600;color:#2f6bff}'
+    + '.etf-sub td.nm .subcode{display:block;font-family:"SF Mono",Consolas,Menlo,monospace;font-size:10.5px;color:#9aa3b5;margin-top:2px;font-weight:400;white-space:nowrap}'
     + '.etf-msg{padding:18px;color:#66708a;font-size:13px;text-align:center}'
     + '.eth-mini{display:none}'
     + '.etf-dim{display:flex;gap:6px;align-items:center;padding:8px 2px 0}'
@@ -1081,7 +1083,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   var panel = document.createElement('div');
   panel.className='tpanel'; panel.id='tpanel-e'; panel.style.display='none';
   panel.innerHTML =
-    '<div class="etf-dim"><span class="lbl">整理维度：</span><button data-dim="d" class="on">按日期</button><button data-dim="i">按宽基指数</button></div>'
+    '<div class="etf-dim"><span class="lbl">整理维度：</span><button data-dim="d" class="on">按日期</button><button data-dim="e">按ETF</button><button data-dim="i">按宽基指数</button></div>'
     + '<div class="tblbox"><div class="etf-tblwrap"><table class="etf-table"><thead><tr id="etfHead">'
     +   '<th>日期</th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">当日净申购(亿)</span><span class="eth-mini">当日(亿)</span></th><th><span class="eth-full">纳入指数</span><span class="eth-mini">指数</span></th>'
     + '</tr></thead><tbody id="etfTbody"></tbody></table></div></div>'
@@ -1138,6 +1140,20 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     });
     tbody.innerHTML=rows.join('');
   }
+  /* 按 ETF：全部 30 只，跟随统计粒度/时间段的最新周期，按该周期净申购降序（净流入多在前） */
+  function renderEtfTable(){
+    var sl=slices(), k=sl.length-1, g=gran(), gt=gtxt(g);
+    var head=panel.querySelector('#etfHead');
+    if(head) head.innerHTML='<th>ETF（名称 / 代码）</th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">'+gt+'净申购(亿)</span><span class="eth-mini">'+gt+'(亿)</span></th><th><span class="eth-full">所属宽基指数</span><span class="eth-mini">指数</span></th>';
+    var rows=[];
+    DATA.etf.forEach(function(x){
+      rows.push({x:x, net:agg(x.net,sl,true)[k], acc:agg(x.acc,sl,false)[k]});
+    });
+    rows.sort(function(a,b){ return (b.net==null?-Infinity:b.net)-(a.net==null?-Infinity:a.net); });
+    tbody.innerHTML=rows.map(function(r){
+      return '<tr><td class="nm"><span class="nmt">'+r.x.name+'</span><span class="subcode">'+r.x.code+'</span></td><td>'+fmtAxis(r.acc)+'</td><td class="'+cls2(r.net)+'">'+sign2(r.net)+'</td><td>'+r.x.idx+'</td></tr>';
+    }).join('');
+  }
   /* 指数下钻：mode=d 视窗内逐日明细（固定按日），mode=e 成分 ETF 的当日/累计（固定最新交易日） */
   function renderIdxSub(subTr, name, mode){
     var li=DATA.dates.length-1, body=subTr.querySelector('.etf-sub-body');
@@ -1153,9 +1169,10 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       }
     }else{
       var etfs=DATA.etf.filter(function(x){return x.idx===name;});
-      h='<table><thead><tr><th>ETF代码</th><th>简称</th><th>当日净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
+      etfs.sort(function(a,b){ return (b.net[li]==null?-Infinity:b.net[li])-(a.net[li]==null?-Infinity:a.net[li]); });
+      h='<table><thead><tr><th>ETF（名称 / 代码）</th><th>当日净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
       etfs.forEach(function(x){
-        h+='<tr><td class="code">'+x.code+'</td><td>'+x.name+'</td><td class="'+cls2(x.net[li])+'">'+sign2(x.net[li])+'</td><td>'+fmtAxis(x.acc[li])+'</td></tr>';
+        h+='<tr><td class="nm"><span class="nmt">'+x.name+'</span><span class="subcode">'+x.code+'</span></td><td class="'+cls2(x.net[li])+'">'+sign2(x.net[li])+'</td><td>'+fmtAxis(x.acc[li])+'</td></tr>';
       });
     }
     body.innerHTML=h+'</tbody></table>';
@@ -1164,6 +1181,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   function renderTable(){
     if(!DATA) return;
     if(dim==='i'){ renderIndexTable(); return; }
+    if(dim==='e'){ renderEtfTable(); return; }
     var sl=slices(), g=gran(), gt=gtxt(g);
     var acc=agg(DATA.total.acc,sl,false), net=agg(DATA.total.net,sl,true), nidx=DATA.total.nidx;
     var head=panel.querySelector('#etfHead');
@@ -1208,11 +1226,14 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     var html='<tr class="etf-sub" data-level="idx"><td colspan="4"><div class="etf-sub-in" style="padding:2px 4px">';
     html+='<div style="font-size:12px;color:#66708a;margin:4px 2px">截至 '+DATA.dates[s.gi]+' · 12 宽基指数净申购（'+gt+' / 累计）</div>';
     html+='<table><thead><tr><th>宽基指数</th><th>'+gt+'净申购(亿)</th><th>累计净申购(亿)</th><th>ETF数</th></tr></thead><tbody>';
+    var idxs=[];
     IDX.forEach(function(name){
       var id=DATA.idx[name]; if(!id) return;
-      var net=agg(id.net,sl,true)[k], acc=agg(id.acc,sl,false)[k];
-      var nec=(id.etf&&id.etf.length)||0;
-      html+='<tr class="idxrow" data-name="'+name+'" data-k="'+k+'"><td>'+name+'</td><td class="'+cls2(net)+'">'+sign2(net)+'</td><td>'+fmtAxis(acc)+'</td><td>'+nec+'</td></tr>';
+      idxs.push({name:name, net:agg(id.net,sl,true)[k], acc:agg(id.acc,sl,false)[k], nec:(id.etf&&id.etf.length)||0});
+    });
+    idxs.sort(function(a,b){ return (b.net==null?-Infinity:b.net)-(a.net==null?-Infinity:a.net); });
+    idxs.forEach(function(r){
+      html+='<tr class="idxrow" data-name="'+r.name+'" data-k="'+k+'"><td>'+r.name+'</td><td class="'+cls2(r.net)+'">'+sign2(r.net)+'</td><td>'+fmtAxis(r.acc)+'</td><td>'+r.nec+'</td></tr>';
     });
     html+='</tbody></table></div></td></tr>';
     tr.insertAdjacentHTML('afterend', html);
@@ -1226,10 +1247,11 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     if(next && next.classList.contains('etf-sub')) next.remove();
     var gt=gtxt(gran());
     var etfs=DATA.etf.filter(function(x){return x.idx===name;});
-    var html='<tr class="etf-sub" data-level="etf"><td colspan="4"><div class="etf-sub-in" style="padding:2px 16px"><table><thead><tr><th>ETF代码</th><th>简称</th><th>'+gt+'净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
+    etfs.sort(function(a,b){ var an=agg(a.net,sl,true)[k], bn=agg(b.net,sl,true)[k]; return (bn==null?-Infinity:bn)-(an==null?-Infinity:an); });
+    var html='<tr class="etf-sub" data-level="etf"><td colspan="4"><div class="etf-sub-in" style="padding:2px 16px"><table><thead><tr><th>ETF（名称 / 代码）</th><th>'+gt+'净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
     etfs.forEach(function(x){
       var net=agg(x.net,sl,true)[k], acc=agg(x.acc,sl,false)[k];
-      html+='<tr><td class="code">'+x.code+'</td><td>'+x.name+'</td><td class="'+cls2(net)+'">'+sign2(net)+'</td><td>'+fmtAxis(acc)+'</td></tr>';
+      html+='<tr><td class="nm"><span class="nmt">'+x.name+'</span><span class="subcode">'+x.code+'</span></td><td class="'+cls2(net)+'">'+sign2(net)+'</td><td>'+fmtAxis(acc)+'</td></tr>';
     });
     html+='</tbody></table></div></td></tr>';
     ir.insertAdjacentHTML('afterend', html);
