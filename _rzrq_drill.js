@@ -1064,6 +1064,9 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.etf-sub tr.idxrow{cursor:pointer}.etf-sub tr.idxrow:hover{background:#f3f7ff}.etf-sub tr.idxrow td:first-child{color:#2f6bff}'
     + '.etf-sub .etf-pos{color:#e5484d}.etf-sub .etf-neg{color:#2f9e44}'
     + '.etf-sub .code{font-family:ui-monospace,Menlo,Consolas,monospace;color:#66708a}'
+    + 'table.etf-table tbody tr.etfdrill{cursor:pointer}.etf-sub tbody tr.etfdrill{cursor:pointer}'
+    + 'table.etf-table tbody tr.etfdrill:hover{background:#f3f7ff}.etf-sub tbody tr.etfdrill:hover{background:#f3f7ff}'
+    + 'tr.etfdrill td.nm .nmt{color:#2f6bff}'
     + '.etf-sub td.nm .nmt,table.etf-table td.nm .nmt{font-weight:600;color:#2f6bff}'
     + '.etf-sub td.nm .subcode,table.etf-table td.nm .subcode{display:block;font-family:"SF Mono",Consolas,Menlo,monospace;font-size:10.5px;color:#9aa3b5;margin-top:2px;font-weight:400;white-space:nowrap}'
     + '.etf-msg{padding:18px;color:#66708a;font-size:13px;text-align:center}'
@@ -1092,7 +1095,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '<div class="tblbox"><div class="etf-tblwrap"><table class="etf-table"><thead><tr id="etfHead">'
     +   '<th>日期</th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">当日净申购(亿)</span><span class="eth-mini">当日(亿)</span></th><th><span class="eth-full">纳入指数</span><span class="eth-mini">指数</span></th>'
     + '</tr></thead><tbody id="etfTbody"></tbody></table></div></div>'
-    + '<details class="etf-note2"><summary>表格口径与数据说明（默认折叠，点击展开）</summary><div>12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。<b>累计净申购含各 ETF 成立／有数据首日起的全部历史净申购</b>（iFinD 区间净流入额锚点，截至 2026-08-16），逐日明细自 2026-08-17 起。跟随图表下方「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计；累计取周期末快照。<b>整理维度</b>默认按日期（跟随统计粒度与ETF图时间段）；切「按宽基指数」则<b>固定按最新交易日</b>：当日＝该交易日净申购，累计＝2012 前置锚点＋逐日净申购累加（<b>净流量累计、非规模存量，故各指数有正有负</b>，如沪深300 因成分 ETF 内有大额申赎对冲而累计值较小）。点指数后可选「按日期」（视窗内逐日明细，固定按日）或「按ETF」（成分 ETF 当日/累计）。</div></details>';
+    + '<details class="etf-note2"><summary>表格口径与数据说明（默认折叠，点击展开）</summary><div>12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。<b>累计净申购含各 ETF 成立／有数据首日起的全部历史净申购</b>（iFinD 区间净流入额锚点，截至 2026-08-16），逐日明细自 2026-08-17 起。跟随图表下方「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计；累计取周期末快照。<b>整理维度</b>默认按日期（跟随统计粒度与ETF图时间段）；切「按宽基指数」则<b>固定按最新交易日</b>：当日＝该交易日净申购，累计＝2012 前置锚点＋逐日净申购累加（<b>净流量累计、非规模存量，故各指数有正有负</b>，如沪深300 因成分 ETF 内有大额申赎对冲而累计值较小）。点指数后可选「按日期」（视窗内逐日明细，固定按日）或「按ETF」（成分 ETF 当日/累计）。<b>点任一 ETF 名称</b>（按ETF维度／按日期下钻第2层／按宽基指数下钻的ETF子表）可展开<b>该 ETF 逐日明细</b>（视窗内、固定按日：日期／当日净申购／累计净申购）。</div></details>';
   sec.appendChild(panel);
 
   var DATA=null, tbody=panel.querySelector('#etfTbody'), dim='d';
@@ -1160,7 +1163,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     });
     rows.sort(function(a,b){ return (b.net==null?-Infinity:b.net)-(a.net==null?-Infinity:a.net); });
     tbody.innerHTML=rows.map(function(r){
-      return '<tr><td class="nm"><span class="nmt">'+r.x.name+'</span><span class="subcode">'+r.x.code+'</span></td><td class="'+cls2(r.net)+'">'+sign2(r.net)+'</td><td>'+fmtAxis(r.acc)+'</td><td>'+r.x.idx+'</td></tr>';
+      return '<tr class="etfdrill" data-code="'+r.x.code+'"><td class="nm"><span class="nmt">'+r.x.name+'</span><span class="subcode">'+r.x.code+'</span></td><td class="'+cls2(r.net)+'">'+sign2(r.net)+'</td><td>'+fmtAxis(r.acc)+'</td><td>'+r.x.idx+'</td></tr>';
     }).join('');
     var et1=panel.querySelector('table.etf-table'); if(et1) et1._sk=null;
     markSortableHeaders();
@@ -1183,7 +1186,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       etfs.sort(function(a,b){ return (b.net[li]==null?-Infinity:b.net[li])-(a.net[li]==null?-Infinity:a.net[li]); });
       h='<table><thead><tr><th>ETF（名称 / 代码）</th><th>当日净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
       etfs.forEach(function(x){
-        h+='<tr><td class="nm"><span class="nmt">'+x.name+'</span><span class="subcode">'+x.code+'</span></td><td class="'+cls2(x.net[li])+'">'+sign2(x.net[li])+'</td><td>'+fmtAxis(x.acc[li])+'</td></tr>';
+        h+='<tr class="etfdrill" data-code="'+x.code+'"><td class="nm"><span class="nmt">'+x.name+'</span><span class="subcode">'+x.code+'</span></td><td class="'+cls2(x.net[li])+'">'+sign2(x.net[li])+'</td><td>'+fmtAxis(x.acc[li])+'</td></tr>';
       });
     }
     body.innerHTML=h+'</tbody></table>';
@@ -1331,7 +1334,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     var html='<tr class="etf-sub" data-level="etf"><td colspan="4"><div class="etf-sub-in" style="padding:2px 16px"><table><thead><tr><th>ETF（名称 / 代码）</th><th>'+gt+'净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
     etfs.forEach(function(x){
       var net=agg(x.net,sl,true)[k], acc=agg(x.acc,sl,false)[k];
-      html+='<tr><td class="nm"><span class="nmt">'+x.name+'</span><span class="subcode">'+x.code+'</span></td><td class="'+cls2(net)+'">'+sign2(net)+'</td><td>'+fmtAxis(acc)+'</td></tr>';
+      html+='<tr class="etfdrill" data-code="'+x.code+'"><td class="nm"><span class="nmt">'+x.name+'</span><span class="subcode">'+x.code+'</span></td><td class="'+cls2(net)+'">'+sign2(net)+'</td><td>'+fmtAxis(acc)+'</td></tr>';
     });
     html+='</tbody></table></div></td></tr>';
     ir.insertAdjacentHTML('afterend', html);
@@ -1357,6 +1360,34 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     if(!mainTr || !mainTr.dataset.name) return;
     subTr.querySelectorAll('.etf-subtabs button').forEach(function(x){x.classList.toggle('on',x===b);});
     renderIdxSub(subTr, mainTr.dataset.name, b.dataset.sub);
+  });
+
+  /* ETF 名称点击 → 展开该 ETF 逐日明细（视窗内逐日、固定按日：当日 / 累计）。
+     覆盖三处入口：按ETF主表 / 按日期下钻第2层 / 按宽基指数下钻的ETF子表。 */
+  tbody.addEventListener('click', function(e){
+    var er=e.target.closest('tr.etfdrill'); if(!er) return;
+    var code=er.dataset.code;
+    var x=null; for(var q=0;q<DATA.etf.length;q++){ if(DATA.etf[q].code===code){ x=DATA.etf[q]; break; } }
+    if(!x) return;
+    var next=er.nextElementSibling;
+    if(next && next.classList.contains('etf-sub') && next.dataset.level==='etfdays'){ next.remove(); return; }
+    /* 收起同层其它已展开的逐日块 */
+    var par=er.parentNode;
+    Array.prototype.slice.call(par.children).forEach(function(r){
+      if(r.classList.contains('etf-sub') && r.dataset.level==='etfdays') r.remove();
+    });
+    var days=[]; slices().forEach(function(s){ s.days.forEach(function(i){days.push(i);}); });
+    var span=Math.max(1, er.cells.length);
+    var html='<tr class="etf-sub" data-level="etfdays"><td colspan="'+span+'"><div class="etf-sub-in" style="padding:2px 10px">'
+      +'<div style="font-size:12px;color:#66708a;margin:4px 2px">'+x.name+'（'+code+'） · '+x.idx+' · 逐日明细（视窗内，固定按日）</div>'
+      +'<table><thead><tr><th>日期</th><th>当日净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
+    for(var j=days.length-1;j>=0;j--){
+      var d=days[j];
+      html+='<tr><td>'+DATA.dates[d]+'</td><td class="'+cls2(x.net[d])+'">'+sign2(x.net[d])+'</td><td>'+fmtAxis(x.acc[d])+'</td></tr>';
+    }
+    html+='</tbody></table></div></td></tr>';
+    er.insertAdjacentHTML('afterend', html);
+    markSortableHeaders();
   });
 
   /* 跟随统一统计粒度 #segG 与 ETF 图时间段 #eRng 重绘。
