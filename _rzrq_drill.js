@@ -1046,6 +1046,11 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + 'table.etf-table th,table.etf-table td{padding:9px 14px;border-bottom:1px solid #eef1f5;white-space:nowrap;text-align:right}'
     + 'table.etf-table th{background:#f8fafc;color:#64748b;font-weight:600;text-align:center;position:sticky;top:0;cursor:default}'
     + 'table.etf-table th:first-child,table.etf-table td:first-child{text-align:left}'
+    /* ETF表头排序：⇅灰(可排)/↓蓝(降)/↑蓝(升)，禁▲▼ */
+    + '#tpanel-e thead th[data-sk]{cursor:pointer;user-select:none}'
+    + '#tpanel-e thead th[data-sk]::after{content:" ⇅";font-size:.72em;color:#aab4c5;margin-left:3px;font-weight:400}'
+    + '#tpanel-e thead th[data-sk].sk-asc::after{content:" ↑";color:#2f6bff}'
+    + '#tpanel-e thead th[data-sk].sk-desc::after{content:" ↓";color:#2f6bff}'
     + 'table.etf-table tbody tr.daterow{cursor:pointer}'
     + 'table.etf-table tbody tr.daterow:hover{background:#f3f7ff}'
     + 'table.etf-table tbody tr.daterow td:first-child{color:#2f6bff;font-weight:600}'
@@ -1135,10 +1140,14 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     var rows=[];
     IDX.forEach(function(name){
       var id=DATA.idx[name]; if(!id) return;
-      var dn=id.net[li], da=id.acc[li];
-      rows.push('<tr class="idxmain" data-name="'+name+'"><td>'+name+'</td><td class="'+cls2(dn)+'">'+sign2(dn)+'</td><td>'+fmtAxis(da)+'</td><td>'+((id.etf&&id.etf.length)||0)+'</td></tr>');
+      rows.push({name:name, dn:id.net[li], da:id.acc[li], nec:(id.etf&&id.etf.length)||0});
     });
-    tbody.innerHTML=rows.join('');
+    rows.sort(function(a,b){ return (b.dn==null?-Infinity:b.dn)-(a.dn==null?-Infinity:a.dn); });
+    tbody.innerHTML=rows.map(function(r){
+      return '<tr class="idxmain" data-name="'+r.name+'"><td>'+r.name+'</td><td class="'+cls2(r.dn)+'">'+sign2(r.dn)+'</td><td>'+fmtAxis(r.da)+'</td><td>'+r.nec+'</td></tr>';
+    }).join('');
+    var et0=panel.querySelector('table.etf-table'); if(et0) et0._sk=null;
+    markSortableHeaders();
   }
   /* 按 ETF：全部 30 只，跟随统计粒度/时间段的最新周期，按该周期净申购降序（净流入多在前） */
   function renderEtfTable(){
@@ -1153,6 +1162,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     tbody.innerHTML=rows.map(function(r){
       return '<tr><td class="nm"><span class="nmt">'+r.x.name+'</span><span class="subcode">'+r.x.code+'</span></td><td>'+fmtAxis(r.acc)+'</td><td class="'+cls2(r.net)+'">'+sign2(r.net)+'</td><td>'+r.x.idx+'</td></tr>';
     }).join('');
+    var et1=panel.querySelector('table.etf-table'); if(et1) et1._sk=null;
+    markSortableHeaders();
   }
   /* 指数下钻：mode=d 视窗内逐日明细（固定按日），mode=e 成分 ETF 的当日/累计（固定最新交易日） */
   function renderIdxSub(subTr, name, mode){
@@ -1176,6 +1187,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       });
     }
     body.innerHTML=h+'</tbody></table>';
+    var subTbl=body.querySelector('table'); if(subTbl) subTbl._sk=null;
+    markSortableHeaders();
   }
 
   function renderTable(){
@@ -1197,6 +1210,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
         +'<td>'+(nidx[s.gi]==null?'—':nidx[s.gi])+'</td></tr>');
     }
     tbody.innerHTML=rows.join('');
+    var et2=panel.querySelector('table.etf-table'); if(et2) et2._sk=null;
+    markSortableHeaders();
   }
 
   function ensure(){
@@ -1214,6 +1229,68 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       panel.querySelectorAll('.etf-dim button').forEach(function(x){x.classList.toggle('on',x===b);});
       renderTable();
     });
+  });
+
+  /* ===== ETF 所有表格表头点击排序（主表3维度 + 各下钻子表通用）=====
+     委托在 panel：任何 thead th 点击即按其列排序所在表；首次降序、再点升序；null/— 末尾。
+     展开的下钻子表行(etf-sub)跟随其父数据行一起移动。 */
+  function skNum(txt){
+    var s=String(txt==null?'':txt).trim();
+    if(s===''||s==='—'||s==='-') return null;
+    var mul=1;
+    if(/万亿/.test(s)){ mul=10000; s=s.replace(/万亿/g,''); }
+    else if(/亿/.test(s)){ s=s.replace(/亿/g,''); }
+    s=s.replace(/[+,]/g,'').replace(/\s/g,'');
+    if(!/^-?\d+(\.\d+)?$/.test(s)) return null;
+    var v=parseFloat(s);
+    return isNaN(v)?null:v*mul;
+  }
+  function skSort(th){
+    var table=th.closest('table'); if(!table) return;
+    var tb=table.tBodies[0]; if(!tb) return;
+    var ths=Array.prototype.slice.call(table.tHead?table.tHead.rows[0].cells:[]);
+    var col=Array.prototype.indexOf.call(ths,th); if(col<0) return;
+    var st=table._sk||(table._sk={col:-1,asc:false});
+    if(st.col===col) st.asc=!st.asc; else { st.col=col; st.asc=false; }
+
+    /* 顶层单元：数据行 + 其后紧跟的 etf-sub 子表行作为一组 */
+    var units=[], kids=Array.prototype.slice.call(tb.children);
+    for(var i=0;i<kids.length;i++){
+      var r=kids[i];
+      if(r.classList&&r.classList.contains('etf-sub')) continue;
+      var u={rows:[r], val:null, isNum:true, hasNum:false, hasTxt:false};
+      var j=i+1;
+      while(j<kids.length && kids[j].classList && kids[j].classList.contains('etf-sub')){ u.rows.push(kids[j]); j++; }
+      var txt=r.cells&&r.cells[col]?r.cells[col].textContent:'';
+      var n=skNum(txt);
+      if(n==null){ if(String(txt).trim()!==''&&String(txt).trim()!=='—') u.hasTxt=true; }
+      else { u.val=n; u.hasNum=true; }
+      u.val=n; u.txt=String(txt==null?'':txt).trim();
+      units.push(u);
+      i=j-1;
+    }
+    /* 该列是否数值列：有数值且无纯文本 → 数值排序，否则文本排序（日期字典序即时间序） */
+    var numeric=units.some(function(u){return u.hasNum;}) && !units.some(function(u){return u.hasTxt;});
+    units.sort(function(a,b){
+      var av=numeric?a.val:a.txt, bv=numeric?b.val:b.txt;
+      if(av==null&&bv==null) return 0;
+      if(av==null) return 1;   /* null 末尾（与升降序无关） */
+      if(bv==null) return -1;
+      var c = numeric ? (av-bv) : String(av).localeCompare(String(bv),'zh-CN');
+      return st.asc?c:-c;
+    });
+    units.forEach(function(u){ u.rows.forEach(function(r){ tb.appendChild(r); }); });
+    ths.forEach(function(x,xi){ x.classList.toggle('sk-asc', xi===col&&st.asc); x.classList.toggle('sk-desc', xi===col&&!st.asc); });
+  }
+  /* 渲染后给 panel 内所有表头打 data-sk 标记（含动态下钻子表） */
+  function markSortableHeaders(){
+    panel.querySelectorAll('thead th').forEach(function(th){ th.setAttribute('data-sk','1'); });
+  }
+  panel.addEventListener('click',function(e){
+    var th=e.target.closest('thead th'); if(!th||!panel.contains(th)) return;
+    th.setAttribute('data-sk','1');
+    Array.prototype.forEach.call(th.parentNode.cells,function(x){ if(x!==th) x.setAttribute('data-sk','1'); });
+    skSort(th);
   });
 
   /* 下钻：日期行 → 12 指数表；指数行 → 逐只 ETF 表（k=周期切片索引，gi=周期末全局索引，均按统一粒度聚合） */
@@ -1239,6 +1316,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     });
     html+='</tbody></table></div></td></tr>';
     tr.insertAdjacentHTML('afterend', html);
+    markSortableHeaders();
   });
 
   tbody.addEventListener('click', function(e){
@@ -1257,6 +1335,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     });
     html+='</tbody></table></div></td></tr>';
     ir.insertAdjacentHTML('afterend', html);
+    markSortableHeaders();
   });
 
   /* 指数维度：点指数行 → 下钻切换「按日期 / 按ETF」 */
