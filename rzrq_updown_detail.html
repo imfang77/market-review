@@ -35,6 +35,8 @@ thead th:nth-child(1),tbody td:nth-child(1){white-space:nowrap}
 .legend{padding:4px 28px 0;font-size:12px;color:#64748b;display:flex;flex-direction:column;gap:4px}
 .legend .lrow{display:flex;gap:14px;flex-wrap:wrap}
 .legend .lg{display:inline-flex;align-items:center;gap:4px}
+.legend .lg[data-lg]{cursor:pointer;border-radius:3px;padding:1px 3px;margin:-1px -3px;transition:opacity .15s}
+.legend .lg[data-lg]:hover{background:rgba(47,107,255,.08)}
 .legend .lg.blue{color:#2f6bff}.legend .lg.red{color:#c0392b}
 .legend .mut{color:#9aa3b2}
 .legend .mrow{white-space:normal;overflow:visible}
@@ -633,6 +635,27 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       vline=document.getElementById('evline'), ov=document.getElementById('eoverlay'),
       tip=document.getElementById('etip'), legend=document.getElementById('elg');
   if(!svg||!plot) return;
+  /* 图例 hover → 对应线高亮、其它线淡化（11-20新增）：图例项与线共用 data-lg 标识；事件委托绑在稳定容器上 */
+  if(legend){
+    function lgFocus(key){
+      if(!plot) return;
+      var els=plot.querySelectorAll('[data-lg]');
+      for(var i=0;i<els.length;i++){
+        var k=els[i].getAttribute('data-lg');
+        els[i].style.opacity=key?(k===key?'1':'0.16'):'';
+      }
+    }
+    legend.addEventListener('mouseover',function(e){
+      var s=(e.target&&e.target.closest)?e.target.closest('[data-lg]'):null;
+      if(!s||s===legend)return;
+      lgFocus(s.getAttribute('data-lg')); s.style.fontWeight='700';
+    });
+    legend.addEventListener('mouseout',function(e){
+      var s=(e.target&&e.target.closest)?e.target.closest('[data-lg]'):null;
+      if(!s||s===legend)return;
+      lgFocus(null); s.style.fontWeight='';
+    });
+  }
   var W=1000, MT=46, PB=402;
   var ML=70, MR=112, pw=W-ML-MR, plotH=PB-MT;
   var G='d', def='m3';
@@ -801,7 +824,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       for(var j=0;j<ps.length;j++){
         var pv=ps[j]||0;if(Math.abs(pv)<0.005)continue;
         var base=pv>=0?posAcc:negAcc, yb=YR2(base), yt=YR2(base+pv);
-        g+='<rect x="'+(cx-bw/2).toFixed(1)+'" y="'+Math.min(yb,yt).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.max(0.6,Math.abs(yt-yb)).toFixed(1)+'" fill="'+(pv>=0?RS[j%RS.length]:GS[j%GS.length])+'"/>';
+        g+='<rect data-lg="bars" x="'+(cx-bw/2).toFixed(1)+'" y="'+Math.min(yb,yt).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.max(0.6,Math.abs(yt-yb)).toFixed(1)+'" fill="'+(pv>=0?RS[j%RS.length]:GS[j%GS.length])+'"/>';
         if(pv>=0)posAcc+=pv;else negAcc+=pv;
       }
     }
@@ -810,10 +833,10 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     for(var k=0;k<cnt;k++) if(v.acc[k]!=null) poly+=(poly?' ':'')+Xi2(k).toFixed(1)+','+YL2(v.acc[k]).toFixed(1);
     if(poly){
       var fp=poly.split(' ')[0].split(','),lp=poly.split(' ')[poly.split(' ').length-1].split(',');
-      g+='<polygon points="'+poly+' '+lp[0]+','+PB+' '+fp[0]+','+PB+'" fill="rgba(47,107,255,.08)"/>';
-      g+='<polyline points="'+poly+'" fill="none" stroke="#2f6bff" stroke-width="2.8" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';
-      if(cnt<=130){var pp=poly.split(' ');for(var q=0;q<pp.length;q++){var xy=pp[q].split(',');g+='<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="3.2" fill="#2f6bff" stroke="#fff" stroke-width="1.2"/>';}}
-      g+='<circle cx="'+lp[0]+'" cy="'+lp[1]+'" r="4.5" fill="#2f6bff" stroke="#fff" stroke-width="1.5"/>';
+      g+='<polygon data-lg="acc" points="'+poly+' '+lp[0]+','+PB+' '+fp[0]+','+PB+'" fill="rgba(47,107,255,.08)"/>';
+      g+='<polyline data-lg="acc" points="'+poly+'" fill="none" stroke="#2f6bff" stroke-width="2.8" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';
+      if(cnt<=130){var pp=poly.split(' ');for(var q=0;q<pp.length;q++){var xy=pp[q].split(',');g+='<circle data-lg="acc" cx="'+xy[0]+'" cy="'+xy[1]+'" r="3.2" fill="#2f6bff" stroke="#fff" stroke-width="1.2"/>';}}
+      g+='<circle data-lg="acc" cx="'+lp[0]+'" cy="'+lp[1]+'" r="4.5" fill="#2f6bff" stroke="#fff" stroke-width="1.5"/>';
     }
     /* 对标线（指数点位 / ETF净值，统一第三轴）：线尾标签防重叠；恒不改资金口径 */
     var tags=[];
@@ -821,22 +844,22 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       var arr=shD[nm]||[],shp='';
       for(var k=0;k<cnt;k++) if(arr[k]!=null) shp+=(shp?' ':'')+Xi2(k).toFixed(1)+','+YS(arr[k]).toFixed(1);
       if(shp){
-        var col=iCol(nm);
-        g+='<polyline points="'+shp+'" fill="none" stroke="'+col+'" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" opacity=".92" vector-effect="non-scaling-stroke"/>';
+        var col=iCol(nm), lk='idx:'+nm;
+        g+='<polyline data-lg="'+lk+'" points="'+shp+'" fill="none" stroke="'+col+'" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" opacity=".92" vector-effect="non-scaling-stroke"/>';
         var last=shp.split(' ')[shp.split(' ').length-1].split(',');
-        g+='<circle cx="'+last[0]+'" cy="'+last[1]+'" r="4" fill="'+col+'" stroke="#fff" stroke-width="1.4"/>';
-        tags.push({nm:nm,col:col,x:parseFloat(last[0]),y:parseFloat(last[1]),dash:false});
+        g+='<circle data-lg="'+lk+'" cx="'+last[0]+'" cy="'+last[1]+'" r="4" fill="'+col+'" stroke="#fff" stroke-width="1.4"/>';
+        tags.push({nm:nm,col:col,x:parseFloat(last[0]),y:parseFloat(last[1]),dash:false,lk:lk});
       }
     });
     etfSel.forEach(function(c,oi){
       var arr=ecN[c]||[],shp='';
       for(var k=0;k<cnt;k++) if(arr[k]!=null) shp+=(shp?' ':'')+Xi2(k).toFixed(1)+','+YS(arr[k]).toFixed(1);
       if(shp){
-        var col=eCol(c,oi);
-        g+='<polyline points="'+shp+'" fill="none" stroke="'+col+'" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" opacity=".92" stroke-dasharray="6 3" vector-effect="non-scaling-stroke"/>';
+        var col=eCol(c,oi), lk='etf:'+c;
+        g+='<polyline data-lg="'+lk+'" points="'+shp+'" fill="none" stroke="'+col+'" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" opacity=".92" stroke-dasharray="6 3" vector-effect="non-scaling-stroke"/>';
         var last=shp.split(' ')[shp.split(' ').length-1].split(',');
-        g+='<circle cx="'+last[0]+'" cy="'+last[1]+'" r="3.8" fill="'+col+'" stroke="#fff" stroke-width="1.4"/>';
-        tags.push({nm:eLabel(c),col:col,x:parseFloat(last[0]),y:parseFloat(last[1]),dash:true});
+        g+='<circle data-lg="'+lk+'" cx="'+last[0]+'" cy="'+last[1]+'" r="3.8" fill="'+col+'" stroke="#fff" stroke-width="1.4"/>';
+        tags.push({nm:eLabel(c),col:col,x:parseFloat(last[0]),y:parseFloat(last[1]),dash:true,lk:lk});
       }
     });
     /* 线尾标签：右端内侧右对齐；可用高度内受限重排（间距不够自动压缩+字号缩小），双向推挤不溢出不重叠 */
@@ -854,7 +877,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
         for(var tj=nT-2;tj>=0;tj--){ if(tags[tj].y>tags[tj+1].y-tagGap) tags[tj].y=tags[tj+1].y-tagGap; }
       }
       tags.forEach(function(t){
-        g+='<text x="'+(t.x-6).toFixed(1)+'" y="'+(t.y+F*0.35).toFixed(1)+'" text-anchor="end" font-size="'+tagFs.toFixed(1)+'" font-weight="600" fill="'+t.col+'" stroke="#fcfdff" stroke-width="3" paint-order="stroke">'+t.nm+'</text>';
+        g+='<text data-lg="'+t.lk+'" x="'+(t.x-6).toFixed(1)+'" y="'+(t.y+F*0.35).toFixed(1)+'" text-anchor="end" font-size="'+tagFs.toFixed(1)+'" font-weight="600" fill="'+t.col+'" stroke="#fcfdff" stroke-width="3" paint-order="stroke">'+t.nm+'</text>';
       });
     }
     /* 事件竖线标注（中央汇金关键操作时点）—— 仅画落在当前视窗内的事件 */
@@ -885,19 +908,19 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
           if(i===0) sp+=hp[i].x.toFixed(1)+','+hp[i].y.toFixed(1);
           else{ sp+=' '+hp[i].x.toFixed(1)+','+hp[i-1].y.toFixed(1); sp+=' '+hp[i].x.toFixed(1)+','+hp[i].y.toFixed(1); }
         }
-        g+='<polyline points="'+sp+'" fill="none" stroke="#7c3aed" stroke-width="2.8" stroke-dasharray="7 4" opacity=".9" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';
-        hp.forEach(function(p){g+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="3.6" fill="#7c3aed" stroke="#fff" stroke-width="1.3"/>';});
+        g+='<polyline data-lg="hj" points="'+sp+'" fill="none" stroke="#7c3aed" stroke-width="2.8" stroke-dasharray="7 4" opacity=".9" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';
+        hp.forEach(function(p){g+='<circle data-lg="hj" cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="3.6" fill="#7c3aed" stroke="#fff" stroke-width="1.3"/>';});
       }
     }
     plot.innerHTML=g;
     ov.setAttribute('x',ML);ov.setAttribute('width',pw);ov.setAttribute('y',MT);ov.setAttribute('height',PB-MT);
     vline.setAttribute('y1',MT);vline.setAttribute('y2',PB);
     if(legend){
-      var lg='<span class="lrow"><span class="lg blue">■ 全市场累计净申购（左轴·亿元）</span>'
-        +'<span class="lg" style="color:#94a3b8">■ 当日净申购·'+scopeTxt+'构成（右轴·红涨绿跌·深浅=指数，悬停看明细）</span>';
-      if(hjDrawn) lg+='<span class="lg" style="color:#7c3aed">┄ 汇金持股票ETF市值（第三方估算·存量口径）</span>';
-      pointSel.forEach(function(nm){lg+='<span class="lg" style="color:'+iCol(nm)+'">— '+nm+(en?'（归一化·基期=100）':'（最右轴·点）')+'</span>';});
-      etfSel.forEach(function(c,oi){lg+='<span class="lg" style="color:'+eCol(c,oi)+'">┄ '+eLabel(c)+'（净值归一化·基期=100）</span>';});
+      var lg='<span class="lrow"><span class="lg blue" data-lg="acc" title="悬停高亮该线">■ 全市场累计净申购（左轴·亿元）</span>'
+        +'<span class="lg" data-lg="bars" style="color:#94a3b8" title="悬停高亮该柱">■ 当日净申购·'+scopeTxt+'构成（右轴·红涨绿跌·深浅=指数，悬停看明细）</span>';
+      if(hjDrawn) lg+='<span class="lg" data-lg="hj" style="color:#7c3aed" title="悬停高亮该线">┄ 汇金持股票ETF市值（第三方估算·存量口径）</span>';
+      pointSel.forEach(function(nm){lg+='<span class="lg" data-lg="idx:'+nm+'" style="color:'+iCol(nm)+'" title="悬停高亮该线">— '+nm+(en?'（归一化·基期=100）':'（最右轴·点）')+'</span>';});
+      etfSel.forEach(function(c,oi){lg+='<span class="lg" data-lg="etf:'+c+'" style="color:'+eCol(c,oi)+'" title="悬停高亮该线">┄ '+eLabel(c)+'（净值归一化·基期=100）</span>';});
       legend.innerHTML=lg+'</span>';
     }
     v.start=cur; window._etfView=v;
