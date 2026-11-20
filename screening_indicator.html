@@ -147,8 +147,12 @@ function loadSeries(year){
   if(CACHE[year])return CACHE[year];
   CACHE[year]=fetch('_series_'+year+'.gz?v='+Date.now()).then(function(r){
     if(!r.ok)throw new Error('HTTP '+r.status+' year '+year);
+    /* 先拿完整字节再解压：线上经过代理的网络流直接 pipeThrough 会挂起 */
+    return r.arrayBuffer();
+  }).then(function(buf){
     if(typeof DecompressionStream==='undefined')throw new Error('浏览器不支持 DecompressionStream，请用最新版 Chrome/Edge');
-    return new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+    var blob=new Blob([buf]);
+    return new Response(blob.stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
   }).then(function(buf){return new Int16Array(buf);});
   return CACHE[year];
 }
