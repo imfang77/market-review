@@ -8,7 +8,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;background:#f0f2f5;color:#1a1a2e;min-height:100vh}
 .header{background:#fff;border-bottom:1px solid #e9ecef;padding:18px 16px;text-align:center;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.header a.back{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:14px;color:#4263eb;text-decoration:none}
 .header h1{font-size:20px;font-weight:700}
 .header .subtitle{margin-top:4px;font-size:12px;color:#868e96}
 .wrap{max-width:1180px;margin:22px auto;padding:0 14px}
@@ -52,6 +51,8 @@ tr:hover td{background:#fafbff}
 .loading{text-align:center;padding:48px;color:#868e96;line-height:2}
 .empty{text-align:center;padding:40px;color:#adb5bd}
 .statline{font-size:12px;color:#868e96;margin-left:auto}
+.res-foot{padding:12px 18px;border-top:1px solid #eef1f8;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.hintline{font-size:12px;color:#adb5bd}
 @media(max-width:600px){.header{padding:14px 10px}.wrap{margin:14px auto;padding:0 8px}.panel{padding:12px}.row{gap:10px}.fld select,.fld input{min-width:88px}.seg button{padding:0 8px;font-size:12px}table{font-size:12px}th,td{padding:7px 8px}.statline{margin-left:0}}
 </style>
 </head>
@@ -66,6 +67,8 @@ tr:hover td{background:#fafbff}
       <div class="fld"><span>排序指标</span><select id="metric">
         <option value="sh">夏普比率（年化）</option>
         <option value="ret">区间收益率</option>
+        <option value="ann">年化收益率</option>
+        <option value="mdd">最大回撤（小优先）</option>
       </select></div>
       <div class="fld"><span>排名前 N</span><input type="number" id="topn" class="w80" value="20" min="1" max="500"></div>
       <button class="btn primary" id="go" type="button">查询排名</button>
@@ -78,6 +81,7 @@ tr:hover td{background:#fafbff}
         <option value="y3">近3年</option><option value="y5">近5年</option>
         <option value="y10" selected>近10年</option><option value="custom">自定义日期</option>
       </select></div>
+      <div class="fld"><span>成立日期（不晚于）</span><input type="date" id="fdate"></div>
       <div class="datepair" id="datepair">
         <div class="fld"><span>开始日期</span><input type="date" id="d1"></div>
         <div class="fld"><span>结束日期</span><input type="date" id="d2"></div>
@@ -86,28 +90,33 @@ tr:hover td{background:#fafbff}
     <div class="more-row" hidden id="more-row">
       <div class="fld"><span>收益率下限(%)</span><input type="number" id="rmin" class="w80" placeholder="不限"></div>
       <div class="fld"><span>收益率上限(%)</span><input type="number" id="rmax" class="w80" placeholder="不限"></div>
+      <div class="fld"><span>最大回撤上限(%)</span><input type="number" id="mddmax" class="w80" placeholder="不限"></div>
       <div class="fld"><span>代码/名称</span><input type="text" id="q" placeholder="搜索" style="min-width:130px"></div>
       <button class="btn" id="reset" type="button">重置</button>
     </div>
-    <div class="note" id="note">口径：夏普 = 日均收益 / 标准差 × √252（剔除单日涨跌超30%的异常日）；区间收益 = 区间内日收益累乘 − 1。按未复权日K计算，除权除息日可能失真；结果仅供参考，不构成投资建议。</div>
+    <div class="note" id="note">口径：夏普 = 日均收益 / 标准差 × √252（剔除单日涨跌超30%的异常日）；区间收益 = 日收益累乘 − 1；年化收益 = (1+区间收益)^(252/区间交易日) − 1；最大回撤 = 区间累计净值自峰值最大回落。成立日期默认随所选区间起点联动，可手动改；仅统计上市日期不晚于该日的股票。按未复权日K计算，除权除息日可能失真；结果仅供参考，不构成投资建议。</div>
   </div>
 
   <div class="res">
     <div class="res-h"><span class="cnt" id="cnt">—</span><span class="tag" id="range-tag"></span>
-      <span class="statline" id="statline"></span></div>
+      <span class="statline" id="statline"></span>
+      <button class="btn" id="export" type="button">导出 Excel</button></div>
     <div class="tblbox"><table id="tb"><thead><tr>
       <th data-k="rank" style="width:52px">排名</th><th data-k="code">代码</th><th data-k="name">名称</th>
-      <th data-k="sh">夏普比率</th><th data-k="ret">区间收益</th><th data-k="n">有效交易日</th>
+      <th data-k="sh">夏普比率</th><th data-k="ann">年化收益</th><th data-k="ret">区间收益</th>
+      <th data-k="mdd">最大回撤</th><th data-k="n">有效交易日</th>
     </tr></thead><tbody id="tbody"></tbody></table></div>
     <div class="loading" id="loading" hidden>正在计算，请稍候…</div>
+    <div class="res-foot"><button class="btn" id="more" type="button" hidden>查看更多 ▾</button>
+      <span class="hintline" id="more-hint"></span></div>
   </div>
 </div>
 
 <script>
 (function(){
 'use strict';
-var M=null, DATE2I={}, CACHE={}, RESULT=[], SORT={k:'',asc:false};
-var SERIES={}, YEAR_INFO={};
+var M=null, CACHE={}, RESULT=[], SORT={k:'',asc:false};
+var SERIES={}, YEAR_INFO={}, SHOWN=20;
 var $=function(id){return document.getElementById(id);};
 
 function fmtPct(v){if(v===null||v===undefined||!isFinite(v))return '—';return (v>0?'+':'')+(v*100).toFixed(2)+'%';}
@@ -143,6 +152,13 @@ function rangeIdx(){
   var target=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
   return [align(target),last];
 }
+/* 成立日期默认跟随区间起点；用户手动改动后不再自动覆盖 */
+function syncFoundDate(){
+  if(M&&!$('fdate').dataset.touched){
+    var ix=rangeIdx();
+    if(ix)$('fdate').value=M.dates[ix[0]];
+  }
+}
 /* 国内访问 GitHub Pages 静态文件极慢（约12KB/s），
    优先走 jsdelivr 国内镜像（约500KB/s），失败回退同源。 */
 var MIRROR='https://cdn.jsdmirror.com/gh/imfang77/market-review@main/';
@@ -175,7 +191,8 @@ function loadSeries(year){
 function compute(s,e){
   var N=M.codes.length, nday=e-s+1, inv=M.invalid, scale=M.scale;
   var sum=new Float64Array(N),sq=new Float64Array(N),mul=new Float64Array(N),cnt=new Uint16Array(N);
-  for(var k=0;k<N;k++)mul[k]=1;
+  var peak=new Float64Array(N),mdd=new Float64Array(N);
+  for(var k=0;k<N;k++){mul[k]=1;peak[k]=1;}
   var years=[];
   for(var gi=s;gi<=e;gi++){var y=M.dates[gi].slice(0,4);if(years.indexOf(y)<0)years.push(y);}
   return Promise.all(years.map(loadSeries)).then(function(arrs){
@@ -185,7 +202,10 @@ function compute(s,e){
       var arr=SERIES[y], off=(gi-yinfo.off)*N;
       for(var k=0;k<N;k++){
         var v=arr[off+k];if(v===inv)continue;
-        var r=v/scale;mul[k]*=(1+r);
+        var r=v/scale;
+        mul[k]*=(1+r);
+        if(mul[k]>peak[k])peak[k]=mul[k];
+        if(peak[k]>0){var dd=1-mul[k]/peak[k];if(dd>mdd[k])mdd[k]=dd;}
         if(r>0.3||r<-0.3)continue;
         sum[k]+=r;sq[k]+=r*r;cnt[k]++;
       }
@@ -197,49 +217,81 @@ function compute(s,e){
       if(!(varc>0))continue;
       var sh=mean/Math.sqrt(varc)*Math.sqrt(252);
       if(!isFinite(sh))continue;
-      out.push({code:M.codes[k2][0],name:M.codes[k2][1],sh:sh,ret:mul[k2]-1,n:c});
+      var ret=mul[k2]-1;
+      var ann=(1+ret>0)?Math.pow(1+ret,252/nday)-1:null;
+      out.push({code:M.codes[k2][0],name:M.codes[k2][1],first:M.codes[k2][2]||'1900-01-01',
+                sh:sh,ret:ret,ann:ann,mdd:mdd[k2],n:c});
     }
     return out;
   });
 }
 function quantile(a,p){if(!a.length)return null;var b=a.slice().sort(function(x,y){return x-y;});var i=(b.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return b[lo]+(b[hi]-b[lo])*(i-lo);}
-function render(){
-  var rows=RESULT,q=$('q').value.trim().toLowerCase();
+function filtered(){
+  var rows=RESULT,q=$('q').value.trim().toLowerCase(),fd=$('fdate').value;
   var lo=$('rmin').value===''?null:parseFloat($('rmin').value)/100,hi=$('rmax').value===''?null:parseFloat($('rmax').value)/100;
-  rows=rows.filter(function(r){
+  var md=$('mddmax').value===''?null:parseFloat($('mddmax').value)/100;
+  return rows.filter(function(r){
+    if(fd&&r.first>fd)return false;
     if(lo!==null&&r.ret<lo)return false;if(hi!==null&&r.ret>hi)return false;
+    if(md!==null&&r.mdd>md)return false;
     if(q&&(r.code+' '+r.name).toLowerCase().indexOf(q)<0)return false;return true;
   });
-  var key=SORT.k||S.metric,asc=SORT.asc;
+}
+function render(){
+  var rows=filtered();
+  var key=SORT.k||S.metric;
+  var asc=SORT.k?SORT.asc:(key==='mdd');
   rows.sort(function(a,b){var x=a[key],y=b[key];if(typeof x==='string')return asc?x.localeCompare(y):y.localeCompare(x);return asc?x-y:y-x;});
   var top=Math.max(1,Math.min(500,parseInt($('topn').value,10)||20));
-  var shown=rows.slice(0,top);
+  if(SHOWN<top)SHOWN=top;
+  var shown=rows.slice(0,SHOWN);
   $('cnt').textContent='符合条件 '+rows.length+' 只 · 显示前 '+shown.length+' 名';
   var shs=rows.map(function(r){return r.sh;}),rets=rows.map(function(r){return r.ret;});
   $('statline').textContent='样本 '+rows.length+' · 夏普中位 '+fmtNum(quantile(shs,.5))+' · 正收益 '+(rets.length?(rets.filter(function(v){return v>0;}).length/rets.length*100).toFixed(1)+'%':'—');
   var h='';
   for(var i=0;i<shown.length;i++){var r=shown[i];
     h+='<tr><td class="rk">'+(i+1)+'</td><td class="rk">'+r.code+'</td><td class="nm">'+r.name+'</td>'+
-       '<td>'+fmtNum(r.sh)+'</td><td class="'+cls(r.ret)+'">'+fmtPct(r.ret)+'</td><td class="rk">'+r.n+'</td></tr>';
+       '<td>'+fmtNum(r.sh)+'</td><td class="'+cls(r.ann)+'">'+fmtPct(r.ann)+'</td><td class="'+cls(r.ret)+'">'+fmtPct(r.ret)+'</td>'+
+       '<td class="dn">−'+(r.mdd*100).toFixed(2)+'%</td><td class="rk">'+r.n+'</td></tr>';
   }
-  $('tbody').innerHTML=h||'<tr><td colspan="6" class="empty">无符合条件的股票</td></tr>';
+  $('tbody').innerHTML=h||'<tr><td colspan="8" class="empty">无符合条件的股票</td></tr>';
+  $('more').hidden=SHOWN>=rows.length;
+  $('more-hint').textContent=SHOWN<rows.length?('已显示 '+shown.length+' / '+rows.length+' 只'):'';
   document.querySelectorAll('#tb thead th').forEach(function(th){
-    th.classList.toggle('asc',SORT.k===th.dataset.k&&SORT.asc);
-    th.classList.toggle('desc',SORT.k===th.dataset.k&&!SORT.asc);
+    var k=th.dataset.k,on=SORT.k===k;
+    th.classList.toggle('asc',on&&SORT.asc);
+    th.classList.toggle('desc',on&&!SORT.asc);
   });
 }
 function run(){
   if(!M)return;
   var ix=rangeIdx();if(!ix)return;
-  S.s=ix[0];S.e=ix[1];
+  syncFoundDate();
+  S.s=ix[0];S.e=ix[1];SHOWN=Math.max(1,Math.min(500,parseInt($('topn').value,10)||20));
   $('range-tag').textContent='区间 '+M.dates[S.s]+' ~ '+M.dates[S.e]+'（'+(S.e-S.s+1)+'个交易日）';
   $('loading').hidden=false;$('tbody').innerHTML='';
   compute(S.s,S.e).then(function(rows){
     RESULT=rows;SORT.k='';SORT.asc=false;$('loading').hidden=true;render();
   }).catch(function(err){
-    $('loading').hidden=true;$('tbody').innerHTML='<tr><td colspan="6" class="empty">计算失败：'+err.message+'</td></tr>';
+    $('loading').hidden=true;$('tbody').innerHTML='<tr><td colspan="8" class="empty">计算失败：'+err.message+'</td></tr>';
     console.error(err);
   });
+}
+function exportXls(){
+  var rows=filtered(),key=SORT.k||S.metric;
+  rows.sort(function(a,b){var x=a[key],y=b[key];if(typeof x==='string')return x.localeCompare(y);return y-x;});
+  var head=['排名','代码','名称','夏普比率','年化收益','区间收益','最大回撤','有效交易日','上市日期'];
+  var esc=function(v){var s=String(v===null||v===undefined?'':v);return '"'+s.replace(/"/g,'""')+'"';};
+  var lines=[head.map(esc).join(',')];
+  var pct=function(v){return (v===null||!isFinite(v))?'':(v*100).toFixed(2)+'%';};
+  for(var i=0;i<rows.length;i++){var r=rows[i];
+    lines.push([i+1,r.code,r.name,r.sh.toFixed(3),pct(r.ann),pct(r.ret),r.mdd>0?('-'+pct(r.mdd)):'0.00%',r.n,r.first].map(esc).join(','));
+  }
+  var blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='按指标选股_'+M.dates[M.dates.length-1].replace(/-/g,'')+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
 }
 function bind(){
   $('sel-range').addEventListener('change',function(){
@@ -250,20 +302,25 @@ function bind(){
   });
   $('go').addEventListener('click',run);
   $('metric').addEventListener('change',function(){S.metric=this.value;SORT.k='';render();});
-  $('topn').addEventListener('input',render);
-  ['q','rmin','rmax'].forEach(function(id){$(id).addEventListener('input',render);});
+  $('topn').addEventListener('input',function(){SHOWN=Math.max(1,parseInt(this.value,10)||20);render();});
+  ['q','rmin','rmax','mddmax'].forEach(function(id){$(id).addEventListener('input',function(){SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});});
+  $('fdate').addEventListener('change',function(){this.dataset.touched='1';SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});
   $('datepair').addEventListener('change',function(){if(S.range==='custom')run();});
+  $('more').addEventListener('click',function(){SHOWN+=50;render();});
+  $('export').addEventListener('click',exportXls);
   $('tg-more').addEventListener('click',function(){
     var row=$('more-row');row.hidden=!row.hidden;
     this.textContent=row.hidden?'更多筛选 ▾':'收起筛选 ▴';
   });
   $('reset').addEventListener('click',function(){
-    $('q').value='';$('rmin').value='';$('rmax').value='';$('topn').value=20;
-    S.metric='sh';$('metric').value='sh';SORT.k='';render();
+    $('q').value='';$('rmin').value='';$('rmax').value='';$('mddmax').value='';$('topn').value=20;
+    delete $('fdate').dataset.touched;
+    syncFoundDate();
+    S.metric='sh';$('metric').value='sh';SORT.k='';SHOWN=20;render();
   });
   document.querySelectorAll('#tb thead th').forEach(function(th){
     th.addEventListener('click',function(){
-      var k=this.dataset.k;if(SORT.k===k)SORT.asc=!SORT.asc;else{SORT.k=k;SORT.asc=false;}
+      var k=this.dataset.k;if(SORT.k===k)SORT.asc=!SORT.asc;else{SORT.k=k;SORT.asc=(k==='mdd');}
       render();
     });
   });
@@ -279,6 +336,7 @@ loadMeta(0).then(function(d){
   M=d;M.years.forEach(function(y){YEAR_INFO[y.y]=y;});
   $('data-date').textContent='数据至 '+M.date+' · '+M.codes.length+' 只A股';
   $('d1').min=M.start;$('d1').max=M.date;$('d2').min=M.start;$('d2').max=M.date;
+  $('fdate').min=M.start;$('fdate').max=M.date;
   bind();run();
 }).catch(function(e){$('data-date').textContent='数据加载失败';console.error(e);});
 })();
