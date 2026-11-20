@@ -28,6 +28,22 @@ body{background:#eef1f6;font-family:-apple-system,"PingFang SC","Microsoft YaHei
 .rng-btn{border:1px solid #dbe3ef;background:#fff;color:#475569;font-size:13px;padding:7px 14px;border-radius:9px;cursor:pointer;transition:.15s;white-space:nowrap}
 .rng-btn:hover{border-color:#2f6bff;color:#2f6bff}
 .rng-btn.active{background:#2f6bff;border-color:#2f6bff;color:#fff;font-weight:600}
+/* 指定时间段（两图同步） */
+.cr-btn{border:1px solid #dbe3ef;background:#fff;color:#475569;font-size:13px;padding:7px 14px;border-radius:9px;cursor:pointer;transition:.15s;white-space:nowrap}
+.cr-btn:hover{border-color:#7c3aed;color:#7c3aed}
+.cr-btn.active{background:#7c3aed;border-color:#7c3aed;color:#fff;font-weight:600}
+.cr-dd{position:relative;display:none}
+.cr-dd.open{display:block}
+.cr-panel{position:absolute;top:calc(100% + 4px);left:0;z-index:85;background:#fff;border:1px solid #dbe2ec;border-radius:10px;box-shadow:0 8px 24px rgba(15,23,42,.14);padding:12px 14px;width:260px}
+.cr-hd{font-size:13px;font-weight:700;color:#334155;margin-bottom:8px}
+.cr-row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;color:#64748b;margin:6px 0}
+.cr-row input[type=date]{font-size:12.5px;padding:5px 7px;border:1px solid #dbe2ec;border-radius:7px;color:#334155;width:158px;font-family:inherit}
+.cr-msg{font-size:11.5px;color:#94a3b8;line-height:1.5;margin:6px 0;min-height:15px}
+.cr-msg.err{color:#e24b4a}
+.cr-act{display:flex;gap:8px;margin-top:8px}
+.cr-act button{flex:1;font-size:12.5px;font-weight:600;padding:6px 0;border:1px solid #dbe2ec;background:#f8fafc;border-radius:7px;cursor:pointer}
+.cr-act button:first-child{background:#7c3aed;border-color:#7c3aed;color:#fff}
+.cr-act button:first-child:hover{background:#6d28d9}
 thead th:nth-child(1),tbody td:nth-child(1){white-space:nowrap}
 /* 融资余额表日期单元格：蓝色+手型，引导点击下钻 */
 #tbody-m td.drill-date{color:#2f6bff;cursor:pointer;font-weight:600;font-variant-numeric:tabular-nums}
@@ -152,7 +168,15 @@ tbody tr:hover{background:#f6f9ff}
 <button class="rng-btn" data-range="m6">半年</button>
 <button class="rng-btn" data-range="ytd">今年以来</button>
 <button class="rng-btn" data-range="all">全部</button>
+<button class="cr-btn" id="crBtnM" type="button">指定时间段</button>
 </div>
+<div class="cr-dd" id="crDD"><div class="cr-panel">
+<div class="cr-hd">指定时间段（两图同步）</div>
+<label class="cr-row">开始<input type="date" id="crStart"></label>
+<label class="cr-row">结束<input type="date" id="crEnd"></label>
+<div class="cr-msg" id="crMsg"></div>
+<div class="cr-act"><button type="button" id="crApply">应用</button><button type="button" id="crReset">重置</button></div>
+</div></div>
 </div>
 <div class="chartbox" id="box">
 <svg id="svg" viewBox="0 0 1000 436" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
@@ -176,6 +200,7 @@ tbody tr:hover{background:#f6f9ff}
 <button class="rng-btn" data-range="m6">半年</button>
 <button class="rng-btn" data-range="ytd">今年以来</button>
 <button class="rng-btn" data-range="all">全部</button>
+<button class="cr-btn" id="crBtnE" type="button">指定时间段</button>
 </div>
 <div class="rngrow idx-sel-row"><span class="lbl rng-lbl">对标指数：</span>
 <div class="idxdd" id="idxDd"><button class="idx-btn" id="eIdxBtn" type="button">全部汇总(12指数)</button>
@@ -290,12 +315,13 @@ function renderMTab(){
   var rows=[], diffs=null;
   if(G==='d'){
     if(th) th.textContent='融资净买入(亿)';
-    for(var i=N_C-1;i>=0;i--) if(CRZ[i]!==null && i>=cur) rows.push(i);
+    const vEnd=viewEnd();
+    for(var i=vEnd;i>=0;i--) if(CRZ[i]!==null && i>=cur) rows.push(i);
   } else {
     var A=gArr();
     if(th) th.textContent=(G==='w'?'较上周末(亿)':'较上月末(亿)');
     for(var k=A.ii.length-1;k>=0;k--){
-      if(A.ii[k]<cur) continue;
+      if(A.ii[k]<cur || A.ii[k]>viewEnd()) continue;
       rows.push(A.ii[k]);
       diffs=diffs||[]; diffs.push(k>0?(A.vv[k]-A.vv[k-1]):null);
     }
@@ -343,9 +369,9 @@ function positionTip(tip,box,cx,cy){
   }
   const br=box.getBoundingClientRect();let tx=cx-br.left+16,ty=cy-br.top-10;if(tx+205>br.width)tx=cx-br.left-215;if(ty<0)ty=0;tip.style.left=tx+'px';tip.style.top=ty+'px';
 }
-function filterTable(id,start){document.querySelectorAll('#'+id+' tr').forEach(function(tr){tr.style.display=(parseInt(tr.dataset.idx)>=start)?'':'none';});}
+function filterTable(id,start,end){document.querySelectorAll('#'+id+' tr').forEach(function(tr){var ix=parseInt(tr.dataset.idx);tr.style.display=(ix>=start && (end==null||ix<=end))?'':'none';});}
 
-let G='d', cur=0, yloL=0,yhiL=1,yloR=0,yhiR=1;
+let G='d', cur=0, curEnd=-1, yloL=0,yhiL=1,yloR=0,yhiR=1;
 const W=1000;
 let MT=46,PB=402,plotH=PB-MT;
 let ML=70,MR=70,pw=W-ML-MR;
@@ -365,7 +391,8 @@ function gArr(){
   if(G==='m')return {ii:CMI,vv:CMV,dd:CMD,lab:'月末快照',stp:'较上月'};
   return null;
 }
-function Xi(i){return ML+pw*(i-cur)/Math.max(1,N_C-1-cur);}
+function viewEnd(){return (curEnd>=cur)?Math.min(curEnd,N_C-1):N_C-1;}
+function Xi(i){return ML+pw*(i-cur)/Math.max(1,viewEnd()-cur);}
 function YL(v){return MT+plotH*((yhiL-v)/(yhiL-yloL));}
 function YR(v){return MT+plotH*((yhiR-v)/(yhiR-yloR));}
 function syncMTab(){
@@ -379,17 +406,17 @@ function draw(s){
   ML=Math.round(F*3.8+12); MR=Math.round(F*3.2+10); pw=W-ML-MR;
   MT=Math.round(F*1.35+26); PB=402; plotH=PB-MT;
   svg.setAttribute('viewBox','0 0 1000 '+Math.round(PB+8+F*1.5));
-  const cnt=N_C-s;
+  const vEnd=viewEnd(), cnt=vEnd-s+1;
   if(cnt<=0) return;
   const pts=[];
-  if(G==='d'){ for(let i=s;i<N_C;i++) if(CRZ[i]!==null) pts.push([i,CRZ[i]]); }
-  else { const A=gArr(); for(let k=0;k<A.ii.length;k++) if(A.ii[k]>=s) pts.push([A.ii[k],A.vv[k]]); }
+  if(G==='d'){ for(let i=s;i<=vEnd;i++) if(CRZ[i]!==null) pts.push([i,CRZ[i]]); }
+  else { const A=gArr(); for(let k=0;k<A.ii.length;k++) if(A.ii[k]>=s&&A.ii[k]<=vEnd) pts.push([A.ii[k],A.vv[k]]); }
   if(!pts.length) return;
   const sv=pts.map(p=>p[1]);
   const mn=Math.min.apply(null,sv), mx=Math.max.apply(null,sv);
   let pad=(mx-mn)*0.12; if(pad<=0)pad=mx*0.02;
   yloL=mn-pad; yhiL=mx+pad;
-  let su=[]; for(let i=s;i<N_C;i++) if(CUP[i]!==null) su.push(CUP[i]);
+  let su=[]; for(let i=s;i<=vEnd;i++) if(CUP[i]!==null) su.push(CUP[i]);
   if(!su.length) return;
   yloR=0; yhiR=Math.max.apply(null,su)*1.1||1;
   let g='';
@@ -412,9 +439,9 @@ function draw(s){
   g+='<line x1="'+ML+'" y1="'+PB+'" x2="'+(W-MR)+'" y2="'+PB+'" stroke="#c7cdda" stroke-width="1.2"/>';
   // 红线：上涨家数（恒为日，右轴）
   let pu='';
-  for(let i=s;i<N_C;i++) if(CUP[i]!==null) pu+=(pu?' ':'')+Xi(i).toFixed(1)+','+YR(CUP[i]).toFixed(1);
+  for(let i=s;i<=vEnd;i++) if(CUP[i]!==null) pu+=(pu?' ':'')+Xi(i).toFixed(1)+','+YR(CUP[i]).toFixed(1);
   g+='<polyline points="'+pu+'" fill="none" stroke="#c0392b" stroke-width="2.8" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';
-  if(cnt<=130){ for(let i=s;i<N_C;i++) if(CUP[i]!==null) g+='<circle cx="'+Xi(i).toFixed(1)+'" cy="'+YR(CUP[i]).toFixed(1)+'" r="2.6" fill="#c0392b"/>'; }
+  if(cnt<=130){ for(let i=s;i<=vEnd;i++) if(CUP[i]!==null) g+='<circle cx="'+Xi(i).toFixed(1)+'" cy="'+YR(CUP[i]).toFixed(1)+'" r="2.6" fill="#c0392b"/>'; }
   // 蓝线：融资余额（随粒度快照，左轴）
   const poly=pts.map(p=>Xi(p[0]).toFixed(1)+','+YL(p[1]).toFixed(1)).join(' ');
   const firstP=pts[0], lastP=pts[pts.length-1];
@@ -447,7 +474,7 @@ function snapAt(i){
 }
 function fmt2(v){return v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
 function show(i,cx,cy){
-  const cnt=N_C-cur;
+  const cnt=viewEnd()-cur+1;
   if(cnt<=1) return;
   const x=Xi(i);
   vline.setAttribute('x1',x); vline.setAttribute('x2',x); vline.style.opacity=1;
@@ -506,8 +533,8 @@ function pick(clientX,clientY){
     rw=r.width;mx=clientX-r.left;
   }
   const sx=W/rw;
-  let i=cur+Math.round((mx-ML)/pw*((N_C-cur-1)||0));
-  i=Math.max(cur,Math.min(N_C-1,i));
+  let i=cur+Math.round((mx-ML)/pw*((viewEnd()-cur)||0));
+  i=Math.max(cur,Math.min(viewEnd(),i));
   show(i,clientX,clientY);
 }
 ov.addEventListener('mousemove',e=>pick(e.clientX,e.clientY));
@@ -532,13 +559,67 @@ document.querySelectorAll('.rng-btn').forEach(function(b){
   b.addEventListener('click',function(){
     document.querySelectorAll('.rng-btn').forEach(function(x){x.classList.remove('active');});
     b.classList.add('active');
+    document.querySelectorAll('.cr-btn').forEach(function(x){x.classList.remove('active');});
     var k=b.dataset.range;
-    cur=RANGES_C[k]; draw(RANGES_C[k]);
+    curEnd=-1; cur=RANGES_C[k]; draw(RANGES_C[k]);
     renderMTab();
     filterTable('tbody-u',RANGES_U[k]);
     tip.style.opacity=0; vline.style.opacity=0; focusL.style.opacity=0; focusR.style.opacity=0;
   });
 });
+/* 日期串→交易日索引（数组按日期升序，字典序可比）。first=true 找第一个 >=ds，否则找最后一个 <=ds */
+function idxOfDate(arr,ds,first){
+  if(first){for(var i=0;i<arr.length;i++) if(arr[i]>=ds) return i; return arr.length-1;}
+  for(var j=arr.length-1;j>=0;j--) if(arr[j]<=ds) return j; return 0;
+}
+/* 指定时间段联动 API（面板调用）：同时作用于主图(CD)与涨跌表(UD)，并驱动 ETF 图。
+   返回两图实际落到的交易日，供面板显示与测试。 */
+window.applyCustomRange=function(sd,ed){
+  var cs=idxOfDate(CD,sd,true), ce=idxOfDate(CD,ed,false); if(cs>ce) cs=ce;
+  cur=cs; curEnd=ce; draw(cur); renderMTab();
+  var us=idxOfDate(UD,sd,true), ue=idxOfDate(UD,ed,false); if(us>ue) us=ue;
+  filterTable('tbody-u',us,ue); applySort('tbody-u');
+  document.querySelectorAll('.rng-btn').forEach(function(x){x.classList.remove('active');});
+  document.querySelectorAll('.cr-btn').forEach(function(x){x.classList.add('active');});
+  tip.style.opacity=0; vline.style.opacity=0; focusL.style.opacity=0; focusR.style.opacity=0;
+  var etf=window._etfApplyRange?window._etfApplyRange(sd,ed):null;
+  return {main:{start:CD[cs],end:CD[ce]},etf:etf};
+};
+window.resetCustomRange=function(){
+  curEnd=-1; cur=RANGES_C[DEF]; draw(cur); renderMTab();
+  filterTable('tbody-u',RANGES_U[DEF]); applySort('tbody-u');
+  document.querySelectorAll('.rng-btn').forEach(function(x){x.classList.toggle('active',x.dataset.range===DEF);});
+  document.querySelectorAll('.cr-btn').forEach(function(x){x.classList.remove('active');});
+  if(window._etfResetRange) window._etfResetRange();
+};
+/* 指定时间段面板交互：两个按钮共用同一面板与日期值（选一次两图同步） */
+(function(){
+  var dd=document.getElementById('crDD'), bM=document.getElementById('crBtnM'), bE=document.getElementById('crBtnE'),
+      si=document.getElementById('crStart'), ei=document.getElementById('crEnd'),
+      msg=document.getElementById('crMsg'), ap=document.getElementById('crApply'), rs=document.getElementById('crReset');
+  if(!dd||!si||!ei) return;
+  si.min=CD[0]; si.max=CD[CD.length-1]; ei.min=CD[0]; ei.max=CD[CD.length-1];
+  function fillDefault(){
+    si.value=CD[cur]||CD[0]; ei.value=CD[viewEnd()]||CD[CD.length-1];
+  }
+  function openDD(e){e.stopPropagation();fillDefault();msg.textContent='';msg.className='cr-msg';dd.classList.add('open');}
+  if(bM) bM.addEventListener('click',openDD);
+  if(bE) bE.addEventListener('click',openDD);
+  dd.addEventListener('click',function(e){e.stopPropagation();});
+  document.addEventListener('click',function(){dd.classList.remove('open');});
+  if(ap) ap.addEventListener('click',function(){
+    var sd=si.value, ed=ei.value;
+    if(!sd||!ed){msg.textContent='请选择开始和结束日期';msg.className='cr-msg err';return;}
+    if(sd>ed){msg.textContent='开始日期不能晚于结束日期';msg.className='cr-msg err';return;}
+    var r=window.applyCustomRange(sd,ed);
+    var rt=(r&&r.main)?('主图 '+r.main.start+' ~ '+r.main.end):'';
+    var et=(r&&r.etf)?(' · ETF '+r.etf.start+' ~ '+r.etf.end):'';
+    msg.textContent='已应用：'+rt+et;msg.className='cr-msg';
+  });
+  if(rs) rs.addEventListener('click',function(){
+    window.resetCustomRange();fillDefault();msg.textContent='已重置为默认 3 个月';msg.className='cr-msg';
+  });
+})();
 document.querySelectorAll('.tbtn').forEach(function(b){
   b.addEventListener('click',function(){
     document.querySelectorAll('.tbtn').forEach(function(x){x.classList.remove('active');});
@@ -661,6 +742,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   var G='d', def='m3';
   var ER=(typeof ETF_RANGES!=='undefined')?ETF_RANGES:{m3:0,all:0};
   var cur=ER[def]||0;   /* 默认3个月：显示区间与按钮高亮一致 */
+  var curEnd=-1;        /* 结束索引：-1=到末尾；指定时间段时设为结束日索引（两图同步） */
   var ED=(typeof ETF_D!=='undefined')?ETF_D:[];
   var EA=(typeof ETF_ACC!=='undefined')?ETF_ACC:[];
   var EN=(typeof ETF_NET!=='undefined')?ETF_NET:[];
@@ -707,7 +789,8 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       var idx=[],acc=[],net=[],dd=[],parts=[],sh={},ec={};
       pointSel.forEach(function(nm){sh[nm]=[];});
       etfSel.forEach(function(c){ec[c]=[];});
-      for(var i=cur;i<N;i++){
+      var iEnd=(curEnd>=cur)?Math.min(curEnd,N-1):N-1;
+      for(var i=cur;i<=iEnd;i++){
         idx.push(i);acc.push(EA[i]);net.push(EN[i]);dd.push(ED[i]);parts.push(partsAt(i));
         pointSel.forEach(function(nm){var s=IDXC[nm];sh[nm].push(s? s[i]:null);});
         etfSel.forEach(function(c){var a=EC[c];ec[c].push(a? a[i]:null);});
@@ -715,7 +798,8 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       return {idx:idx,acc:acc,net:net,dd:dd,parts:parts,sh:sh,ec:ec};
     }
     var map={},order=[];
-    for(var i=cur;i<N;i++){
+    var iEnd=(curEnd>=cur)?Math.min(curEnd,N-1):N-1;
+    for(var i=cur;i<=iEnd;i++){
       var key=G==='w'?weekKey(ED[i]):ED[i].slice(0,7);
       if(!map[key]){map[key]={idx:[],acc:[],net:0,dd:[],parts:IDXN.map(function(){return 0;}),sh:{},ec:{}};
         pointSel.forEach(function(nm){map[key].sh[nm]=null;});
@@ -1090,8 +1174,19 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   /* 只绑时间段按钮(.rng-btn)——面板的 全选/清空 按钮也在 #eRng 内,若绑 #eRng button 会把 cur 误置 0 */
   document.querySelectorAll('#eRng .rng-btn').forEach(function(b){b.addEventListener('click',function(){
     document.querySelectorAll('#eRng .rng-btn').forEach(function(x){x.classList.remove('active');});b.classList.add('active');
-    cur=ER[b.dataset.range]||0;hideTips();drawE(cur);
+    document.querySelectorAll('#eRng .cr-btn').forEach(function(x){x.classList.remove('active');});
+    curEnd=-1;cur=ER[b.dataset.range]||0;hideTips();drawE(cur);
   });});
+  /* 指定时间段联动 API（主图面板调用）：日期串→ED 交易日索引[cur,curEnd]。日期 YYYY-MM-DD 字典序可比 */
+  function edFind(ds,first){for(var i=first?0:N-1;first?i<N:i>=0;first?i++:i--){if(first?ED[i]>=ds:ED[i]<=ds)return i;}return first?N-1:0;}
+  window._etfApplyRange=function(sd,ed){
+    var cs=edFind(sd,true),ce=edFind(ed,false);if(cs>ce)ce=cs;
+    cur=cs;curEnd=ce;hideTips();drawE(cur);
+    document.querySelectorAll('#eRng .rng-btn').forEach(function(x){x.classList.remove('active');});
+    document.querySelectorAll('#eRng .cr-btn').forEach(function(x){x.classList.add('active');});
+    return {start:ED[cs],end:ED[ce]};
+  };
+  window._etfResetRange=function(){curEnd=-1;cur=ER[def]||0;hideTips();drawE(cur);};
   /* 统计粒度已统一：跟随图表下方唯一 #segG（.on 高亮由主图脚本切换，此处只更新自身 G 并重绘） */
   document.querySelectorAll('#segG button').forEach(function(b){b.addEventListener('click',function(){
     G=b.dataset.g;hideTips();drawE(cur);
