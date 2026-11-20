@@ -1153,14 +1153,14 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   function renderEtfTable(){
     var sl=slices(), k=sl.length-1, g=gran(), gt=gtxt(g);
     var head=panel.querySelector('#etfHead');
-    if(head) head.innerHTML='<th>ETF（名称 / 代码）</th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">'+gt+'净申购(亿)</span><span class="eth-mini">'+gt+'(亿)</span></th><th><span class="eth-full">所属宽基指数</span><span class="eth-mini">指数</span></th>';
+    if(head) head.innerHTML='<th>ETF（名称 / 代码）</th><th><span class="eth-full">'+gt+'净申购(亿)</span><span class="eth-mini">'+gt+'(亿)</span></th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">所属宽基指数</span><span class="eth-mini">指数</span></th>';
     var rows=[];
     DATA.etf.forEach(function(x){
       rows.push({x:x, net:agg(x.net,sl,true)[k], acc:agg(x.acc,sl,false)[k]});
     });
     rows.sort(function(a,b){ return (b.net==null?-Infinity:b.net)-(a.net==null?-Infinity:a.net); });
     tbody.innerHTML=rows.map(function(r){
-      return '<tr><td class="nm"><span class="nmt">'+r.x.name+'</span><span class="subcode">'+r.x.code+'</span></td><td>'+fmtAxis(r.acc)+'</td><td class="'+cls2(r.net)+'">'+sign2(r.net)+'</td><td>'+r.x.idx+'</td></tr>';
+      return '<tr><td class="nm"><span class="nmt">'+r.x.name+'</span><span class="subcode">'+r.x.code+'</span></td><td class="'+cls2(r.net)+'">'+sign2(r.net)+'</td><td>'+fmtAxis(r.acc)+'</td><td>'+r.x.idx+'</td></tr>';
     }).join('');
     var et1=panel.querySelector('table.etf-table'); if(et1) et1._sk=null;
     markSortableHeaders();
@@ -1200,13 +1200,13 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     var sl=slices(), g=gran(), gt=gtxt(g);
     var acc=agg(DATA.total.acc,sl,false), net=agg(DATA.total.net,sl,true), nidx=DATA.total.nidx;
     var head=panel.querySelector('#etfHead');
-    if(head) head.innerHTML='<th>日期</th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">'+gt+'净申购(亿)</span><span class="eth-mini">'+gt+'(亿)</span></th><th><span class="eth-full">纳入指数</span><span class="eth-mini">指数</span></th>';
+    if(head) head.innerHTML='<th>日期</th><th><span class="eth-full">'+gt+'净申购(亿)</span><span class="eth-mini">'+gt+'(亿)</span></th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th><th><span class="eth-full">纳入指数</span><span class="eth-mini">指数</span></th>';
     var rows=[];
     for(var k=sl.length-1;k>=0;k--){
       var s=sl[k];
       rows.push('<tr class="daterow" data-k="'+k+'"><td>'+DATA.dates[s.gi]+'</td>'
-        +'<td>'+fmtAxis(acc[k])+'</td>'
         +'<td class="'+cls2(net[k])+'">'+sign2(net[k])+'</td>'
+        +'<td>'+fmtAxis(acc[k])+'</td>'
         +'<td>'+(nidx[s.gi]==null?'—':nidx[s.gi])+'</td></tr>');
     }
     tbody.innerHTML=rows.join('');
