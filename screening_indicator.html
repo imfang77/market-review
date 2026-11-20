@@ -67,7 +67,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
 .statline{font-size:12px;color:#868e96;margin-left:auto}
 .res-foot{padding:12px 18px;border-top:1px solid #eef1f8;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
 .hintline{font-size:12px;color:#adb5bd}
-@media(max-width:600px){.header{padding:14px 10px}.wrap{margin:14px auto;padding:0 8px}.panel{padding:12px}.row{gap:10px}.fld select,.fld input{min-width:88px}.seg button{padding:0 8px;font-size:12px}table{font-size:12px;min-width:760px}th,td{padding:7px 8px}th:first-child,td:first-child{left:0;width:44px;min-width:44px;max-width:44px}th:nth-child(2),td:nth-child(2){left:44px;min-width:130px;max-width:160px}.statline{margin-left:0}.cal-list{padding:8px 12px 14px}}
+@media(max-width:600px){.header{padding:14px 10px}.wrap{margin:14px auto;padding:0 8px}.panel{padding:12px}.row{gap:10px}.fld select,.fld input{min-width:88px}.seg button{padding:0 8px;font-size:12px}table{font-size:12px;min-width:700px}th,td{padding:7px 8px}th:first-child,td:first-child{left:0;width:36px;min-width:36px;max-width:36px;padding-left:4px;padding-right:4px}th:nth-child(2),td:nth-child(2){left:36px;min-width:96px;max-width:112px;padding-left:6px;padding-right:6px}td.nm .subcode{font-size:10.5px}.statline{margin-left:0}.cal-list{padding:8px 12px 14px}}
 </style>
 </head>
 <body>
@@ -116,8 +116,8 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       <button class="btn" id="export" type="button">导出 Excel</button></div>
     <div class="tblbox"><table id="tb"><thead><tr>
       <th data-k="rank" style="width:52px">排名</th><th data-k="name">名称 / 代码</th>
-      <th data-k="sh">夏普比率</th><th data-k="ann">年化收益</th><th data-k="ret">区间收益</th>
-      <th data-k="mdd">最大回撤</th><th data-k="n">有效交易日</th><th data-k="first">上市日期</th>
+      <th data-k="sh">夏普比率</th><th data-k="ann">年化收益</th><th data-k="mdd">最大回撤</th>
+      <th data-k="ret">区间收益</th><th data-k="n">有效交易日</th><th data-k="first">上市日期</th>
     </tr></thead><tbody id="tbody"></tbody></table></div>
     <div class="loading" id="loading" hidden>正在计算，请稍候…</div>
     <div class="res-foot"><button class="btn" id="more" type="button" hidden>查看更多 ▾</button>
@@ -273,8 +273,8 @@ function render(){
   var h='';
   for(var i=0;i<shown.length;i++){var r=shown[i];
     h+='<tr><td class="rk">'+(i+1)+'</td><td class="nm"><span class="nmt">'+r.name+'</span><span class="subcode">'+r.code+'</span></td>'+
-       '<td>'+fmtNum(r.sh)+'</td><td class="'+cls(r.ann)+'">'+fmtPct(r.ann)+'</td><td class="'+cls(r.ret)+'">'+fmtPct(r.ret)+'</td>'+
-       '<td class="dn">−'+(r.mdd*100).toFixed(2)+'%</td><td class="rk">'+r.n+'</td><td class="rk">'+(r.first&&r.first!=='1900-01-01'?r.first:'—')+'</td></tr>';
+       '<td>'+fmtNum(r.sh)+'</td><td class="'+cls(r.ann)+'">'+fmtPct(r.ann)+'</td><td class="dn">−'+(r.mdd*100).toFixed(2)+'%</td>'+
+       '<td class="'+cls(r.ret)+'">'+fmtPct(r.ret)+'</td><td class="rk">'+r.n+'</td><td class="rk">'+(r.first&&r.first!=='1900-01-01'?r.first:'—')+'</td></tr>';
   }
   $('tbody').innerHTML=h||'<tr><td colspan="8" class="empty">无符合条件的股票</td></tr>';
   $('more').hidden=SHOWN>=rows.length;
@@ -302,12 +302,12 @@ function run(){
 function exportXls(){
   var rows=filtered(),key=SORT.k||S.metric;
   rows.sort(function(a,b){var x=a[key],y=b[key];if(typeof x==='string')return x.localeCompare(y);return y-x;});
-  var head=['排名','名称','代码','夏普比率','年化收益','区间收益','最大回撤','有效交易日','上市日期'];
+  var head=['排名','名称','代码','夏普比率','年化收益','最大回撤','区间收益','有效交易日','上市日期'];
   var esc=function(v){var s=String(v===null||v===undefined?'':v);return '"'+s.replace(/"/g,'""')+'"';};
   var lines=[head.map(esc).join(',')];
   var pct=function(v){return (v===null||!isFinite(v))?'':(v*100).toFixed(2)+'%';};
   for(var i=0;i<rows.length;i++){var r=rows[i];
-    lines.push([i+1,r.name,r.code,r.sh.toFixed(3),pct(r.ann),pct(r.ret),r.mdd>0?('-'+pct(r.mdd)):'0.00%',r.n,r.first].map(esc).join(','));
+    lines.push([i+1,r.name,r.code,r.sh.toFixed(3),pct(r.ann),r.mdd>0?('-'+pct(r.mdd)):'0.00%',pct(r.ret),r.n,r.first].map(esc).join(','));
   }
   var blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);
