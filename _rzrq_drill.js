@@ -1089,7 +1089,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.etf-subtabs button.on{background:#0f766e;color:#fff;border-color:#0f766e}'
     + '@media(max-width:620px){table.etf-table{table-layout:fixed}table.etf-table th:first-child,table.etf-table td:first-child{width:32%}table.etf-table.dim-etf th:first-child,table.etf-table.dim-etf td:first-child{width:clamp(112px,34vw,148px)}table.etf-table.dim-etf td.nm{white-space:normal;line-height:1.35}table.etf-table.dim-etf td.nm .nmt{display:block}table.etf-table th,table.etf-table td{padding:8px 3px;font-size:13.5px}.etf-sub table th,.etf-sub table td{padding:8px 4px;font-size:13.5px}.eth-full{display:none}.eth-mini{display:inline}.etf-tblwrap{max-height:440px}#tpanel-e .tblbox{padding:6px 8px 8px}}'
     + '@media(max-width:360px){table.etf-table th,table.etf-table td{padding:8px 1px}#tpanel-e .tblbox{padding:6px 0 8px}}'
-    + '@media(max-width:620px){table.etf-table.dim-etf{min-width:900px}table.etf-table.dim-etf td.chg{font-size:13px}}';
+    + '@media(max-width:620px){table.etf-table.dim-etf{min-width:900px}table.etf-table.dim-etf td.chg{font-size:13px}.etfdays-in table{table-layout:fixed}.etfdays-in th,.etfdays-in td{padding:7px 3px;font-size:12.5px}}';
   if (!document.getElementById('etf-tab-css')) {
     var st = document.createElement('style'); st.id='etf-tab-css'; st.textContent = css; document.head.appendChild(st);
   }
@@ -1424,9 +1424,13 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     });
     var days=[]; slices().forEach(function(s){ s.days.forEach(function(i){days.push(i);}); });
     var span=Math.max(1, er.cells.length);
-    var html='<tr class="etf-sub" data-level="etfdays"><td colspan="'+span+'"><div class="etf-sub-in" style="padding:2px 10px">'
+    /* 逐日子表宽度按滚动容器可视宽计算，不能继承 900px 表格宽（否则手机只见日期一列） */
+    var wrapEl=tbody.closest('.etf-tblwrap'), avail=wrapEl?wrapEl.clientWidth:0;
+    if(avail>60) avail-=26; /* 子表所在td左右padding 6 + 容器左右padding 20 */
+    var wStyle=avail>160?('width:'+avail+'px;max-width:none;'):'';
+    var html='<tr class="etf-sub" data-level="etfdays"><td colspan="'+span+'"><div class="etf-sub-in etfdays-in" style="padding:2px 10px;'+wStyle+'">'
       +'<div style="font-size:12px;color:#66708a;margin:4px 2px">'+x.name+'（'+code+'） · '+x.idx+' · 逐日明细（视窗内，固定按日）</div>'
-      +'<table><thead><tr><th>日期</th><th>当日净申购(亿)</th><th>累计净申购(亿)</th></tr></thead><tbody>';
+      +'<table><thead><tr><th>日期</th><th><span class="eth-full">当日净申购(亿)</span><span class="eth-mini">当日(亿)</span></th><th><span class="eth-full">累计净申购(亿)</span><span class="eth-mini">累计(亿)</span></th></tr></thead><tbody>';
     for(var j=days.length-1;j>=0;j--){
       var d=days[j];
       html+='<tr><td>'+DATA.dates[d]+'</td><td class="'+cls2(x.net[d])+'">'+sign2(x.net[d])+'</td><td>'+fmtAxis(x.acc[d])+'</td></tr>';
