@@ -18,6 +18,7 @@ body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", san
 .card .top { display: flex; align-items: center; gap: 12px; }
 .card .ico { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
 .card.tech .ico { background: #e3f2fd; }
+.card.ind .ico { background: #e6f7f5; }
 .card.fund .ico { background: #ede7f6; }
 .card.rps .ico { background: #ffe3e3; }
 .card .title { font-size: 18px; font-weight: 700; }
@@ -34,9 +35,16 @@ body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", san
 <body>
 <div class="header"><a class="back" href="index.html">&#8592; 返回</a>
 <h1>条件选股</h1>
-<div class="subtitle">技术面 / 基本面 / RPS · 三入口</div>
+<div class="subtitle">指标 / 技术面 / 基本面 / RPS · 四入口</div>
 </div>
 <div class="container">
+
+<a class="card ind" href="screening_indicator.html?v=20261120" id="card-ind">
+  <div class="top"><div class="ico">&#128202;</div><div><div class="title">按指标选股 / 按指标统计</div></div></div>
+  <div class="desc">按年份或时间段计算夏普比率与区间收益。<br>支持收益率排名 / 范围筛选，结果按所选指标降序。</div>
+  <div class="meta"><span class="badge-date" id="ind-date">全市场 · 按指标筛选</span></div>
+  <div class="arrow">&#8250;</div>
+</a>
 
 <a class="card tech" href="screening_tech.html?v=20260812" id="card-tech">
   <div class="top"><div class="ico">&#128200;</div><div><div class="title">技术面选股</div></div></div>
@@ -68,7 +76,7 @@ body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", san
   <div class="arrow">&#8250;</div>
 </a>
 
-<div class="tip">红色圆点表示技术面 / 基本面 / RPS 有新数据更新。</div>
+<div class="tip">红色圆点表示指标 / 技术面 / 基本面 / RPS 有新数据更新。</div>
 
 </div>
 

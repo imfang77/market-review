@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>按指标选股 / 按指标统计 · A股复盘选股中心</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;background:#f0f2f5;color:#1a1a2e;min-height:100vh}
+.header{background:#fff;border-bottom:1px solid #e9ecef;padding:18px 16px;text-align:center;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.header a.back{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:14px;color:#4263eb;text-decoration:none}
+.header h1{font-size:20px;font-weight:700}
+.header .subtitle{margin-top:4px;font-size:12px;color:#868e96}
+.wrap{max-width:1180px;margin:22px auto;padding:0 14px}
+.panel{background:#fff;border-radius:12px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.05);margin-bottom:14px}
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tab{border:1px solid #e9ecef;background:#fff;border-radius:8px;padding:8px 16px;font-size:14px;cursor:pointer;color:#495057}
+.tab.on{background:#4263eb;border-color:#4263eb;color:#fff;font-weight:700}
+.row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-end}
+.fld{display:flex;flex-direction:column;gap:5px;font-size:12px;color:#868e96}
+.fld select,.fld input{border:1px solid #dee2e6;border-radius:7px;padding:7px 9px;font-size:13px;color:#1a1a2e;background:#fff;min-width:104px;height:34px}
+.fld input.w70{min-width:70px;width:70px}
+.seg{display:inline-flex;border:1px solid #dee2e6;border-radius:7px;overflow:hidden;height:34px}
+.seg button{border:0;background:#fff;padding:0 12px;font-size:13px;color:#495057;cursor:pointer}
+.seg button.on{background:#4263eb;color:#fff;font-weight:700}
+.note{font-size:12px;color:#adb5bd;line-height:1.6;margin-top:10px}
+.btn{border:1px solid #dee2e6;background:#fff;border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;height:34px}
+.btn:hover{border-color:#4263eb;color:#4263eb}
+.res{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.res-h{padding:12px 18px;border-bottom:1px solid #eef1f8;font-size:13px;color:#495057;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.cnt{color:#4263eb;font-weight:700}
+.tblbox{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{background:#f8f9fc;color:#495057;font-weight:600;text-align:right;padding:9px 12px;white-space:nowrap;cursor:pointer;user-select:none;border-bottom:1px solid #eef1f8}
+th:first-child,th:nth-child(2){text-align:left}
+th:hover{color:#4263eb}
+td{padding:8px 12px;border-bottom:1px solid #f4f5f8;text-align:right;white-space:nowrap}
+td:first-child,td:nth-child(2){text-align:left}
+td.nm{font-weight:600}
+tr:hover td{background:#fafbff}
+.up{color:#e5484d;font-weight:600}.dn{color:#2f9e44;font-weight:600}
+.rk{color:#868e96}
+.more{text-align:center;padding:12px}
+.loading{text-align:center;padding:48px;color:#868e96}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:16px 18px}
+.stat{background:#f8f9fc;border-radius:9px;padding:12px 14px}
+.stat .k{font-size:12px;color:#868e96}.stat .v{font-size:20px;font-weight:800;margin-top:4px}
+@media(max-width:600px){.header{padding:14px 10px}.wrap{margin:14px auto;padding:0 8px}.panel{padding:12px}.fld select,.fld input{min-width:88px}table{font-size:12px}th,td{padding:7px 8px}}
+</style>
+</head>
+<body>
+<div class="header"><a class="back" href="screening.html">&#8592; 返回</a>
+<h1>按指标选股 / 按指标统计</h1>
+<div class="subtitle">全市场 · 夏普比率与区间收益 · <span id="data-date">加载中…</span></div>
+</div>
+<div class="wrap">
+  <div class="panel">
+    <div class="tabs">
+      <button class="tab on" id="tab-pick" type="button">按指标选股</button>
+      <button class="tab" id="tab-stat" type="button">按指标统计</button>
+    </div>
+    <div class="row">
+      <div class="fld"><span>时间口径</span><div class="seg">
+        <button type="button" id="kind-year" class="on">按年份</button>
+        <button type="button" id="kind-period">按时间段</button>
+      </div></div>
+      <div class="fld"><span id="lab-win">年份</span><select id="sel-win"></select></div>
+      <div class="fld"><span>排序指标</span><select id="sel-metric">
+        <option value="sh">夏普比率（年化）</option>
+        <option value="ret">区间收益率</option>
+      </select></div>
+      <div class="fld"><span>收益率下限(%)</span><input type="number" id="in-min" class="w70" placeholder="不限" step="1"></div>
+      <div class="fld"><span>收益率上限(%)</span><input type="number" id="in-max" class="w70" placeholder="不限" step="1"></div>
+      <div class="fld"><span>收益率排名前N</span><input type="number" id="in-top" class="w70" placeholder="不限" step="10"></div>
+      <div class="fld"><span>代码/名称</span><input type="text" id="in-q" class="w70" placeholder="搜索" style="min-width:110px"></div>
+      <button class="btn" id="btn-reset" type="button">重置</button>
+    </div>
+    <div class="note">口径：夏普 = 日均收益 / 标准差 × √252（日简单收益，剔除单日涨跌超 30% 的异常K）；区间收益 = 期末收盘 / 期初前一日收盘 − 1。数据为本地全市场日K缓存，未做复权处理，除权除息日可能失真。</div>
+  </div>
+
+  <div class="res" id="view-pick">
+    <div class="res-h"><span class="cnt" id="cnt">—</span><span id="sort-tip">默认按夏普降序</span></div>
+    <div class="tblbox"><table id="tb"><thead><tr>
+      <th data-k="code">代码</th><th data-k="name">名称</th>
+      <th data-k="ret">区间收益</th><th data-k="sh">夏普比率</th>
+      <th data-k="n">交易日</th><th data-k="rank">收益排名</th>
+    </tr></thead><tbody id="tbody"></tbody></table></div>
+    <div class="more"><button class="btn" id="btn-more" type="button">显示更多</button></div>
+  </div>
+
+  <div class="res" id="view-stat" style="display:none">
+    <div class="res-h">当前筛选条件下的样本统计</div>
+    <div class="statgrid" id="statgrid"></div>
+    <div class="tblbox"><table id="tb2"><thead><tr>
+      <th>夏普区间</th><th>股票数</th><th>占比</th><th>平均区间收益</th><th>正收益占比</th>
+    </tr></thead><tbody id="statbody"></tbody></table></div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var DATA=null;
+var S={kind:'year',win:'Y2026',metric:'sh',minR:'',maxR:'',top:'',q:'',asc:false,sortKey:'',page:1};
+var PAGE=50, rankCache={};
+function $(id){return document.getElementById(id);}
+function pct(v,d){if(v===null||v===undefined||isNaN(v))return '—';return (v>0?'+':'')+(v*100).toFixed(d===undefined?2:d)+'%';}
+function num(v,d){if(v===null||v===undefined||isNaN(v))return '—';return Number(v).toFixed(d===undefined?2:d);}
+function color(v){return v>0?'up':(v<0?'dn':'');}
+function wi(){var i=DATA.meta.windows.indexOf(S.win);return i<0?0:i;}
+function val(r,i){var o=2+i*3;return {sh:r[o],ret:r[o+1],n:r[o+2]};}
+function ranks(i){
+  if(rankCache[i])return rankCache[i];
+  var a=DATA.d.map(function(r){return {c:r[0],v:val(r,i).ret};}).filter(function(x){return x.v!==null&&!isNaN(x.v);});
+  a.sort(function(x,y){return y.v-x.v;});
+  var m={};for(var k=0;k<a.length;k++)m[a[k].c]=k+1;
+  rankCache[i]=m;return m;
+}
+function fillWin(){
+  var sel=$('sel-win'),ws=DATA.meta.windows,L=DATA.meta.labels,items=[];
+  for(var i=0;i<ws.length;i++){
+    var isY=ws[i].charAt(0)==='Y';
+    if((S.kind==='year')===isY)items.push([ws[i],L[ws[i]]||ws[i]]);
+  }
+  sel.innerHTML=items.map(function(x){return '<option value="'+x[0]+'">'+x[1]+'</option>';}).join('');
+  if(!items.some(function(x){return x[0]===S.win;}))S.win=items[0][0];
+  sel.value=S.win;
+  $('lab-win').textContent=S.kind==='year'?'年份':'时间段';
+}
+function filtered(){
+  var i=wi(),rk=ranks(i),q=S.q.trim().toLowerCase();
+  var min=S.minR===''?null:parseFloat(S.minR),max=S.maxR===''?null:parseFloat(S.maxR),top=S.top===''?null:parseInt(S.top,10);
+  var out=[];
+  DATA.d.forEach(function(r){
+    var v=val(r,i);if(v.sh===null||v.ret===null)return;
+    var rp=v.ret*100;
+    if(min!==null&&rp<min)return;
+    if(max!==null&&rp>max)return;
+    if(top!==null&&rk[r[0]]>top)return;
+    if(q&&(r[0]+' '+r[1]).toLowerCase().indexOf(q)<0)return;
+    out.push({code:r[0],name:r[1],sh:v.sh,ret:v.ret,n:v.n,rank:rk[r[0]]||0});
+  });
+  var key=S.sortKey||S.metric;
+  var asc=S.asc;
+  out.sort(function(a,b){
+    var x=a[key],y=b[key];
+    if(typeof x==='string')return asc?x.localeCompare(y):y.localeCompare(x);
+    if(x===null||x===undefined)return 1;
+    if(y===null||y===undefined)return -1;
+    return asc?x-y:y-x;
+  });
+  return out;
+}
+function renderPick(){
+  var rows=filtered(),n=Math.min(S.page*PAGE,rows.length);
+  $('cnt').textContent='共 '+rows.length+' 只 · 当前显示 '+n+' 只';
+  $('sort-tip').textContent='按'+(S.sortKey==='ret'?'区间收益':S.sortKey==='sh'?'夏普比率':S.sortKey==='name'?'名称':S.sortKey==='code'?'代码':S.sortKey)+'排序';
+  var h='';
+  for(var i=0;i<n;i++){
+    var r=rows[i];
+    h+='<tr><td class="rk">'+r.code+'</td><td class="nm">'+r.name+'</td>'+
+       '<td class="'+color(r.ret)+'">'+pct(r.ret)+'</td><td>'+num(r.sh)+'</td>'+
+       '<td class="rk">'+r.n+'</td><td class="rk">'+r.rank+'</td></tr>';
+  }
+  $('tbody').innerHTML=h||'<tr><td colspan="6" style="text-align:center;padding:30px;color:#adb5bd">无符合条件的股票</td></tr>';
+  $('btn-more').style.display=n<rows.length?'inline-block':'none';
+}
+function quantile(a,p){if(!a.length)return null;var b=a.slice().sort(function(x,y){return x-y;});var i=(b.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return b[lo]+(b[hi]-b[lo])*(i-lo);}
+function renderStat(){
+  var rows=filtered(),sh=rows.map(function(r){return r.sh;}).filter(function(v){return v!==null;});
+  var rets=rows.map(function(r){return r.ret;}).filter(function(v){return v!==null;});
+  var pos=rets.filter(function(v){return v>0;}).length;
+  var avg=function(a){return a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null;};
+  var items=[['样本数',rows.length,0],['平均夏普',num(avg(sh)),''],['夏普中位数',num(quantile(sh,.5)),''],
+    ['夏普75分位',num(quantile(sh,.75)),''],['夏普90分位',num(quantile(sh,.9)),''],
+    ['平均区间收益',pct(avg(rets)),''],['正收益占比',rets.length?(pos/rets.length*100).toFixed(1)+'%':'—','']];
+  $('statgrid').innerHTML=items.map(function(x){return '<div class="stat"><div class="k">'+x[0]+'</div><div class="v '+x[2]+'">'+x[1]+'</div></div>';}).join('');
+  var bands=[[-99,0,'夏普 < 0'],[0,.5,'0 ~ 0.5'],[.5,1,'0.5 ~ 1'],[1,1.5,'1 ~ 1.5'],[1.5,99,'≥ 1.5']];
+  var h='';
+  bands.forEach(function(b){
+    var g=rows.filter(function(r){return r.sh>=b[0]&&r.sh<b[1];});
+    var gr=g.map(function(r){return r.ret;}).filter(function(v){return v!==null;});
+    var gp=gr.filter(function(v){return v>0;}).length;
+    h+='<tr><td>'+b[2]+'</td><td>'+g.length+'</td><td>'+(rows.length?(g.length/rows.length*100).toFixed(1)+'%':'—')+'</td>'+
+       '<td class="'+color(avg(gr))+'">'+pct(avg(gr))+'</td><td>'+(gr.length?(gp/gr.length*100).toFixed(1)+'%':'—')+'</td></tr>';
+  });
+  $('statbody').innerHTML=h;
+}
+function render(){if($('view-stat').style.display==='none')renderPick();else renderStat();}
+function resetSort(){S.asc=false;S.sortKey='';S.page=1;render();}
+function bind(){
+  $('sel-win').addEventListener('change',function(){S.win=this.value;rankCache={};resetSort();});
+  $('sel-metric').addEventListener('change',function(){S.metric=this.value;resetSort();});
+  var keyMap={'in-min':'minR','in-max':'maxR','in-top':'top','in-q':'q'};
+  ['in-min','in-max','in-top','in-q'].forEach(function(id){
+    $(id).addEventListener('input',function(){S[keyMap[id]]=this.value;S.page=1;render();});
+  });
+  $('btn-reset').addEventListener('click',function(){
+    S.minR='';S.maxR='';S.top='';S.q='';S.metric='sh';S.page=1;
+    ['in-min','in-max','in-top','in-q'].forEach(function(id){$(id).value='';});
+    $('sel-metric').value='sh';resetSort();
+  });
+  $('btn-more').addEventListener('click',function(){S.page++;renderPick();});
+  $('kind-year').addEventListener('click',function(){
+    S.kind='year';this.classList.add('on');$('kind-period').classList.remove('on');fillWin();rankCache={};resetSort();
+  });
+  $('kind-period').addEventListener('click',function(){
+    S.kind='period';this.classList.add('on');$('kind-year').classList.remove('on');fillWin();rankCache={};resetSort();
+  });
+  $('tab-pick').addEventListener('click',function(){
+    this.classList.add('on');$('tab-stat').classList.remove('on');$('view-pick').style.display='';$('view-stat').style.display='none';renderPick();
+  });
+  $('tab-stat').addEventListener('click',function(){
+    this.classList.add('on');$('tab-pick').classList.remove('on');$('view-pick').style.display='none';$('view-stat').style.display='';renderStat();
+  });
+  var ths=document.querySelectorAll('#tb thead th');
+  for(var i=0;i<ths.length;i++){
+    ths[i].addEventListener('click',function(){
+      var k=this.getAttribute('data-k');
+      if(S.sortKey===k)S.asc=!S.asc;else{S.sortKey=k;S.asc=false;}
+      S.page=1;renderPick();
+    });
+  }
+}
+fetch('_indicator_data.json?v='+Date.now()).then(function(r){return r.json();}).then(function(d){
+  DATA=d;
+  $('data-date').textContent='数据至 '+(d.meta.date||'—')+' · '+d.meta.count+' 只';
+  fillWin();bind();render();
+}).catch(function(e){$('data-date').textContent='数据加载失败';console.error(e);});
+})();
+</script>
+</body>
+</html>
