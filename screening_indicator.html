@@ -71,17 +71,17 @@ tr:hover td{background:#fafbff}
         <option value="mdd">最大回撤（小优先）</option>
       </select></div>
       <div class="fld"><span>排名前 N</span><input type="number" id="topn" class="w80" value="20" min="1" max="500"></div>
-      <button class="btn primary" id="go" type="button">查询排名</button>
-      <span class="toggle" id="tg-more">更多筛选 ▾</span>
-    </div>
-    <div class="row" style="margin-top:14px">
       <div class="fld"><span>时间范围</span><select id="sel-range">
         <option value="m1">近1月</option><option value="m3">近3月</option>
         <option value="m6">近6月</option><option value="y1">近1年</option>
         <option value="y3">近3年</option><option value="y5">近5年</option>
         <option value="y10" selected>近10年</option><option value="custom">自定义日期</option>
       </select></div>
-      <div class="fld"><span>成立日期（不晚于）</span><input type="date" id="fdate"></div>
+      <div class="fld"><span>上市日期（不晚于）</span><input type="date" id="fdate"></div>
+      <button class="btn primary" id="go" type="button">查询排名</button>
+      <span class="toggle" id="tg-more">更多筛选 ▾</span>
+    </div>
+    <div class="row" style="margin-top:14px">
       <div class="datepair" id="datepair">
         <div class="fld"><span>开始日期</span><input type="date" id="d1"></div>
         <div class="fld"><span>结束日期</span><input type="date" id="d2"></div>
@@ -94,7 +94,7 @@ tr:hover td{background:#fafbff}
       <div class="fld"><span>代码/名称</span><input type="text" id="q" placeholder="搜索" style="min-width:130px"></div>
       <button class="btn" id="reset" type="button">重置</button>
     </div>
-    <div class="note" id="note">口径：夏普 = 日均收益 / 标准差 × √252（剔除单日涨跌超30%的异常日）；区间收益 = 日收益累乘 − 1；年化收益 = (1+区间收益)^(252/区间交易日) − 1；最大回撤 = 区间累计净值自峰值最大回落。成立日期默认随所选区间起点联动，可手动改；仅统计上市日期不晚于该日的股票。按未复权日K计算，除权除息日可能失真；结果仅供参考，不构成投资建议。</div>
+    <div class="note" id="note">口径：夏普 = 日均收益 / 标准差 × √252（剔除单日涨跌超30%的异常日）；区间收益 = 日收益累乘 − 1；年化收益 = (1+区间收益)^(252/区间交易日) − 1；最大回撤 = 区间累计净值自峰值最大回落。上市日期默认随所选区间起点联动，可手动改；仅统计上市日期不晚于该日的股票。按未复权日K计算，除权除息日可能失真；结果仅供参考，不构成投资建议。</div>
   </div>
 
   <div class="res">
@@ -104,7 +104,7 @@ tr:hover td{background:#fafbff}
     <div class="tblbox"><table id="tb"><thead><tr>
       <th data-k="rank" style="width:52px">排名</th><th data-k="code">代码</th><th data-k="name">名称</th>
       <th data-k="sh">夏普比率</th><th data-k="ann">年化收益</th><th data-k="ret">区间收益</th>
-      <th data-k="mdd">最大回撤</th><th data-k="n">有效交易日</th>
+      <th data-k="mdd">最大回撤</th><th data-k="n">有效交易日</th><th data-k="first">上市日期</th>
     </tr></thead><tbody id="tbody"></tbody></table></div>
     <div class="loading" id="loading" hidden>正在计算，请稍候…</div>
     <div class="res-foot"><button class="btn" id="more" type="button" hidden>查看更多 ▾</button>
@@ -252,9 +252,9 @@ function render(){
   for(var i=0;i<shown.length;i++){var r=shown[i];
     h+='<tr><td class="rk">'+(i+1)+'</td><td class="rk">'+r.code+'</td><td class="nm">'+r.name+'</td>'+
        '<td>'+fmtNum(r.sh)+'</td><td class="'+cls(r.ann)+'">'+fmtPct(r.ann)+'</td><td class="'+cls(r.ret)+'">'+fmtPct(r.ret)+'</td>'+
-       '<td class="dn">−'+(r.mdd*100).toFixed(2)+'%</td><td class="rk">'+r.n+'</td></tr>';
+       '<td class="dn">−'+(r.mdd*100).toFixed(2)+'%</td><td class="rk">'+r.n+'</td><td class="rk">'+(r.first&&r.first!=='1900-01-01'?r.first:'—')+'</td></tr>';
   }
-  $('tbody').innerHTML=h||'<tr><td colspan="8" class="empty">无符合条件的股票</td></tr>';
+  $('tbody').innerHTML=h||'<tr><td colspan="9" class="empty">无符合条件的股票</td></tr>';
   $('more').hidden=SHOWN>=rows.length;
   $('more-hint').textContent=SHOWN<rows.length?('已显示 '+shown.length+' / '+rows.length+' 只'):'';
   document.querySelectorAll('#tb thead th').forEach(function(th){
@@ -273,7 +273,7 @@ function run(){
   compute(S.s,S.e).then(function(rows){
     RESULT=rows;SORT.k='';SORT.asc=false;$('loading').hidden=true;render();
   }).catch(function(err){
-    $('loading').hidden=true;$('tbody').innerHTML='<tr><td colspan="8" class="empty">计算失败：'+err.message+'</td></tr>';
+    $('loading').hidden=true;$('tbody').innerHTML='<tr><td colspan="9" class="empty">计算失败：'+err.message+'</td></tr>';
     console.error(err);
   });
 }
