@@ -143,13 +143,29 @@ function rangeIdx(){
   var target=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
   return [align(target),last];
 }
+/* 国内访问 GitHub Pages 静态文件极慢（约12KB/s），
+   优先走 jsdelivr 国内镜像（约500KB/s），失败回退同源。 */
+var MIRROR='https://cdn.jsdmirror.com/gh/imfang77/market-review@main/';
+var IS_LOCAL=/^(127\.0\.0\.1|localhost)$/.test(location.hostname);
+function fetchBuf(url,ms){
+  return new Promise(function(res,rej){
+    var ctrl=new AbortController(),timer=setTimeout(function(){ctrl.abort();rej(new Error('timeout'));},ms);
+    fetch(url,{signal:ctrl.signal}).then(function(r){
+      clearTimeout(timer);
+      if(!r.ok){rej(new Error('HTTP '+r.status+' '+url));return;}
+      return r.arrayBuffer().then(res,rej);
+    }).catch(function(e){clearTimeout(timer);rej(e);});
+  });
+}
 function loadSeries(year){
   if(CACHE[year])return CACHE[year];
-  CACHE[year]=fetch('_series_'+year+'.gz?v='+Date.now()).then(function(r){
-    if(!r.ok)throw new Error('HTTP '+r.status+' year '+year);
-    /* 先拿完整字节再解压：线上经过代理的网络流直接 pipeThrough 会挂起 */
-    return r.arrayBuffer();
-  }).then(function(buf){
+  var fname='_series_'+year+'.gz';
+  var srcs=IS_LOCAL?[fname]:[MIRROR+fname,fname];
+  var attempt=function(i){
+    if(i>=srcs.length)return Promise.reject(new Error('分片加载失败: '+fname));
+    return fetchBuf(srcs[i],IS_LOCAL?60000:25000).catch(function(){return attempt(i+1);});
+  };
+  CACHE[year]=attempt(0).then(function(buf){
     if(typeof DecompressionStream==='undefined')throw new Error('浏览器不支持 DecompressionStream，请用最新版 Chrome/Edge');
     var blob=new Blob([buf]);
     return new Response(blob.stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
@@ -255,7 +271,13 @@ function bind(){
   });
 }
 var S={range:'y1',metric:'sh',s:0,e:0};
-fetch('_series_meta.json?v='+Date.now()).then(function(r){return r.json();}).then(function(d){
+var metaSrcs=IS_LOCAL?['_series_meta.json?v='+Date.now()]:[MIRROR+'_series_meta.json','_series_meta.json?v='+Date.now()];
+function loadMeta(i){
+  if(i>=metaSrcs.length)return Promise.reject(new Error('元数据加载失败'));
+  return fetchBuf(metaSrcs[i],IS_LOCAL?60000:25000).then(function(buf){return JSON.parse(new TextDecoder().decode(buf));})
+    .catch(function(){return loadMeta(i+1);});
+}
+loadMeta(0).then(function(d){
   M=d;M.years.forEach(function(y){YEAR_INFO[y.y]=y;});
   $('data-date').textContent='数据至 '+M.date+' · '+M.codes.length+' 只A股';
   $('d1').min=M.start;$('d1').max=M.date;$('d2').min=M.start;$('d2').max=M.date;
