@@ -29,6 +29,9 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif
 .datepair.on{display:flex}
 .more-row{margin-top:12px;padding-top:12px;border-top:1px dashed #e9ecef;display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
 .more-row[hidden]{display:none}
+.chk{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#495057;cursor:pointer;height:36px;user-select:none}
+.chk input{width:15px;height:15px;margin:0;accent-color:#4263eb;cursor:pointer}
+.chk:hover{color:#4263eb}
 .toggle{font-size:12px;color:#4263eb;cursor:pointer;user-select:none;margin-top:13px}
 .cal-fold{border-top:1px solid #eef1f8;background:#fcfcfe}
 .cal-fold>summary{padding:11px 18px;font-size:12px;color:#868e96;cursor:pointer;user-select:none}
@@ -106,6 +109,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       <div class="fld"><span>收益率上限(%)</span><input type="number" id="rmax" class="w80" placeholder="不限"></div>
       <div class="fld"><span>最大回撤上限(%)</span><input type="number" id="mddmax" class="w80" placeholder="不限"></div>
       <div class="fld"><span>代码/名称</span><input type="text" id="q" placeholder="搜索" style="min-width:130px"></div>
+      <label class="chk" for="nost"><input type="checkbox" id="nost" checked>不含ST</label>
       <button class="btn" id="reset" type="button">重置</button>
     </div>
   </div>
@@ -249,10 +253,11 @@ function compute(s,e){
 }
 function quantile(a,p){if(!a.length)return null;var b=a.slice().sort(function(x,y){return x-y;});var i=(b.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return b[lo]+(b[hi]-b[lo])*(i-lo);}
 function filtered(){
-  var rows=RESULT,q=$('q').value.trim().toLowerCase(),fd=$('fdate').value;
+  var rows=RESULT,q=$('q').value.trim().toLowerCase(),fd=$('fdate').value,st=$('nost').checked;
   var lo=$('rmin').value===''?null:parseFloat($('rmin').value)/100,hi=$('rmax').value===''?null:parseFloat($('rmax').value)/100;
   var md=$('mddmax').value===''?null:parseFloat($('mddmax').value)/100;
   return rows.filter(function(r){
+    if(st&&r.name.indexOf('ST')>=0)return false;
     if(fd&&r.first>fd)return false;
     if(lo!==null&&r.ret<lo)return false;if(hi!==null&&r.ret>hi)return false;
     if(md!==null&&r.mdd>md)return false;
@@ -326,6 +331,7 @@ function bind(){
   $('metric').addEventListener('change',function(){S.metric=this.value;SORT.k='';render();});
   $('topn').addEventListener('input',function(){SHOWN=Math.max(1,parseInt(this.value,10)||20);render();});
   ['q','rmin','rmax','mddmax'].forEach(function(id){$(id).addEventListener('input',function(){SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});});
+  $('nost').addEventListener('change',function(){SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});
   $('fdate').addEventListener('change',function(){this.dataset.touched='1';SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});
   $('datepair').addEventListener('change',function(){if(S.range==='custom')run();});
   $('more').addEventListener('click',function(){SHOWN+=50;render();});
@@ -335,7 +341,7 @@ function bind(){
     this.textContent=row.hidden?'更多筛选 ▾':'收起筛选 ▴';
   });
   $('reset').addEventListener('click',function(){
-    $('q').value='';$('rmin').value='';$('rmax').value='';$('mddmax').value='';$('topn').value=20;
+    $('q').value='';$('rmin').value='';$('rmax').value='';$('mddmax').value='';$('nost').checked=true;$('topn').value=20;
     delete $('fdate').dataset.touched;
     syncFoundDate();
     S.metric='sh';$('metric').value='sh';SORT.k='';SHOWN=20;render();
