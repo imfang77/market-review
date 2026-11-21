@@ -98,7 +98,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       <div class="fld"><span>时间范围</span><select id="sel-range">
         <option value="m1">近1月</option><option value="m3">近3月</option>
         <option value="m6">近6月</option>
-        <option value="y1">今年（2026年1月1日起）</option>
+        <option value="y1">今年（2026/1/1起）</option>
         <option value="y2">近2年（2025/1/1起）</option><option value="y3">近3年（2024/1/1起）</option>
         <option value="y4">近4年（2023/1/1起）</option><option value="y5">近5年（2022/1/1起）</option>
         <option value="y6">近6年（2021/1/1起）</option><option value="y7">近7年（2020/1/1起）</option>
@@ -117,12 +117,12 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       </div>
     </div>
     <div class="more-row" hidden id="more-row">
-      <div class="fld"><span>上市日期（不晚于）</span><input type="date" id="fdate"></div>
       <div class="fld"><span>收益率下限(%)</span><input type="number" id="rmin" class="w80" placeholder="不限"></div>
       <div class="fld"><span>收益率上限(%)</span><input type="number" id="rmax" class="w80" placeholder="不限"></div>
       <span class="fld-pair"><div class="fld"><span>最大回撤上限(%)</span><input type="number" id="mddmax" class="w80" placeholder="不限"></div>
       <div class="fld"><span>最大回撤下限(%)</span><input type="number" id="mddmin" class="w80" placeholder="不限"></div></span>
       <div class="fld"><span>代码/名称</span><input type="text" id="q" placeholder="搜索" style="min-width:130px"></div>
+      <div class="fld"><span>上市日期（不晚于）</span><input type="date" id="fdate"></div>
       <div class="fldbox" id="stBox"><button type="button" class="btn fldbox-btn" id="stBtn" aria-expanded="false"><span id="stBtnText">不含ST、不含已退市</span><span class="caret">▾</span></button>
         <div class="fldbox-pop" id="stPanel" hidden>
           <label class="chk" for="nost"><input type="checkbox" id="nost" checked>不含ST</label>
