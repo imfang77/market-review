@@ -97,11 +97,16 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       <div class="fld"><span>排名前 N</span><input type="number" id="topn" class="w80" value="20" min="1" max="500"></div>
       <div class="fld"><span>时间范围</span><select id="sel-range">
         <option value="m1">近1月</option><option value="m3">近3月</option>
-        <option value="m6">近6月</option><option value="y1">近1年</option>
-        <option value="y3">近3年</option><option value="y5">近5年</option>
-        <option value="y10" selected>近10年</option><option value="custom">自定义日期</option>
+        <option value="m6">近6月</option>
+        <option value="y1">今年（2026年1月1日起）</option>
+        <option value="y2">近2年（2025/1/1起）</option><option value="y3">近3年（2024/1/1起）</option>
+        <option value="y4">近4年（2023/1/1起）</option><option value="y5">近5年（2022/1/1起）</option>
+        <option value="y6">近6年（2021/1/1起）</option><option value="y7">近7年（2020/1/1起）</option>
+        <option value="y8">近8年（2019/1/1起）</option><option value="y9">近9年（2018/1/1起）</option>
+        <option value="y10" selected>近10年（2017/1/1起）</option>
+        <option value="y15">近15年（2012/1/1起）</option><option value="y20">近20年（2007/1/1起）</option>
+        <option value="custom">自定义日期</option>
       </select></div>
-      <div class="fld"><span>上市日期（不晚于）</span><input type="date" id="fdate"></div>
       <button class="btn primary" id="go" type="button">查询排名</button>
       <span class="toggle" id="tg-more">更多筛选 ▾</span>
     </div>
@@ -112,6 +117,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       </div>
     </div>
     <div class="more-row" hidden id="more-row">
+      <div class="fld"><span>上市日期（不晚于）</span><input type="date" id="fdate"></div>
       <div class="fld"><span>收益率下限(%)</span><input type="number" id="rmin" class="w80" placeholder="不限"></div>
       <div class="fld"><span>收益率上限(%)</span><input type="number" id="rmax" class="w80" placeholder="不限"></div>
       <span class="fld-pair"><div class="fld"><span>最大回撤上限(%)</span><input type="number" id="mddmax" class="w80" placeholder="不限"></div>
@@ -190,10 +196,11 @@ function rangeIdx(){
   }
   var n={m1:21,m3:63,m6:126}[r];
   if(n)return [Math.max(0,last-n+1),last];
-  var yrs={y1:1,y3:3,y5:5,y10:10}[r]||1;
-  var dt=new Date(a[last]+'T00:00:00');dt.setFullYear(dt.getFullYear()-yrs);
-  var target=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
-  return [align(target),last];
+  /* 今年/近N年：按对应年份1月1日起首个交易日对齐（非自然倒推） */
+  var yrs={y1:0,y2:1,y3:2,y4:3,y5:4,y6:5,y7:6,y8:7,y9:8,y10:9,y15:14,y20:19};
+  if(!(r in yrs))return [Math.max(0,last-252),last];
+  var year=parseInt(a[last].slice(0,4),10)-yrs[r];
+  return [alignStart(year+'-01-01'),last];
 }
 /* 成立日期默认跟随区间起点；用户手动改动后不再自动覆盖 */
 function syncFoundDate(){
