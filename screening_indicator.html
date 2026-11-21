@@ -110,6 +110,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       <div class="fld"><span>最大回撤上限(%)</span><input type="number" id="mddmax" class="w80" placeholder="不限"></div>
       <div class="fld"><span>代码/名称</span><input type="text" id="q" placeholder="搜索" style="min-width:130px"></div>
       <label class="chk" for="nost"><input type="checkbox" id="nost" checked>不含ST</label>
+      <label class="chk" for="nod"><input type="checkbox" id="nod" checked>不含已退市</label>
       <button class="btn" id="reset" type="button">重置</button>
     </div>
   </div>
@@ -135,6 +136,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       <div class="cal-line"><b>5/10/20日涨幅</b>：按交易日回溯，最近 5 / 10 / 20 个交易日日收益累乘 − 1，锚定数据最后交易日（不随所选区间变化）；停牌日无收益不计入，窗口内完全无有效数据显示“—”；日线未复权。</div>
       <div class="cal-line"><b>有效交易日</b>：实际参与夏普计算的日收益样本数；至少 20 日且不少于区间交易日的 60%，单日涨跌幅绝对值超过 30% 的异常日剔除（仍计入区间收益与回撤）。</div>
       <div class="cal-line"><b>上市日期</b>：来自通达信基础库 SSDATE 字段，筛选条件为上市日期不晚于所选日期；默认随区间起点联动，手动修改后不再覆盖。基础库无记录的少数退市证券显示“—”。</div>
+      <div class="cal-line"><b>不含ST / 不含已退市</b>：分别按证券简称含“ST”、后缀“退”或前缀“退市”识别，默认均勾选；已退市证券保留历史日线，但默认不参与筛选。</div>
       <div class="cal-line"><b>数据用途</b>：结果仅供研究参考，不构成投资建议。</div>
     </div></details>
   </div>
@@ -283,11 +285,12 @@ function recentRets(){
   });
 }
 function filtered(){
-  var rows=RESULT,q=$('q').value.trim().toLowerCase(),fd=$('fdate').value,st=$('nost').checked;
+  var rows=RESULT,q=$('q').value.trim().toLowerCase(),fd=$('fdate').value,st=$('nost').checked,nd=$('nod').checked;
   var lo=$('rmin').value===''?null:parseFloat($('rmin').value)/100,hi=$('rmax').value===''?null:parseFloat($('rmax').value)/100;
   var md=$('mddmax').value===''?null:parseFloat($('mddmax').value)/100;
   return rows.filter(function(r){
     if(st&&r.name.indexOf('ST')>=0)return false;
+    if(nd&&(/退$/.test(r.name)||/^退市/.test(r.name)))return false;
     if(fd&&r.first>fd)return false;
     if(lo!==null&&r.ret<lo)return false;if(hi!==null&&r.ret>hi)return false;
     if(md!==null&&r.mdd>md)return false;
@@ -363,6 +366,7 @@ function bind(){
   $('topn').addEventListener('input',function(){SHOWN=Math.max(1,parseInt(this.value,10)||20);render();});
   ['q','rmin','rmax','mddmax'].forEach(function(id){$(id).addEventListener('input',function(){SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});});
   $('nost').addEventListener('change',function(){SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});
+  $('nod').addEventListener('change',function(){SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});
   $('fdate').addEventListener('change',function(){this.dataset.touched='1';SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});
   $('datepair').addEventListener('change',function(){if(S.range==='custom')run();});
   $('more').addEventListener('click',function(){SHOWN+=50;render();});
@@ -372,7 +376,7 @@ function bind(){
     this.textContent=row.hidden?'更多筛选 ▾':'收起筛选 ▴';
   });
   $('reset').addEventListener('click',function(){
-    $('q').value='';$('rmin').value='';$('rmax').value='';$('mddmax').value='';$('nost').checked=true;$('topn').value=20;
+    $('q').value='';$('rmin').value='';$('rmax').value='';$('mddmax').value='';$('nost').checked=true;$('nod').checked=true;$('topn').value=20;
     delete $('fdate').dataset.touched;
     syncFoundDate();
     S.metric='sh';$('metric').value='sh';SORT.k='';SHOWN=20;render();
