@@ -29,6 +29,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif
 .datepair.on{display:flex}
 .more-row{margin-top:12px;padding-top:12px;border-top:1px dashed #e9ecef;display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
 .more-row[hidden]{display:none}
+.chk-group{display:inline-flex;gap:18px;align-items:center;flex-wrap:nowrap}
 .chk{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#495057;cursor:pointer;height:36px;user-select:none}
 .chk input{width:15px;height:15px;margin:0;accent-color:#4263eb;cursor:pointer}
 .chk:hover{color:#4263eb}
@@ -109,8 +110,8 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       <div class="fld"><span>收益率上限(%)</span><input type="number" id="rmax" class="w80" placeholder="不限"></div>
       <div class="fld"><span>最大回撤上限(%)</span><input type="number" id="mddmax" class="w80" placeholder="不限"></div>
       <div class="fld"><span>代码/名称</span><input type="text" id="q" placeholder="搜索" style="min-width:130px"></div>
-      <label class="chk" for="nost"><input type="checkbox" id="nost" checked>不含ST</label>
-      <label class="chk" for="nod"><input type="checkbox" id="nod" checked>不含已退市</label>
+      <span class="chk-group"><label class="chk" for="nost"><input type="checkbox" id="nost" checked>不含ST</label>
+      <label class="chk" for="nod"><input type="checkbox" id="nod" checked>不含已退市</label></span>
       <button class="btn" id="reset" type="button">重置</button>
     </div>
   </div>
