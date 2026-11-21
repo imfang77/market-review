@@ -13,6 +13,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif
 .wrap{max-width:1180px;margin:22px auto;padding:0 14px}
 .panel{background:#fff;border-radius:12px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.05);margin-bottom:14px}
 .row{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end}
+.fld-pair{display:inline-flex;gap:12px;align-items:flex-end;flex-wrap:nowrap}
 .fld{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#868e96}
 .fld select,.fld input{border:1px solid #dee2e6;border-radius:7px;padding:7px 9px;font-size:13px;color:#1a1a2e;background:#fff;height:36px;min-width:112px}
 .fld input.w80{min-width:80px;width:80px}
@@ -108,7 +109,8 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
     <div class="more-row" hidden id="more-row">
       <div class="fld"><span>收益率下限(%)</span><input type="number" id="rmin" class="w80" placeholder="不限"></div>
       <div class="fld"><span>收益率上限(%)</span><input type="number" id="rmax" class="w80" placeholder="不限"></div>
-      <div class="fld"><span>最大回撤上限(%)</span><input type="number" id="mddmax" class="w80" placeholder="不限"></div>
+      <span class="fld-pair"><div class="fld"><span>最大回撤上限(%)</span><input type="number" id="mddmax" class="w80" placeholder="不限"></div>
+      <div class="fld"><span>最大回撤下限(%)</span><input type="number" id="mddmin" class="w80" placeholder="不限"></div></span>
       <div class="fld"><span>代码/名称</span><input type="text" id="q" placeholder="搜索" style="min-width:130px"></div>
       <span class="chk-group"><label class="chk" for="nost"><input type="checkbox" id="nost" checked>不含ST</label>
       <label class="chk" for="nod"><input type="checkbox" id="nod" checked>不含已退市</label></span>
@@ -133,7 +135,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       <div class="cal-line"><b>夏普比率（年化）</b>：日均收益 ÷ 日收益标准差 × √252。√252 是把日频均值与波动换算到年度（252 个交易日）的系数；这里按无风险利率 = 0 处理，衡量每承担一单位年化波动能获得多少年化超额回报。它不是“把区间收益率年化”，而是风险调整后的年化指标。</div>
       <div class="cal-line"><b>年化收益</b>：(1 + 区间收益)^(252 / 区间交易日数) − 1，把区间累计收益折算成等效年化收益。</div>
       <div class="cal-line"><b>区间收益</b>：区间内各日收益累乘 − 1；日线未复权，除权除息日跳空可能使收益失真。</div>
-      <div class="cal-line"><b>最大回撤</b>：区间累计净值相对此前峰值的最大回落幅度，表中以负号展示。</div>
+      <div class="cal-line"><b>最大回撤</b>：区间累计净值相对此前峰值的最大回落幅度，表中以负号展示；筛选框的“上限/下限”按回撤幅度（正数%）判断，上限=回撤不超过 X%、下限=回撤至少 X%。</div>
       <div class="cal-line"><b>5/10/20日涨幅</b>：按交易日回溯，最近 5 / 10 / 20 个交易日日收益累乘 − 1，锚定数据最后交易日（不随所选区间变化）；停牌日无收益不计入，窗口内完全无有效数据显示“—”；日线未复权。</div>
       <div class="cal-line"><b>有效交易日</b>：实际参与夏普计算的日收益样本数；至少 20 日且不少于区间交易日的 60%，单日涨跌幅绝对值超过 30% 的异常日剔除（仍计入区间收益与回撤）。</div>
       <div class="cal-line"><b>上市日期</b>：来自通达信基础库 SSDATE 字段，筛选条件为上市日期不晚于所选日期；默认随区间起点联动，手动修改后不再覆盖。基础库无记录的少数退市证券显示“—”。</div>
@@ -288,13 +290,13 @@ function recentRets(){
 function filtered(){
   var rows=RESULT,q=$('q').value.trim().toLowerCase(),fd=$('fdate').value,st=$('nost').checked,nd=$('nod').checked;
   var lo=$('rmin').value===''?null:parseFloat($('rmin').value)/100,hi=$('rmax').value===''?null:parseFloat($('rmax').value)/100;
-  var md=$('mddmax').value===''?null:parseFloat($('mddmax').value)/100;
+  var md=$('mddmax').value===''?null:parseFloat($('mddmax').value)/100,mn=$('mddmin').value===''?null:parseFloat($('mddmin').value)/100;
   return rows.filter(function(r){
     if(st&&r.name.indexOf('ST')>=0)return false;
     if(nd&&(/退$/.test(r.name)||/^退市/.test(r.name)))return false;
     if(fd&&r.first>fd)return false;
     if(lo!==null&&r.ret<lo)return false;if(hi!==null&&r.ret>hi)return false;
-    if(md!==null&&r.mdd>md)return false;
+    if(md!==null&&r.mdd>md)return false;if(mn!==null&&r.mdd<mn)return false;
     if(q&&(r.code+' '+r.name).toLowerCase().indexOf(q)<0)return false;return true;
   });
 }
@@ -365,7 +367,7 @@ function bind(){
   $('go').addEventListener('click',run);
   $('metric').addEventListener('change',function(){S.metric=this.value;SORT.k='';render();});
   $('topn').addEventListener('input',function(){SHOWN=Math.max(1,parseInt(this.value,10)||20);render();});
-  ['q','rmin','rmax','mddmax'].forEach(function(id){$(id).addEventListener('input',function(){SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});});
+  ['q','rmin','rmax','mddmax','mddmin'].forEach(function(id){$(id).addEventListener('input',function(){SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});});
   $('nost').addEventListener('change',function(){SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});
   $('nod').addEventListener('change',function(){SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});
   $('fdate').addEventListener('change',function(){this.dataset.touched='1';SHOWN=Math.max(1,parseInt($('topn').value,10)||20);render();});
@@ -377,7 +379,7 @@ function bind(){
     this.textContent=row.hidden?'更多筛选 ▾':'收起筛选 ▴';
   });
   $('reset').addEventListener('click',function(){
-    $('q').value='';$('rmin').value='';$('rmax').value='';$('mddmax').value='';$('nost').checked=true;$('nod').checked=true;$('topn').value=20;
+    $('q').value='';$('rmin').value='';$('rmax').value='';$('mddmax').value='';$('mddmin').value='';$('nost').checked=true;$('nod').checked=true;$('topn').value=20;
     delete $('fdate').dataset.touched;
     syncFoundDate();
     S.metric='sh';$('metric').value='sh';SORT.k='';SHOWN=20;render();
