@@ -117,8 +117,8 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       </div>
     </div>
     <div class="more-row" hidden id="more-row">
-      <div class="fld"><span>收益率下限(%)</span><input type="number" id="rmin" class="w80" placeholder="不限"></div>
-      <div class="fld"><span>收益率上限(%)</span><input type="number" id="rmax" class="w80" placeholder="不限"></div>
+      <div class="fld"><span>年化收益下限(%)</span><input type="number" id="rmin" class="w80" placeholder="不限"></div>
+      <div class="fld"><span>年化收益上限(%)</span><input type="number" id="rmax" class="w80" placeholder="不限"></div>
       <span class="fld-pair"><div class="fld"><span>最大回撤上限(%)</span><input type="number" id="mddmax" class="w80" placeholder="不限"></div>
       <div class="fld"><span>最大回撤下限(%)</span><input type="number" id="mddmin" class="w80" placeholder="不限"></div></span>
       <div class="fld"><span>代码/名称</span><input type="text" id="q" placeholder="搜索" style="min-width:130px"></div>
@@ -149,7 +149,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       <span class="hintline" id="more-hint"></span></div>
     <details class="cal-fold" id="cal-fold"><summary>计算口径与数据说明（默认折叠，点击展开）</summary><div class="cal-list">
       <div class="cal-line"><b>夏普比率（年化）</b>：日均收益 ÷ 日收益标准差 × √252。√252 是把日频均值与波动换算到年度（252 个交易日）的系数；这里按无风险利率 = 0 处理，衡量每承担一单位年化波动能获得多少年化超额回报。它不是“把区间收益率年化”，而是风险调整后的年化指标。</div>
-      <div class="cal-line"><b>年化收益</b>：(1 + 区间收益)^(252 / 区间交易日数) − 1，把区间累计收益折算成等效年化收益。</div>
+      <div class="cal-line"><b>年化收益</b>：(1 + 区间收益)^(252 / 区间交易日数) − 1，把区间累计收益折算成等效年化收益。筛选区的「年化收益下限/上限」即按此值判断（不是区间收益）；无年化值者不参与该组筛选。</div>
       <div class="cal-line"><b>区间收益</b>：区间内各日收益累乘 − 1；日线未复权，除权除息日跳空可能使收益失真。</div>
       <div class="cal-line"><b>最大回撤</b>：区间累计净值相对此前峰值的最大回落幅度，表中以负号展示；筛选框的“上限/下限”按回撤幅度（正数%）判断，上限=回撤不超过 X%、下限=回撤至少 X%。</div>
       <div class="cal-line"><b>5/10/20日涨幅</b>：按交易日回溯，最近 5 / 10 / 20 个交易日日收益累乘 − 1，锚定数据最后交易日（不随所选区间变化）；停牌日无收益不计入，窗口内完全无有效数据显示“—”；日线未复权。</div>
@@ -202,11 +202,25 @@ function rangeIdx(){
   var year=parseInt(a[last].slice(0,4),10)-yrs[r];
   return [alignStart(year+'-01-01'),last];
 }
-/* 成立日期默认跟随区间起点；用户手动改动后不再自动覆盖 */
+/* 时间范围的名义起始日（与下拉文案一致）：
+   年份型(y1~y20)用「起始年份-01-01」（如近20年=2007-01-01），
+   月份型(m1/m3/m6)与自定义用实际首个交易日。
+   注意不能用 M.dates[ix[0]]——数据仅 2015 起，alignStart('2007-01-01') 会被钳到 2015 首日。 */
+function rangeStartDate(){
+  var r=S.range,a=M.dates,last=a.length-1;
+  var yrs={y1:0,y2:1,y3:2,y4:3,y5:4,y6:5,y7:6,y8:7,y9:8,y10:9,y15:14,y20:19};
+  if(r in yrs){
+    var year=parseInt(a[last].slice(0,4),10)-yrs[r];
+    return year+'-01-01';
+  }
+  var ix=rangeIdx();
+  return ix?a[ix[0]]:null;
+}
+/* 上市日期（不晚于）默认跟随时间范围起始日；用户手动改动后不再自动覆盖 */
 function syncFoundDate(){
   if(M&&!$('fdate').dataset.touched){
-    var ix=rangeIdx();
-    if(ix)$('fdate').value=M.dates[ix[0]];
+    var d=rangeStartDate();
+    if(d)$('fdate').value=d;
   }
 }
 /* 国内访问 GitHub Pages 静态文件极慢（约12KB/s），
@@ -313,7 +327,8 @@ function filtered(){
     if(os? !isst : (st&&isst))return false;
     if(nd&&(/退$/.test(r.name)||/^退市/.test(r.name)))return false;
     if(fd&&r.first>fd)return false;
-    if(lo!==null&&r.ret<lo)return false;if(hi!==null&&r.ret>hi)return false;
+    /* 年化收益上下限：与标签口径一致，按 r.ann 判断；无年化值者（ann=null）不参与该组筛选 */
+    if(lo!==null&&(r.ann==null||r.ann<lo))return false;if(hi!==null&&(r.ann==null||r.ann>hi))return false;
     if(md!==null&&r.mdd>md)return false;if(mn!==null&&r.mdd<mn)return false;
     if(q&&(r.code+' '+r.name).toLowerCase().indexOf(q)<0)return false;return true;
   });
@@ -448,7 +463,8 @@ loadMeta(0).then(function(d){
   M=d;M.years.forEach(function(y){YEAR_INFO[y.y]=y;});
   $('data-date').textContent='数据至 '+M.date+' · '+M.codes.length+' 只';
   $('d1').min=M.start;$('d1').max=M.date;$('d2').min=M.start;$('d2').max=M.date;
-  $('fdate').min=M.start;$('fdate').max=M.date;
+  /* 上市日期可早于数据起点（如近20年=2007），min 放宽到 A 股开市初期 */
+  $('fdate').min='1990-01-01';$('fdate').max=M.date;
   bind();run();
 }).catch(function(e){$('data-date').textContent='数据加载失败';console.error(e);});
 })();
