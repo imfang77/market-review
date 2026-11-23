@@ -77,7 +77,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
 .statline{font-size:12px;color:#868e96;margin-left:auto}
 .res-foot{padding:12px 18px;border-top:1px solid #eef1f8;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
 .hintline{font-size:12px;color:#adb5bd}
-@media(max-width:600px){.header{padding:14px 10px}.wrap{margin:14px auto;padding:0 8px}.panel{padding:12px}.row{gap:10px}.fld select,.fld input{min-width:88px}.seg button{padding:0 8px;font-size:12px}table{font-size:12px;table-layout:fixed;width:920px;min-width:920px}th,td{padding:7px 8px}th:first-child,td:first-child{left:0;width:32px;min-width:32px;max-width:32px;padding-left:3px;padding-right:3px}th:nth-child(2),td:nth-child(2){left:32px;width:80px;min-width:80px;max-width:80px;padding-left:5px;padding-right:5px}th:nth-child(3){width:78px}th:nth-child(4){width:90px}th:nth-child(5){width:90px}th:nth-child(6){width:76px}th:nth-child(7){width:76px}th:nth-child(8){width:76px}th:nth-child(9){width:90px}th:nth-child(10){width:100px}th:nth-child(11){width:140px}td.nm .subcode{font-size:10.5px}.statline{margin-left:0}.cal-list{padding:8px 12px 14px}}
+@media(max-width:600px){.header{padding:14px 10px}.wrap{margin:14px auto;padding:0 8px}.panel{padding:12px}.row{gap:10px}.fld select,.fld input{min-width:88px}.seg button{padding:0 8px;font-size:12px}table{font-size:12px;table-layout:fixed;width:1092px;min-width:1092px}th,td{padding:7px 8px}th:first-child,td:first-child{left:0;width:32px;min-width:32px;max-width:32px;padding-left:3px;padding-right:3px}th:nth-child(2),td:nth-child(2){left:32px;width:80px;min-width:80px;max-width:80px;padding-left:5px;padding-right:5px}th:nth-child(3){width:78px}th:nth-child(4){width:90px}th:nth-child(5){width:90px}th:nth-child(6){width:76px}th:nth-child(7){width:76px}th:nth-child(8){width:76px}th:nth-child(9),th:nth-child(10){width:86px;white-space:normal;word-break:break-all}th:nth-child(11){width:90px}th:nth-child(12){width:76px}th:nth-child(13){width:140px}td.nm .subcode{font-size:10.5px}.statline{margin-left:0}.cal-list{padding:8px 12px 14px}}
 </style>
 </head>
 <body>
@@ -142,6 +142,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       <th data-k="rank" style="width:52px">排名</th><th data-k="name">名称</th>
       <th data-k="sh">夏普比率</th><th data-k="ann">年化收益</th><th data-k="mdd">最大回撤</th>
       <th data-k="c5">5日涨幅</th><th data-k="c10">10日涨幅</th><th data-k="c20">20日涨幅</th>
+      <th data-k="mddS">最大回撤起始日期</th><th data-k="mddE">最大回撤结束日期</th>
       <th data-k="ret">区间收益</th><th data-k="n">有效交易日</th><th data-k="first">上市日期</th>
     </tr></thead><tbody id="tbody"></tbody></table></div>
     <div class="loading" id="loading" hidden>正在计算，请稍候…</div>
@@ -152,6 +153,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       <div class="cal-line"><b>年化收益</b>：(1 + 区间收益)^(252 / 区间交易日数) − 1，把区间累计收益折算成等效年化收益。筛选区的「年化收益下限/上限」即按此值判断（不是区间收益）；无年化值者不参与该组筛选。</div>
       <div class="cal-line"><b>区间收益</b>：区间内各日收益累乘 − 1；日线未复权，除权除息日跳空可能使收益失真。</div>
       <div class="cal-line"><b>最大回撤</b>：区间累计净值相对此前峰值的最大回落幅度，表中以负号展示；筛选框的“上限/下限”按回撤幅度（正数%）判断，上限=回撤不超过 X%、下限=回撤至少 X%。</div>
+      <div class="cal-line"><b>最大回撤起始/结束日期</b>：起始日期=该区间内最大回撤对应的历史最高净值日（峰值日），结束日期=随后的最低净值日（谷底日）；两者都落在所选时间范围内，随所选区间重新计算。若区间内净值从未回落（最大回撤为 0）显示“—”。</div>
       <div class="cal-line"><b>5/10/20日涨幅</b>：按交易日回溯，最近 5 / 10 / 20 个交易日日收益累乘 − 1，锚定数据最后交易日（不随所选区间变化）；停牌日无收益不计入，窗口内完全无有效数据显示“—”；日线未复权。</div>
       <div class="cal-line"><b>有效交易日</b>：实际参与夏普计算的日收益样本数；至少 20 日且不少于区间交易日的 60%，单日涨跌幅绝对值超过 30% 的异常日剔除（仍计入区间收益与回撤）。</div>
       <div class="cal-line"><b>上市日期</b>：来自通达信基础库 SSDATE 字段，筛选条件为上市日期不晚于所选日期；默认随区间起点联动，手动修改后不再覆盖。基础库无记录的少数退市证券显示“—”。</div>
@@ -256,7 +258,9 @@ function compute(s,e){
   var N=M.codes.length, nday=e-s+1, inv=M.invalid, scale=M.scale;
   var sum=new Float64Array(N),sq=new Float64Array(N),mul=new Float64Array(N),cnt=new Uint16Array(N);
   var peak=new Float64Array(N),mdd=new Float64Array(N);
-  for(var k=0;k<N;k++){mul[k]=1;peak[k]=1;}
+  /* 最大回撤起止：peakDay=当前峰值日索引，ddS/ddE=历史最大回撤的峰值日与谷底日索引 */
+  var peakDay=new Int32Array(N),ddS=new Int32Array(N),ddE=new Int32Array(N);
+  for(var k=0;k<N;k++){mul[k]=1;peak[k]=1;peakDay[k]=s;ddS[k]=s;ddE[k]=s;}
   var years=[];
   for(var gi=s;gi<=e;gi++){var y=M.dates[gi].slice(0,4);if(years.indexOf(y)<0)years.push(y);}
   return Promise.all(years.map(loadSeries)).then(function(arrs){
@@ -268,8 +272,8 @@ function compute(s,e){
         var v=arr[off+k];if(v===inv)continue;
         var r=v/scale;
         mul[k]*=(1+r);
-        if(mul[k]>peak[k])peak[k]=mul[k];
-        if(peak[k]>0){var dd=1-mul[k]/peak[k];if(dd>mdd[k])mdd[k]=dd;}
+        if(mul[k]>peak[k]){peak[k]=mul[k];peakDay[k]=gi;}
+        if(peak[k]>0){var dd=1-mul[k]/peak[k];if(dd>mdd[k]){mdd[k]=dd;ddS[k]=peakDay[k];ddE[k]=gi;}}
         if(r>0.3||r<-0.3)continue;
         sum[k]+=r;sq[k]+=r*r;cnt[k]++;
       }
@@ -284,7 +288,9 @@ function compute(s,e){
       var ret=mul[k2]-1;
       var ann=(1+ret>0)?Math.pow(1+ret,252/nday)-1:null;
       out.push({code:M.codes[k2][0],name:M.codes[k2][1],first:M.codes[k2][2]||'1900-01-01',
-                sh:sh,ret:ret,ann:ann,mdd:mdd[k2],n:c,k:k2});
+                sh:sh,ret:ret,ann:ann,mdd:mdd[k2],
+                mddS:mdd[k2]>0?M.dates[ddS[k2]]:'—',mddE:mdd[k2]>0?M.dates[ddE[k2]]:'—',
+                n:c,k:k2});
     }
     return recentRets().then(function(rr){
       out.forEach(function(r){r.c5=rr.c5[r.k];r.c10=rr.c10[r.k];r.c20=rr.c20[r.k];});
@@ -339,8 +345,8 @@ function render(){
   var asc=SORT.k?SORT.asc:(key==='mdd');
   /* NaN（显示“—”）恒排末尾：否则比较返回NaN被当0，破坏整体顺序 */
   rows.sort(function(a,b){var x=a[key],y=b[key];
-    var xn=typeof x==='number'&&isFinite(x),yn=typeof y==='number'&&isFinite(y);
-    if(!xn&&!yn)return 0;if(!xn)return 1;if(!yn)return -1;
+    var bad=function(v){return v==='—'||v===null||v===undefined||v===''||(typeof v==='number'&&!isFinite(v));};
+    if(bad(x)&&bad(y))return 0;if(bad(x))return 1;if(bad(y))return -1;
     if(typeof x==='string')return asc?x.localeCompare(y):y.localeCompare(x);
     return asc?x-y:y-x;});
   var top=Math.max(1,Math.min(500,parseInt($('topn').value,10)||20));
@@ -354,9 +360,10 @@ function render(){
     h+='<tr><td class="rk">'+(i+1)+'</td><td class="nm"><span class="nmt">'+r.name+'</span><span class="subcode">'+r.code+'</span></td>'+
        '<td>'+fmtNum(r.sh)+'</td><td class="'+cls(r.ann)+'">'+fmtPct(r.ann)+'</td><td class="dn">−'+(r.mdd*100).toFixed(2)+'%</td>'+
        '<td class="'+cls(r.c5)+'">'+fmtPct(r.c5)+'</td><td class="'+cls(r.c10)+'">'+fmtPct(r.c10)+'</td><td class="'+cls(r.c20)+'">'+fmtPct(r.c20)+'</td>'+
+       '<td class="rk">'+r.mddS+'</td><td class="rk">'+r.mddE+'</td>'+
        '<td class="'+cls(r.ret)+'">'+fmtPct(r.ret)+'</td><td class="rk">'+r.n+'</td><td class="rk">'+(r.first&&r.first!=='1900-01-01'?r.first:'—')+'</td></tr>';
   }
-  $('tbody').innerHTML=h||'<tr><td colspan="11" class="empty">无符合条件的股票</td></tr>';
+  $('tbody').innerHTML=h||'<tr><td colspan="13" class="empty">无符合条件的股票</td></tr>';
   $('more').hidden=SHOWN>=rows.length;
   $('more-hint').textContent=SHOWN<rows.length?('已显示 '+shown.length+' / '+rows.length+' 只'):'';
   document.querySelectorAll('#tb thead th').forEach(function(th){
@@ -375,22 +382,22 @@ function run(){
   compute(S.s,S.e).then(function(rows){
     RESULT=rows;SORT.k='';SORT.asc=false;$('loading').hidden=true;render();
   }).catch(function(err){
-    $('loading').hidden=true;$('tbody').innerHTML='<tr><td colspan="8" class="empty">计算失败：'+err.message+'</td></tr>';
+    $('loading').hidden=true;$('tbody').innerHTML='<tr><td colspan="13" class="empty">计算失败：'+err.message+'</td></tr>';
     console.error(err);
   });
 }
 function exportXls(){
   var rows=filtered(),key=SORT.k||S.metric;
   rows.sort(function(a,b){var x=a[key],y=b[key];
-    var xn=typeof x==='number'&&isFinite(x),yn=typeof y==='number'&&isFinite(y);
-    if(!xn&&!yn)return 0;if(!xn)return 1;if(!yn)return -1;
-    if(typeof x==='string')return x.localeCompare(y);return y-x;});
-  var head=['排名','名称','代码','夏普比率','年化收益','最大回撤','5日涨幅','10日涨幅','20日涨幅','区间收益','有效交易日','上市日期'];
+    var bad=function(v){return v==='—'||v===null||v===undefined||v===''||(typeof v==='number'&&!isFinite(v));};
+    if(bad(x)&&bad(y))return 0;if(bad(x))return 1;if(bad(y))return -1;
+    if(typeof x==='string')return y.localeCompare(x);return y-x;});
+  var head=['排名','名称','代码','夏普比率','年化收益','最大回撤','5日涨幅','10日涨幅','20日涨幅','最大回撤起始日期','最大回撤结束日期','区间收益','有效交易日','上市日期'];
   var esc=function(v){var s=String(v===null||v===undefined?'':v);return '"'+s.replace(/"/g,'""')+'"';};
   var lines=[head.map(esc).join(',')];
   var pct=function(v){return (v===null||!isFinite(v))?'':(v*100).toFixed(2)+'%';};
   for(var i=0;i<rows.length;i++){var r=rows[i];
-    lines.push([i+1,r.name,r.code,r.sh.toFixed(3),pct(r.ann),r.mdd>0?('-'+pct(r.mdd)):'0.00%',pct(r.c5),pct(r.c10),pct(r.c20),pct(r.ret),r.n,r.first].map(esc).join(','));
+    lines.push([i+1,r.name,r.code,r.sh.toFixed(3),pct(r.ann),r.mdd>0?('-'+pct(r.mdd)):'0.00%',pct(r.c5),pct(r.c10),pct(r.c20),r.mddS,r.mddE,pct(r.ret),r.n,r.first].map(esc).join(','));
   }
   var blob=new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);
