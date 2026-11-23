@@ -242,16 +242,24 @@ function fetchBuf(url,ms){
 function loadSeries(year){
   if(CACHE[year])return CACHE[year];
   var fname='_series_'+year+'.gz';
-  var srcs=IS_LOCAL?[fname]:[MIRROR+fname,fname];
+  /* 分片必须与 meta 同源同版本：meta 同源优先（含最新交易日），而 jsdelivr @main 缓存滞后
+     （实测 2026 分片少 1 天 = 5542 个 Int16），错配会让最后一日下标越界 → 全部 NaN → 0 只。
+     故改为同源优先、镜像仅回退，并在解压后按 meta 的 n×代码数校验长度。 */
+  var srcs=IS_LOCAL?[fname]:[fname,MIRROR+fname];
+  var yi=YEAR_INFO[year], expect=yi?yi.n*M.codes.length:0;
   var attempt=function(i){
     if(i>=srcs.length)return Promise.reject(new Error('分片加载失败: '+fname));
-    return fetchBuf(srcs[i],IS_LOCAL?60000:25000).catch(function(){return attempt(i+1);});
+    return fetchBuf(srcs[i],IS_LOCAL?60000:25000).then(function(buf){
+      if(typeof DecompressionStream==='undefined')throw new Error('浏览器不支持 DecompressionStream，请用最新版 Chrome/Edge');
+      var blob=new Blob([buf]);
+      return new Response(blob.stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+    }).then(function(buf){
+      var arr=new Int16Array(buf);
+      if(expect&&arr.length!==expect)throw new Error('分片版本不匹配: '+year+' '+arr.length+'/'+expect);
+      return arr;
+    }).catch(function(){return attempt(i+1);});
   };
-  CACHE[year]=attempt(0).then(function(buf){
-    if(typeof DecompressionStream==='undefined')throw new Error('浏览器不支持 DecompressionStream，请用最新版 Chrome/Edge');
-    var blob=new Blob([buf]);
-    return new Response(blob.stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
-  }).then(function(buf){return new Int16Array(buf);});
+  CACHE[year]=attempt(0);
   return CACHE[year];
 }
 function compute(s,e){
