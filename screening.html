@@ -39,10 +39,13 @@ body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", san
 </div>
 <div class="container">
 
-<a class="card ind" href="screening_indicator.html?v=20261121a" id="card-ind">
+<a class="card ind" href="screening_indicator.html?v=20261121" id="card-ind">
   <div class="top"><div class="ico">&#128202;</div><div><div class="title">按指标选股</div></div></div>
-  <div class="desc">按年份或时间段计算夏普比率与区间收益。<br>支持收益率排名 / 范围筛选，结果按所选指标降序。</div>
-  <div class="meta"><span class="badge-date" id="ind-date">全市场 · 任意区间 · 夏普/收益排名</span></div>
+  <div class="desc">全市场 / 任意区间，按年份或时间段计算夏普比率与区间收益。<br>支持收益率排名 / 范围筛选，结果按所选指标降序。</div>
+  <div class="meta">
+    <span class="badge-date" id="ind-date">更新于 —</span>
+    <span class="dot hide" id="ind-dot"></span>
+  </div>
   <div class="arrow">&#8250;</div>
 </a>
 
@@ -76,11 +79,12 @@ body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", san
   <div class="arrow">&#8250;</div>
 </a>
 
-<div class="tip">红色圆点表示技术面 / 基本面 / RPS 有新数据更新。</div>
+<div class="tip">红色圆点表示指标 / 技术面 / 基本面 / RPS 有新数据更新。</div>
 
 </div>
 
 <script>
+var IND_DATE = "20261121";
 var TECH_DATE = "20260918";
 var FUND_DATE = "20260918";
 var RPS_DATE = "20260918";
@@ -97,6 +101,7 @@ function setupCard(prefix, dateStr){
   var hasNew = dateStr && dateStr > seen;
   dot.classList.toggle("hide", !hasNew);
 }
+setupCard("ind", IND_DATE);
 setupCard("tech", TECH_DATE);
 setupCard("fund", FUND_DATE);
 setupCard("rps", RPS_DATE);
@@ -105,6 +110,7 @@ function markRead(prefix, dateStr){
   var dot = document.getElementById(prefix + "-dot");
   dot.classList.add("hide");
 }
+document.getElementById("card-ind").addEventListener("click", function(){ markRead("ind", IND_DATE); });
 document.getElementById("card-tech").addEventListener("click", function(){ markRead("tech", TECH_DATE); });
 document.getElementById("card-fund").addEventListener("click", function(){ markRead("fund", FUND_DATE); });
 document.getElementById("card-rps").addEventListener("click", function(){ markRead("rps", RPS_DATE); });
@@ -114,6 +120,7 @@ document.getElementById("card-rps").addEventListener("click", function(){ markRe
   try {
     fetch('screening_meta.json?t=' + Date.now()).then(function(r){ return r.json(); }).then(function(m){
       if (!m) return;
+      if (m.indicatorDate){ IND_DATE = m.indicatorDate; setupCard("ind", IND_DATE); var ci = document.getElementById("card-ind"); if (ci) ci.href = "screening_indicator.html?v=" + IND_DATE; }
       if (m.techDate){ TECH_DATE = m.techDate; setupCard("tech", TECH_DATE); var ct = document.getElementById("card-tech"); if (ct) ct.href = "screening_tech.html?v=" + TECH_DATE; }
       if (m.fundDate){ FUND_DATE = m.fundDate; setupCard("fund", FUND_DATE); var cf = document.getElementById("card-fund"); if (cf) cf.href = "screening_fund.html?v=" + FUND_DATE; }
       if (m.rpsDate){ RPS_DATE = m.rpsDate; setupCard("rps", RPS_DATE); var cr = document.getElementById("card-rps"); if (cr) cr.href = "stock_rps.html?v=" + RPS_DATE; }

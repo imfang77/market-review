@@ -172,6 +172,7 @@ body.sb-etf #sbEtfHd{padding:8px 28px 2px}
 <body><div class="wrap">
 <div id="sbViewRz"><div class="hd">
 <h1>宽基 ETF 资金流</h1>
+<div class="asof asof-line">更新于 <b>2026-11-23</b></div>
 <div class="asof asof-line">行情最新：<b>2026-11-23</b>（涨跌家数）</div><div class="asof asof-line">融资余额最新披露：<b>2026-11-20</b>（两融 T+1 披露）</div>
 <div class="sub">单图双轴：左轴（蓝刻度）=融资余额蓝线（随粒度切快照），右轴（红刻度）=上涨家数红线（恒为每日）。</div>
 </div>
@@ -1242,7 +1243,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       var box=document.createElement('div');
       box.id='sbEtfHd';box.className='hd';
       var ed=(typeof ETF_D!=='undefined'&&ETF_D.length)?ETF_D[ETF_D.length-1]:'—';
-      box.innerHTML='<h1>宽基 ETF 资金流</h1><div class="asof asof-line">行情最新：<b>'+ed+'</b>（ETF 净申购）</div>';
+      box.innerHTML='<h1>宽基 ETF 资金流</h1><div class="asof asof-line">更新于 <b>2026-11-23</b></div><div class="asof asof-line">行情最新：<b>'+ed+'</b>（ETF 净申购）</div>';
       sec.insertBefore(box,sec.firstChild);
       var oldhd=sec.querySelector('.etfchart-hd');
       if(oldhd) oldhd.style.display='none';
