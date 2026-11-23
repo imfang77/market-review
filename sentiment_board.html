@@ -20,7 +20,12 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif
 .report-card .date-text{font-size:18px;font-weight:700}
 .report-card .arrow{position:absolute;right:20px;top:20px;font-size:20px;color:#adb5bd}
 .report-card .summary{font-size:13px;color:#868e96;line-height:1.7}
-.report-card .upd{margin-top:9px;display:inline-block;background:#fff0f0;color:#c92a2a;border-radius:8px;padding:2px 9px;font-size:12px;font-weight:700}
+/* 与条件选股 screening.html 完全同款：badge-date + 未读红点 */
+.report-card .meta{margin-top:9px;font-size:12px;color:#495057;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.badge-date{background:#f1f3f5;border-radius:10px;padding:3px 10px;font-weight:600}
+.dot{width:9px;height:9px;border-radius:50%;background:#e03131;display:inline-block;box-shadow:0 0 0 3px rgba(224,49,49,0.18)}
+.dot.hide{display:none}
+.tip{text-align:center;font-size:13px;color:#868e96;margin:14px 0 0}
 @media(max-width:600px){.container{margin:20px auto;padding:0 12px}.report-card{padding:16px 16px}.report-card .date-text{font-size:16px}.report-card .arrow{right:14px;top:14px;font-size:17px}}
 </style>
 </head>
@@ -30,19 +35,52 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif
 <div class="container">
   <div class="section-title">数据看板</div>
   <div class="report-list">
-    <a class="report-card" href="sentiment_rzrq.html">
+    <a class="report-card" href="sentiment_rzrq.html" id="card-rz">
       <div class="card-header"><span class="date-text">融资余额 · 涨跌家数 · 个股融资余额</span></div>
-      <div class="summary">每日融资余额与上涨家数双轴走势；表格含每日融资余额、每日涨跌家数、个股融资余额明细</div>
-      <div class="upd">更新于 <b>2026-11-23</b> · 融资余额披露 2026-11-20（T+1）</div>
+      <div class="summary">每日融资余额与上涨家数双轴走势；表格含每日融资余额、每日涨跌家数、个股融资余额明细（融资余额为 T+1 披露，最新 2026-11-20）</div>
+      <div class="meta">
+        <span class="badge-date" id="rz-date">更新于 —</span>
+        <span class="dot hide" id="rz-dot"></span>
+      </div>
       <span class="arrow">&#8599;</span>
     </a>
-    <a class="report-card" href="sentiment_etf.html">
+    <a class="report-card" href="sentiment_etf.html" id="card-etf">
       <div class="card-header"><span class="date-text">宽基 ETF 资金流</span></div>
       <div class="summary">宽基 ETF 累计净申购与指数走势；表格支持按日期 / 按ETF / 按宽基指数三维度查看</div>
-      <div class="upd">更新于 <b>2026-11-23</b></div>
+      <div class="meta">
+        <span class="badge-date" id="etf-date">更新于 —</span>
+        <span class="dot hide" id="etf-dot"></span>
+      </div>
       <span class="arrow">&#8599;</span>
     </a>
   </div>
+  <div class="tip">红色圆点表示情绪看板有更新未查看。</div>
 </div>
+<script>
+/* 与条件选股 screening.html 同款：更新于 YYYY-MM-DD + 未读红点（localStorage 记忆已读）。 */
+var RZ_DATE = "20261120", UD_DATE = "20261123", ETF_DATE = "20261123";
+var META_KEY = "ashare_sentiment_meta_read_v1";
+function loadRead(){ try { return JSON.parse(localStorage.getItem(META_KEY) || "{}"); } catch(e){ return {}; } }
+function saveRead(o){ try { localStorage.setItem(META_KEY, JSON.stringify(o)); } catch(e){} }
+function fmtDate(d){ if(!d) return "—"; return d.replace(/^(\d{4})(\d{2})(\d{2})$/, "$1-$2-$3"); }
+var read = loadRead();
+function setupCard(prefix, dateStr){
+  var dEl = document.getElementById(prefix + "-date");
+  var dot = document.getElementById(prefix + "-dot");
+  dEl.textContent = "更新于 " + fmtDate(dateStr);
+  var seen = read[prefix] || "";
+  var hasNew = dateStr && dateStr > seen;
+  dot.classList.toggle("hide", !hasNew);
+}
+setupCard("rz", UD_DATE);
+setupCard("etf", ETF_DATE);
+function markRead(prefix, dateStr){
+  var r = loadRead(); r[prefix] = dateStr || ""; saveRead(r);
+  var dot = document.getElementById(prefix + "-dot");
+  dot.classList.add("hide");
+}
+document.getElementById("card-rz").addEventListener("click", function(){ markRead("rz", UD_DATE); });
+document.getElementById("card-etf").addEventListener("click", function(){ markRead("etf", ETF_DATE); });
+</script>
 </body>
 </html>
