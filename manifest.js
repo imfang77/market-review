@@ -9,15 +9,15 @@ window.REPORTS = [
   {
     "date": "2026-11-24",
     "weekday": "周二",
-    "reviewFile": "review-20261124.html?v=1795521405",
+    "reviewFile": "review-20261124.html?v=1795521828",
     "reviewSummary": "沪指+0.27%(3548.37) 深成指-0.29% 创业板-0.05% 科创50+1.81% | 1838涨/3267跌 涨停64 成交1.65万亿 赚钱效应约36% | 恐贪39.2中性",
     "screeningFile": "screening.html",
     "screeningSummary": "技术面页最新20261124；基本面页数据截至最新季报；RPS选股页数据日期20261124",
-    "mainlineFile": "mainline-20261124.html?v=1795519835",
+    "mainlineFile": "mainline-20261124.html?v=1795521864",
     "mainlineSummary": "5日主线:渔业/公路/水力发电｜10日主线:银行/水力发电/港口｜20日主线:渔业/乳制品/空运｜融资余额 待次日披露后更新｜涨跌家数 1838/460/3267 · 总5565",
-    "mainlineConceptFile": "mainline_concept-20261124.html?v=1795519835",
+    "mainlineConceptFile": "mainline_concept-20261124.html?v=1795521864",
     "conceptSummary": "5日主线:渔业/公路/水力发电｜10日主线:银行/水力发电/港口｜20日主线:渔业/乳制品/空运｜融资余额 待次日披露后更新｜涨跌家数 1838/460/3267 · 总5565",
-    "previewFile": "preview-20261124.html?v=1795521405"
+    "previewFile": "preview-20261124.html?v=1795521867"
   },
   {
     "date": "2026-11-23",
