@@ -1105,7 +1105,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '<div class="tblbox"><div class="etf-tblwrap"><table class="etf-table"><thead><tr id="etfHead">'
     +   '<th>日期</th><th><span class="eth-full">当日净申购(亿)</span><span class="eth-mini">当日(亿)</span></th><th><span class="eth-full">当日份额增减(亿份)</span><span class="eth-mini">份额(亿份)</span></th><th><span class="eth-full">份额存量(亿份)</span><span class="eth-mini">存量(亿份)</span></th><th><span class="eth-full">纳入指数</span><span class="eth-mini">指数</span></th>'
     + '</tr></thead><tbody id="etfTbody"></tbody></table></div></div>'
-    + '<details class="etf-note2"><summary>表格口径与数据说明（默认折叠，点击展开）</summary><div>12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。列口径：<b>净申购(亿)</b>＝iFinD 份额法净流入金额；<b>份额增减(亿份)</b>＝基金份额存量差分并<b>剔除份额拆分</b>（真实申赎，负=净赎回；拆分日显示「—」）；<b>份额存量(亿份)</b>＝该时点基金总份额（<b>未复权真实值</b>，与图表蓝线的「前复权」口径不同，图表蓝线末端与本列一致）。跟随图表下方「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计（净申购与份额增减取周期累加，份额存量取周期末快照）。<b>整理维度</b>默认按日期（跟随统计粒度与ETF图时间段）；切「按宽基指数」则<b>固定按最新交易日</b>（当日＝该交易日数值，存量＝该日基金总份额）。点指数后可选「按日期」（视窗内逐日明细，固定按日）或「按ETF」（成分 ETF 当日/存量）。<b>点任一 ETF 名称</b>（按ETF维度／按日期下钻第2层／按宽基指数下钻的ETF子表）可展开<b>该 ETF 逐日明细</b>（视窗内、固定按日：当日净申购／当日份额增减／份额存量）。<b>「按ETF」维度</b>在份额存量后附 <b>当日／5日／10日／20日／60日／120日／250日涨幅</b>（前复权净值，截至数据最新交易日；当日＝相对上一交易日、N日＝相对 N 个交易日前，上市不足显示「—」），各列均可点表头排序、首次降序。<b>当日成交(亿)</b>与<b>ETF规模·市值(亿)</b>取自腾讯行情快照（规模＝总市值；盘中成交为截至查询时刻的累计额，收盘后为全日额）。份额数据源：iFinD 基金日频「基金份额」，全历史逐日拉取。</div></details>';
+    + '<details class="etf-note2"><summary>表格口径与数据说明（默认折叠，点击展开）</summary><div>12 宽基指数 · 30 只头部 ETF 净申购明细（全市场净申购，非汇金独占）。列口径：<b>净申购(亿)</b>＝iFinD 份额法净流入金额；<b>份额增减(亿份)</b>＝基金份额存量差分并<b>剔除份额拆分</b>（真实申赎，负=净赎回；拆分日显示「—」）；<b>份额存量(亿份)</b>＝该时点基金总份额（<b>未复权真实值</b>，与图表蓝线的「前复权」口径不同，图表蓝线末端与本列一致）。跟随图表下方「统计粒度」与 ETF 图时间段：日=当日、周=本周累计、月=本月累计（净申购与份额增减取周期累加，份额存量取周期末快照）。<b>整理维度</b>默认按日期（跟随统计粒度与ETF图时间段）；切「按宽基指数」同样<b>跟随统计粒度与ETF图时间段的最新周期</b>（日＝当日、周/月＝当周/当月累计；存量＝周期末基金总份额）。点指数后可选「按日期」（视窗内逐日明细，固定按日）或「按ETF」（成分 ETF 跟随统计粒度的周期累计/存量）。<b>点任一 ETF 名称</b>（按ETF维度／按日期下钻第2层／按宽基指数下钻的ETF子表）可展开<b>该 ETF 逐日明细</b>（视窗内、固定按日：当日净申购／当日份额增减／份额存量）。<b>「按ETF」维度</b>在份额存量后附 <b>当日／5日／10日／20日／60日／120日／250日涨幅</b>（前复权净值，截至数据最新交易日；当日＝相对上一交易日、N日＝相对 N 个交易日前，上市不足显示「—」），各列均可点表头排序、首次降序。<b>当日成交(亿)</b>与<b>ETF规模·市值(亿)</b>取自腾讯行情快照（规模＝总市值；盘中成交为截至查询时刻的累计额，收盘后为全日额）。份额数据源：iFinD 基金日频「基金份额」，全历史逐日拉取。</div></details>';
   sec.appendChild(panel);
 
   var DATA=null, tbody=panel.querySelector('#etfTbody'), dim='d';
@@ -1213,16 +1213,16 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     });
   }
 
-  /* 按宽基指数：固定最新交易日 —— 当日净申购 / 当日份额增减 / 份额存量 / ETF数（不随周/月粒度与时间段变化） */
+  /* 按宽基指数：跟随统计粒度/时间段的最新周期 —— 净申购/份额增减取周期累计，份额存量取周期末快照 */
   function renderIndexTable(){
-    var li=DATA.dates.length-1;
+    var sl=slices(), k=sl.length-1, g=gran(), gt=gtxt(g);
     var head=panel.querySelector('#etfHead');
-    if(head) head.innerHTML='<th>宽基指数</th><th><span class="eth-full">当日净申购(亿)</span><span class="eth-mini">当日(亿)</span></th><th><span class="eth-full">当日份额增减(亿份)</span><span class="eth-mini">份额(亿份)</span></th><th><span class="eth-full">份额存量(亿份)</span><span class="eth-mini">存量(亿份)</span></th><th><span class="eth-full">ETF数</span><span class="eth-mini">只数</span></th>';
+    if(head) head.innerHTML='<th>宽基指数</th><th><span class="eth-full">'+gt+'净申购(亿)</span><span class="eth-mini">'+gt+'(亿)</span></th><th><span class="eth-full">'+gt+'份额增减(亿份)</span><span class="eth-mini">份额(亿份)</span></th><th><span class="eth-full">份额存量(亿份)</span><span class="eth-mini">存量(亿份)</span></th><th><span class="eth-full">ETF数</span><span class="eth-mini">只数</span></th>';
     var rows=[];
     IDX.forEach(function(name){
       var id=DATA.idx[name]; if(!id) return;
       var sd=shareIdx(name);
-      rows.push({name:name, dn:id.net[li], ds:(sd&&sd.dsh)?sd.dsh[li]:null, ss:(sd&&sd.sh)?sd.sh[li]:null, nec:(id.etf&&id.etf.length)||0});
+      rows.push({name:name, dn:agg(id.net,sl,true)[k], ds:sd?agg(sd.dsh,sl,true)[k]:null, ss:sd?agg(sd.sh,sl,false)[k]:null, nec:(id.etf&&id.etf.length)||0});
     });
     rows.sort(function(a,b){ return (b.dn==null?-Infinity:b.dn)-(a.dn==null?-Infinity:a.dn); });
     tbody.innerHTML=rows.map(function(r){
@@ -1258,9 +1258,9 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     var et1=panel.querySelector('table.etf-table'); if(et1) et1._sk=null;
     markSortableHeaders();
   }
-  /* 指数下钻：mode=d 视窗内逐日明细（固定按日），mode=e 成分 ETF 的当日净申购/份额增减/存量（固定最新交易日） */
+  /* 指数下钻：mode=d 视窗内逐日明细（固定按日），mode=e 成分 ETF 跟随统计粒度的周期累计/存量 */
   function renderIdxSub(subTr, name, mode){
-    var li=DATA.dates.length-1, body=subTr.querySelector('.etf-sub-body');
+    var sl=slices(), k=sl.length-1, gt=gtxt(gran()), body=subTr.querySelector('.etf-sub-body');
     var id=DATA.idx[name], sd=shareIdx(name);
     if(!id){ body.innerHTML='<div class="etf-msg">无数据</div>'; return; }
     var h='';
@@ -1274,11 +1274,15 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     }else{
       ensureStats();
       var etfs=DATA.etf.filter(function(x){return x.idx===name;});
-      etfs.sort(function(a,b){ return (b.net[li]==null?-Infinity:b.net[li])-(a.net[li]==null?-Infinity:a.net[li]); });
-      h='<table class="etfmini"><thead><tr><th>ETF（名称 / 代码）</th><th>当日净申购(亿)</th><th>当日份额增减(亿份)</th><th>份额存量(亿份)</th><th>当日成交(亿)</th><th>规模·市值(亿)</th></tr></thead><tbody>';
-      etfs.forEach(function(x){
+      var rows=etfs.map(function(x){
         var sa=shareArr(x.code);
-        h+='<tr class="etfdrill" data-code="'+x.code+'"><td class="nm"><span class="nmt">'+x.name+'</span><span class="subcode">'+x.code+'</span></td><td class="'+cls2(x.net[li])+'">'+sign2(x.net[li])+'</td><td class="'+cls2(sa?(sa.dsh?sa.dsh[li]:null):null)+'">'+sign2(sa?(sa.dsh?sa.dsh[li]:null):null)+'</td><td>'+fmtSh(sa?(sa.sh?sa.sh[li]:null):null)+'</td><td class="st-amt" data-code="'+x.code+'">'+amt2(statOf(x.code,'amt'))+'</td><td class="st-mcap" data-code="'+x.code+'">'+amt2(statOf(x.code,'mcap'))+'</td></tr>';
+        return {x:x, net:agg(x.net,sl,true)[k], ds:sa?agg(sa.dsh,sl,true)[k]:null, ss:sa?agg(sa.sh,sl,false)[k]:null};
+      });
+      rows.sort(function(a,b){ return (b.net==null?-Infinity:b.net)-(a.net==null?-Infinity:a.net); });
+      h='<table class="etfmini"><thead><tr><th>ETF（名称 / 代码）</th><th>'+gt+'净申购(亿)</th><th>'+gt+'份额增减(亿份)</th><th>份额存量(亿份)</th><th>当日成交(亿)</th><th>规模·市值(亿)</th></tr></thead><tbody>';
+      rows.forEach(function(r){
+        var x=r.x;
+        h+='<tr class="etfdrill" data-code="'+x.code+'"><td class="nm"><span class="nmt">'+x.name+'</span><span class="subcode">'+x.code+'</span></td><td class="'+cls2(r.net)+'">'+sign2(r.net)+'</td><td class="'+cls2(r.ds)+'">'+sign2(r.ds)+'</td><td>'+fmtSh(r.ss)+'</td><td class="st-amt" data-code="'+x.code+'">'+amt2(statOf(x.code,'amt'))+'</td><td class="st-mcap" data-code="'+x.code+'">'+amt2(statOf(x.code,'mcap'))+'</td></tr>';
       });
     }
     body.innerHTML=h+'</tbody></table>';
