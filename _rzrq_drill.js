@@ -1520,3 +1520,327 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     ensure();
   });
 })();
+
+/* ===== 各指数收益汇总 标签页（区间收益 + 年化夏普） =====
+   口径（11-27 定稿）：
+     · 收益 = 末收盘 ÷ 期初收盘 − 1，周期一律按【交易日】不按自然日（5日 = 相对5个交易日前）。
+     · 夏普 = 日均收益 ÷ 日收益标准差 × √252（年化，无风险利率取 0，与「按指标选股」页同一口径）。
+     · 区间不足 20 个交易日不显示夏普（样本太少无统计意义），显示「—」。
+     · 今年以来 = 末收盘 ÷ 上年最后一个交易日收盘 − 1。
+   数据：优先用 HTML 内联 IDXR_D/IDXR_C/IDXR_CSI（独立指数日期轴，到最新交易日；
+        图表那份 ETF_IDX_CLOSE 是按资金流日期轴对齐的，会少几天，不能用于本表）。
+        自定义区间早于内联起点时按需 fetch _idx_close_2012.json 全历史。 */
+(function(){
+  if (typeof RZQ === 'undefined') return;
+  var tabs = document.querySelector('.tbltabs');
+  var sec  = document.querySelector('.tblsec');
+  if (!tabs || !sec) return;
+  var eBtn = tabs.querySelector('[data-t="e"]');
+  if (!eBtn) return;                    /* 依赖宽基ETF标签页先注入（提供 .tbltabs 容器） */
+  if (document.getElementById('tpanel-r')) return;
+
+  var IDXCOLOR = {'沪深300':'#0d9488','中证A500':'#be123c','上证50':'#7c3aed','中证500':'#c2410c',
+    '中证1000':'#059669','科创50':'#db2777','创业板指':'#4f46e5','中证2000':'#b45309',
+    '科创100':'#0284c7','创业板50':'#9333ea','上证指数':'#a16207','深证成指':'#334155'};
+
+  /* ---------- 数据 ---------- */
+  var D   = (typeof IDXR_D  !== 'undefined' && IDXR_D)  ? IDXR_D.slice() : [];
+  var C   = (typeof IDXR_C  !== 'undefined' && IDXR_C)  ? IDXR_C : {};
+  var CSR = (typeof IDXR_CSI!== 'undefined' && IDXR_CSI)? IDXR_CSI.slice() : [];
+  var IDX = Object.keys(C);
+  var FULL = null, FULLP = null;        /* fetch 到的全历史 */
+
+  function asof(){ return D.length ? D[D.length - 1] : ''; }
+
+  function loadFull(){
+    if (FULL) return Promise.resolve(FULL);
+    if (FULLP) return FULLP;
+    FULLP = fetch('_idx_close_2012.json', { cache: 'no-store' })
+      .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function(j){
+        if (!j || !j.dates || !j.close) throw new Error('bad json');
+        FULL = { dates: j.dates, close: j.close };
+        D = j.dates.slice(); C = j.close; CSR = [];
+        IDX = Object.keys(C);
+        return FULL;
+      })
+      .catch(function(e){ FULLP = null; throw e; });
+    return FULLP;
+  }
+
+  /* ---------- CSS ---------- */
+  var css = ''
+    + '#tpanel-r .tblbox{padding:6px 8px 10px}'
+    + '.ir-top{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:6px 2px 8px;font-size:12px;color:#64748b}'
+    + '.ir-top .lbl{color:#64748b;margin-right:1px}'
+    + '.ir-ch{font-size:12px;padding:3px 10px;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap}'
+    + '.ir-ch.on{background:#eef4ff;border-color:#2f6bff;color:#2f6bff;font-weight:600}'
+    + '.ir-cus{display:inline-flex;align-items:center;gap:5px;margin-left:6px;padding-left:8px;border-left:1px solid #e2e8f0;white-space:nowrap}'
+    + '.ir-cus .lbl{white-space:nowrap}'
+    + '.ir-cus input[type=date]{font-size:12px;padding:2px 6px;border:1px solid #cbd5e1;border-radius:6px;color:#475569;background:#fff;font-family:inherit}'
+    + '.ir-add{font-size:12px;padding:3px 10px;border:1px solid #2f6bff;background:#2f6bff;color:#fff;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap}'
+    + '.ir-clr{font-size:12px;padding:3px 9px;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap}'
+    + '.ir-asof{margin-left:auto;font-size:12px;color:#94a3b8;white-space:nowrap}'
+    + '.ir-tblwrap{overflow:auto;max-height:560px;border:1px solid #eef1f6;border-radius:10px}'
+    + 'table.ir-table{border-collapse:separate;border-spacing:0;width:100%;font-size:13.5px}'
+    + 'table.ir-table th,table.ir-table td{padding:7px 10px;border-bottom:1px solid #eef1f5;white-space:nowrap;text-align:right}'
+    + 'table.ir-table thead th{background:#f8fafc;color:#64748b;font-weight:600;text-align:center;position:sticky;z-index:3;height:30px;box-sizing:border-box}'
+    /* 隔离：主页面有一条全局 thead th::after{content:" ⇅"}（融资余额主表用），会污染本表所有表头；
+       下面用更高特异性把默认箭头清掉，只有带 data-sk 的可排列表头才显示箭头 */
+    + 'table.ir-table thead th::after{content:none;margin-left:0}'
+    + 'table.ir-table thead tr:nth-child(1) th{top:0;border-bottom:1px solid #e6ecf3}'
+    + 'table.ir-table thead tr:nth-child(2) th{top:30px;font-weight:400;color:#94a3b8;font-size:12px;background:#f8fafc}'
+    + 'table.ir-table th.ir-nm,table.ir-table td.ir-nm{text-align:left;position:sticky;left:0;background:#fff;z-index:2;box-shadow:1px 0 0 #eef1f5}'
+    + 'table.ir-table thead th.ir-nm{z-index:6;background:#f8fafc}'
+    + 'table.ir-table tbody tr:hover td{background:#f7faff}'
+    + 'table.ir-table tbody tr:hover td.ir-nm{background:#f3f7ff}'
+    + 'table.ir-table tbody tr:last-child td{border-bottom:none}'
+    + 'table.ir-table td.ir-nm{color:#334155;font-weight:500}'
+    + '.ir-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;vertical-align:middle}'
+    + '.ir-up{color:#e24b4a}.ir-dn{color:#16a34a}.ir-na{color:#b6bfcc}'
+    + '.ir-sub{font-size:11.5px;font-weight:400}'
+    + '#tpanel-r thead th[data-sk]{cursor:pointer;user-select:none}'
+    + '#tpanel-r thead th[data-sk]::after{content:" ⇅";font-size:.75em;color:#aab4c5;margin-left:2px;font-weight:400}'
+    + '#tpanel-r thead th[data-sk].sk-asc::after{content:" ↑";color:#2f6bff}'
+    + '#tpanel-r thead th[data-sk].sk-desc::after{content:" ↓";color:#2f6bff}'
+    + '.ir-note2{font-size:12px;color:#66708a;line-height:1.6;margin:8px 2px 0}'
+    + '.ir-note2 summary{cursor:pointer;font-weight:600;color:#475569;padding:6px 2px}'
+    + '.ir-note2[open] summary{margin-bottom:4px}'
+    + '.ir-note2 b{color:#334155}'
+    + '.ir-msg{padding:16px;color:#66708a;font-size:13px;text-align:center}'
+    + '@media(max-width:620px){#tpanel-r .tblbox{padding:6px 4px 8px}table.ir-table{font-size:13px}table.ir-table th,table.ir-table td{padding:6px 7px}table.ir-table th.ir-nm,table.ir-table td.ir-nm{min-width:80px}.ir-top{gap:5px;font-size:11.5px}.ir-ch{font-size:11.5px;padding:3px 8px}.ir-cus{flex-basis:100%;margin-left:0;padding-left:0;border-left:none;margin-top:2px;gap:4px;flex-wrap:wrap}.ir-cus .lbl{flex:0 0 auto}.ir-cus input[type=date]{font-size:11.5px;padding:2px 4px;flex:1 1 82px;min-width:0}.ir-add,.ir-clr{flex:0 0 auto}.ir-asof{width:100%;margin-left:0;text-align:right;font-size:11px}}';
+  if (!document.getElementById('ir-tab-css')) {
+    var st = document.createElement('style'); st.id = 'ir-tab-css'; st.textContent = css; document.head.appendChild(st);
+  }
+
+  /* ---------- 标签按钮（紧跟在宽基ETF之后） ---------- */
+  var rBtn = document.createElement('button');
+  rBtn.className = 'tbtn'; rBtn.dataset.t = 'r'; rBtn.textContent = '各指数收益汇总';
+  tabs.insertBefore(rBtn, eBtn.nextSibling);
+
+  /* ---------- 面板 ---------- */
+  var RANGES = [
+    { k: 'r5',   n: 5,   label: '5日' },
+    { k: 'r10',  n: 10,  label: '10日' },
+    { k: 'r20',  n: 20,  label: '20日' },
+    { k: 'r60',  n: 60,  label: '60日' },
+    { k: 'r120', n: 120, label: '120日' },
+    { k: 'ytd',  n: 0,   label: '今年以来' }
+  ];
+  var show = { r5:1, r10:1, r20:1, r60:1, r120:1, ytd:1 };
+  var custom = null;                     /* {label, s, e}：s/e 为 D 中的索引 */
+  var sortKey = 'r20', sortMetric = 'r'; /* 默认按 20 日收益降序 */
+
+  var panel = document.createElement('div');
+  panel.className = 'tpanel'; panel.id = 'tpanel-r'; panel.style.display = 'none';
+  panel.innerHTML =
+      '<div class="ir-top" id="irTop">'
+    +   '<span class="lbl">区间</span>'
+    +   '<span id="irChips"></span>'
+    +   '<span class="ir-cus"><span class="lbl">自定义</span>'
+    +     '<input type="date" id="irFrom"><span style="color:#b6bfcc">—</span><input type="date" id="irTo">'
+    +     '<button class="ir-add" type="button" id="irAdd">添加</button>'
+    +     '<button class="ir-clr" type="button" id="irClr">清除</button>'
+    +   '</span>'
+    +   '<span class="ir-asof" id="irAsof"></span>'
+    + '</div>'
+    + '<div class="ir-tblwrap"><table class="ir-table"><thead id="irHead"></thead><tbody id="irBody"></tbody></table></div>'
+    + '<details class="ir-note2"><summary>口径与算法说明（默认折叠，点击展开）</summary><div>'
+    +   '<b>区间收益</b>＝末收盘 ÷ 期初收盘 − 1。周期一律按<b>交易日</b>回溯（5 日＝相对 5 个交易日前，非自然日）。'
+    +   '<b>夏普</b>＝区间内日均收益 ÷ 日收益标准差 × √252（年化，<b>无风险利率取 0</b>），与「按指标选股」页同一口径；'
+    +   '注意它不等于区间收益的年化值。<b>区间不足 20 个交易日不显示夏普</b>（显示「—」），因样本过少无统计意义。'
+    +   '<b>今年以来</b>＝末收盘 ÷ 上年最后一个交易日收盘 − 1。<b>自定义</b>区间按输入的起止日期取「首个 ≥ 起始日」与「最后 ≤ 截止日」两个交易日的收盘，作为额外一列追加。'
+    +   '点第二行表头（收益/夏普）可排序，首次降序、再点升序，空值恒排末尾。指数名前的色点与上方图表同色。'
+    +   '<b>数据</b>：指数日线取自腾讯 fqkline（中证2000 走通达信），最新交易日见右上角；'
+    +   '自定义区间超出内联范围（近 300 个交易日）时自动拉取完整历史。指数收益未扣费、不含分红再投资差异。'
+    + '</div></details>';
+  sec.appendChild(panel);
+
+  var head = panel.querySelector('#irHead'), body = panel.querySelector('#irBody');
+  var chips = panel.querySelector('#irChips'), asofEl = panel.querySelector('#irAsof');
+  var fromEl = panel.querySelector('#irFrom'), toEl = panel.querySelector('#irTo');
+
+  /* ---------- 计算 ---------- */
+  function lastIdx(){ return D.length - 1; }
+  function ytdBaseIdx(){
+    if (!D.length) return -1;
+    var y = D[lastIdx()]; if (!y) return -1;
+    var jan1 = y.slice(0, 4) + '-01-01';
+    for (var i = lastIdx(); i >= 0; i--) if (D[i] < jan1) return i;
+    return -1;
+  }
+  function retAt(arr, s, e){
+    if (s < 0 || e < 0 || s >= arr.length || e >= arr.length || s >= e) return null;
+    var a = arr[s], b = arr[e];
+    if (a == null || b == null || !a) return null;
+    return (b / a - 1) * 100;
+  }
+  function sharpeAt(arr, s, e){
+    if (s < 0 || e < 0 || s >= arr.length || e >= arr.length || s >= e) return null;
+    var rs = [], sum = 0, i, p, q, r;
+    for (i = s + 1; i <= e; i++) {
+      p = arr[i - 1]; q = arr[i];
+      if (p == null || q == null || !p) continue;
+      r = q / p - 1; rs.push(r); sum += r;
+    }
+    if (rs.length < 20) return null;             /* 样本不足 20 个交易日 → 不显示夏普 */
+    var mean = sum / rs.length, v = 0, d;
+    for (i = 0; i < rs.length; i++) { d = rs[i] - mean; v += d * d; }
+    v = v / (rs.length - 1);
+    var sd = Math.sqrt(v);
+    if (!sd || !isFinite(sd)) return null;
+    return mean / sd * Math.sqrt(252);
+  }
+  /* 返回当前要显示的列：[{key,label,s,e,isCustom}] */
+  function cols(){
+    var out = [], e = lastIdx();
+    RANGES.forEach(function (r) {
+      if (!show[r.k]) return;
+      var s = (r.n === 0) ? ytdBaseIdx() : (e - r.n);
+      out.push({ key: r.k, label: r.label, s: s, e: e });
+    });
+    if (custom) out.push({ key: 'cus', label: custom.label, s: custom.s, e: custom.e, isCustom: true });
+    return out;
+  }
+  function fmtPct(v){ if (v == null) return '<span class="ir-na">—</span>';
+    return '<span class="' + (v >= 0 ? 'ir-up' : 'ir-dn') + '">' + (v >= 0 ? '+' : '') + v.toFixed(2) + '%</span>'; }
+  function fmtSh(v){ if (v == null) return '<span class="ir-na">—</span>';
+    return '<span class="' + (v >= 0 ? 'ir-up' : 'ir-dn') + '">' + v.toFixed(2) + '</span>'; }
+
+  function render(){
+    var cs = cols();
+    asofEl.textContent = IDX.length ? ('截至 ' + asof() + ' · ' + IDX.length + ' 个宽基指数') : '';
+    if (!D.length || !IDX.length) {
+      head.innerHTML = ''; body.innerHTML = '<tr><td class="ir-msg">指数数据未加载</td></tr>'; return;
+    }
+    /* 表头：第一行区间名（跨2列），第二行 收益 / 夏普 */
+    var h1 = '<tr><th class="ir-nm" rowspan="2">指数</th>';
+    cs.forEach(function (c) { h1 += '<th colspan="2">' + c.label + '</th>'; });
+    h1 += '</tr>';
+    var h2 = '<tr>';
+    cs.forEach(function (c, ci) {
+      h2 += '<th data-sk data-c="' + ci + '" data-m="r">收益</th><th data-sk data-c="' + ci + '" data-m="s">夏普</th>';
+    });
+    h2 += '</tr>';
+    head.innerHTML = h1 + h2;
+
+    /* 数值矩阵 */
+    var rows = IDX.map(function (nm) {
+      var arr = C[nm] || [], cells = [];
+      cs.forEach(function (c) { cells.push({ r: retAt(arr, c.s, c.e), s: sharpeAt(arr, c.s, c.e) }); });
+      return { nm: nm, cells: cells };
+    });
+    /* 排序 */
+    var sci = -1;
+    for (var i = 0; i < cs.length; i++) if (cs[i].key === sortKey) sci = i;
+    if (sci >= 0) {
+      var asc = !!sortAsc;
+      rows.sort(function (a, b) {
+        var x = a.cells[sci] ? a.cells[sci][sortMetric] : null;
+        var y = b.cells[sci] ? b.cells[sci][sortMetric] : null;
+        if (x == null && y == null) return 0;
+        if (x == null) return 1;            /* 空值恒末尾 */
+        if (y == null) return -1;
+        return asc ? (x - y) : (y - x);
+      });
+    }
+    /* 表体 */
+    var html = '';
+    rows.forEach(function (row) {
+      html += '<tr><td class="ir-nm"><span class="ir-dot" style="background:' + (IDXCOLOR[row.nm] || '#94a3b8') + '"></span>' + row.nm + '</td>';
+      row.cells.forEach(function (cell) {
+        html += '<td>' + fmtPct(cell.r) + '</td><td class="ir-sub">' + fmtSh(cell.s) + '</td>';
+      });
+      html += '</tr>';
+    });
+    body.innerHTML = html;
+    /* 表头排序状态标记 */
+    head.querySelectorAll('th[data-sk]').forEach(function (th) {
+      var c = +th.dataset.c, m = th.dataset.m;
+      th.classList.remove('sk-asc', 'sk-desc');
+      if (sci >= 0 && c === sci && m === sortMetric) th.classList.add(sortAsc ? 'sk-asc' : 'sk-desc');
+    });
+    /* 表格最小宽度：首列 + 每区间两列 */
+    panel.querySelector('table.ir-table').style.minWidth = Math.max(320, 104 + cs.length * 2 * 82) + 'px';
+  }
+  var sortAsc = false;
+
+  /* ---------- 交互 ---------- */
+  chips.innerHTML = RANGES.map(function (r) {
+    return '<button class="ir-ch on" type="button" data-rk="' + r.k + '">' + r.label + '</button>';
+  }).join(' ');
+  chips.querySelectorAll('.ir-ch').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var k = b.dataset.rk;
+      show[k] = show[k] ? 0 : 1;
+      b.classList.toggle('on', !!show[k]);
+      render();
+    });
+  });
+
+  head.addEventListener('click', function (ev) {
+    var th = ev.target.closest ? ev.target.closest('th[data-sk]') : null;
+    if (!th) return;
+    var cs = cols(), ci = +th.dataset.c;
+    if (!cs[ci]) return;
+    var m = th.dataset.m, k = cs[ci].key;
+    if (sortKey === k && sortMetric === m) sortAsc = !sortAsc; else { sortKey = k; sortMetric = m; sortAsc = false; }
+    render();
+  });
+
+  function shortDate(d){ return d ? (d.slice(5)) : ''; }
+  function idxOnOrAfter(ds, d){ for (var i = 0; i < ds.length; i++) if (ds[i] >= d) return i; return -1; }
+  function idxOnOrBefore(ds, d){ for (var i = ds.length - 1; i >= 0; i--) if (ds[i] <= d) return i; return -1; }
+
+  function applyCustom(){
+    var f = fromEl.value, t = toEl.value;
+    if (!f || !t) { alert('请先选择起始与截止日期'); return; }
+    if (f > t) { alert('起始日期不能晚于截止日期'); return; }
+    function doApply(){
+      var s = idxOnOrAfter(D, f), e = idxOnOrBefore(D, t);
+      if (s < 0 || e < 0 || s > e) { alert('所选区间内没有交易日数据'); return; }
+      custom = { label: shortDate(D[s]) + '→' + shortDate(D[e]), s: s, e: e };
+      sortKey = 'cus'; sortMetric = 'r'; sortAsc = false;
+      render();
+    }
+    if (f < D[0]) {                       /* 早于内联起点 → 拉全历史 */
+      asofEl.textContent = '正在加载更早历史…';
+      loadFull().then(function () { initDates(); doApply(); })
+        .catch(function () { alert('自定义区间早于 ' + D[0] + '，需要联网加载完整历史；当前环境无法加载。'); render(); });
+      return;
+    }
+    doApply();
+  }
+  panel.querySelector('#irAdd').addEventListener('click', applyCustom);
+  panel.querySelector('#irClr').addEventListener('click', function () {
+    custom = null; fromEl.value = ''; toEl.value = '';
+    if (sortKey === 'cus') { sortKey = 'r20'; sortMetric = 'r'; sortAsc = false; }
+    render();
+  });
+
+  function initDates(){
+    var lo = D.length ? D[0] : '', hi = D.length ? D[D.length - 1] : '';
+    if (lo) fromEl.min = lo;
+    if (hi) { toEl.max = hi; if (!toEl.value) toEl.value = hi; }
+    if (lo && !fromEl.value) {
+      var e = D.length - 1;
+      var s = Math.max(0, e - 60);        /* 默认给近 60 个交易日，用户可改 */
+      fromEl.value = D[s];
+    }
+  }
+  initDates();
+
+  /* 首次进入该标签页才渲染（避免无谓计算）；已有数据则直接渲染 */
+  rBtn.addEventListener('click', function () {
+    document.querySelectorAll('.tbtn').forEach(function (b) { b.classList.toggle('active', b.dataset.t === 'r'); });
+    document.querySelectorAll('.tpanel').forEach(function (p) { p.style.display = (p.id === 'tpanel-r') ? 'block' : 'none'; });
+    render();
+  });
+
+  /* 无内联数据（如派生页未带 IDXR_*）时，自动拉一次全历史 */
+  if (!D.length || !IDX.length) {
+    loadFull().then(function () { initDates(); render(); }).catch(function () { render(); });
+  } else {
+    render();
+  }
+})();
