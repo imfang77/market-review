@@ -736,6 +736,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
    副图 = 默认隐藏；选中1个或多个指数后显示中证全指（全市场行情基准，灰色虚线）+ 所选指数走势线。
        全市场份额线与中证全指基准做图例联动高亮 + 同步竖线。
    图3  = 所选 ETF 时显示对应指数成分 ETF 净值走势线（固定归一化·基期=100）；ETF选择框放在副图标题行。
+         图3已开(有选中ETF)时切换单选指数→自动换成该指数的成分ETF；数值只在悬浮窗显示，图例不写数字。
    图例 = 固定5列网格左对齐（手机3列），口径说明独占整行。 */
 (function(){
   var box=document.getElementById('ebox'); if(!box) return;
@@ -1179,9 +1180,9 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     if(legend3){
       function sRet3(a){var f=firstVal(a),l=lastVal(a);return (f!=null&&l!=null&&f!==0)?((l/f-1)*100):null;}
       var its=[];
-      etfSel.forEach(function(c){var r=sRet3(ecN[c]||[]);its.push({r:r,html:'<span class="lg" data-lg="etf:'+c+'" style="color:'+eCol(c,etfSel.indexOf(c))+'">┄ '+eLabel(c)+(r==null?'':' '+(r>=0?'+':'')+r.toFixed(2)+'%')+'</span>'});});
+      etfSel.forEach(function(c){var r=sRet3(ecN[c]||[]);its.push({r:r,html:'<span class="lg" data-lg="etf:'+c+'" style="color:'+eCol(c,etfSel.indexOf(c))+'">┄ '+eLabel(c)+'</span>'});});
       its.sort(function(a,b){return (b.r==null?-Infinity:b.r)-(a.r==null?-Infinity:a.r);});
-      legend3.innerHTML='<span class="lrow">'+its.map(function(x){return x.html;}).join('')+'<span class="lgnote">前复权净值归一化（基期=100）；右侧%为区间涨跌；ETF列表按当前所选指数过滤。</span></span>';
+      legend3.innerHTML='<span class="lrow">'+its.map(function(x){return x.html;}).join('')+'<span class="lgnote">前复权净值归一化（基期=100）；鼠标悬停查看当日数值；ETF列表按当前所选指数过滤。</span></span>';
     }
     v.start3=cur;
   }
@@ -1237,7 +1238,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     list.querySelectorAll('input').forEach(function(c){c.addEventListener('change',function(){
       if(c.value===ALLKEY){if(c.checked)list.querySelectorAll('input').forEach(function(x){if(x.value!==ALLKEY)x.checked=false;});}
       else if(c.checked){var a=list.querySelector('input[value="'+ALLKEY+'"]');if(a)a.checked=false;}
-      syncSel();applySel();
+      syncSel();applySel(true);
     });});
   }}
   function buildEtfPanel(){if(eList){
@@ -1250,9 +1251,15 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       syncEtfSel();applySel();
     });});
   }}
-  function applySel(){
+  // idxChanged=指数勾选变化触发。图3已开(etfSel非空)时切单选指数→自动换成该指数全部成分ETF；
+  // 图3未开(etfSel空)时不自动打开；外部 setSel/setEtfSel 传默认false，不触发自动切换。
+  function applySel(idxChanged){
     hideTips();
-    if(pointSel.length===1){var ok={};etfPool().forEach(function(m){ok[m.code]=1;});etfSel=etfSel.filter(function(c){return ok[c];});}
+    if(pointSel.length===1){
+      var pool=etfPool(),ok={};pool.forEach(function(m){ok[m.code]=1;});
+      if(idxChanged&&etfSel.length>0){etfSel=pool.map(function(m){return m.code;});}
+      else etfSel=etfSel.filter(function(c){return ok[c];});
+    }
     syncCompat();buildPanel();buildEtfPanel();
     if(btn)btn.textContent=btnLabel();if(eBtn)eBtn.textContent=eBtnLabel();drawE(cur);
   }
@@ -1285,8 +1292,8 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     document.addEventListener('click',function(){panel.classList.remove('open');});
     panel.querySelectorAll('.idx-pact button').forEach(function(b){b.addEventListener('click',function(){
       var act=b.dataset.act,all=list.querySelector('input[value="'+ALLKEY+'"]');
-      if(act==='all'){list.querySelectorAll('input').forEach(function(c){c.checked=(c.value!==ALLKEY);});if(all)all.checked=false;syncSel();applySel();}
-      else if(act==='none'){list.querySelectorAll('input').forEach(function(c){c.checked=(c.value===ALLKEY);});syncSel();applySel();}
+      if(act==='all'){list.querySelectorAll('input').forEach(function(c){c.checked=(c.value!==ALLKEY);});if(all)all.checked=false;syncSel();applySel(true);}
+      else if(act==='none'){list.querySelectorAll('input').forEach(function(c){c.checked=(c.value===ALLKEY);});syncSel();applySel(true);}
     });});
   }
   if(eBtn&&ePanel&&eList){
@@ -1319,5 +1326,5 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   drawE(cur);
 })();
 </script>
-<script src="_rzrq_drill.js?v=202611260233"></script>
+<script src="_rzrq_drill.js?v=202611260247"></script>
 </body></html>
