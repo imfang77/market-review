@@ -223,7 +223,7 @@ tbody tr:hover{background:#f6f9ff}
 </svg>
 <div id="etip"></div></div>
 <div class="legend" id="elg"></div>
-<div class="etfchart-sub2" style="padding:14px 28px 2px;font-size:13px;color:#64748b;font-weight:600">对标指数点位 / ETF 净值（行情走势 · 与主图共用选择 · 同指数同色）</div>
+<div class="etfchart-sub2" id="e2hd" style="padding:14px 28px 2px;font-size:13px;color:#64748b;font-weight:600">对标指数点位 / ETF 净值（行情走势 · 与主图共用选择 · 同指数同色）</div>
 <div class="chartbox" id="e2box">
 <svg id="e2svg" viewBox="0 0 1000 300" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
 <g id="e2plot"></g>
@@ -731,27 +731,52 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       ov2=document.getElementById('e2overlay'), tip2=document.getElementById('e2tip'),
       legend2=document.getElementById('e2lg');
   var hasSub=!!(svg2&&plot2);
-  /* 图例 hover → 对应线高亮、其它线淡化（11-20新增）：图例项与线共用 data-lg 标识；事件委托绑在稳定容器上 */
-  if(legend){
-    function lgFocus(key){
-      if(!plot) return;
-      var els=plot.querySelectorAll('[data-lg]');
+  /* 副图显隐（11-26）：默认「全部」(pointSel/etfSel 均空)时副图三块(标题/容器/图例)隐藏，
+     只有主图选定对标指数或 ETF 时才显示，避免默认进来多出一张空行情图 */
+  var subHd=document.getElementById('e2hd');
+  function syncSubVisible(){
+    var show=(pointSel.length>0)||(etfSel.length>0), disp=show?'':'none';
+    if(subHd)subHd.style.display=disp;
+    if(box2)box2.style.display=disp;
+    if(legend2)legend2.style.display=disp;
+  }
+  /* 图例 hover → 主图+副图同标识线「同时」高亮、其它淡化（11-26改）：
+     - 图例项与线共用 data-lg 标识；idx:同名指数在主副图各有一条线，一并高亮/淡化；
+     - bars 高亮时额外加深色描边（柱子默认 opacity=1，仅靠不透明度看不出高亮）；
+     - 主图与副图两处图例都触发同一逻辑，任意一图 hover 都能点亮另一图对应线。 */
+  function lgFocusAll(key){
+    [plot,plot2].forEach(function(pl){
+      if(!pl)return;
+      var els=pl.querySelectorAll('[data-lg]');
       for(var i=0;i<els.length;i++){
         var k=els[i].getAttribute('data-lg');
         els[i].style.opacity=key?(k===key?'1':'0.16'):'';
+        if(k==='bars'){
+          if(key&&k===key){els[i].setAttribute('stroke','#334155');els[i].setAttribute('stroke-width','0.6');}
+          else{els[i].removeAttribute('stroke');els[i].removeAttribute('stroke-width');}
+        }
       }
-    }
-    legend.addEventListener('mouseover',function(e){
-      var s=(e.target&&e.target.closest)?e.target.closest('[data-lg]'):null;
-      if(!s||s===legend)return;
-      lgFocus(s.getAttribute('data-lg')); s.style.fontWeight='700';
     });
-    legend.addEventListener('mouseout',function(e){
-      var s=(e.target&&e.target.closest)?e.target.closest('[data-lg]'):null;
-      if(!s||s===legend)return;
-      lgFocus(null); s.style.fontWeight='';
+    [legend,legend2].forEach(function(lg){
+      if(!lg)return;
+      var its=lg.querySelectorAll('[data-lg]');
+      for(var j=0;j<its.length;j++) its[j].style.fontWeight=(key&&its[j].getAttribute('data-lg')===key)?'700':'';
     });
   }
+  function bindLg(lg){
+    if(!lg)return;
+    lg.addEventListener('mouseover',function(e){
+      var s=(e.target&&e.target.closest)?e.target.closest('[data-lg]'):null;
+      if(!s||s===lg)return;
+      lgFocusAll(s.getAttribute('data-lg'));
+    });
+    lg.addEventListener('mouseout',function(e){
+      var s=(e.target&&e.target.closest)?e.target.closest('[data-lg]'):null;
+      if(!s||s===lg)return;
+      lgFocusAll(null);
+    });
+  }
+  bindLg(legend);bindLg(legend2);
   var W=1000, MT=46, PB=402;
   var ML=70, MR=112, pw=W-ML-MR, plotH=PB-MT;
   var G='d', def='m3';
@@ -1039,6 +1064,8 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   var W2=1000,MT2=34,PB2=262,ML2=70,MR2=118,pw2=W2-ML2-MR2,plotH2=PB2-MT2;
   function drawE2(){
     if(!hasSub) return;
+    syncSubVisible();
+    if(!(pointSel.length>0||etfSel.length>0)) return;  /* 默认「全部」：副图保持隐藏，无需绘制 */
     var v=window._etfView;if(!v||!v.idx.length){plot2.innerHTML='';if(legend2)legend2.innerHTML='';return;}
     var m=metrics(),F=m.F,nl=m.nl,cnt=v.idx.length;
     var en=effNorm();
@@ -1159,10 +1186,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     ov2.addEventListener('touchstart',function(e){if(e.touches[0])pick2(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
     ov2.addEventListener('touchmove',function(e){if(e.touches[0])pick2(e.touches[0].clientX,e.touches[0].clientY);},{passive:true});
     ov2.addEventListener('touchend',hideTips2);
-    if(legend2){
-      legend2.addEventListener('mouseover',function(e){var s=(e.target&&e.target.closest)?e.target.closest('[data-lg]'):null;if(!s||s===legend2)return;plot2.querySelectorAll('[data-lg]').forEach(function(el){el.style.opacity=(el.getAttribute('data-lg')===s.getAttribute('data-lg'))?'1':'0.16';});});
-      legend2.addEventListener('mouseout',function(){plot2.querySelectorAll('[data-lg]').forEach(function(el){el.style.opacity='';});});
-    }
+    /* 副图图例高亮已由上方 bindLg(legend2) 统一接管（主副图同指数联动），此处不再单独绑定 */
   }
   function hideTips(){vline.style.opacity=0;tip.style.opacity=0;if(hasSub)hideTips2();}
   ov.addEventListener('mousemove',function(e){pick(e.clientX,e.clientY);});
@@ -1280,5 +1304,5 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   drawE(cur);
 })();
 </script>
-<script src="_rzrq_drill.js?v=202611260111"></script>
+<script src="_rzrq_drill.js?v=202611260124"></script>
 </body></html>
