@@ -223,7 +223,7 @@ body.sb-etf #sbEtfHd{padding:8px 28px 2px}
 <button class="cr-btn" id="crBtnE" type="button">指定时间段</button>
 </div>
 <div class="rngrow idx-sel-row"><span class="lbl rng-lbl">对标指数：</span>
-<div class="idxdd" id="idxDd"><button class="idx-btn" id="eIdxBtn" type="button">全部汇总(12指数)</button>
+<div class="idxdd" id="idxDd"><button class="idx-btn" id="eIdxBtn" type="button">全部汇总</button>
 <div class="idx-panel" id="eIdxPanel"><div class="idx-pact"><button type="button" data-act="all">全选</button><button type="button" data-act="none">清空</button></div><div class="idx-plist" id="eIdxList"></div><label class="idx-norm"><input type="checkbox" id="eNormChk" checked><span>归一化（基期=100，便于比较涨跌；取消则显示真实点位）</span></label></div>
 <input type="hidden" id="eIdxSel" value="__ALL__">
 </div>
@@ -237,7 +237,13 @@ body.sb-etf #sbEtfHd{padding:8px 28px 2px}
 </svg>
 <div id="etip"></div></div>
 <div class="legend" id="elg"></div>
-<div class="etfchart-sub2" id="e2hd" style="padding:14px 28px 2px;font-size:13px;color:#64748b;font-weight:600">副图 · 指数走势（中证全指全市场基准 + 所选指数，同指数同色）</div>
+<div class="etfchart-sub2" id="e2hd" style="padding:14px 28px 2px;font-size:13px;color:#64748b;font-weight:600;display:flex;align-items:center;gap:10px;flex-wrap:wrap">副图 · 指数走势（中证全指全市场基准 + 所选指数，同指数同色）
+<span class="lbl rng-lbl" style="font-weight:400">图3对标ETF：</span>
+<div class="idxdd" id="etfDd"><button class="idx-btn" id="eEtfBtn" type="button">无</button>
+<div class="idx-panel" id="eEtfPanel"><div class="idx-pact"><button type="button" data-act="all">全选</button><button type="button" data-act="none">清空</button></div><div class="idx-plist" id="eEtfList"></div><label class="idx-norm"><span>图3仅列出当前所选指数的成分ETF；净值线固定归一化（基期=100）</span></label></div>
+<input type="hidden" id="eEtfSel" value="__ALL__">
+</div>
+</div>
 <div class="chartbox" id="e2box">
 <svg id="e2svg" viewBox="0 0 1000 300" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
 <g id="e2plot"></g>
@@ -246,12 +252,7 @@ body.sb-etf #sbEtfHd{padding:8px 28px 2px}
 </svg>
 <div id="e2tip"></div></div>
 <div class="legend" id="e2lg"></div>
-<div class="etfchart-sub2" id="e3hd" style="padding:14px 28px 2px;font-size:13px;color:#64748b;font-weight:600;display:flex;align-items:center;gap:10px;flex-wrap:wrap">图3 · 所选指数对应 ETF 净值走势 <span class="lbl rng-lbl">对标ETF：</span>
-<div class="idxdd" id="etfDd"><button class="idx-btn" id="eEtfBtn" type="button">无</button>
-<div class="idx-panel" id="eEtfPanel"><div class="idx-pact"><button type="button" data-act="all">全选</button><button type="button" data-act="none">清空</button></div><div class="idx-plist" id="eEtfList"></div><label class="idx-norm"><span>仅列出当前所选指数的成分ETF；净值线固定归一化（基期=100）</span></label></div>
-<input type="hidden" id="eEtfSel" value="__ALL__">
-</div>
-</div>
+<div class="etfchart-sub2" id="e3hd" style="padding:14px 28px 2px;font-size:13px;color:#64748b;font-weight:600">图3 · 所选指数对应 ETF 净值走势</div>
 <div class="chartbox" id="e3box">
 <svg id="e3svg" viewBox="0 0 1000 300" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
 <g id="e3plot"></g>
@@ -263,7 +264,7 @@ body.sb-etf #sbEtfHd{padding:8px 28px 2px}
 <div class="lsrow-out"><button class="ls-btn" data-ls="etf" type="button">⛶ 横屏</button></div>
 <details class="descfold etf-desc"><summary>口径与数据说明（默认折叠，点击展开）</summary>
 <div class="sub">
-<div><b>① 指标口径</b>：蓝线＝全市场 <b>ETF 份额存量</b>（亿份，<b>前复权</b>：发生份额拆分/折算的 ETF，其拆分日前历史存量÷累计拆分比，曲线连续无拆分跳变，<b>末端值＝真实总份额</b>；份额只由一级市场申赎改变，曲线涨跌即申赎行为），柱＝当日净申购<b>金额</b>（亿元）按 <b>12 指数分段堆叠</b>（正红负绿，色深=指数，悬停看构成明细；周/月粒度下柱为周期累加、蓝线取周期末快照）。<b>蓝线恒为全市场不随选择变化</b>；选中对标指数后，<b>当日柱只堆叠所选指数分段</b>（未选指数置 0）。<b>主图</b>：彩色曲线＝各指数<b>累计净申购金额</b>（亿元，右轴外侧·2012 年起累计，同指数同色），默认「全部」显示 12 条曲线；蓝线份额存量仍在左轴，红绿柱仍在右轴内侧。<b>副图</b>：灰色虚线＝<b>中证全指</b>（全市场行情基准，对应主图全市场份额），所选指数叠加收盘点位走势线（可归一化，默认基期=100；取消看真实点位）；同指数主副图同色。<b>图3</b>：仅在选了对标 ETF 时显示，画当前指数对应 ETF 的前复权净值走势（固定归一化），ETF 选择框就在图3标题行、按所选指数过滤。中证全指/指数走势仅作行情参照，<b>不代表资金流向</b>；跨指数比较份额会受净值差异失真，故指数层面改用<b>金额曲线</b>。12 指数为互斥分组（30 只 ETF 各归一组）。表格中的「份额存量」列为<b>未复权真实值</b>，「当日份额增减」已剔除拆分。</div>
+<div><b>① 指标口径</b>：蓝线＝全市场 <b>ETF 份额存量</b>（亿份，<b>前复权</b>：发生份额拆分/折算的 ETF，其拆分日前历史存量÷累计拆分比，曲线连续无拆分跳变，<b>末端值＝真实总份额</b>；份额只由一级市场申赎改变，曲线涨跌即申赎行为），柱＝当日净申购<b>金额</b>（亿元）按 <b>12 指数分段堆叠</b>（正红负绿，色深=指数，悬停看构成明细；周/月粒度下柱为周期累加、蓝线取周期末快照）。<b>蓝线恒为全市场不随选择变化</b>；选中对标指数后，<b>当日柱只堆叠所选指数分段</b>（未选指数置 0）。<b>主图</b>：默认只画蓝线份额存量（左轴）＋红绿柱当日净申购（右轴单列），<b>不显示任何指数曲线</b>；选中对标指数后，才叠加该指数<b>累计净申购金额</b>曲线（右侧第二轴·亿元·2012 年起累计·同指数同色），右轴两列分别标「当日/累计」，刻度与标题按数字位数压缩以免挤压绘图区。<b>副图</b>：打开页面默认隐藏，选中 1 个或多个指数后才显示；灰色虚线＝<b>中证全指</b>（全市场行情基准，对应主图全市场份额），所选指数叠加收盘点位走势线（可归一化，默认基期=100；取消看真实点位）。主图全市场份额与副图中证全指<b>图例联动高亮、日期竖线同步</b>；同指数主副图同色。<b>图3</b>：ETF 选择框已放在<b>副图标题行</b>，选了对标 ETF 后显示该指数成分 ETF 的前复权净值走势（固定归一化·基期=100）。中证全指/指数走势仅作行情参照，<b>不代表资金流向</b>；跨指数比较份额会受净值差异失真，故指数层面改用<b>金额曲线</b>。12 指数为互斥分组（30 只 ETF 各归一组）。表格中的「份额存量」列为<b>未复权真实值</b>，「当日份额增减」已剔除拆分。</div>
 <div><b>② 为何与「国家队持仓」不等价</b>：本图为<b>一级市场申赎口径</b>，<b>不含二级市场买卖</b> —— 国家队经二级市场受让份额不产生净申购数据，故蓝线/柱平坦不能推出「国家队没持有」。全市场净申购，非汇金独占。</div>
 <div><b>③ 关键事件</b>：2024-02-06 汇金公告增持四大行及多只 ETF（2024 年一级净申购 +8,349 亿）；2026-01-14 沪指冲高 4190 点、汇金启动大规模减持（2026 上半年 −16,946 亿）；2026-06-08 汇金重启增持，宽基 ETF 转净流入（7–11 月 +7,121 亿）。汇金减持的是波段仓位，六大行等永久底仓约 3.37 万亿未动。汇金持股市值参考节点（第三方估算）：2024 末约 1.04 万亿 / 2025 末约 1.53 万亿 / 2026-03 末主要宽基约 0.30 万亿 / 2026-05 末汇金系宽基剩余约 0.13 万亿（该阶梯线因左轴改为份额存量、量纲不同，11-24 起不再绘制）。</div>
 <div><b>④ 数据来源</b>：净流入额＝iFinD 基金日频（30 只宽基 ETF，逐只按 ≤100 日历天窗口拉取，902 个窗口），已用 iFinD「区间净流入额」全历史锚点逐只对账（30/30 通过）；<b>份额存量＝iFinD 基金日频「基金份额」（亿份，931 个窗口全历史拉取）</b>，当日份额增减＝存量差分并<b>剔除份额拆分</b>（拆分日经「单位净值×净流入额」交叉校验还原拆分比）；各指数点位为腾讯行情日线（中证2000 走 iFinD 指数日频）；30 只 ETF 前复权净值为腾讯行情 qfq 日线，按本图日期轴对齐（新上市 ETF 上市前无值）。份额与净流入相互独立：存量是<b>时点数</b>（非流量累计），拆分日的存量跳变属真实数据、已从增减列剔除。</div>
@@ -745,11 +746,12 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
 })();
 </script>
 <script>/* ===== 宽基ETF净资金流 图表（主图资金 + 副图指数走势 + 图3 ETF走势） =====
-   语义（11-26 定稿）：
-   主图 = 蓝线全市场份额存量（左轴·亿份·前复权）+ 红绿柱当日净申购（右轴内侧·亿元）
-        + 各指数累计净申购曲线（右轴外侧·亿元·同指数同色）；默认「全部」=12条曲线。
-   副图 = 中证全指（全市场行情基准，灰色虚线）+ 所选指数走势线（收盘点位，可归一化）。
-   图3  = 所选指数对应的 ETF 净值走势线（固定归一化·基期=100），ETF选择框随本图显示。
+   语义（11-26 晚定稿）：
+   主图 = 蓝线全市场份额存量（左轴·亿份·前复权）+ 红绿柱当日净申购（右轴·亿元）。
+       默认不显示任何指数；选中指数后才叠加该指数累计净申购曲线（右侧第二轴·亿元·同指数同色）。
+   副图 = 默认隐藏；选中1个或多个指数后显示中证全指（全市场行情基准，灰色虚线）+ 所选指数走势线。
+       全市场份额线与中证全指基准做图例联动高亮 + 同步竖线。
+   图3  = 所选 ETF 时显示对应指数成分 ETF 净值走势线（固定归一化·基期=100）；ETF选择框放在副图标题行。
    图例 = 固定5列网格左对齐（手机3列），口径说明独占整行。 */
 (function(){
   var box=document.getElementById('ebox'); if(!box) return;
@@ -765,21 +767,29 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       plot3=document.getElementById('e3plot'), vline3=document.getElementById('e3vline'),
       ov3=document.getElementById('e3overlay'), tip3=document.getElementById('e3tip'),
       legend3=document.getElementById('e3lg'), subHd3=document.getElementById('e3hd');
-  var hasSub=!!(svg2&&plot2), hasSub3=!!(svg3&&plot3);
+  var hasSub=!!(svg2&&plot2), hasSub3=!!(svg3&&plot3), crossOwner=0;
   function syncSubVisible(){
-    var d2='',d3=(etfSel.length>0)?'':'none';
+    var subOn=pointSel.length>0;
+    var d2=subOn?'':'none',d3=(subOn&&etfSel.length>0)?'':'none';
     if(subHd)subHd.style.display=d2; if(box2)box2.style.display=d2; if(legend2)legend2.style.display=d2;
     if(subHd3)subHd3.style.display=d3; if(box3)box3.style.display=d3; if(legend3)legend3.style.display=d3;
   }
+  // 主图全市场份额(acc) 与 副图中证全指(csi) 互为联动组
+  function focusKeys(key){
+    if(!key)return [];
+    if(key==='acc'||key==='csi')return ['acc','csi'];
+    return [key];
+  }
   function lgFocusAll(key){
+    var keys=focusKeys(key);
     [plot,plot2,plot3].forEach(function(pl){
       if(!pl)return;
       var els=pl.querySelectorAll('[data-lg]');
       for(var i=0;i<els.length;i++){
-        var k=els[i].getAttribute('data-lg');
-        els[i].style.opacity=key?(k===key?'1':'0.16'):'';
+        var k=els[i].getAttribute('data-lg'),hit=keys.indexOf(k)>=0;
+        els[i].style.opacity=key?(hit?'1':'0.16'):'';
         if(k==='bars'){
-          if(key&&k===key){els[i].setAttribute('stroke','#334155');els[i].setAttribute('stroke-width','0.6');}
+          if(key&&key==='bars'){els[i].setAttribute('stroke','#334155');els[i].setAttribute('stroke-width','0.6');}
           else{els[i].removeAttribute('stroke');els[i].removeAttribute('stroke-width');}
         }
       }
@@ -787,7 +797,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     [legend,legend2,legend3].forEach(function(lg){
       if(!lg)return;
       var its=lg.querySelectorAll('[data-lg]');
-      for(var j=0;j<its.length;j++)its[j].style.fontWeight=(key&&its[j].getAttribute('data-lg')===key)?'500':'';
+      for(var j=0;j<its.length;j++)its[j].style.fontWeight=(keys.indexOf(its[j].getAttribute('data-lg'))>=0)?'500':'';
     });
   }
   function bindLg(lg){
@@ -802,6 +812,15 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     });
   }
   bindLg(legend);bindLg(legend2);bindLg(legend3);
+  // 主图与副图日期竖线同步；owner=1 主图触发，owner=2 副图触发
+  function syncCross(k,owner){
+    var v=window._etfView;if(!v||!hasSub||!pointSel.length||!v.idx.length)return;
+    var cnt=v.idx.length,off=cnt<=1?0:k/(cnt-1);
+    if(owner!==2&&vline2){var x2=ML2+pw2*off;vline2.setAttribute('x1',x2);vline2.setAttribute('x2',x2);vline2.style.opacity=1;}
+    if(owner!==1&&vline){var x1=ML+pw*off;vline.setAttribute('x1',x1);vline.setAttribute('x2',x1);vline.style.opacity=1;}
+    crossOwner=owner;
+  }
+  function clearSubCross(){if(vline2)vline2.style.opacity=0;if(crossOwner===2&&vline){vline.style.opacity=0;crossOwner=0;}}
   var W=1000,MT=46,PB=402,ML=70,MR=160,pw=W-ML-MR,plotH=PB-MT;
   var G='d',def='m3';
   var ER=(typeof ETF_RANGES!=='undefined')?ETF_RANGES:{m3:0,all:0};
@@ -830,7 +849,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   function REDSHADES(){return ['#f4c7c5','#eeb0ad','#e89995','#e2807c','#d96763','#d14e4a','#c43b37','#b52f2b','#a32622','#8f1e1b','#771714','#5c100e'];}
   function GREENSHADES(){return ['#bfe6cf','#a6d9bb','#8ccba7','#71bd93','#56ae7f','#3f9d6c','#2f8c5c','#247a4e','#1c6942','#155737','#0f452c','#0a3321'];}
   var pointSel=[],etfSel=[],normMode=true;
-  function activeIdx(){return pointSel.length?pointSel:IDXN;}
+  function activeIdx(){return pointSel.slice();} // 默认不选＝无指数曲线，柱仍为全市场12指数汇总
   function effNorm(){return normMode;}
   var N=ED.length;
   var EVS=(typeof ETF_EVENTS!=='undefined')?ETF_EVENTS:[];
@@ -890,9 +909,6 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   function drawE(s){
     cur=s;if(N===0)return;
     var m=metrics(),F=m.F,nl=m.nl,names=activeIdx();
-    ML=Math.round(F*3.8+12);MR=Math.round(F*9.5+135);pw=W-ML-MR;
-    MT=Math.round(F*1.35+26);PB=402;plotH=PB-MT;
-    svg.setAttribute('viewBox','0 0 1000 '+Math.round(PB+9+F*1.8));
     var v=buildView();if(!v.idx.length)return;
     var accArr=v.shm.filter(function(x){return x!=null;});if(!accArr.length)return;
     var mn=Math.min.apply(null,accArr),mx=Math.max.apply(null,accArr),pad=(mx-mn)*0.12;
@@ -903,6 +919,16 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     if(!accVals.length)accVals=[0,1];
     var amn=Math.min.apply(null,accVals),amx=Math.max.apply(null,accVals),apad=(amx-amn)*0.1;
     if(apad<=0)apad=Math.max(1,Math.abs(amx)*0.02);yloA=amn-apad;yhiA=amx+apad;
+    // 右轴宽度按数字位数动态计算：默认只留1列；选中指数才开第2列，避免手机端绘图区被压扁
+    var hasI=names.length>0;
+    function digits(v){var n=Math.round(Math.abs(v)||0);return Math.min(6,Math.max(3,String(n).length));}
+    var dR=digits(Math.max(Math.abs(yloR),Math.abs(yhiR))),dA=hasI?digits(Math.max(Math.abs(yloA),Math.abs(yhiA))):0;
+    var unitW=F*0.58;
+    ML=Math.round(F*3.8+12);
+    MR=hasI?Math.round(14+(dR+dA)*unitW+34):Math.round(12+dR*unitW+12);
+    pw=W-ML-MR;
+    MT=Math.round(F*1.35+(hasI?40:26));PB=402;plotH=PB-MT;
+    svg.setAttribute('viewBox','0 0 1000 '+Math.round(PB+9+F*1.8));
     var cnt=v.idx.length;
     function Xi2(k){return ML+pw*(cnt<=1?0:k/(cnt-1));}
     function YL2(val){return MT+plotH*((yhiL-val)/(yhiL-yloL));}
@@ -914,9 +940,10 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       g+='<line x1="'+ML+'" y1="'+yy.toFixed(1)+'" x2="'+(W-MR)+'" y2="'+yy.toFixed(1)+'" stroke="#eef1f6"/>';
       g+='<text x="'+(ML-8)+'" y="'+(yy+F*0.35).toFixed(1)+'" text-anchor="end" font-size="'+F.toFixed(1)+'" fill="#2f6bff">'+Math.round(t).toLocaleString('zh-CN')+'</text>';
       var t2=yhiR-(yhiR-yloR)*k/4,y2=MT+plotH*k/4;
-      g+='<text x="'+(W-MR+8)+'" y="'+(y2+F*0.35).toFixed(1)+'" font-size="'+F.toFixed(1)+'" fill="#94a3b8">'+Math.round(t2).toLocaleString('zh-CN')+'</text>';
-      var t3=yhiA-(yhiA-yloA)*k/4;
-      g+='<text x="'+(W-6)+'" y="'+(y2+F*0.35).toFixed(1)+'" text-anchor="end" font-size="'+F.toFixed(1)+'" fill="#94a3b8">'+Math.round(t3).toLocaleString('zh-CN')+'</text>';
+      g+='<text x="'+(W-MR+8)+'" y="'+(y2+F*0.35).toFixed(1)+'" font-size="'+F.toFixed(1)+'" fill="#94a3b8">'+Math.round(t2)+'</text>';
+      if(hasI){var t3=yhiA-(yhiA-yloA)*k/4;
+        g+='<text x="'+(W-6)+'" y="'+(y2+F*0.35).toFixed(1)+'" text-anchor="end" font-size="'+F.toFixed(1)+'" fill="#94a3b8">'+Math.round(t3)+'</text>';
+      }
     }
     for(var j=0;j<nl;j++){
       var kk=Math.round(j*(cnt-1)/((nl-1)||1)),xx=Xi2(kk);
@@ -924,14 +951,17 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       var lab=v.dd[kk];if(G!=='d')lab=lab.slice(0,7);
       g+='<text x="'+xx.toFixed(1)+'" y="'+(PB+9+F*1.2).toFixed(1)+'" text-anchor="middle" font-size="'+F.toFixed(1)+'" fill="#8b95a7">'+lab.slice(2)+'</text>';
     }
-    var tMainY=MT-22;
+    var tMainY=MT-(hasI?F*2.4:22),tSubY=MT-F*1.1;
     g+='<text x="14" y="'+tMainY.toFixed(1)+'" font-size="'+(F*1.05).toFixed(1)+'" font-weight="500" fill="#2f6bff">份额存量（亿份·前复权）</text>';
-    g+='<text x="'+(W-MR+8)+'" y="'+tMainY.toFixed(1)+'" font-size="'+(F*1.05).toFixed(1)+'" font-weight="500" fill="#94a3b8">当日净申购（亿元）</text>';
-    g+='<text x="'+(W-6)+'" y="'+tMainY.toFixed(1)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="500" fill="#94a3b8">累计净申购（亿元）</text>';
+    g+='<text x="'+(W-6)+'" y="'+tMainY.toFixed(1)+'" text-anchor="end" font-size="'+(F*1.05).toFixed(1)+'" font-weight="500" fill="#94a3b8">净申购（亿元）</text>';
+    if(hasI){
+      g+='<text x="'+(W-MR+8)+'" y="'+tSubY.toFixed(1)+'" font-size="'+(F*0.82).toFixed(1)+'" fill="#94a3b8">当日</text>';
+      g+='<text x="'+(W-6)+'" y="'+tSubY.toFixed(1)+'" text-anchor="end" font-size="'+(F*0.82).toFixed(1)+'" fill="#94a3b8">累计</text>';
+    }
     g+='<line x1="'+ML+'" y1="'+MT+'" x2="'+ML+'" y2="'+PB+'" stroke="#bcd0f7" stroke-width="1.4"/>';
     g+='<line x1="'+(W-MR)+'" y1="'+MT+'" x2="'+(W-MR)+'" y2="'+PB+'" stroke="#eec9c9" stroke-width="1.4"/>';
-    g+='<line x1="'+(W-6)+'" y1="'+MT+'" x2="'+(W-6)+'" y2="'+PB+'" stroke="#e2e8f0" stroke-width="1.2"/>';
-    g+='<line x1="'+ML+'" y1="'+PB+'" x2="'+(W-MR)+'" y2="'+PB+'" stroke="#c7cdda" stroke-width="1.2"/>';
+    if(hasI)g+='<line x1="'+(W-6)+'" y1="'+MT+'" x2="'+(W-6)+'" y2="'+PB+'" stroke="#e2e8f0" stroke-width="1.2"/>';
+    g+='<line x1="'+ML+'" y1="'+PB+'" x2="'+(hasI?W-6:W-MR)+'" y2="'+PB+'" stroke="#c7cdda" stroke-width="1.2"/>';
     var zero=YR2(0),bw=Math.max(2,Math.min(16,pw/Math.max(cnt,1)*0.55)),RS=REDSHADES(),GS=GREENSHADES();
     for(var k=0;k<cnt;k++){
       var cx=Xi2(k),ps=v.parts[k]||[],posAcc=0,negAcc=0;
@@ -984,13 +1014,13 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     if(legend){
       var sw='<span style="display:inline-block;width:18px;height:0;border-top:3px solid currentColor;vertical-align:middle;margin-right:6px"></span>';
       var lg='<span class="lrow">'
-        +'<span class="lg blue" data-lg="acc" title="悬停高亮该线">— 全市场份额存量（左轴·亿份）</span>'
-        +'<span class="lg" data-lg="bars" style="color:#94a3b8" title="悬停高亮该柱">■ 当日净申购（右轴内侧·亿元·红涨绿跌）</span>';
+        +'<span class="lg blue" data-lg="acc" title="悬停高亮该线，并联动副图中证全指">— 全市场份额存量（左轴·亿份）</span>'
+        +'<span class="lg" data-lg="bars" style="color:#94a3b8" title="悬停高亮该柱">■ 当日净申购（右轴·亿元·'+(names.length?'所选指数':'全市场12指数')+'·红涨绿跌）</span>';
       var items=[];
       names.forEach(function(nm){var a=v.iac[nm]||[],last=lastVal(a);items.push({v:last,html:'<span class="lg" data-lg="idx:'+nm+'" style="color:'+iCol(nm)+'">'+sw+nm+' '+fmt(last)+'亿</span>'});});
       items.sort(function(a,b){return (b.v==null?-Infinity:b.v)-(a.v==null?-Infinity:a.v);});
       items.forEach(function(it){lg+=it.html;});
-      lg+='<span class="lgnote">口径：蓝线=份额存量（亿份，左轴）；红绿柱=当日净申购（亿元，右轴内侧）；彩色曲线=累计净申购（亿元，右轴外侧，2012年起累计，周期末取当日快照）。</span>';
+      lg+='<span class="lgnote">口径：蓝线=份额存量（亿份，左轴）；红绿柱=当日净申购（亿元，右轴）。'+(names.length?'彩色曲线=所选指数累计净申购（亿元，右侧第二轴，2012年起累计，周期末取当日快照）；右轴两列分别为当日/累计，单位均为亿元。':'当前为全市场汇总，默认不显示指数曲线；选中「对标指数」后才在其右侧第二轴叠加累计净申购曲线。')+'</span>';
       legend.innerHTML=lg+'</span>';
     }
     v.start=cur;window._etfView=v;drawE2();drawE3();
@@ -1003,6 +1033,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     var v=window._etfView;if(!v||!v.idx.length)return;
     var cnt=v.idx.length,k=Math.round((mx-ML)/pw*(cnt-1));k=Math.max(0,Math.min(cnt-1,k));
     var xx=ML+pw*(cnt<=1?0:k/(cnt-1));vline.setAttribute('x1',xx);vline.setAttribute('x2',xx);vline.style.opacity=1;
+    syncCross(k,1);
     var ps0=(v.parts&&v.parts[k])||[];
     var netV=pointSel.length?ps0.reduce(function(s,x){return s+(x||0);},0):(v.net[k]||0);
     var ncol=netV>=0?UP:DOWN,scopeTip=pointSel.length?(pointSel.length+'个所选指数'):'全市场12指数';
@@ -1097,7 +1128,8 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     var v=window._etfView;if(!v||!v.idx.length)return;
     var r=svg2.getBoundingClientRect();if(!r.width)return;
     var mx=(clientX-r.left)*(W2/r.width),cnt=v.idx.length,k=Math.round((mx-ML2)/pw2*(cnt-1));k=Math.max(0,Math.min(cnt-1,k));
-    var xx=X2(k);vline2.setAttribute('x1',xx);vline2.setAttribute('x2',xx);vline2.style.opacity=1;
+    var xx=ML2+pw2*(cnt<=1?0:k/(cnt-1));vline2.setAttribute('x1',xx);vline2.setAttribute('x2',xx);vline2.style.opacity=1;
+    syncCross(k,2);
     var en=effNorm(),csiD=en?(v.csiN||[]):(v.csi||[]),html='<div class="t-d">'+v.dd[k]+' · 指数走势</div>';
     function row(nm,arr,col,raw){
       var dv=arr[k],base=firstVal(arr),pct=(dv!=null&&base)?((dv/base-1)*100):null;
@@ -1173,7 +1205,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     var v=window._etfView;if(!v||!v.idx.length)return;
     var r=svg3.getBoundingClientRect();if(!r.width)return;
     var mx=(clientX-r.left)*(W3/r.width),cnt=v.idx.length,k=Math.round((mx-ML3)/pw3*(cnt-1));k=Math.max(0,Math.min(cnt-1,k));
-    var xx=X3(k);vline3.setAttribute('x1',xx);vline3.setAttribute('x2',xx);vline3.style.opacity=1;
+    var xx=ML3+pw3*(cnt<=1?0:k/(cnt-1));vline3.setAttribute('x1',xx);vline3.setAttribute('x2',xx);vline3.style.opacity=1;
     var html='<div class="t-d">'+v.dd[k]+' · ETF净值走势</div>';
     etfSel.forEach(function(c,oi){
       var a=(v.ecN&&v.ecN[c])||[],dv=a[k],base=firstVal(a),pct=(dv!=null&&base)?(dv-base):null;
@@ -1184,7 +1216,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     var b3=box3.getBoundingClientRect(),tx=clientX-b3.left+14;if(tx+200>b3.width)tx=clientX-b3.left-200;
     var ty=clientY-b3.top-10;if(ty<0)ty=0;tip3.style.left=tx+'px';tip3.style.top=ty+'px';tip3.style.opacity=1;
   }
-  function hideTips2(){vline2.style.opacity=0;tip2.style.opacity=0;}
+  function hideTips2(){clearSubCross();tip2.style.opacity=0;}
   function hideTips3(){if(!hasSub3)return;vline3.style.opacity=0;tip3.style.opacity=0;}
   if(hasSub){
     ov2.addEventListener('mousemove',function(e){pick2(e.clientX,e.clientY);});
@@ -1211,7 +1243,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       panel=document.getElementById('eIdxPanel'),list=document.getElementById('eIdxList');
   var eBtn=document.getElementById('eEtfBtn'),ePanel=document.getElementById('eEtfPanel'),
       eList=document.getElementById('eEtfList'),eCompat=document.getElementById('eEtfSel');
-  function btnLabel(){return pointSel.length===0?'全部(12指数)':(pointSel.length===1?pointSel[0]:pointSel.length+'个指数');}
+  function btnLabel(){return pointSel.length===0?'全部汇总':(pointSel.length===1?pointSel[0]:pointSel.length+'个指数');}
   function eBtnLabel(){return etfSel.length===0?'无':(etfSel.length===1?(emeta[etfSel[0]]?emeta[etfSel[0]].name:etfSel[0]):etfSel.length+'只ETF');}
   function syncCompat(){if(compat)compat.value=pointSel.length===0?ALLKEY:pointSel.join(',');if(eCompat)eCompat.value=etfSel.length===0?ALLKEY:etfSel.join(',');}
   function etfPool(){return (pointSel.length===1)?EM.filter(function(m){return m.idx===pointSel[0];}):EM;}
@@ -1303,7 +1335,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   drawE(cur);
 })();
 </script>
-<script src="_rzrq_drill.js?v=202611260206"></script>
+<script src="_rzrq_drill.js?v=202611260233"></script>
 
 <script>
 /* 详情页只展示一种视图；隐藏视图保持可测量宽度（不用 display:none），
