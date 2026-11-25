@@ -1132,18 +1132,22 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   function shareIdx(name){ return (SHARE&&SHARE.idx&&SHARE.idx[name])||null; }
   function shareTotal(){ return (SHARE&&SHARE.total)||null; }
   /* ===== ETF 区间涨幅（前复权净值，截至数据最新交易日）=====
-     优先用 HTML 注入的 ETF_CLOSES；若其长度与资金流日期轴不一致（净值先更新/HTML未重建），
-     则按需拉取 _etf_close_2012.json，加载完成后自动重绘按ETF表。 */
+     两套数据源结构不同：HTML 注入 ETF_CLOSES={code:[净值...]}；
+     按需拉取的 _etf_close_2012.json={dates:[...],close:{code:[...]}}。
+     涨幅只取净值序列自身最后有值日往前 n 根，不要求与资金流日期轴等长。 */
   var CHG=null, CLOSING=false;
   function ensureCloses(){
     if(CHG) return;
     if(typeof ETF_CLOSES!=='undefined' && ETF_CLOSES && DATA){
       var c=DATA.etf&&DATA.etf[0]&&DATA.etf[0].code, a=c&&ETF_CLOSES[c];
-      if(a && a.length>=DATA.dates.length && a[a.length-1]!=null){ CHG=ETF_CLOSES; return; }
+      if(a && a.length && a.some(function(v){ return v!=null; })){ CHG=ETF_CLOSES; return; }
     }
     if(CLOSING) return;
     CLOSING=true;
-    RZQ.load('_etf_close_2012.json').then(function(d){ CHG=d||{}; })
+    RZQ.load('_etf_close_2012.json').then(function(d){
+      /* 兼容 {dates,close} 与直接的 {code:[...]} 两种结构，避免整包当 code 映射导致全列「—」 */
+      CHG=(d && d.close && typeof d.close==='object' && !Array.isArray(d.close)) ? d.close : (d||{});
+    })
       .catch(function(){ CHG={}; })
       .then(function(){ if(DATA && dim==='e') renderTable(); });
   }
