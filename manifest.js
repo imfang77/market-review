@@ -7,6 +7,19 @@
  */
 window.REPORTS = [
     {
+      "date": "2026-11-25",
+      "weekday": "周三",
+      "reviewFile": "review-20261125.html?v=1795605107",
+      "reviewSummary": "",
+      "screeningFile": "screening.html",
+      "screeningSummary": "",
+      "mainlineFile": "mainline-20261125.html?v=1795605124",
+      "mainlineSummary": "5日主线:渔业/水力发电/银行｜10日主线:银行/水力发电/电信运营｜20日主线:渔业/乳制品/白酒｜融资余额 待次日披露后更新｜涨跌家数 2757/467/2340 · 总5564",
+      "mainlineConceptFile": "mainline_concept-20261125.html?v=1795605124",
+      "conceptSummary": "5日主线:渔业/水力发电/银行｜10日主线:银行/水力发电/电信运营｜20日主线:渔业/乳制品/白酒｜融资余额 待次日披露后更新｜涨跌家数 2757/467/2340 · 总5564",
+      "previewFile": "preview-20261125.html?v=1795605207"
+    },
+    {
       "date": "2026-11-24",
       "weekday": "周二",
       "reviewFile": "review-20261124.html?v=1795521828",
@@ -14,10 +27,10 @@ window.REPORTS = [
       "screeningFile": "screening.html",
       "screeningSummary": "技术面页最新20261124；基本面页数据截至最新季报；RPS选股页数据日期20261124",
       "mainlineFile": "mainline-20261124.html?v=1795521864",
-      "mainlineSummary": "5日主线:渔业/公路/水力发电｜10日主线:银行/水力发电/港口｜20日主线:渔业/乳制品/空运｜融资余额 21,422.00亿 · ▲2.62亿｜涨跌家数 1838/460/3267 · 总5565",
+      "mainlineSummary": "5日主线:渔业/公路/水力发电｜10日主线:银行/水力发电/港口｜20日主线:渔业/乳制品/空运｜融资余额 21,422.00亿 · ▲2.62亿｜涨跌家数 1951/126/3498 · 总5575",
       "mainlineConceptFile": "mainline_concept-20261124.html?v=1795521864",
-      "conceptSummary": "5日主线:渔业/公路/水力发电｜10日主线:银行/水力发电/港口｜20日主线:渔业/乳制品/空运｜融资余额 21,422.00亿 · ▲2.62亿｜涨跌家数 1838/460/3267 · 总5565",
-      "previewFile": "preview-20261124.html?v=1795570946"
+      "conceptSummary": "5日主线:渔业/公路/水力发电｜10日主线:银行/水力发电/港口｜20日主线:渔业/乳制品/空运｜融资余额 21,422.00亿 · ▲2.62亿｜涨跌家数 1951/126/3498 · 总5575",
+      "previewFile": "preview-20261124.html?v=1795605207"
     },
     {
       "date": "2026-11-23",
