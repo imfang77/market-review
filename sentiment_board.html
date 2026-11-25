@@ -37,7 +37,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif
   <div class="report-list">
     <a class="report-card" href="sentiment_rzrq.html" id="card-rz">
       <div class="card-header"><span class="date-text">融资余额 · 涨跌家数 · 个股融资余额</span></div>
-      <div class="summary">每日融资余额与上涨家数双轴走势；表格含每日融资余额、每日涨跌家数、个股融资余额明细（融资余额为 T+1 披露，最新 2026-11-23）</div>
+      <div class="summary">每日融资余额与上涨家数双轴走势；表格含每日融资余额、每日涨跌家数、个股融资余额明细（融资余额为 T+1 披露，最新 2026-11-24）</div>
       <div class="meta">
         <span class="badge-date" id="rz-date">更新于 —</span>
         <span class="dot hide" id="rz-dot"></span>
@@ -58,7 +58,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif
 </div>
 <script>
 /* 与条件选股 screening.html 同款：更新于 YYYY-MM-DD + 未读红点（localStorage 记忆已读）。 */
-var RZ_DATE = "20261123", UD_DATE = "20261124", ETF_DATE = "20261124";
+var RZ_DATE = "20261124", UD_DATE = "20261124", ETF_DATE = "20261124";
 var META_KEY = "ashare_sentiment_meta_read_v1";
 function loadRead(){ try { return JSON.parse(localStorage.getItem(META_KEY) || "{}"); } catch(e){ return {}; } }
 function saveRead(o){ try { localStorage.setItem(META_KEY, JSON.stringify(o)); } catch(e){} }
