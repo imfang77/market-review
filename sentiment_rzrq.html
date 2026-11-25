@@ -755,7 +755,12 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
        全市场份额线与中证全指基准做图例联动高亮 + 同步竖线。
    图3  = 所选 ETF 时显示对应指数成分 ETF 净值走势线（固定归一化·基期=100）；ETF选择框放在副图标题行。
          图3已开(有选中ETF)时切换单选指数→自动换成该指数的成分ETF；数值只在悬浮窗显示，图例不写数字。
-   图例 = 固定5列网格左对齐（手机3列），口径说明独占整行。 */
+   图例 = 固定5列网格左对齐（手机3列），口径说明独占整行。
+   图例联动（三图互通）：
+     · 主图「全市场份额存量」↔ 副图「中证全指」互为联动组；
+     · 副图/主图选中某指数 → 图3 中属于该指数的全部 ETF 线一起高亮（idx:名 ↔ etf:码 由 ETF_META.idx 映射）；
+     · 图3 选中某只 ETF → 其所属指数在图2、主图的对应线一起高亮。
+     命中线同时加粗（polyline stroke-width 提到 4），其余淡出到 .16；支持点击锁定、再点取消。 */
 (function(){
   var box=document.getElementById('ebox'); if(!box) return;
   var svg=document.getElementById('esvg'), plot=document.getElementById('eplot'),
@@ -777,11 +782,22 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     if(subHd)subHd.style.display=d2; if(box2)box2.style.display=d2; if(legend2)legend2.style.display=d2;
     if(subHd3)subHd3.style.display=d3; if(box3)box3.style.display=d3; if(legend3)legend3.style.display=d3;
   }
-  // 主图全市场份额(acc) 与 副图中证全指(csi) 互为联动组
+  // 图例联动：三图互通
+  //    acc(全市场份额) ↔ csi(中证全指)
+  //    idx:名 → 再加上该指数的全部成分 ETF 的 etf:码（跨到图3）
+  //    etf:码 → 再加上该 ETF 所属指数的 idx:名（跨到主图/副图）
   function focusKeys(key){
     if(!key)return [];
     if(key==='acc'||key==='csi')return ['acc','csi'];
-    return [key];
+    var set=[key],i,m;
+    if(key.indexOf('idx:')===0){
+      var nm=key.slice(4);
+      for(i=0;i<EM.length;i++){m=EM[i];if(m&&m.idx===nm&&set.indexOf('etf:'+m.code)<0)set.push('etf:'+m.code);}
+    }else if(key.indexOf('etf:')===0){
+      var cm=emeta[key.slice(4)];
+      if(cm&&cm.idx&&set.indexOf('idx:'+cm.idx)<0)set.push('idx:'+cm.idx);
+    }
+    return set;
   }
   function lgFocusAll(key){
     var keys=focusKeys(key);
@@ -791,6 +807,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       for(var i=0;i<els.length;i++){
         var k=els[i].getAttribute('data-lg'),hit=keys.indexOf(k)>=0;
         els[i].style.opacity=key?(hit?'1':'0.16'):'';
+        if(els[i].tagName==='polyline')els[i].style.strokeWidth=(key&&hit)?'4':'';  // 命中线加粗，更醒目
         if(k==='bars'){
           if(key&&key==='bars'){els[i].setAttribute('stroke','#334155');els[i].setAttribute('stroke-width','0.6');}
           else{els[i].removeAttribute('stroke');els[i].removeAttribute('stroke-width');}
@@ -803,6 +820,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       for(var j=0;j<its.length;j++)its[j].style.fontWeight=(keys.indexOf(its[j].getAttribute('data-lg'))>=0)?'500':'';
     });
   }
+  var lgLock=null;   // 点击锁定的图例项（三图共用），再点同一项取消
   function bindLg(lg){
     if(!lg)return;
     lg.addEventListener('mouseover',function(e){
@@ -811,7 +829,14 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     });
     lg.addEventListener('mouseout',function(e){
       var s=(e.target&&e.target.closest)?e.target.closest('[data-lg]'):null;
-      if(!s||s===lg)return;lgFocusAll(null);
+      if(!s||s===lg)return;lgFocusAll(lgLock);
+    });
+    lg.addEventListener('click',function(e){
+      var s=(e.target&&e.target.closest)?e.target.closest('[data-lg]'):null;
+      if(!s||s===lg)return;
+      var k=s.getAttribute('data-lg');
+      if(lgLock===k){lgLock=null;lgFocusAll(null);}   // 再点同一项 → 取消锁定、全部复位
+      else{lgLock=k;lgFocusAll(k);}                   // 点其它项 → 改锁到该项
     });
   }
   bindLg(legend);bindLg(legend2);bindLg(legend3);
@@ -1027,6 +1052,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       legend.innerHTML=lg+'</span>';
     }
     v.start=cur;window._etfView=v;drawE2();drawE3();
+    if(lgLock)lgFocusAll(lgLock);   // 重绘后恢复点击锁定的高亮
   }
   function pick(clientX,clientY){
     var lsMode=(typeof lsPoint==='function'&&lsActive());
@@ -1349,7 +1375,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   drawE(cur);
 })();
 </script>
-<script src="_rzrq_drill.js?v=202611260303"></script>
+<script src="_rzrq_drill.js?v=202611260317"></script>
 
 <script>
 /* 详情页只展示一种视图；隐藏视图保持可测量宽度（不用 display:none），
