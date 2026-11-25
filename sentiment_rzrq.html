@@ -51,6 +51,8 @@ thead th:nth-child(1),tbody td:nth-child(1){white-space:nowrap}
 .legend{padding:4px 28px 0;font-size:12px;color:#64748b;display:flex;flex-direction:column;gap:4px}
 .legend .lrow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:12px;row-gap:5px;align-items:center;justify-content:start;text-align:left}
 .legend .lg{display:inline-flex;align-items:center;gap:4px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.legend .lgsw{display:inline-block;flex:none;width:18px;height:0;border-top:3px solid currentColor;vertical-align:middle;margin-right:5px}
+.legend .lgsw.dash{border-top-style:dashed}
 .legend .lgnote{grid-column:1/-1;white-space:normal;text-align:left;color:#94a3b8;font-size:11.5px;line-height:1.5;padding-top:2px}
 .legend .lg[data-lg]{cursor:pointer;border-radius:3px;padding:1px 3px;margin:-1px -3px;transition:opacity .15s}
 .legend .lg[data-lg]:hover{background:rgba(47,107,255,.08)}
@@ -93,10 +95,10 @@ body.lslock{overflow:hidden}
 .etfchart-sec .descfold{margin:12px 28px 0}
 .etf-desc .sub>div{padding:8px 0 8px 14px;border-left:3px solid #e2e8f0;margin-bottom:10px;line-height:1.85}
 .etf-desc .sub>div:last-child{margin-bottom:0;border-left-color:#f1f5f9}
-#etip,#e2tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .08s;background:rgba(255,255,255,.97);border:1px solid #e2e8f0;border-radius:10px;box-shadow:0 6px 20px rgba(31,41,55,.14);padding:10px 14px;font-size:12px;min-width:185px;z-index:5}
-#etip .t-d,#e2tip .t-d{font-weight:700;font-size:13px;margin-bottom:6px;color:#1f2937}
-#etip .t-r,#e2tip .t-r{display:flex;justify-content:space-between;gap:18px;line-height:1.7;color:#64748b}
-#etip .t-r b,#e2tip .t-r b{color:#1f2937;font-weight:700}
+#etip,#e2tip,#e3tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .08s;background:rgba(255,255,255,.97);border:1px solid #e2e8f0;border-radius:10px;box-shadow:0 6px 20px rgba(31,41,55,.14);padding:10px 14px;font-size:12px;min-width:185px;z-index:5}
+#etip .t-d,#e2tip .t-d,#e3tip .t-d{font-weight:700;font-size:13px;margin-bottom:6px;color:#1f2937}
+#etip .t-r,#e2tip .t-r,#e3tip .t-r{display:flex;justify-content:space-between;gap:18px;line-height:1.7;color:#64748b}
+#etip .t-r b,#e2tip .t-r b,#e3tip .t-r b{color:#1f2937;font-weight:700}
 .etfchart-sub2{margin-top:6px}
 .tblsec{margin:16px 28px 0;border:1px solid #e8edf5;border-radius:12px;overflow:hidden}
 .descfold{margin:16px 28px 0;border:1px solid #e8edf5;border-radius:12px;background:#fbfcfe}
@@ -1015,7 +1017,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     if(legend){
       var sw='<span style="display:inline-block;width:18px;height:0;border-top:3px solid currentColor;vertical-align:middle;margin-right:6px"></span>';
       var lg='<span class="lrow">'
-        +'<span class="lg blue" data-lg="acc" title="悬停高亮该线，并联动副图中证全指">— 全市场份额存量（左轴·亿份）</span>'
+        +'<span class="lg blue" data-lg="acc" title="悬停高亮该线，并联动副图中证全指"><span class="lgsw"></span>全市场份额存量（左轴·亿份）</span>'
         +'<span class="lg" data-lg="bars" style="color:#94a3b8" title="悬停高亮该柱">■ 当日净申购（右轴·亿元·'+(names.length?'所选指数':'全市场12指数')+'·红涨绿跌）</span>';
       var items=[];
       names.forEach(function(nm){var a=v.iac[nm]||[],last=lastVal(a);items.push({v:last,html:'<span class="lg" data-lg="idx:'+nm+'" style="color:'+iCol(nm)+'">'+sw+nm+' '+fmt(last)+'亿</span>'});});
@@ -1118,7 +1120,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       function sRet(a){var f=firstVal(a),l=lastVal(a);return (f!=null&&l!=null&&f!==0)?((l/f-1)*100):null;}
       function rTxt(r){return r==null?'':(' '+(r>=0?'+':'')+r.toFixed(2)+'%');}
       var sw='<span style="display:inline-block;width:18px;height:0;border-top:3px solid currentColor;vertical-align:middle;margin-right:6px"></span>';
-      var l2='<span class="lrow"><span class="lg" data-lg="csi" style="color:#64748b">┄ 中证全指（全市场基准）'+rTxt(sRet(csiD))+'</span>';
+      var l2='<span class="lrow"><span class="lg" data-lg="csi" style="color:#64748b"><span class="lgsw dash"></span>中证全指（全市场基准）'+rTxt(sRet(csiD))+'</span>';
       pointSel.forEach(function(nm){l2+='<span class="lg" data-lg="idx:'+nm+'" style="color:'+iCol(nm)+'">'+sw+nm+rTxt(sRet(shD[nm]||[]))+'</span>';});
       l2+='<span class="lgnote">'+(en?'归一化·基期=100；右侧%为区间涨跌':'真实收盘点位；右侧%为区间涨跌')+'；中证全指对应主图全市场份额，走势线仅作行情参照，不代表资金流向。</span></span>';
       legend2.innerHTML=l2;
@@ -1247,7 +1249,12 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   function btnLabel(){return pointSel.length===0?'全部汇总':(pointSel.length===1?pointSel[0]:pointSel.length+'个指数');}
   function eBtnLabel(){return etfSel.length===0?'无':(etfSel.length===1?(emeta[etfSel[0]]?emeta[etfSel[0]].name:etfSel[0]):etfSel.length+'只ETF');}
   function syncCompat(){if(compat)compat.value=pointSel.length===0?ALLKEY:pointSel.join(',');if(eCompat)eCompat.value=etfSel.length===0?ALLKEY:etfSel.join(',');}
-  function etfPool(){return (pointSel.length===1)?EM.filter(function(m){return m.idx===pointSel[0];}):EM;}
+  // ETF池：单选=该指数成分；多选=所选各指数成分的并集（不再返回全部，避免选2个指数就列出30只）
+  function etfPool(){
+    if(pointSel.length===1)return EM.filter(function(m){return m.idx===pointSel[0];});
+    if(pointSel.length>1)return EM.filter(function(m){return pointSel.indexOf(m.idx)>=0;});
+    return EM;
+  }
   function buildPanel(){if(list){
     list.innerHTML='<label class="idx-item"><input type="checkbox" value="'+ALLKEY+'"'+(pointSel.length===0?' checked':'')+'><span>全部（12指数）</span></label>'
       +IDXN.map(function(n){return '<label class="idx-item"><input type="checkbox" value="'+n+'"'+(pointSel.indexOf(n)>=0?' checked':'')+'><span>'+n+'</span></label>';}).join('');
@@ -1271,7 +1278,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   // 图3未开(etfSel空)时不自动打开；外部 setSel/setEtfSel 传默认false，不触发自动切换。
   function applySel(idxChanged){
     hideTips();
-    if(pointSel.length===1){
+    if(pointSel.length>0){
       var pool=etfPool(),ok={};pool.forEach(function(m){ok[m.code]=1;});
       if(idxChanged&&etfSel.length>0){etfSel=pool.map(function(m){return m.code;});}
       else etfSel=etfSel.filter(function(c){return ok[c];});
@@ -1342,7 +1349,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   drawE(cur);
 })();
 </script>
-<script src="_rzrq_drill.js?v=202611260247"></script>
+<script src="_rzrq_drill.js?v=202611260303"></script>
 
 <script>
 /* 详情页只展示一种视图；隐藏视图保持可测量宽度（不用 display:none），
