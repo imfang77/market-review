@@ -1532,12 +1532,11 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
         自定义区间早于内联起点时按需 fetch _idx_close_2012.json 全历史。 */
 (function(){
   if (typeof RZQ === 'undefined') return;
-  var tabs = document.querySelector('.tbltabs');
-  var sec  = document.querySelector('.tblsec');
-  if (!tabs || !sec) return;
-  var eBtn = tabs.querySelector('[data-t="e"]');
-  if (!eBtn) return;                    /* 依赖宽基ETF标签页先注入（提供 .tbltabs 容器） */
-  if (document.getElementById('tpanel-r')) return;
+  /* 本表挂在「宽基ETF净资金流」面板内部，作为该面板的二级标签，
+     不再占用顶层标签栏（顶层 m/s/e/u 在手机端换行后会被误读成融资余额/涨跌家数那一组）。 */
+  var panelE = document.getElementById('tpanel-e');
+  if (!panelE) return;                  /* 依赖宽基ETF标签页先注入 */
+  if (document.getElementById('irPane')) return;
 
   var IDXCOLOR = {'沪深300':'#0d9488','中证A500':'#be123c','上证50':'#7c3aed','中证500':'#c2410c',
     '中证1000':'#059669','科创50':'#db2777','创业板指':'#4f46e5','中证2000':'#b45309',
@@ -1570,7 +1569,12 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
 
   /* ---------- CSS ---------- */
   var css = ''
-    + '#tpanel-r .tblbox{padding:6px 8px 10px}'
+    + '.ir-subtabs{display:flex;gap:6px;margin:2px 2px 6px}'
+    + '.ir-subtabs button{font-size:12px;padding:4px 13px;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap}'
+    + '.ir-subtabs button.on{background:#eef4ff;border-color:#2f6bff;color:#2f6bff;font-weight:600}'
+    + '#irPane{display:none;padding:0 2px 4px}'
+    + '#tpanel-e.ir-mode > #irPane{display:block}'
+    + '#tpanel-e.ir-mode > .etf-flow-view{display:none}'
     + '.ir-top{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:6px 2px 8px;font-size:12px;color:#64748b}'
     + '.ir-top .lbl{color:#64748b;margin-right:1px}'
     + '.ir-ch{font-size:12px;padding:3px 10px;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap}'
@@ -1599,40 +1603,44 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.ir-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;vertical-align:middle}'
     + '.ir-up{color:#e24b4a}.ir-dn{color:#16a34a}.ir-na{color:#b6bfcc}'
     + '.ir-sub{font-size:11.5px;font-weight:400}'
-    + '#tpanel-r thead th[data-sk]{cursor:pointer;user-select:none}'
-    + '#tpanel-r thead th[data-sk]::after{content:" ⇅";font-size:.75em;color:#aab4c5;margin-left:2px;font-weight:400}'
-    + '#tpanel-r thead th[data-sk].sk-asc::after{content:" ↑";color:#2f6bff}'
-    + '#tpanel-r thead th[data-sk].sk-desc::after{content:" ↓";color:#2f6bff}'
+    + '#irPane thead th[data-sk]{cursor:pointer;user-select:none}'
+    + '#irPane thead th[data-sk]::after{content:" ⇅";font-size:.75em;color:#aab4c5;margin-left:2px;font-weight:400}'
+    + '#irPane thead th[data-sk].sk-asc::after{content:" ↑";color:#2f6bff}'
+    + '#irPane thead th[data-sk].sk-desc::after{content:" ↓";color:#2f6bff}'
     + '.ir-note2{font-size:12px;color:#66708a;line-height:1.6;margin:8px 2px 0}'
     + '.ir-note2 summary{cursor:pointer;font-weight:600;color:#475569;padding:6px 2px}'
     + '.ir-note2[open] summary{margin-bottom:4px}'
     + '.ir-note2 b{color:#334155}'
     + '.ir-msg{padding:16px;color:#66708a;font-size:13px;text-align:center}'
-    + '@media(max-width:620px){#tpanel-r .tblbox{padding:6px 4px 8px}table.ir-table{font-size:13px}table.ir-table th,table.ir-table td{padding:6px 7px}table.ir-table th.ir-nm,table.ir-table td.ir-nm{min-width:80px}.ir-top{gap:5px;font-size:11.5px}.ir-ch{font-size:11.5px;padding:3px 8px}.ir-cus{flex-basis:100%;margin-left:0;padding-left:0;border-left:none;margin-top:2px;gap:4px;flex-wrap:wrap}.ir-cus .lbl{flex:0 0 auto}.ir-cus input[type=date]{font-size:11.5px;padding:2px 4px;flex:1 1 82px;min-width:0}.ir-add,.ir-clr{flex:0 0 auto}.ir-asof{width:100%;margin-left:0;text-align:right;font-size:11px}}';
+    + '@media(max-width:620px){table.ir-table{font-size:13px}table.ir-table th,table.ir-table td{padding:6px 7px}table.ir-table th.ir-nm,table.ir-table td.ir-nm{min-width:80px}.ir-top{gap:5px;font-size:11.5px}.ir-ch{font-size:11.5px;padding:3px 8px}.ir-cus{flex-basis:100%;margin-left:0;padding-left:0;border-left:none;margin-top:2px;gap:4px;flex-wrap:wrap}.ir-cus .lbl{flex:0 0 auto}.ir-cus input[type=date]{font-size:11.5px;padding:2px 4px;flex:1 1 82px;min-width:0}.ir-add,.ir-clr{flex:0 0 auto}.ir-asof{width:100%;margin-left:0;text-align:right;font-size:11px}}';
   if (!document.getElementById('ir-tab-css')) {
     var st = document.createElement('style'); st.id = 'ir-tab-css'; st.textContent = css; document.head.appendChild(st);
   }
 
-  /* ---------- 标签按钮（紧跟在宽基ETF之后） ---------- */
-  var rBtn = document.createElement('button');
-  rBtn.className = 'tbtn'; rBtn.dataset.t = 'r'; rBtn.textContent = '各指数收益汇总';
-  tabs.insertBefore(rBtn, eBtn.nextSibling);
+  /* ---------- 二级标签（宽基ETF 面板内部：资金流明细 / 各指数收益汇总） ---------- */
+  var subnav = document.createElement('div');
+  subnav.className = 'ir-subtabs'; subnav.id = 'irSubtabs';
+  subnav.innerHTML = '<button type="button" data-v="flow" class="on">资金流明细</button>'
+                   + '<button type="button" data-v="ret">各指数收益汇总</button>';
+  panelE.insertBefore(subnav, panelE.firstChild);
+  /* 既有内容（整理维度/表体/说明）打标记，切到收益汇总时整组隐藏 */
+  Array.prototype.slice.call(panelE.children).forEach(function (el) {
+    if (el !== subnav) el.classList.add('etf-flow-view');
+  });
 
   /* ---------- 面板 ---------- */
   var RANGES = [
-    { k: 'r5',   n: 5,   label: '5日' },
-    { k: 'r10',  n: 10,  label: '10日' },
     { k: 'r20',  n: 20,  label: '20日' },
     { k: 'r60',  n: 60,  label: '60日' },
     { k: 'r120', n: 120, label: '120日' },
     { k: 'ytd',  n: 0,   label: '今年以来' }
   ];
-  var show = { r5:1, r10:1, r20:1, r60:1, r120:1, ytd:1 };
+  var show = { r20:1, r60:1, r120:1, ytd:1 };
   var custom = null;                     /* {label, s, e}：s/e 为 D 中的索引 */
   var sortKey = 'r20', sortMetric = 'r'; /* 默认按 20 日收益降序 */
 
   var panel = document.createElement('div');
-  panel.className = 'tpanel'; panel.id = 'tpanel-r'; panel.style.display = 'none';
+  panel.id = 'irPane';
   panel.innerHTML =
       '<div class="ir-top" id="irTop">'
     +   '<span class="lbl">区间</span>'
@@ -1646,15 +1654,16 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '</div>'
     + '<div class="ir-tblwrap"><table class="ir-table"><thead id="irHead"></thead><tbody id="irBody"></tbody></table></div>'
     + '<details class="ir-note2"><summary>口径与算法说明（默认折叠，点击展开）</summary><div>'
-    +   '<b>区间收益</b>＝末收盘 ÷ 期初收盘 − 1。周期一律按<b>交易日</b>回溯（5 日＝相对 5 个交易日前，非自然日）。'
+    +   '<b>区间收益</b>＝末收盘 ÷ 期初收盘 − 1。周期一律按<b>交易日</b>回溯（20 日＝相对 20 个交易日前，非自然日）。'
     +   '<b>夏普</b>＝区间内日均收益 ÷ 日收益标准差 × √252（年化，<b>无风险利率取 0</b>），与「按指标选股」页同一口径；'
     +   '注意它不等于区间收益的年化值。<b>区间不足 20 个交易日不显示夏普</b>（显示「—」），因样本过少无统计意义。'
     +   '<b>今年以来</b>＝末收盘 ÷ 上年最后一个交易日收盘 − 1。<b>自定义</b>区间按输入的起止日期取「首个 ≥ 起始日」与「最后 ≤ 截止日」两个交易日的收盘，作为额外一列追加。'
     +   '点第二行表头（收益/夏普）可排序，首次降序、再点升序，空值恒排末尾。指数名前的色点与上方图表同色。'
+    +   '短周期（5 日 / 10 日）收益请直接看<b>「按ETF」维度</b>的涨幅列，本表不重复列。'
     +   '<b>数据</b>：指数日线取自腾讯 fqkline（中证2000 走通达信），最新交易日见右上角；'
     +   '自定义区间超出内联范围（近 300 个交易日）时自动拉取完整历史。指数收益未扣费、不含分红再投资差异。'
     + '</div></details>';
-  sec.appendChild(panel);
+  panelE.appendChild(panel);
 
   var head = panel.querySelector('#irHead'), body = panel.querySelector('#irBody');
   var chips = panel.querySelector('#irChips'), asofEl = panel.querySelector('#irAsof');
@@ -1830,12 +1839,21 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   }
   initDates();
 
-  /* 首次进入该标签页才渲染（避免无谓计算）；已有数据则直接渲染 */
-  rBtn.addEventListener('click', function () {
-    document.querySelectorAll('.tbtn').forEach(function (b) { b.classList.toggle('active', b.dataset.t === 'r'); });
-    document.querySelectorAll('.tpanel').forEach(function (p) { p.style.display = (p.id === 'tpanel-r') ? 'block' : 'none'; });
-    render();
+  /* 二级标签切换：资金流明细 ↔ 各指数收益汇总（首次切入才渲染） */
+  var subBtns = Array.prototype.slice.call(subnav.querySelectorAll('button'));
+  var rendered = false;
+  function setView(v){
+    var isRet = (v === 'ret');
+    panelE.classList.toggle('ir-mode', isRet);
+    subBtns.forEach(function (b) { b.classList.toggle('on', b.dataset.v === v); });
+    if (isRet && !rendered) { rendered = true; render(); }
+  }
+  subBtns.forEach(function (b) {
+    b.addEventListener('click', function () { setView(b.dataset.v); });
   });
+  /* 从其它顶层标签切回「宽基ETF净资金流」时回到资金流明细，避免误以为进了别的表 */
+  var eTop = document.querySelector('.tbltabs [data-t="e"]');
+  if (eTop) eTop.addEventListener('click', function () { setView('flow'); });
 
   /* 无内联数据（如派生页未带 IDXR_*）时，自动拉一次全历史 */
   if (!D.length || !IDX.length) {
