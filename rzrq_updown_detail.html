@@ -1018,7 +1018,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
     var scopeTip=pointSel.length?(pointSel.length+'个所选指数'):'全市场12指数';
     var html='<div class="t-d">'+dd+' · 存量=全市场（前复权）/ 当日净申购='+scopeTip+'</div>'
       +'<div class="t-r"><span style="color:#2f6bff">● 份额存量（全市场·前复权）</span><b style="color:#2f6bff">'+fmt(accV)+' 亿份</b></div>'
-      +'<div class="t-r"><span style="color:'+ncol+'">● 当日净申购（'+scopeTip+'）</span><b style="color:'+ncol+'">'+(netV>=0?'+':'')+fmt(netV)+' 亿</b></div>';
+      +'<div class="t-r"><span style="color:'+ncol+'">● 当日净申购（'+scopeTip+'）</span><b style="color:'+ncol+'">'+(netV>=0?'+':'')+fmt(netV)+' 亿元</b></div>';
     var ps=(v.parts&&v.parts[k])||[];
     var pairs=IDXN.map(function(nm,j){return {n:nm,v:ps[j]||0};}).filter(function(o){return Math.abs(o.v)>=0.005;})
       .sort(function(a,b){return Math.abs(b.v)-Math.abs(a.v);});
@@ -1173,5 +1173,5 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   drawE(cur);
 })();
 </script>
-<script src="_rzrq_drill.js?v=202611250801"></script>
+<script src="_rzrq_drill.js?v=202611250812"></script>
 </body></html>

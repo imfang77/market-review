@@ -330,8 +330,8 @@
     var ncol=netV>=0?UP:DOWN;
     var scopeTip=pointSel.length?(pointSel.length+'个所选指数'):'全市场12指数';
     var html='<div class="t-d">'+dd+' · 累计=全市场 / 当日='+scopeTip+'</div>'
-      +'<div class="t-r"><span style="color:#2f6bff">● 累计净申购（全市场）</span><b style="color:#2f6bff">'+fmt(accV)+' 亿</b></div>'
-      +'<div class="t-r"><span style="color:'+ncol+'">● 当日净申购（'+scopeTip+'）</span><b style="color:'+ncol+'">'+(netV>=0?'+':'')+fmt(netV)+' 亿</b></div>';
+      +'<div class="t-r"><span style="color:#2f6bff">● 累计净申购（全市场）</span><b style="color:#2f6bff">'+fmt(accV)+' 亿元</b></div>'
+      +'<div class="t-r"><span style="color:'+ncol+'">● 当日净申购（'+scopeTip+'）</span><b style="color:'+ncol+'">'+(netV>=0?'+':'')+fmt(netV)+' 亿元</b></div>';
     var ps=(v.parts&&v.parts[k])||[];
     var pairs=IDXN.map(function(nm,j){return {n:nm,v:ps[j]||0};}).filter(function(o){return Math.abs(o.v)>=0.005;})
       .sort(function(a,b){return Math.abs(b.v)-Math.abs(a.v);});
