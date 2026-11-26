@@ -9,15 +9,15 @@ window.REPORTS = [
   {
     "date": "2026-11-26",
     "weekday": "周四",
-    "reviewFile": "review-20261126.html?v=1795709533",
+    "reviewFile": "review-20261126.html?v=1795713781",
     "reviewSummary": "沪指+0.01%(3476.88) 深成指-0.02% 创业板+0.29% 科创50-1.36% 沪深300+0.06% 中证500-0.46% | 1679涨/3376跌 涨停69只 成交1.32万亿 恐贪23.7(恐惧) 权重护盘个股普跌",
     "screeningFile": "screening.html",
     "screeningSummary": "技术面页最新2026-11-26；基本面页数据截至最新季报；RPS选股页数据日期2026-11-26；按指标选股数据日期2026-11-26",
-    "mainlineFile": "mainline-20261126.html?v=1795709565",
+    "mainlineFile": "mainline-20261126.html?v=1795712960",
     "mainlineSummary": "5日主线:渔业/银行/水力发电｜10日主线:银行/电信运营/水力发电｜20日主线:渔业/乳制品/啤酒｜融资余额 待次日披露后更新｜涨跌家数 1679/509/3376 · 总5564",
-    "mainlineConceptFile": "mainline_concept-20261126.html?v=1795709565",
+    "mainlineConceptFile": "mainline_concept-20261126.html?v=1795712960",
     "conceptSummary": "5日主线:渔业/银行/水力发电｜10日主线:银行/电信运营/水力发电｜20日主线:渔业/乳制品/啤酒｜融资余额 待次日披露后更新｜涨跌家数 1679/509/3376 · 总5564",
-    "previewFile": "preview-20261126.html?v=1795709677"
+    "previewFile": "preview-20261126.html?v=1795712999"
   },
   {
     "date": "2026-11-25",
@@ -30,7 +30,7 @@ window.REPORTS = [
     "mainlineSummary": "5日主线:渔业/水力发电/银行｜10日主线:银行/水力发电/电信运营｜20日主线:渔业/乳制品/白酒｜融资余额 21,213.86亿 · ▼208.14亿｜涨跌家数 584/61/4927 · 总5572",
     "mainlineConceptFile": "mainline_concept-20261125.html?v=1795614503",
     "conceptSummary": "5日主线:渔业/水力发电/银行｜10日主线:银行/水力发电/电信运营｜20日主线:渔业/乳制品/白酒｜融资余额 21,213.86亿 · ▼208.14亿｜涨跌家数 584/61/4927 · 总5572",
-    "previewFile": "preview-20261125.html?v=1795709677"
+    "previewFile": "preview-20261125.html?v=1795712999"
   },
   {
     "date": "2026-11-24",
