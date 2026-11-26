@@ -590,3 +590,18 @@ grep -c '<YYYY-MM-DD>' sentiment_etf.html                    # 内联 ETF_D 末�
    - **现状替代方案（已实现，透明可复现）**：`g1_score.js` 基于真实行情数据（kline 新浪 / 今日报价 东方财富 push2delay / 净利润同比 东方财富 RPT）计算 `技术评分`(0-100) 与 `综合评分`(0-100)，经 `build_screening_data.js` 写入 `_g1_breakthrough_*.json`(字段 `tecScore`/`compScore`) 与 `_g1_tecscore_*.json`(字段 `代码/名称/技术评分/综合评分`)，再由 `_gen_screening_*.js` 渲染。
    - **禁止在任何生成器中把评分硬编码为 `'N/A'` 占位**；若某股票数据不足（kline < 61 根）确实算不出，才可回退 `'N/A'` 并注明原因。
    - **若用户已连接 `westock-mcp`（腾讯自选股 MCP）**：其 `data_score` 可恢复官方评分，届时优先取官方值、用自算值兜底，并在报告注明数据来源。
+
+### Step 12d: 「按融资余额分析」模块（v13 定稿，两处入口）
+
+- 入口：①`sentiment_rzrq.html` / `rzrq_updown_detail.html` / `sentiment_etf.html` 的 `.tbltabs`
+  注入页签 **「按融资余额分析」**（由 `_rzrq_drill.js` 尾部加载器注入）；
+  ②`screening_indicator.html` 顶部一级页签 **「按夏普/收益率」｜「按融资余额」**。
+- 实现：`_rzrq_fa.js`（Shadow DOM 隔离，从 v13 式样 `_gen_fa_preview.py` 经 `_build_rzrq_fa.py`
+  编译生成，勿手改）；数据 `_rzrq_fa_data.json`（由 `_gen_fa_preview_data.py` 从
+  `drill_data/_rzrq_hist_d.json` + vipdoc + `_code_themes.json` 生成）。
+- **两者必须成对同步到 git_sync**，且任何 drill.js / 模块改动都要 bump 所有引用页的
+  `?v=` 戳（当前 `202611270500`），否则浏览器缓存旧版。
+- 每日重建：`_rebuild_detail_card.mjs` 步骤 3.5 已内置「重生成 FA 数据 + 拷模块/数据到 MR」，
+  派生的情绪页由 `_build_sentiment_board.py` 从 MR 源页重建，页签自动带上。
+- 回归：`node _rzq_fa_prod_test.js`（走 http，含页签命名/两入口/弹窗双轴）；
+  发布前 `curl` 校验 `_rzrq_fa.js` / `_rzrq_fa_data.json` 均 200。

@@ -79,13 +79,24 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
 .hintline{font-size:12px;color:#adb5bd}
 @media(max-width:600px){.header{padding:14px 10px}.wrap{margin:14px auto;padding:0 8px}.panel{padding:12px}.row{gap:10px}.fld select,.fld input{min-width:88px}.seg button{padding:0 8px;font-size:12px}table{font-size:12px;table-layout:fixed;width:1092px;min-width:1092px}th,td{padding:7px 8px}th:first-child,td:first-child{left:0;width:32px;min-width:32px;max-width:32px;padding-left:3px;padding-right:3px}th:nth-child(2),td:nth-child(2){left:32px;width:80px;min-width:80px;max-width:80px;padding-left:5px;padding-right:5px}th:nth-child(3){width:78px}th:nth-child(4){width:90px}th:nth-child(5){width:90px}th:nth-child(6){width:76px}th:nth-child(7){width:76px}th:nth-child(8){width:76px}th:nth-child(9),th:nth-child(10){width:86px;white-space:normal;word-break:break-all}th:nth-child(11){width:90px}th:nth-child(12){width:76px}th:nth-child(13){width:140px}td.nm .subcode{font-size:10.5px}.statline{margin-left:0}.cal-list{padding:8px 12px 14px}}
 </style>
+<style id="ind-tabs-css">
+.ind-top-tabs{display:flex;gap:8px;max-width:1180px;margin:14px auto 0;padding:0 14px}
+.ind-top-tabs button{border:1px solid #dee2e6;background:#fff;border-radius:8px;padding:9px 18px;font-size:13.5px;color:#64748b;cursor:pointer;font-family:inherit}
+.ind-top-tabs button.on{background:#2f6bff;border-color:#2f6bff;color:#fff;font-weight:700}
+#indFaWrap{display:none}
+@media(max-width:600px){.ind-top-tabs{padding:0 8px;margin:10px auto 0}.ind-top-tabs button{padding:7px 12px;font-size:12.5px}}
+</style>
 </head>
 <body>
 <div class="header">
 <h1>按指标选股</h1>
 <div class="subtitle">全市场 · 任意区间夏普 / 收益率排名 · <span id="data-date">加载中…</span></div>
 </div>
-<div class="wrap">
+<div class="ind-top-tabs" id="indTopTabs">
+<button type="button" data-v="tech" class="on">按夏普/收益率</button>
+<button type="button" data-v="fa">按融资余额</button>
+</div>
+<div class="wrap" id="indTechWrap">
   <div class="panel">
     <div class="row">
       <div class="fld"><span>排序指标</span><select id="metric">
@@ -162,7 +173,40 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
     </div></details>
   </div>
 </div>
+<div class="wrap" id="indFaWrap"><div id="indFaHost" style="padding:16px;min-height:200px;color:#94a3b8;font-size:12.5px">融资余额分析加载中…</div></div>
 
+<script>
+(function(){
+  'use strict';
+  var tabs=document.getElementById('indTopTabs');
+  if(!tabs||window.__indTabsBound)return; window.__indTabsBound=true;
+  var tech=document.getElementById('indTechWrap'), fa=document.getElementById('indFaWrap'), host=document.getElementById('indFaHost');
+  var loaded=false, loading=false;
+  function ensure(){
+    if(loaded)return Promise.resolve();
+    if(loading)return window.__indFaLoading;
+    loading=true;
+    window.__indFaLoading=new Promise(function(res,rej){
+      function mount(){ if(!window.RZQFA){rej(new Error('RZQFA missing'));return;}
+        window.RZQFA.mount(host).then(function(){loaded=true;loading=false;res();},rej); }
+      if(window.RZQFA){mount();return;}
+      var s=document.createElement('script'); s.src='_rzrq_fa.js?v=202611270500'; s.onload=mount;
+      s.onerror=function(){loading=false;host.textContent='模块加载失败，请刷新重试';rej(new Error('module load failed'));};
+      document.head.appendChild(s);
+    });
+    return window.__indFaLoading;
+  }
+  tabs.addEventListener('click',function(e){
+    var b=e.target&&e.target.closest?e.target.closest('button[data-v]'):null; if(!b)return;
+    var faMode=b.dataset.v==='fa';
+    tabs.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b);});
+    tech.style.display=faMode?'none':'';
+    fa.style.display=faMode?'block':'none';
+    if(faMode)ensure().catch(function(er){host.textContent='数据加载失败：'+(er&&er.message?er.message:'未知错误');});
+  });
+  window._rzqFaInd={activate:function(){tabs.querySelector('button[data-v="fa"]').click();},state:function(){return window._rzqFaState?window._rzqFaState():null;}};
+})();
+</script>
 <script>
 (function(){
 'use strict';

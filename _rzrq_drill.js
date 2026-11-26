@@ -609,9 +609,19 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.rzq-st-ac .empty{padding:10px;font-size:12px;color:#9aa3b5}'
     + '.rzq-st-hint{font-size:12px;color:#9aa3b5}'
     + '.rzq-st-hint b{color:#2f6bff}'
-    + '.rzq-st-chart{border:1px solid #eef1f6;border-radius:10px;padding:10px 10px 6px;margin-bottom:10px;background:#fff}'
+    + '.rzq-st-chart{border:1px solid #eef1f6;border-radius:10px;padding:10px 10px 6px;margin-bottom:6px;background:#fff}'
     /* 铺满容器：去掉 900px 上限与自动居中，交给 svg viewBox 自适应（2026-11-27） */
     + '.rzq-st-chart svg{width:100%;display:block;margin:0}'
+    /* 横屏按钮（与主图同款 ⛶，2026-11-27）：桌面也保留，点一下旋转90°全屏 */
+    + '.rzq-st-lsrow{display:flex;justify-content:flex-end;padding:0 4px 8px}'
+    + '.rzq-st-lsbtn{font-size:12px;color:#475569;background:#fff;border:1px solid #dbe2ec;border-radius:8px;padding:5px 12px;cursor:pointer;line-height:1.5}'
+    + '.rzq-st-lsbtn:active{background:#eef2f7}'
+    + '#rzqLsOv{position:fixed;inset:0;background:#f6f8fb;z-index:99998;display:none}'
+    + '#rzqLsOv.on{display:block}'
+    + '#rzqLsWrap{position:absolute;top:0;left:0;transform-origin:top left;transform:rotate(90deg) translateY(-100%)}'
+    + '#rzqLsOv .ls-card{box-sizing:border-box;transform-origin:top left;background:#fff;border-radius:10px}'
+    + '#rzqLsClose{position:fixed;top:10px;right:10px;z-index:99999;font-size:13px;font-weight:700;color:#e24b4a;background:#fff;border:1px solid #f3c1c1;border-radius:10px;padding:8px 14px;cursor:pointer}'
+    + 'body.rzqlslock{overflow:hidden}'
     + '.rzq-st-legend{display:flex;flex-wrap:wrap;gap:3px 12px;align-items:center;font-size:12px;color:#64748b;padding:2px 4px 0;line-height:1.5}'
     + '.rzq-st-legend .lg{display:inline-flex;align-items:center;gap:5px;white-space:normal}'
     + '.rzq-st-legend i{display:inline-block;width:13px;height:3px;border-radius:2px;flex:0 0 auto}'
@@ -669,6 +679,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '<span class="rzq-st-hint">金额单位：<b class="rzq-unit-txt">' + U0.label + '</b>（余额与净买入同单位，系统按个股市值自动选 万/千万/亿 档；表格/走势/下钻表格同步）</span>'
     + '</div>'
     + '<div class="rzq-st-chart"></div>'
+    + '<div class="rzq-st-lsrow"><button class="rzq-st-lsbtn" type="button" title="旋转90°全屏查看走势图">⛶ 横屏</button></div>'
     + '<div class="rzq-st-tbl"><table><thead><tr>'
     + '<th data-col="0">日期</th><th data-col="2">融资净买入(' + U0.label + ')</th>'
     + '<th data-col="1">融资余额(' + U0.label + ')</th><th data-col="3">占流通市值(%)</th>'
@@ -711,7 +722,10 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   window.addEventListener('resize', function () {
     hideTip();
     if (rsTimer) clearTimeout(rsTimer);
-    rsTimer = setTimeout(function () { if (isActive()) render(); }, 160); // 手机/桌面切换时重算表头短标签
+    rsTimer = setTimeout(function () {
+      var ls = document.getElementById('rzqLsOv');
+      if (isActive() && !(ls && ls.classList.contains('on'))) render(); // 手机/桌面切换时重算表头短标签；横屏中只做 layout 不重绘
+    }, 160);
   });
 
   function isEtf(c) { return /^(15|16|51|52|53|56|58)/.test(c); }
@@ -873,13 +887,13 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     U = U || RZQ.effUnit(rows.map(function (x) { return x.r; }));
     var vals = rows.map(function (x) { return x.r; }).filter(function (v) { return v != null && !isNaN(v); });
     if (vals.length < 2) { S.geo = null; return ''; }
-    /* 铺满版（2026-11-27）：viewBox 1000×300、左边距 66（原 120/560），外层已去掉 900px 上限 */
-    var W = 1000, H = 300, pl = 66, pr = 22, pt = 30, pb = 42;
+    /* 铺满版（2026-11-27）：viewBox 1000×460（原 300 太扁）、左边距 66，外层已去掉 900px 上限 */
+    var W = 1000, H = 460, pl = 66, pr = 22, pt = 34, pb = 46;
     var iw = W - pl - pr, ih = H - pt - pb, bottom = pt + ih;
     var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
     var pad = (mx - mn) * 0.12 || Math.abs(mx || 1) * 0.02;
     var lo = mn - pad, hi = mx + pad;
-    var lineBot = pt + ih * 0.60, zeroY = pt + ih * 0.80, barH = ih * 0.16;
+    var lineBot = pt + ih * 0.62, zeroY = pt + ih * 0.86, barH = ih * 0.14;
     var dabs = 1e-9;
     rows.forEach(function (x) { if (x.j != null && !isNaN(x.j)) dabs = Math.max(dabs, Math.abs(x.j)); });
     var xx = function (i) { return pl + iw * i / (rows.length - 1); };
@@ -1062,6 +1076,55 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   } catch (e) {}
   render();
   RZQ.syncUnitCaps();
+
+  /* ---------- 横屏看图（与主图 ⛶ 同款）：旋转90°全屏；节点移动非克隆，退出原父节点归位 ----------
+     悬停坐标走 SVG getScreenCTM()（含祖先 rotate/scale），横屏下无需逆映射额外处理。 */
+  (function () {
+    var OV = document.createElement('div'); OV.id = 'rzqLsOv';
+    var WRAP = document.createElement('div'); WRAP.id = 'rzqLsWrap';
+    var CLOSE = document.createElement('button'); CLOSE.id = 'rzqLsClose'; CLOSE.type = 'button'; CLOSE.textContent = '✕ 退出横屏';
+    OV.appendChild(WRAP); OV.appendChild(CLOSE); document.body.appendChild(OV);
+    var moved = [], phs = [], card = null;
+    function layout() {
+      var SH = window.innerHeight, SW = window.innerWidth;
+      WRAP.style.width = SH + 'px'; WRAP.style.height = SW + 'px';
+      if (!card) return;
+      card.style.width = SH + 'px'; card.style.transform = 'none';
+      var k = Math.min(1, SW / (card.offsetHeight || 1));
+      for (var it = 0; it < 2 && k < 1; it++) {
+        card.style.width = (SH / k) + 'px';
+        k = Math.min(1, SW / (card.offsetHeight || 1));
+      }
+      card.style.transformOrigin = 'top left';
+      card.style.transform = 'scale(' + k + ')';
+    }
+    function exit() {
+      moved.forEach(function (n, i) {
+        if (phs[i] && phs[i].parentNode) phs[i].parentNode.insertBefore(n, phs[i]);
+        if (phs[i] && phs[i].parentNode) phs[i].remove();
+      });
+      moved = []; phs = []; WRAP.innerHTML = ''; card = null;
+      OV.classList.remove('on'); document.body.classList.remove('rzqlslock');
+      if (isActive()) render();
+    }
+    function enter() {
+      var chart = panel.querySelector('.rzq-st-chart');
+      if (!chart || !chart.querySelector('svg')) return;
+      moved = [chart];
+      phs = moved.map(function (n) { var p = document.createComment('rzqlsph'); n.parentNode.insertBefore(p, n); return p; });
+      card = document.createElement('div'); card.className = 'ls-card';
+      moved.forEach(function (n) { card.appendChild(n); });
+      WRAP.innerHTML = ''; WRAP.appendChild(card);
+      OV.classList.add('on'); document.body.classList.add('rzqlslock');
+      requestAnimationFrame(layout);
+    }
+    panel.querySelector('.rzq-st-lsbtn').addEventListener('click', function () {
+      if (OV.classList.contains('on')) exit(); else enter();
+    });
+    CLOSE.addEventListener('click', exit);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && OV.classList.contains('on')) exit(); });
+    window.addEventListener('resize', function () { if (OV.classList.contains('on')) layout(); });
+  })();
 })();
 
 
@@ -2025,4 +2088,63 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   } else {
     render();
   }
+})();
+
+
+/* ==========================================================================
+   「按融资余额分析」标签页（v13 定稿，2026-11-27 部署）
+   实现抽离到外部模块 _rzrq_fa.js（Shadow DOM 隔离，数据按需 fetch），
+   本段只负责注入页签 + 容器并按需加载；口径同 v13 式样。
+   ========================================================================== */
+(function () {
+  'use strict';
+  if (document.getElementById('rzq-fa-host')) return;
+  var tabs = document.querySelector('.tbltabs'), sec = document.querySelector('.tblsec');
+  if (!tabs || !sec) return;
+  var FA_JS = '_rzrq_fa.js?v=202611270500';
+
+  var sBtn = tabs.querySelector('[data-t="s"]');
+  var uBtn = tabs.querySelector('[data-t="u"]');
+  var btn = document.createElement('button');
+  btn.className = 'tbtn'; btn.dataset.t = 'fa'; btn.textContent = '按融资余额分析';
+  if (sBtn) tabs.insertBefore(btn, sBtn.nextSibling);
+  else if (uBtn) tabs.insertBefore(btn, uBtn.nextSibling);
+  else tabs.appendChild(btn);
+
+  var panel = document.createElement('div');
+  panel.className = 'tpanel'; panel.id = 'tpanel-fa'; panel.style.display = 'none';
+  panel.innerHTML = '<div id="rzq-fa-host" style="padding:10px 14px;min-height:200px;color:#94a3b8;font-size:12.5px">融资余额分析加载中…</div>';
+  sec.appendChild(panel);
+
+  var host = panel.querySelector('#rzq-fa-host');
+  var loading = false, loaded = false;
+  function ensure() {
+    if (loaded) return Promise.resolve();
+    if (loading) return window.__rzqFaLoading;
+    loading = true;
+    window.__rzqFaLoading = new Promise(function (resolve, reject) {
+      function mount() {
+        if (!window.RZQFA || !window.RZQFA.mount) { reject(new Error('RZQFA module missing')); return; }
+        window.RZQFA.mount(host).then(function () { loaded = true; loading = false; resolve(); }, reject);
+      }
+      if (window.RZQFA) { mount(); return; }
+      var sc = document.createElement('script');
+      sc.src = FA_JS; sc.onload = mount;
+      sc.onerror = function () { loading = false; host.textContent = '模块加载失败，请刷新重试'; reject(new Error('module load failed')); };
+      document.head.appendChild(sc);
+    });
+    return window.__rzqFaLoading;
+  }
+  function activate() {
+    document.querySelectorAll('.tbtn').forEach(function (b) { b.classList.toggle('active', b === btn); });
+    document.querySelectorAll('.tpanel').forEach(function (p) { p.style.display = 'none'; });
+    panel.style.display = 'block';
+    ensure().catch(function (e) { host.textContent = '数据加载失败：' + (e && e.message ? e.message : '未知错误'); });
+  }
+  btn.addEventListener('click', activate);
+  window._rzqFa = {
+    activate: activate,
+    state: function () { return window._rzqFaState ? window._rzqFaState() : null; },
+    root: function () { return host && host.shadowRoot ? host.shadowRoot : host; }
+  };
 })();
