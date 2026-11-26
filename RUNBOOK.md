@@ -508,6 +508,49 @@ NODE="C:/Users/15921/.workbuddy/binaries/node/versions/22.22.2/node.exe"
 
 若 `deploy_check` 返回非 0：重试 Step 12 部署一次，再次 `deploy_check`；仍失败则记录到自动化 memory 并告警（不要静默结束）。
 
+### Step 12c: 情绪看板三张卡片日期一致性（每次复盘必做）
+
+> 「情绪看板」首页（`sentiment_board.html`）有三张卡片：融资余额·涨跌家数·个股（`sentiment_rzrq.html`）、
+> **宽基 ETF 资金流**（`sentiment_etf.html`）。三张卡片的「更新于」必须与当日复盘同日推进，
+> 不允许只有融资卡更新、ETF 卡停在上一个交易日（2026-11-26 复盘实测发生）。
+
+**卡片日期来源链**：`_etf_flow.json` 末日期 → `_sentiment_brief.json` 的 `meta.etfDate`
+→ `_build_sentiment_board.py` 渲染 `ETF_DATE = "<YYYYMMDD>"`。所以 ETF 数据不推进，卡片日期就不会变。
+
+**必须按此顺序执行（流水线 gen_41 / gen_42 已内置，手工补数时照抄）**：
+
+```bash
+PY="C:/Users/15921/.workbuddy/binaries/python/envs/default/Scripts/python.exe"
+NODE="C:/Users/15921/.workbuddy/binaries/node/versions/22.22.2/node.exe"
+cd "C:/Users/15921/WorkBuddy/2026-08-30-12-04-45"
+"$PY" _etf_daily_update.py            # ① 拉 ETF 净申购（iFinD）；拿不到会自动转官方规模口径兜底
+"$PY" _patch_close_vipdoc.py --write  # ② 补指数收盘/中证全指/ETF净值尾部（腾讯 WAF 501 或 iFinD 额度耗尽时必需）
+cd "C:/Users/15921/WorkBuddy/2026-08-03-21-11-02"
+"$NODE" _rebuild_detail_card.mjs      # ③ 重建源页 → 再自动跑 brief → board（顺序不可颠倒）
+```
+
+**iFinD 额度耗尽时（2026-11-25/11-26 真实发生）**：`_etf_daily_update.py` 会打印
+「iFinD 无新交易日报文」并自动调用 `_etf_flow_official.py <DATE> --write`
+（交易所官方规模 ÷ 东财单位净值自算净申购，要求 30/30 只覆盖且与上一日 iFinD 值自检偏差 <12% 才写盘）。
+实测 11-26：覆盖 30/30，中位偏差 0.01%，合计净流入 94.10 亿元。
+若兜底也未通过（官方份额尚未披露），**如实保留上一交易日并在通知里写明「宽基ETF净申购 T+1 未披露」**，不得伪造成当日。
+
+**发布前三项校验（缺一不可）**：
+
+```bash
+cd "C:/Users/15921/WorkBuddy/market-review_git_sync"
+grep -o 'ETF_DATE = "[0-9]*"' sentiment_board.html          # 必须 == 当日 <DATE>
+"$PY" -c "import json;print(json.load(open('_sentiment_brief.json'))['meta']['etfDate'])"   # 必须 == 当日
+grep -c '<YYYY-MM-DD>' sentiment_etf.html                    # 内联 ETF_D 末日必须含当日
+```
+
+三项任一不满足 → 回到上面 ①②③ 重跑；`_etf_flow.json` 末日期没推进就不要指望卡片日期变。
+
+**踩坑记录**：
+- 腾讯 `fqkline` 会被 `waf.tencent.com` 501 拦截 → 指数/ETF 收盘改用 `_patch_close_vipdoc.py`（本机 vipdoc 日线 + 中证指数官网 + 腾讯/东财快照三重兜底）。
+- `_sh_index_2012.json` 旧逻辑「缺失日用前值填充」会把昨日收盘写进当日，第二天判定不再缺失 → 永久错一天（11-26 实测 3476.47 应为 3476.88）。现已改为「与前一日同值也算缺失」并用 vipdoc 校正。
+- `_etf_shares.json` 用 `indent=1` + 浮点长尾会撑到 4.9MB（国内首屏 20s+），已改为 round(4)+紧凑写盘 ≈ 2.6MB。
+
 ### Step 13: 完成确认
 
 确认以下事项：
