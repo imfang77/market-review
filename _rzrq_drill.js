@@ -1579,6 +1579,11 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.ir-top{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:6px 2px 8px;font-size:12px;color:#64748b}'
     + '.ir-top .lbl{color:#64748b;margin-right:1px}'
     + '.ir-cus{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}'
+    + '.ir-cus[hidden]{display:none}'                       /* 自定义区间默认折叠 */
+    + '.ir-cusbtn{display:inline-flex;align-items:center;gap:3px;font-size:12px;padding:3px 9px;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap}'
+    + '.ir-cusbtn[aria-expanded="true"]{background:#eef4ff;border-color:#2f6bff;color:#2f6bff;font-weight:600}'
+    + '.ir-carc{font-size:9px;line-height:1;transition:transform .12s}'
+    + '.ir-cusbtn[aria-expanded="true"] .ir-carc{transform:rotate(90deg)}'
     + '.ir-cur{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:0 2px 8px;font-size:12px;color:#64748b}'
     + '.ir-cur label{display:inline-flex;align-items:center;gap:4px;cursor:pointer;user-select:none;white-space:nowrap}'
     + '.ir-cur input[type=checkbox]{width:13px;height:13px;margin:0;accent-color:#2f6bff;cursor:pointer}'
@@ -1623,7 +1628,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.ir-note2[open] summary{margin-bottom:4px}'
     + '.ir-note2 b{color:#334155}'
     + '.ir-msg{padding:16px;color:#66708a;font-size:13px;text-align:center}'
-    + '@media(max-width:620px){table.ir-table{font-size:13px}table.ir-table th,table.ir-table td{padding:6px 7px}table.ir-table th.ir-nm,table.ir-table td.ir-nm{width:110px;min-width:110px;max-width:110px}.ir-bdg{font-size:8.5px;padding:0 2px;line-height:1.4}.ir-nmwrap{gap:2px 3px}.ir-top{gap:4px;font-size:11.5px}.ir-cus{flex-basis:100%;margin-left:0;margin-top:0;gap:3px;flex-wrap:nowrap;width:100%}.ir-cus .lbl{flex:0 0 auto}.ir-cus input[type=date]{font-size:11px;padding:2px 3px;flex:1 1 0;min-width:0}.ir-add,.ir-clr{flex:0 0 auto;padding:3px 7px;font-size:11px}.ir-cur{gap:9px;font-size:11.5px;padding:0 0 6px}.ir-asof{width:100%;margin-left:0;text-align:right;font-size:11px}}';
+    + '@media(max-width:620px){table.ir-table{font-size:13px}table.ir-table th,table.ir-table td{padding:6px 7px}table.ir-table th.ir-nm,table.ir-table td.ir-nm{width:110px;min-width:110px;max-width:110px}.ir-bdg{font-size:8.5px;padding:0 2px;line-height:1.4}.ir-nmwrap{gap:2px 3px}.ir-top{gap:4px;font-size:11.5px}.ir-cus{flex-basis:100%;margin-left:0;margin-top:0;gap:3px;flex-wrap:nowrap;width:100%}.ir-cusbtn{flex:0 0 auto;padding:3px 8px;font-size:11px}.ir-cus input[type=date]{font-size:11px;padding:2px 3px;flex:1 1 0;min-width:0}.ir-add,.ir-clr{flex:0 0 auto;padding:3px 7px;font-size:11px}.ir-cur{gap:9px;font-size:11.5px;padding:0 0 6px}.ir-asof{width:100%;margin-left:0;text-align:right;font-size:11px}}';
   if (!document.getElementById('ir-tab-css')) {
     var st = document.createElement('style'); st.id = 'ir-tab-css'; st.textContent = css; document.head.appendChild(st);
   }
@@ -1663,7 +1668,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   panel.id = 'irPane';
   panel.innerHTML =
       '<div class="ir-top" id="irTop">'
-    +   '<span class="ir-cus"><span class="lbl">自定义</span>'
+    +   '<button class="ir-cusbtn" type="button" id="irCusBtn" aria-expanded="false" title="点击展开/收起自定义区间">自定义<span class="ir-carc">▸</span></button>'
+    +   '<span class="ir-cus" id="irCusRow" hidden>'
     +     '<input type="date" id="irFrom"><span style="color:#b6bfcc">—</span><input type="date" id="irTo">'
     +     '<button class="ir-add" type="button" id="irAdd">添加</button>'
     +     '<button class="ir-clr" type="button" id="irClr">清除</button>'
@@ -1927,6 +1933,17 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     }
     doApply();
   }
+  /* 自定义区间：默认折叠，点「自定义」展开/收起日期行 */
+  var cusBtn = panel.querySelector('#irCusBtn'), cusRow = panel.querySelector('#irCusRow');
+  function setCusOpen(open){
+    cusBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    cusRow.hidden = !open;
+  }
+  cusBtn.addEventListener('click', function () {
+    setCusOpen(cusBtn.getAttribute('aria-expanded') !== 'true');
+  });
+  window._irSetCusOpen = setCusOpen;      /* 供回归脚本/外部调用 */
+
   panel.querySelector('#irAdd').addEventListener('click', applyCustom);
   panel.querySelector('#irClr').addEventListener('click', function () {
     custom = null; fromEl.value = ''; toEl.value = '';
