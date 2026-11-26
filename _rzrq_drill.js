@@ -1583,7 +1583,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.ir-cur label{display:inline-flex;align-items:center;gap:4px;cursor:pointer;user-select:none;white-space:nowrap}'
     + '.ir-cur input[type=checkbox]{width:13px;height:13px;margin:0;accent-color:#2f6bff;cursor:pointer}'
     + '.ir-nmh{display:block;text-align:center}'
-    + '.ir-nmh2{display:block;text-align:center;font-size:10px;font-weight:400;color:#8592a6;line-height:1.35;margin-top:2px;white-space:normal}'
+    + '.ir-rknote{font-size:11.5px;color:#8592a6;line-height:1.55;margin:6px 2px 2px}'
+    + '.ir-rknote b{color:#64748b;font-weight:600}'
     + '.ir-cus .lbl{white-space:nowrap}'
     + '.ir-cus input[type=date]{font-size:12px;padding:2px 6px;border:1px solid #cbd5e1;border-radius:6px;color:#475569;background:#fff;font-family:inherit}'
     + '.ir-add{font-size:12px;padding:3px 10px;border:1px solid #2f6bff;background:#2f6bff;color:#fff;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap}'
@@ -1627,11 +1628,11 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     var st = document.createElement('style'); st.id = 'ir-tab-css'; st.textContent = css; document.head.appendChild(st);
   }
 
-  /* ---------- 二级标签（宽基ETF 面板内部：资金流明细 / 各指数涨跌汇总） ---------- */
+  /* ---------- 二级标签（宽基ETF 面板内部：资金流明细 / 宽基指数涨跌汇总） ---------- */
   var subnav = document.createElement('div');
   subnav.className = 'ir-subtabs'; subnav.id = 'irSubtabs';
   subnav.innerHTML = '<button type="button" data-v="flow" class="on">资金流明细</button>'
-                   + '<button type="button" data-v="ret">各指数涨跌汇总</button>';
+                   + '<button type="button" data-v="ret">宽基指数涨跌汇总</button>';
   panelE.insertBefore(subnav, panelE.firstChild);
   /* 既有内容（整理维度/表体/说明）打标记，切到涨跌汇总时整组隐藏 */
   Array.prototype.slice.call(panelE.children).forEach(function (el) {
@@ -1650,7 +1651,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     { k: 'ytd',  n: 0,   label: '今年以来', sh: true, rank: false }
   ];
   var custom = null;                     /* {label, s, e}：s/e 为 D 中的索引 */
-  var showCol = { n: true, r: true, s: true };   /* 列开关：净申购 / 涨跌 / 夏普 */
+  var showCol = { n: true, r: true, s: false };  /* 列开关：净申购 / 涨跌 / 夏普（夏普默认不勾选） */
   var METRICS = [
     { m: 'n', label: '净申购', title: '净申购金额（亿元）', w: 56 },
     { m: 'r', label: '涨跌',   title: '区间涨跌幅（%）',   w: 50 },
@@ -1667,12 +1668,12 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     +     '<button class="ir-add" type="button" id="irAdd">添加</button>'
     +     '<button class="ir-clr" type="button" id="irClr">清除</button>'
     +   '</span>'
-    +   '<span class="ir-asof" id="irAsof"></span>'
+    +   '<span class="ir-asof" id="irAsof">净申购单位 亿元</span>'
     + '</div>'
     + '<div class="ir-cur" id="irCur">'
     +   '<label><input type="checkbox" data-m="n" checked>净申购</label>'
     +   '<label><input type="checkbox" data-m="r" checked>涨跌</label>'
-    +   '<label><input type="checkbox" data-m="s" checked>夏普</label>'
+    +   '<label><input type="checkbox" data-m="s">夏普</label>'
     + '</div>'
     + '<div class="ir-tblwrap"><table class="ir-table"><thead id="irHead"></thead><tbody id="irBody"></tbody></table></div>'
     + '<details class="ir-note2"><summary>口径与算法说明（默认折叠，点击展开）</summary><div>'
@@ -1684,17 +1685,22 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     +   '<b>排名徽章</b>：5 日 / 10 日 / 20 日 / 60 日 / 120 日 / 今年以来 的净申购金额各自降序取前 3 名，'
     +   '在指数名后挂「5日①」这类标签：①＝该区间净申购额第 1 名、②＝第 2 名、③＝第 3 名，鼠标悬浮可看具体金额。'
     +   '<b>精度</b>：净申购取整数（元→亿元四舍五入到个位，带千分位）、涨跌保留 1 位小数、夏普保留 2 位小数。'
-    +   '<b>列开关</b>：表格上方的「净申购 / 涨跌 / 夏普」复选框控制对应列是否显示；默认按 20 日净申购降序排列，点表头可改排序。'
+    +   '<b>列开关</b>：表格上方的「净申购 / 涨跌 / 夏普」复选框控制对应列是否显示（<b>夏普默认不勾选</b>）；默认按 20 日净申购降序排列，点表头可改排序。'
     +   '<b>今年以来</b>＝末收盘 ÷ 上年最后一个交易日收盘 − 1，净申购同步取上年末以来累计。'
     +   '<b>自定义</b>区间按输入的起止日期取「首个 ≥ 起始日」与「最后 ≤ 截止日」两个交易日，追加一组三列。'
     +   '三个表头（净申购/涨跌/夏普）均可点排序，首次降序、再点升序，空值恒排末尾。指数名前的色点与上方图表同色。'
-    +   '<b>数据</b>：指数日线取自腾讯 fqkline（中证2000 走通达信），最新交易日见右上角；'
+    +   '<b>数据</b>：指数日线取自腾讯 fqkline（中证2000 走通达信），最新交易日见上方图表；'
     +   '自定义区间超出内联范围（近 300 个交易日）时自动拉取完整历史。指数涨跌未扣费、不含分红再投资差异。'
-    + '</div></details>';
+    + '</div></details>'
+    + '<div class="ir-rknote" id="irRkNote">'
+    +   '指数名后的徽章为<b>净申购排名</b>：①＝该区间净申购金额第 1 名、②＝第 2 名、③＝第 3 名'
+    +   '（5日 / 10日 / 20日 / 60日 / 120日 / 今年以来 各自独立排名，只取前 3；鼠标悬浮可看具体金额）。'
+    + '</div>';
   panelE.appendChild(panel);
 
   var head = panel.querySelector('#irHead'), body = panel.querySelector('#irBody');
   var asofEl = panel.querySelector('#irAsof');
+  var ASOF_TXT = '净申购单位 亿元';   /* 表格上方只留单位，不再显示截止日与指数个数 */
   var fromEl = panel.querySelector('#irFrom'), toEl = panel.querySelector('#irTo');
 
   /* ---------- 计算 ---------- */
@@ -1790,16 +1796,14 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
 
   function render(){
     var cs = cols();
-    asofEl.textContent = IDX.length ? ('截至 ' + asof() + ' · ' + IDX.length + ' 个宽基指数 · 净申购单位 亿元') : '';
+    asofEl.textContent = IDX.length ? ASOF_TXT : '';
     if (!D.length || !IDX.length) {
       head.innerHTML = ''; body.innerHTML = '<tr><td class="ir-msg">指数数据未加载</td></tr>'; return;
     }
     /* 表头：第一行区间名（跨度＝当前勾选的指标列数）；第二行 净申购 / 涨跌 / 夏普 */
     var vm = METRICS.filter(function (x) { return showCol[x.m]; });
     if (!vm.length) vm = [{ m: 'r', label: '涨跌', title: '区间涨跌幅（%）', w: 50 }];
-    var h1 = '<tr><th class="ir-nm" rowspan="2">'
-           + '<span class="ir-nmh">指数</span>'
-           + '<span class="ir-nmh2">①净申购第1名<br>②第2名 ③第3名</span></th>';
+    var h1 = '<tr><th class="ir-nm" rowspan="2"><span class="ir-nmh">指数</span></th>';
     cs.forEach(function (c) { h1 += '<th colspan="' + vm.length + '">' + c.label + '</th>'; });
     h1 += '</tr>';
     var h2 = '<tr>';
