@@ -1577,17 +1577,15 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '#tpanel-e.ir-mode > .etf-flow-view{display:none}'
     + '.ir-top{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:6px 2px 8px;font-size:12px;color:#64748b}'
     + '.ir-top .lbl{color:#64748b;margin-right:1px}'
-    + '.ir-ch{font-size:12px;padding:3px 10px;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap}'
-    + '.ir-ch.on{background:#eef4ff;border-color:#2f6bff;color:#2f6bff;font-weight:600}'
-    + '.ir-cus{display:inline-flex;align-items:center;gap:5px;margin-left:6px;padding-left:8px;border-left:1px solid #e2e8f0;white-space:nowrap}'
+    + '.ir-cus{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}'
     + '.ir-cus .lbl{white-space:nowrap}'
     + '.ir-cus input[type=date]{font-size:12px;padding:2px 6px;border:1px solid #cbd5e1;border-radius:6px;color:#475569;background:#fff;font-family:inherit}'
     + '.ir-add{font-size:12px;padding:3px 10px;border:1px solid #2f6bff;background:#2f6bff;color:#fff;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap}'
     + '.ir-clr{font-size:12px;padding:3px 9px;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap}'
     + '.ir-asof{margin-left:auto;font-size:12px;color:#94a3b8;white-space:nowrap}'
     + '.ir-tblwrap{overflow:auto;max-height:560px;border:1px solid #eef1f6;border-radius:10px}'
-    + 'table.ir-table{border-collapse:separate;border-spacing:0;width:100%;font-size:13.5px}'
-    + 'table.ir-table th,table.ir-table td{padding:7px 10px;border-bottom:1px solid #eef1f5;white-space:nowrap;text-align:right}'
+    + 'table.ir-table{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px}'
+    + 'table.ir-table th,table.ir-table td{padding:7px 5px;border-bottom:1px solid #eef1f5;white-space:nowrap;text-align:right}'
     + 'table.ir-table thead th{background:#f8fafc;color:#64748b;font-weight:600;text-align:center;position:sticky;z-index:3;height:30px;box-sizing:border-box}'
     /* 隔离：主页面有一条全局 thead th::after{content:" ⇅"}（融资余额主表用），会污染本表所有表头；
        下面用更高特异性把默认箭头清掉，只有带 data-sk 的可排列表头才显示箭头 */
@@ -1603,6 +1601,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.ir-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;vertical-align:middle}'
     + '.ir-up{color:#e24b4a}.ir-dn{color:#16a34a}.ir-na{color:#b6bfcc}'
     + '.ir-sub{font-size:11.5px;font-weight:400}'
+    + '.ir-u{font-size:10px;font-weight:400;color:#a3adbd;margin-left:1px}'
     + '#irPane thead th[data-sk]{cursor:pointer;user-select:none}'
     + '#irPane thead th[data-sk]::after{content:" ⇅";font-size:.75em;color:#aab4c5;margin-left:2px;font-weight:400}'
     + '#irPane thead th[data-sk].sk-asc::after{content:" ↑";color:#2f6bff}'
@@ -1612,7 +1611,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.ir-note2[open] summary{margin-bottom:4px}'
     + '.ir-note2 b{color:#334155}'
     + '.ir-msg{padding:16px;color:#66708a;font-size:13px;text-align:center}'
-    + '@media(max-width:620px){table.ir-table{font-size:13px}table.ir-table th,table.ir-table td{padding:6px 7px}table.ir-table th.ir-nm,table.ir-table td.ir-nm{min-width:80px}.ir-top{gap:5px;font-size:11.5px}.ir-ch{font-size:11.5px;padding:3px 8px}.ir-cus{flex-basis:100%;margin-left:0;padding-left:0;border-left:none;margin-top:2px;gap:4px;flex-wrap:wrap}.ir-cus .lbl{flex:0 0 auto}.ir-cus input[type=date]{font-size:11.5px;padding:2px 4px;flex:1 1 82px;min-width:0}.ir-add,.ir-clr{flex:0 0 auto}.ir-asof{width:100%;margin-left:0;text-align:right;font-size:11px}}';
+    + '@media(max-width:620px){table.ir-table{font-size:13px}table.ir-table th,table.ir-table td{padding:6px 7px}table.ir-table th.ir-nm,table.ir-table td.ir-nm{min-width:80px}.ir-top{gap:5px;font-size:11.5px}.ir-cus{flex-basis:100%;margin-left:0;margin-top:2px;gap:4px;flex-wrap:wrap}.ir-cus .lbl{flex:0 0 auto}.ir-cus input[type=date]{font-size:11.5px;padding:2px 4px;flex:1 1 82px;min-width:0}.ir-add,.ir-clr{flex:0 0 auto}.ir-asof{width:100%;margin-left:0;text-align:right;font-size:11px}}';
   if (!document.getElementById('ir-tab-css')) {
     var st = document.createElement('style'); st.id = 'ir-tab-css'; st.textContent = css; document.head.appendChild(st);
   }
@@ -1629,13 +1628,16 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   });
 
   /* ---------- 面板 ---------- */
+  /* 列固定：5/10/20/60/120日 + 今年以来（不再有「区间」筛选 chips）。
+     每列族：净申购(亿元) + 收益(%[+夏普])；5日/10日 不足 20 个交易日不列夏普。 */
   var RANGES = [
-    { k: 'r20',  n: 20,  label: '20日' },
-    { k: 'r60',  n: 60,  label: '60日' },
-    { k: 'r120', n: 120, label: '120日' },
-    { k: 'ytd',  n: 0,   label: '今年以来' }
+    { k: 'r5',   n: 5,   label: '5日',     sh: false },
+    { k: 'r10',  n: 10,  label: '10日',    sh: false },
+    { k: 'r20',  n: 20,  label: '20日',    sh: true },
+    { k: 'r60',  n: 60,  label: '60日',    sh: true },
+    { k: 'r120', n: 120, label: '120日',   sh: true },
+    { k: 'ytd',  n: 0,   label: '今年以来', sh: true }
   ];
-  var show = { r20:1, r60:1, r120:1, ytd:1 };
   var custom = null;                     /* {label, s, e}：s/e 为 D 中的索引 */
   var sortKey = 'r20', sortMetric = 'r'; /* 默认按 20 日收益降序 */
 
@@ -1643,9 +1645,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   panel.id = 'irPane';
   panel.innerHTML =
       '<div class="ir-top" id="irTop">'
-    +   '<span class="lbl">区间</span>'
-    +   '<span id="irChips"></span>'
-    +   '<span class="ir-cus"><span class="lbl">自定义</span>'
+    +   '<span class="ir-cus"><span class="lbl">自定义区间</span>'
     +     '<input type="date" id="irFrom"><span style="color:#b6bfcc">—</span><input type="date" id="irTo">'
     +     '<button class="ir-add" type="button" id="irAdd">添加</button>'
     +     '<button class="ir-clr" type="button" id="irClr">清除</button>'
@@ -1654,19 +1654,21 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '</div>'
     + '<div class="ir-tblwrap"><table class="ir-table"><thead id="irHead"></thead><tbody id="irBody"></tbody></table></div>'
     + '<details class="ir-note2"><summary>口径与算法说明（默认折叠，点击展开）</summary><div>'
-    +   '<b>区间收益</b>＝末收盘 ÷ 期初收盘 − 1。周期一律按<b>交易日</b>回溯（20 日＝相对 20 个交易日前，非自然日）。'
+    +   '<b>净申购(亿元)</b>＝该区间内该指数全部成分 ETF 的<b>一级市场申赎净额累加</b>（与上方 ETF 图的指数累计净申购同源，末值差分为区间值），'
+    +   '非二级市场买卖、非份额存量；数据截至资金流最新交易日（见上方图表）。'
+    +   '<b>区间收益</b>＝末收盘 ÷ 期初收盘 − 1。周期一律按<b>交易日</b>回溯（5 日＝相对 5 个交易日前，非自然日）。'
     +   '<b>夏普</b>＝区间内日均收益 ÷ 日收益标准差 × √252（年化，<b>无风险利率取 0</b>），与「按指标选股」页同一口径；'
-    +   '注意它不等于区间收益的年化值。<b>区间不足 20 个交易日不显示夏普</b>（显示「—」），因样本过少无统计意义。'
-    +   '<b>今年以来</b>＝末收盘 ÷ 上年最后一个交易日收盘 − 1。<b>自定义</b>区间按输入的起止日期取「首个 ≥ 起始日」与「最后 ≤ 截止日」两个交易日的收盘，作为额外一列追加。'
-    +   '点第二行表头（收益/夏普）可排序，首次降序、再点升序，空值恒排末尾。指数名前的色点与上方图表同色。'
-    +   '短周期（5 日 / 10 日）收益请直接看<b>「按ETF」维度</b>的涨幅列，本表不重复列。'
+    +   '注意它不等于区间收益的年化值。<b>5 日 / 10 日区间不足 20 个交易日，不列夏普列</b>（样本过少无统计意义）。'
+    +   '<b>今年以来</b>＝末收盘 ÷ 上年最后一个交易日收盘 − 1，净申购同步取上年末以来累计。'
+    +   '<b>自定义</b>区间按输入的起止日期取「首个 ≥ 起始日」与「最后 ≤ 截止日」两个交易日，追加一组三列。'
+    +   '三个表头（净申购/收益/夏普）均可点排序，首次降序、再点升序，空值恒排末尾。指数名前的色点与上方图表同色。'
     +   '<b>数据</b>：指数日线取自腾讯 fqkline（中证2000 走通达信），最新交易日见右上角；'
     +   '自定义区间超出内联范围（近 300 个交易日）时自动拉取完整历史。指数收益未扣费、不含分红再投资差异。'
     + '</div></details>';
   panelE.appendChild(panel);
 
   var head = panel.querySelector('#irHead'), body = panel.querySelector('#irBody');
-  var chips = panel.querySelector('#irChips'), asofEl = panel.querySelector('#irAsof');
+  var asofEl = panel.querySelector('#irAsof');
   var fromEl = panel.querySelector('#irFrom'), toEl = panel.querySelector('#irTo');
 
   /* ---------- 计算 ---------- */
@@ -1700,21 +1702,43 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     if (!sd || !isFinite(sd)) return null;
     return mean / sd * Math.sqrt(252);
   }
-  /* 返回当前要显示的列：[{key,label,s,e,isCustom}] */
+  /* ---------- 净申购（亿元）：指数累计净申购曲线做区间差分 ----------
+     ETF_IDX_ACC 与 ETF_D 同轴（资金流日期轴）；区间起止从本表日期轴映射过去，
+     取「最后一个 ≤ 该日的交易日」，保证与收益列同一时间窗。 */
+  var ETFD = (typeof ETF_D !== 'undefined' && ETF_D) ? ETF_D : [];
+  var ACC  = (typeof ETF_IDX_ACC !== 'undefined' && ETF_IDX_ACC) ? ETF_IDX_ACC : {};
+  function etfPos(d){
+    var lo = 0, hi = ETFD.length - 1, best = -1, m;
+    while (lo <= hi) { m = (lo + hi) >> 1; if (ETFD[m] <= d) { best = m; lo = m + 1; } else { hi = m - 1; } }
+    return best;
+  }
+  function netAt(nm, d0, d1){
+    var a = ACC[nm];
+    if (!a || !a.length || !ETFD.length || !d0 || !d1) return null;
+    var i1 = etfPos(d1), i0 = etfPos(d0);
+    if (i1 < 0 || i0 < 0 || i0 >= i1) return null;
+    var v1 = a[i1], v0 = a[i0];
+    if (v1 == null || v0 == null) return null;
+    return v1 - v0;
+  }
+
+  /* 返回当前要显示的列：[{key,label,s,e,sh,isCustom}]，s/e 为 D 索引 */
   function cols(){
     var out = [], e = lastIdx();
     RANGES.forEach(function (r) {
-      if (!show[r.k]) return;
       var s = (r.n === 0) ? ytdBaseIdx() : (e - r.n);
-      out.push({ key: r.k, label: r.label, s: s, e: e });
+      out.push({ key: r.k, label: r.label, s: s, e: e, sh: !!r.sh });
     });
-    if (custom) out.push({ key: 'cus', label: custom.label, s: custom.s, e: custom.e, isCustom: true });
+    if (custom) out.push({ key: 'cus', label: custom.label, s: custom.s, e: custom.e, sh: true, isCustom: true });
     return out;
   }
   function fmtPct(v){ if (v == null) return '<span class="ir-na">—</span>';
     return '<span class="' + (v >= 0 ? 'ir-up' : 'ir-dn') + '">' + (v >= 0 ? '+' : '') + v.toFixed(2) + '%</span>'; }
   function fmtSh(v){ if (v == null) return '<span class="ir-na">—</span>';
     return '<span class="' + (v >= 0 ? 'ir-up' : 'ir-dn') + '">' + v.toFixed(2) + '</span>'; }
+  function fmtNet(v){ if (v == null) return '<span class="ir-na">—</span>';
+    var s = Math.abs(v).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return '<span class="' + (v >= 0 ? 'ir-up' : 'ir-dn') + '">' + (v >= 0 ? '+' : '-') + s + '</span>'; }
 
   function render(){
     var cs = cols();
@@ -1722,13 +1746,15 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     if (!D.length || !IDX.length) {
       head.innerHTML = ''; body.innerHTML = '<tr><td class="ir-msg">指数数据未加载</td></tr>'; return;
     }
-    /* 表头：第一行区间名（跨2列），第二行 收益 / 夏普 */
+    /* 表头：第一行区间名（5/10日=2列，其余=3列）；第二行 净申购 / 收益 / 夏普 */
     var h1 = '<tr><th class="ir-nm" rowspan="2">指数</th>';
-    cs.forEach(function (c) { h1 += '<th colspan="2">' + c.label + '</th>'; });
+    cs.forEach(function (c) { h1 += '<th colspan="' + (c.sh ? 3 : 2) + '">' + c.label + '</th>'; });
     h1 += '</tr>';
     var h2 = '<tr>';
     cs.forEach(function (c, ci) {
-      h2 += '<th data-sk data-c="' + ci + '" data-m="r">收益</th><th data-sk data-c="' + ci + '" data-m="s">夏普</th>';
+      h2 += '<th data-sk data-c="' + ci + '" data-m="n">净申购<span class="ir-u">(亿元)</span></th>'
+          + '<th data-sk data-c="' + ci + '" data-m="r">收益</th>';
+      if (c.sh) h2 += '<th data-sk data-c="' + ci + '" data-m="s">夏普</th>';
     });
     h2 += '</tr>';
     head.innerHTML = h1 + h2;
@@ -1736,7 +1762,14 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     /* 数值矩阵 */
     var rows = IDX.map(function (nm) {
       var arr = C[nm] || [], cells = [];
-      cs.forEach(function (c) { cells.push({ r: retAt(arr, c.s, c.e), s: sharpeAt(arr, c.s, c.e) }); });
+      cs.forEach(function (c) {
+        var d0 = (c.s >= 0) ? D[c.s] : null, d1 = (c.e >= 0) ? D[c.e] : null;
+        cells.push({
+          n: netAt(nm, d0, d1),
+          r: retAt(arr, c.s, c.e),
+          s: c.sh ? sharpeAt(arr, c.s, c.e) : null
+        });
+      });
       return { nm: nm, cells: cells };
     });
     /* 排序 */
@@ -1757,8 +1790,9 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     var html = '';
     rows.forEach(function (row) {
       html += '<tr><td class="ir-nm"><span class="ir-dot" style="background:' + (IDXCOLOR[row.nm] || '#94a3b8') + '"></span>' + row.nm + '</td>';
-      row.cells.forEach(function (cell) {
-        html += '<td>' + fmtPct(cell.r) + '</td><td class="ir-sub">' + fmtSh(cell.s) + '</td>';
+      row.cells.forEach(function (cell, ci) {
+        html += '<td class="ir-net">' + fmtNet(cell.n) + '</td><td>' + fmtPct(cell.r) + '</td>';
+        if (cs[ci].sh) html += '<td class="ir-sub">' + fmtSh(cell.s) + '</td>';
       });
       html += '</tr>';
     });
@@ -1769,24 +1803,14 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       th.classList.remove('sk-asc', 'sk-desc');
       if (sci >= 0 && c === sci && m === sortMetric) th.classList.add(sortAsc ? 'sk-asc' : 'sk-desc');
     });
-    /* 表格最小宽度：首列 + 每区间两列 */
-    panel.querySelector('table.ir-table').style.minWidth = Math.max(320, 104 + cs.length * 2 * 82) + 'px';
+    /* 表格最小宽度：首列 + 各列族实际列宽 */
+    var w = 88;
+    cs.forEach(function (c) { w += 82 + 58 + (c.sh ? 44 : 0); });
+    panel.querySelector('table.ir-table').style.minWidth = Math.max(320, w) + 'px';
   }
   var sortAsc = false;
 
   /* ---------- 交互 ---------- */
-  chips.innerHTML = RANGES.map(function (r) {
-    return '<button class="ir-ch on" type="button" data-rk="' + r.k + '">' + r.label + '</button>';
-  }).join(' ');
-  chips.querySelectorAll('.ir-ch').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var k = b.dataset.rk;
-      show[k] = show[k] ? 0 : 1;
-      b.classList.toggle('on', !!show[k]);
-      render();
-    });
-  });
-
   head.addEventListener('click', function (ev) {
     var th = ev.target.closest ? ev.target.closest('th[data-sk]') : null;
     if (!th) return;
