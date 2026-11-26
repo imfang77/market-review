@@ -585,7 +585,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   var NOTE = '① 数据源为东方财富个股两融明细，底层单位「亿元」；融资余额/占流通市值为期末快照，融资净买入为当期（日/周/月）累计。<br>'
     + '② 跟随页面「融资统计粒度」与「时间段」：日/周/月分别读取对应历史序列。<br>'
     + '③ 本页日期仅作展示，不支持下钻；点表头可排序，默认按日期降序。<br>'
-    + '④ 表格四列（日期 / 融资余额 / <b>融资净买入</b> / 占流通市值）常驻显示，点表头可排序；表格行不再弹出悬浮明细。<br>'
+    + '④ 表格四列（日期 / <b>当日融资净买入</b> / 融资余额 / 占流通市值）常驻显示，当日净买入在前、余额（累计快照）在后，与「每日融资余额」表列序一致；点表头可排序，表格行不再弹出悬浮明细。<br>'
     + '⑤ <b>金额单位（万 / 千万 / 亿）</b>：融资余额与融资净买入共用同一单位，系统按该股票融资余额规模自动选档（如四千万显示「四千」、净买入两百万显示「两百」），小额个股不再被压成 0；切换标的、粒度或时间段时重算。也可手动点选「万 / 千万 / 亿」锁定该档。<br>'
     + '⑥ 走势图蓝线 = 融资余额、红绿柱 = <b>融资净买入</b>（红正绿负），图内 / 图例 / 悬停明细均按当前单位标注；鼠标悬停（手机点按/滑动）图上任意一期 → 浮出当期数字明细。';
 
@@ -610,7 +610,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.rzq-st-hint{font-size:12px;color:#9aa3b5}'
     + '.rzq-st-hint b{color:#2f6bff}'
     + '.rzq-st-chart{border:1px solid #eef1f6;border-radius:10px;padding:10px 10px 6px;margin-bottom:10px;background:#fff}'
-    + '.rzq-st-chart svg{max-width:900px;margin:0 auto}'
+    /* 铺满容器：去掉 900px 上限与自动居中，交给 svg viewBox 自适应（2026-11-27） */
+    + '.rzq-st-chart svg{width:100%;display:block;margin:0}'
     + '.rzq-st-legend{display:flex;flex-wrap:wrap;gap:3px 12px;align-items:center;font-size:12px;color:#64748b;padding:2px 4px 0;line-height:1.5}'
     + '.rzq-st-legend .lg{display:inline-flex;align-items:center;gap:5px;white-space:normal}'
     + '.rzq-st-legend i{display:inline-block;width:13px;height:3px;border-radius:2px;flex:0 0 auto}'
@@ -669,8 +670,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '</div>'
     + '<div class="rzq-st-chart"></div>'
     + '<div class="rzq-st-tbl"><table><thead><tr>'
-    + '<th data-col="0">日期</th><th data-col="1">融资余额(' + U0.label + ')</th>'
-    + '<th data-col="2">融资净买入(' + U0.label + ')</th><th data-col="3">占流通市值(%)</th>'
+    + '<th data-col="0">日期</th><th data-col="2">融资净买入(' + U0.label + ')</th>'
+    + '<th data-col="1">融资余额(' + U0.label + ')</th><th data-col="3">占流通市值(%)</th>'
     + '</tr></thead><tbody id="tbody-s"></tbody></table></div>'
     + '<div class="rzq-st-note">' + NOTE + '</div>'
     + '<div class="rzq-st-tip"></div>'
@@ -776,7 +777,10 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     if (!it) return;
     S.code = it.c; S.name = it.n;
     RZQ.code = it.c; RZQ.name = it.n;
-    q.value = it.c;
+    /* 选中后输入框显示名称而非代码（2026-11-27 用户定稿）；代码保留在 data-code，供回归/外部读取 */
+    q.value = it.n || it.c;
+    q.dataset.code = it.c;
+    q.title = it.c + (it.n ? ' · ' + it.n : '');
     ac.classList.remove('show'); ac.innerHTML = '';
     render();
   }
@@ -787,7 +791,11 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     qTimer = setTimeout(function () {
       if (!S.idx) { ensureLoad(); return; }
       if (/^\d{6}$/.test(v) && S.idx.some(function (x) { return x.c === v; })) { pick(v); return; }
-      if (S.code && v !== S.code) { S.code = ''; S.name = ''; RZQ.code = ''; RZQ.name = ''; }
+      /* 选中后框内是名称，须与 S.name 比对；否则每次 input 都会误把已选标的清掉 */
+      if (S.code && v !== S.code && v !== S.name) {
+        S.code = ''; S.name = ''; RZQ.code = ''; RZQ.name = '';
+        q.removeAttribute('data-code'); q.removeAttribute('title');
+      }
       showAc(v);
       render();
     }, 180);
@@ -829,19 +837,49 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       th.classList.toggle('sort-desc', on && !S.sort.asc);
     });
   }
+  /* 横轴刻度（2026-11-27）：日/周＝首末完整日期＋中间按可用宽度抽稀；
+     月＝逐月「1月…11月」全部标出；带粗略包围盒防重叠，首末必经保留。 */
+  function xTicks(rows, gran, x0, iw, y) {
+    var n = rows.length, placed = [], out = '';
+    var xf = function (i) { return x0 + iw * i / ((n - 1) || 1); };
+    function wid(t) { return t.length * (t.indexOf('-') >= 0 ? 7.3 : 6.9) + 8; }
+    function add(i, t, a) {
+      var x = xf(i), w = wid(t);
+      var l = a === 'start' ? x : (a === 'end' ? x - w : x - w / 2);
+      var b = { l: l, r: l + w, x: x, t: t, a: a };
+      for (var k = 0; k < placed.length; k++) {
+        var o = placed[k];
+        if (b.r > o.l - 6 && o.r > b.l - 6) return false;
+      }
+      placed.push(b); return true;
+    }
+    if (gran === 'm') {
+      rows.forEach(function (r, i) { add(i, (+r.dt.slice(5, 7) || 0) + '月', 'middle'); });
+    } else {
+      add(0, rows[0].dt, 'start');
+      add(n - 1, rows[n - 1].dt, 'end');
+      var budget = Math.max(3, Math.floor(iw / 96));
+      var step = Math.max(1, Math.ceil((n - 1) / (budget + 1)));
+      for (var i = step; i < n - 1; i += step) add(i, rows[i].dt.slice(5), 'middle');
+    }
+    placed.forEach(function (b) {
+      out += '<text x="' + b.x.toFixed(1) + '" y="' + y + '" font-size="12" fill="#9aa3b5" text-anchor="' + b.a + '">' + b.t + '</text>';
+    });
+    return out;
+  }
   /* 走势图：蓝线=融资余额（上半部），红绿柱=融资净买入（下半部，红正绿负）；
      与二级弹窗走势图同一范式；悬停任意一期浮出当期数字明细。 */
   function spark(rows, U) {
     U = U || RZQ.effUnit(rows.map(function (x) { return x.r; }));
     var vals = rows.map(function (x) { return x.r; }).filter(function (v) { return v != null && !isNaN(v); });
     if (vals.length < 2) { S.geo = null; return ''; }
-    /* 放大版：viewBox 560×320（原 520×232），桌面最大宽 900px；字号/线宽随比例同步放大 */
-    var W = 560, H = 320, pl = 120, pr = 18, pt = 28, pb = 34;
+    /* 铺满版（2026-11-27）：viewBox 1000×300、左边距 66（原 120/560），外层已去掉 900px 上限 */
+    var W = 1000, H = 300, pl = 66, pr = 22, pt = 30, pb = 42;
     var iw = W - pl - pr, ih = H - pt - pb, bottom = pt + ih;
     var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
     var pad = (mx - mn) * 0.12 || Math.abs(mx || 1) * 0.02;
     var lo = mn - pad, hi = mx + pad;
-    var lineBot = pt + ih * 0.62, zeroY = pt + ih * 0.80, barH = ih * 0.16;
+    var lineBot = pt + ih * 0.60, zeroY = pt + ih * 0.80, barH = ih * 0.16;
     var dabs = 1e-9;
     rows.forEach(function (x) { if (x.j != null && !isNaN(x.j)) dabs = Math.max(dabs, Math.abs(x.j)); });
     var xx = function (i) { return pl + iw * i / (rows.length - 1); };
@@ -873,10 +911,10 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       + '<polygon points="' + area + '" fill="rgba(47,107,255,.09)"/>'
       + '<polyline points="' + pstr + '" fill="none" stroke="#2f6bff" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>'
       + '<circle cx="' + last[0].toFixed(1) + '" cy="' + last[1].toFixed(1) + '" r="4.5" fill="#2f6bff"/>'
-      + '<text x="' + pl + '" y="' + (pt - 9) + '" font-size="12.5" fill="#2f6bff">融资余额 · ' + U.label + ' · 共 ' + rows.length + ' 期</text>'
-      + '<text x="' + (pl + iw) + '" y="' + (pt - 9) + '" font-size="12" fill="#9aa3b5" text-anchor="end">融资净买入 · ' + U.label + ' · 红正/绿负</text>'
-      + '<text x="' + pl + '" y="' + (H - 10) + '" font-size="12.5" fill="#9aa3b5">' + rows[0].dt + '</text>'
-      + '<text x="' + (pl + iw) + '" y="' + (H - 10) + '" font-size="12.5" fill="#9aa3b5" text-anchor="end">' + rows[rows.length - 1].dt + '</text>'
+      + '<text x="' + pl + '" y="' + (pt - 10) + '" font-size="12.5" fill="#2f6bff">'
+      +   (S.name ? esc(S.name) + ' · ' : '') + '融资余额 · ' + U.label + ' · 共 ' + rows.length + ' 期</text>'
+      + '<text x="' + (pl + iw) + '" y="' + (pt - 10) + '" font-size="12" fill="#9aa3b5" text-anchor="end">融资净买入 · ' + U.label + ' · 红正/绿负</text>'
+      + xTicks(rows, S.gran, pl, iw, H - 12)
       + '<line class="st-cursor" x1="0" y1="' + pt + '" x2="0" y2="' + bottom + '" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3 3" style="opacity:0"/>'
       + '<circle class="st-dot" r="5" cx="0" cy="0" fill="#2f6bff" stroke="#fff" stroke-width="1.5" style="opacity:0"/>'
       + '<rect class="st-ovl" x="0" y="0" width="' + W + '" height="' + H + '" fill="transparent" pointer-events="all"/>'
@@ -924,8 +962,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     var mob = window.matchMedia && window.matchMedia('(max-width:620px)').matches;
     /* 手机端用短表头（单位在上方「金额单位」提示条中给出），四列全部常驻、不隐藏、不截断 */
     return mob
-      ? ['日期', '融资余额', '融资净买入', '占流通']
-      : ['日期', '融资余额(' + U.label + ')', '融资净买入(' + U.label + ')·' + G[S.gran], '占流通市值(%)'];
+      ? ['日期', '融资净买入', '融资余额', '占流通']
+      : ['日期', '融资净买入(' + U.label + ')·' + G[S.gran], '融资余额(' + U.label + ')', '占流通市值(%)'];
   }
   function render() {
     if (!panel) return;
@@ -962,8 +1000,9 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       ? sorted.map(function (x) {
           return '<tr>'
             + '<td class="st-dt">' + x.dt + '</td>'
-            + '<td class="num">' + RZQ.uVal(x.r, U) + '</td>'
+            /* 2026-11-27：当日净买入在前、融资余额（累计快照）在后，与主页「每日融资余额」列序一致 */
             + '<td class="num ' + jcls(x.j) + '">' + RZQ.uSigned(x.j, U) + '</td>'
+            + '<td class="num">' + RZQ.uVal(x.r, U) + '</td>'
             + '<td class="num">' + (x.z == null || isNaN(x.z) ? '—' : x.z.toFixed(2)) + '</td></tr>';
         }).join('')
       : '<tr><td colspan="4" class="rzq-st-msg">该时间段内暂无数据</td></tr>';
@@ -976,6 +1015,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     if (hit) { pick(hit.dataset.c); return; }
     if (e.target.closest('.rzq-st-clear')) {
       q.value = ''; S.code = ''; S.name = ''; RZQ.code = ''; RZQ.name = '';
+      q.removeAttribute('data-code'); q.removeAttribute('title');
       ac.classList.remove('show'); render(); return;
     }
     var th = e.target.closest('.rzq-st-tbl thead th');
