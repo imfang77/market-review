@@ -1521,12 +1521,13 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   });
 })();
 
-/* ===== 各指数收益汇总 标签页（区间收益 + 年化夏普） =====
-   口径（11-27 定稿）：
-     · 收益 = 末收盘 ÷ 期初收盘 − 1，周期一律按【交易日】不按自然日（5日 = 相对5个交易日前）。
+/* ===== 各指数涨跌汇总 标签页（区间净申购 + 涨跌 + 年化夏普） =====
+   口径（11-26 定稿）：
+     · 涨跌 = 末收盘 ÷ 期初收盘 − 1，周期一律按【交易日】不按自然日（5日 = 相对5个交易日前）。
      · 夏普 = 日均收益 ÷ 日收益标准差 × √252（年化，无风险利率取 0，与「按指标选股」页同一口径）。
-     · 区间不足 20 个交易日不显示夏普（样本太少无统计意义），显示「—」。
+     · 至少 3 个日收益才给夏普（5/10 日样本短，仅作参考）。
      · 今年以来 = 末收盘 ÷ 上年最后一个交易日收盘 − 1。
+     · 三列（净申购/涨跌/夏普）由表格上方复选框控制显隐，默认按 20 日净申购降序。
    数据：优先用 HTML 内联 IDXR_D/IDXR_C/IDXR_CSI（独立指数日期轴，到最新交易日；
         图表那份 ETF_IDX_CLOSE 是按资金流日期轴对齐的，会少几天，不能用于本表）。
         自定义区间早于内联起点时按需 fetch _idx_close_2012.json 全历史。 */
@@ -1578,6 +1579,11 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.ir-top{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:6px 2px 8px;font-size:12px;color:#64748b}'
     + '.ir-top .lbl{color:#64748b;margin-right:1px}'
     + '.ir-cus{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}'
+    + '.ir-cur{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:0 2px 8px;font-size:12px;color:#64748b}'
+    + '.ir-cur label{display:inline-flex;align-items:center;gap:4px;cursor:pointer;user-select:none;white-space:nowrap}'
+    + '.ir-cur input[type=checkbox]{width:13px;height:13px;margin:0;accent-color:#2f6bff;cursor:pointer}'
+    + '.ir-nmh{display:block;text-align:center}'
+    + '.ir-nmh2{display:block;text-align:center;font-size:10px;font-weight:400;color:#8592a6;line-height:1.35;margin-top:2px;white-space:normal}'
     + '.ir-cus .lbl{white-space:nowrap}'
     + '.ir-cus input[type=date]{font-size:12px;padding:2px 6px;border:1px solid #cbd5e1;border-radius:6px;color:#475569;background:#fff;font-family:inherit}'
     + '.ir-add{font-size:12px;padding:3px 10px;border:1px solid #2f6bff;background:#2f6bff;color:#fff;border-radius:6px;cursor:pointer;font-family:inherit;white-space:nowrap}'
@@ -1593,7 +1599,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + 'table.ir-table thead tr:nth-child(1) th{top:0;border-bottom:1px solid #e6ecf3}'
     + 'table.ir-table thead tr:nth-child(2) th{top:30px;font-weight:400;color:#94a3b8;font-size:12px;background:#f8fafc}'
     + 'table.ir-table th.ir-nm,table.ir-table td.ir-nm{text-align:left;position:sticky;left:0;background:#fff;z-index:2;box-shadow:1px 0 0 #eef1f5;white-space:normal;max-width:190px}'
-    + 'table.ir-table thead th.ir-nm{z-index:6;background:#f8fafc}'
+    + 'table.ir-table thead th.ir-nm{z-index:6;background:#f8fafc;text-align:center}'
     + '.ir-nmwrap{display:inline-flex;flex-wrap:wrap;align-items:center;gap:3px 4px;vertical-align:middle}'
     + '.ir-nmt{display:inline-flex;align-items:center;white-space:nowrap}'
     + '.ir-bdg{font-size:9.5px;line-height:1.5;padding:0 4px;border-radius:4px;background:#f1f5f9;color:#64748b;white-space:nowrap;font-weight:400}'
@@ -1616,25 +1622,25 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.ir-note2[open] summary{margin-bottom:4px}'
     + '.ir-note2 b{color:#334155}'
     + '.ir-msg{padding:16px;color:#66708a;font-size:13px;text-align:center}'
-    + '@media(max-width:620px){table.ir-table{font-size:13px}table.ir-table th,table.ir-table td{padding:6px 7px}table.ir-table th.ir-nm,table.ir-table td.ir-nm{min-width:0;max-width:132px}.ir-bdg{font-size:9px;padding:0 3px}.ir-nmwrap{gap:2px 3px}.ir-top{gap:5px;font-size:11.5px}.ir-cus{flex-basis:100%;margin-left:0;margin-top:2px;gap:4px;flex-wrap:wrap}.ir-cus .lbl{flex:0 0 auto}.ir-cus input[type=date]{font-size:11.5px;padding:2px 4px;flex:1 1 82px;min-width:0}.ir-add,.ir-clr{flex:0 0 auto}.ir-asof{width:100%;margin-left:0;text-align:right;font-size:11px}}';
+    + '@media(max-width:620px){table.ir-table{font-size:13px}table.ir-table th,table.ir-table td{padding:6px 7px}table.ir-table th.ir-nm,table.ir-table td.ir-nm{width:110px;min-width:110px;max-width:110px}.ir-bdg{font-size:8.5px;padding:0 2px;line-height:1.4}.ir-nmwrap{gap:2px 3px}.ir-top{gap:4px;font-size:11.5px}.ir-cus{flex-basis:100%;margin-left:0;margin-top:0;gap:3px;flex-wrap:nowrap;width:100%}.ir-cus .lbl{flex:0 0 auto}.ir-cus input[type=date]{font-size:11px;padding:2px 3px;flex:1 1 0;min-width:0}.ir-add,.ir-clr{flex:0 0 auto;padding:3px 7px;font-size:11px}.ir-cur{gap:9px;font-size:11.5px;padding:0 0 6px}.ir-asof{width:100%;margin-left:0;text-align:right;font-size:11px}}';
   if (!document.getElementById('ir-tab-css')) {
     var st = document.createElement('style'); st.id = 'ir-tab-css'; st.textContent = css; document.head.appendChild(st);
   }
 
-  /* ---------- 二级标签（宽基ETF 面板内部：资金流明细 / 各指数收益汇总） ---------- */
+  /* ---------- 二级标签（宽基ETF 面板内部：资金流明细 / 各指数涨跌汇总） ---------- */
   var subnav = document.createElement('div');
   subnav.className = 'ir-subtabs'; subnav.id = 'irSubtabs';
   subnav.innerHTML = '<button type="button" data-v="flow" class="on">资金流明细</button>'
-                   + '<button type="button" data-v="ret">各指数收益汇总</button>';
+                   + '<button type="button" data-v="ret">各指数涨跌汇总</button>';
   panelE.insertBefore(subnav, panelE.firstChild);
-  /* 既有内容（整理维度/表体/说明）打标记，切到收益汇总时整组隐藏 */
+  /* 既有内容（整理维度/表体/说明）打标记，切到涨跌汇总时整组隐藏 */
   Array.prototype.slice.call(panelE.children).forEach(function (el) {
     if (el !== subnav) el.classList.add('etf-flow-view');
   });
 
   /* ---------- 面板 ---------- */
   /* 列固定：5/10/20/60/120日 + 今年以来（不再有「区间」筛选 chips）。
-     每列族一律三列：净申购(亿元) + 收益(%) + 夏普。 */
+     每列族一律三列：净申购(亿元) + 涨跌(%) + 夏普；三列可用复选框单独关掉。 */
   var RANGES = [
     { k: 'r5',   n: 5,   label: '5日',     sh: true, rank: true },
     { k: 'r10',  n: 10,  label: '10日',    sh: true, rank: true },
@@ -1644,34 +1650,46 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     { k: 'ytd',  n: 0,   label: '今年以来', sh: true, rank: false }
   ];
   var custom = null;                     /* {label, s, e}：s/e 为 D 中的索引 */
-  var sortKey = 'r20', sortMetric = 'r'; /* 默认按 20 日收益降序 */
+  var showCol = { n: true, r: true, s: true };   /* 列开关：净申购 / 涨跌 / 夏普 */
+  var METRICS = [
+    { m: 'n', label: '净申购', title: '净申购金额（亿元）', w: 56 },
+    { m: 'r', label: '涨跌',   title: '区间涨跌幅（%）',   w: 50 },
+    { m: 's', label: '夏普',   title: '年化夏普',         w: 40 }
+  ];
+  var sortKey = 'r20', sortMetric = 'n'; /* 默认按 20 日净申购降序 */
 
   var panel = document.createElement('div');
   panel.id = 'irPane';
   panel.innerHTML =
       '<div class="ir-top" id="irTop">'
-    +   '<span class="ir-cus"><span class="lbl">自定义区间</span>'
+    +   '<span class="ir-cus"><span class="lbl">自定义</span>'
     +     '<input type="date" id="irFrom"><span style="color:#b6bfcc">—</span><input type="date" id="irTo">'
     +     '<button class="ir-add" type="button" id="irAdd">添加</button>'
     +     '<button class="ir-clr" type="button" id="irClr">清除</button>'
     +   '</span>'
     +   '<span class="ir-asof" id="irAsof"></span>'
     + '</div>'
+    + '<div class="ir-cur" id="irCur">'
+    +   '<label><input type="checkbox" data-m="n" checked>净申购</label>'
+    +   '<label><input type="checkbox" data-m="r" checked>涨跌</label>'
+    +   '<label><input type="checkbox" data-m="s" checked>夏普</label>'
+    + '</div>'
     + '<div class="ir-tblwrap"><table class="ir-table"><thead id="irHead"></thead><tbody id="irBody"></tbody></table></div>'
     + '<details class="ir-note2"><summary>口径与算法说明（默认折叠，点击展开）</summary><div>'
     +   '<b>净申购(亿元)</b>＝该区间内该指数全部成分 ETF 的<b>一级市场申赎净额累加</b>（与上方 ETF 图的指数累计净申购同源，末值差分为区间值），'
     +   '非二级市场买卖、非份额存量；数据截至资金流最新交易日（见上方图表）。'
-    +   '<b>区间收益</b>＝末收盘 ÷ 期初收盘 − 1。周期一律按<b>交易日</b>回溯（5 日＝相对 5 个交易日前，非自然日）。'
+    +   '<b>区间涨跌</b>＝末收盘 ÷ 期初收盘 − 1。周期一律按<b>交易日</b>回溯（5 日＝相对 5 个交易日前，非自然日）。'
     +   '<b>夏普</b>＝区间内日均收益 ÷ 日收益标准差 × √252（年化，<b>无风险利率取 0</b>），与「按指标选股」页同一口径；'
-    +   '注意它不等于区间收益的年化值。5 日 / 10 日区间的夏普样本仅 5 / 10 个交易日，波动极大，<b>只作横向参考</b>。'
-    +   '<b>排名徽章</b>：5 日 / 10 日 / 20 日 / 60 日 / 120 日 的净申购金额各自降序取前 3 名（今年以来不参与），'
-    +   '在指数名后挂「5日净申购一」这类标签，一枚徽章＝该周期净申购额第 1/2/3 名，鼠标悬浮可看具体金额。'
-    +   '<b>精度</b>：净申购取整数（元→亿元四舍五入到个位，带千分位）、收益保留 1 位小数、夏普保留 2 位小数。'
+    +   '注意它不等于区间涨跌幅的年化值。5 日 / 10 日区间的夏普样本仅 5 / 10 个交易日，波动极大，<b>只作横向参考</b>。'
+    +   '<b>排名徽章</b>：5 日 / 10 日 / 20 日 / 60 日 / 120 日 / 今年以来 的净申购金额各自降序取前 3 名，'
+    +   '在指数名后挂「5日①」这类标签：①＝该区间净申购额第 1 名、②＝第 2 名、③＝第 3 名，鼠标悬浮可看具体金额。'
+    +   '<b>精度</b>：净申购取整数（元→亿元四舍五入到个位，带千分位）、涨跌保留 1 位小数、夏普保留 2 位小数。'
+    +   '<b>列开关</b>：表格上方的「净申购 / 涨跌 / 夏普」复选框控制对应列是否显示；默认按 20 日净申购降序排列，点表头可改排序。'
     +   '<b>今年以来</b>＝末收盘 ÷ 上年最后一个交易日收盘 − 1，净申购同步取上年末以来累计。'
     +   '<b>自定义</b>区间按输入的起止日期取「首个 ≥ 起始日」与「最后 ≤ 截止日」两个交易日，追加一组三列。'
-    +   '三个表头（净申购/收益/夏普）均可点排序，首次降序、再点升序，空值恒排末尾。指数名前的色点与上方图表同色。'
+    +   '三个表头（净申购/涨跌/夏普）均可点排序，首次降序、再点升序，空值恒排末尾。指数名前的色点与上方图表同色。'
     +   '<b>数据</b>：指数日线取自腾讯 fqkline（中证2000 走通达信），最新交易日见右上角；'
-    +   '自定义区间超出内联范围（近 300 个交易日）时自动拉取完整历史。指数收益未扣费、不含分红再投资差异。'
+    +   '自定义区间超出内联范围（近 300 个交易日）时自动拉取完整历史。指数涨跌未扣费、不含分红再投资差异。'
     + '</div></details>';
   panelE.appendChild(panel);
 
@@ -1712,7 +1730,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   }
   /* ---------- 净申购（亿元）：指数累计净申购曲线做区间差分 ----------
      ETF_IDX_ACC 与 ETF_D 同轴（资金流日期轴）；区间起止从本表日期轴映射过去，
-     取「最后一个 ≤ 该日的交易日」，保证与收益列同一时间窗。 */
+     取「最后一个 ≤ 该日的交易日」，保证与涨跌列同一时间窗。 */
   var ETFD = (typeof ETF_D !== 'undefined' && ETF_D) ? ETF_D : [];
   var ACC  = (typeof ETF_IDX_ACC !== 'undefined' && ETF_IDX_ACC) ? ETF_IDX_ACC : {};
   function etfPos(d){
@@ -1740,7 +1758,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     if (custom) out.push({ key: 'cus', label: custom.label, s: custom.s, e: custom.e, sh: true, isCustom: true });
     return out;
   }
-  /* 数值精度（用户口径）：净申购取【整数】、收益保留 1 位小数、夏普保留 2 位 */
+  /* 数值精度（用户口径）：净申购取【整数】、涨跌保留 1 位小数、夏普保留 2 位 */
   function fmtPct(v){ if (v == null) return '<span class="ir-na">—</span>';
     return '<span class="' + (v >= 0 ? 'ir-up' : 'ir-dn') + '">' + (v >= 0 ? '+' : '') + v.toFixed(1) + '%</span>'; }
   function fmtSh(v){ if (v == null) return '<span class="ir-na">—</span>';
@@ -1752,7 +1770,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   /* ---------- 「N日净申购一/二/三」排名徽章 ----------
      只对 5/10/20/60/120 日做排名（今年以来不参与），每周期按净申购额降序取前 3，
      结果按指数归集：同一指数可能同时挂多枚徽章（如沪深300 五行全中）。 */
-  var RANKS = ['r5', 'r10', 'r20', 'r60', 'r120'], CN_NUM = ['一', '二', '三'];
+  var RANKS = ['r5', 'r10', 'r20', 'r60', 'r120', 'ytd'], CN_NUM = ['①', '②', '③'];
   function buildBadges(cs, rows){
     var map = {};
     RANKS.forEach(function (k) {
@@ -1763,7 +1781,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
                      .map(function (r) { return { nm: r.nm, v: r.cells[ci].n }; })
                      .sort(function (a, b) { return b.v - a.v; });
       pool.slice(0, 3).forEach(function (o, j) {
-        (map[o.nm] = map[o.nm] || []).push({ txt: cs[ci].label + '净申购' + CN_NUM[j], rk: j + 1, v: o.v });
+        (map[o.nm] = map[o.nm] || []).push({ txt: cs[ci].label + CN_NUM[j], rk: j + 1, v: o.v,
+          tip: cs[ci].label + '净申购第 ' + (j + 1) + ' 名' });
       });
     });
     return map;
@@ -1775,15 +1794,19 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     if (!D.length || !IDX.length) {
       head.innerHTML = ''; body.innerHTML = '<tr><td class="ir-msg">指数数据未加载</td></tr>'; return;
     }
-    /* 表头：第一行区间名（每组 3 列）；第二行 净申购 / 收益 / 夏普 */
-    var h1 = '<tr><th class="ir-nm" rowspan="2">指数</th>';
-    cs.forEach(function (c) { h1 += '<th colspan="3">' + c.label + '</th>'; });
+    /* 表头：第一行区间名（跨度＝当前勾选的指标列数）；第二行 净申购 / 涨跌 / 夏普 */
+    var vm = METRICS.filter(function (x) { return showCol[x.m]; });
+    if (!vm.length) vm = [{ m: 'r', label: '涨跌', title: '区间涨跌幅（%）', w: 50 }];
+    var h1 = '<tr><th class="ir-nm" rowspan="2">'
+           + '<span class="ir-nmh">指数</span>'
+           + '<span class="ir-nmh2">①净申购第1名<br>②第2名 ③第3名</span></th>';
+    cs.forEach(function (c) { h1 += '<th colspan="' + vm.length + '">' + c.label + '</th>'; });
     h1 += '</tr>';
     var h2 = '<tr>';
     cs.forEach(function (c, ci) {
-      h2 += '<th data-sk data-c="' + ci + '" data-m="n" title="净申购金额（亿元）">净申购</th>'
-          + '<th data-sk data-c="' + ci + '" data-m="r">收益</th>'
-          + '<th data-sk data-c="' + ci + '" data-m="s">夏普</th>';
+      vm.forEach(function (mt) {
+        h2 += '<th data-sk data-c="' + ci + '" data-m="' + mt.m + '" title="' + mt.title + '">' + mt.label + '</th>';
+      });
     });
     h2 += '</tr>';
     head.innerHTML = h1 + h2;
@@ -1802,7 +1825,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       return { nm: nm, cells: cells };
     });
     /* 排名徽章：在行序确定前按原始数值算（与排序无关） */
-    var bmap = buildBadges(cs, rows);
+    var bmap = showCol.n ? buildBadges(cs, rows) : {};
     /* 排序 */
     var sci = -1;
     for (var i = 0; i < cs.length; i++) if (cs[i].key === sortKey) sci = i;
@@ -1824,11 +1847,15 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       html += '<tr><td class="ir-nm"><span class="ir-nmwrap">'
             + '<span class="ir-nmt"><span class="ir-dot" style="background:' + (IDXCOLOR[row.nm] || '#94a3b8') + '"></span>' + row.nm + '</span>'
             + bd.map(function (b) {
-                return '<span class="ir-bdg r' + b.rk + '" title="' + b.txt + ' · ' + b.v.toFixed(0) + ' 亿元">' + b.txt + '</span>';
+                return '<span class="ir-bdg r' + b.rk + '" title="' + b.tip + ' · ' + b.v.toFixed(0) + ' 亿元">' + b.txt + '</span>';
               }).join('')
             + '</span></td>';
-      row.cells.forEach(function (cell, ci) {
-        html += '<td class="ir-net">' + fmtNet(cell.n) + '</td><td>' + fmtPct(cell.r) + '</td><td class="ir-sub">' + fmtSh(cell.s) + '</td>';
+      row.cells.forEach(function (cell) {
+        vm.forEach(function (mt) {
+          if (mt.m === 'n')      html += '<td class="ir-net">' + fmtNet(cell.n) + '</td>';
+          else if (mt.m === 'r') html += '<td>' + fmtPct(cell.r) + '</td>';
+          else                   html += '<td class="ir-sub">' + fmtSh(cell.s) + '</td>';
+        });
       });
       html += '</tr>';
     });
@@ -1839,12 +1866,28 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       th.classList.remove('sk-asc', 'sk-desc');
       if (sci >= 0 && c === sci && m === sortMetric) th.classList.add(sortAsc ? 'sk-asc' : 'sk-desc');
     });
-    /* 表格最小宽度：首列 + 每组三列（净申购/收益/夏普） */
+    /* 表格最小宽度：首列 + 已勾选指标列 */
     var w = 132;
-    cs.forEach(function () { w += 56 + 50 + 40; });
+    cs.forEach(function () { vm.forEach(function (mt) { w += mt.w; }); });
     panel.querySelector('table.ir-table').style.minWidth = Math.max(320, w) + 'px';
   }
   var sortAsc = false;
+
+  /* ---------- 列开关（净申购 / 涨跌 / 夏普） ---------- */
+  var curEl = panel.querySelector('#irCur');
+  curEl.addEventListener('change', function (ev) {
+    var cb = ev.target;
+    if (!cb || cb.type !== 'checkbox' || !cb.dataset.m) return;
+    var m = cb.dataset.m, yes = cb.checked;
+    /* 至少保留一列，避免整表空掉 */
+    var left = METRICS.filter(function (x) { return x.m !== m && showCol[x.m]; });
+    if (!yes && !left.length) { cb.checked = true; return; }
+    showCol[m] = yes;
+    if (!showCol[sortMetric] && left.length) {           /* 当前排序列被隐藏 → 顺延到仍可见的指标 */
+      sortMetric = left[0].m;
+    }
+    render();
+  });
 
   /* ---------- 交互 ---------- */
   head.addEventListener('click', function (ev) {
@@ -1883,7 +1926,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   panel.querySelector('#irAdd').addEventListener('click', applyCustom);
   panel.querySelector('#irClr').addEventListener('click', function () {
     custom = null; fromEl.value = ''; toEl.value = '';
-    if (sortKey === 'cus') { sortKey = 'r20'; sortMetric = 'r'; sortAsc = false; }
+    if (sortKey === 'cus') { sortKey = 'r20'; sortMetric = 'n'; sortAsc = false; }
     render();
   });
 
@@ -1899,7 +1942,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   }
   initDates();
 
-  /* 二级标签切换：资金流明细 ↔ 各指数收益汇总（首次切入才渲染） */
+  /* 二级标签切换：资金流明细 ↔ 各指数涨跌汇总（首次切入才渲染） */
   var subBtns = Array.prototype.slice.call(subnav.querySelectorAll('button'));
   var rendered = false;
   function setView(v){
