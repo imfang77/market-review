@@ -1413,7 +1413,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       var box=document.createElement('div');
       box.id='sbEtfHd';box.className='hd';
       var ed=(typeof ETF_D!=='undefined'&&ETF_D.length)?ETF_D[ETF_D.length-1]:'—';
-      box.innerHTML='<h1>宽基 ETF 资金流</h1><div class="asof asof-line">行情最新：<b>'+ed+'</b>（ETF 净申购）</div>';
+      box.innerHTML='<h1>宽基 ETF 净申购</h1><div class="asof asof-line">行情最新：<b>'+ed+'</b>（ETF 净申购）</div>';
       sec.insertBefore(box,sec.firstChild);
       var oldhd=sec.querySelector('.etfchart-hd');
       if(oldhd) oldhd.style.display='none';

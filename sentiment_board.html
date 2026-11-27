@@ -31,7 +31,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif
 </head>
 <body>
 <div class="header">
-<h1>情绪看板</h1><div class="subtitle">融资余额 / 涨跌家数 / 个股融资余额 / 宽基ETF资金流</div></div>
+<h1>情绪看板</h1><div class="subtitle">融资余额 / 涨跌家数 / 个股融资余额 / 宽基ETF净申购 / 全部股票型ETF净申购</div></div>
 <div class="container">
   <div class="section-title">数据看板</div>
   <div class="report-list">
@@ -45,11 +45,20 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif
       <span class="arrow">&#8599;</span>
     </a>
     <a class="report-card" href="sentiment_etf.html" id="card-etf">
-      <div class="card-header"><span class="date-text">宽基 ETF 资金流</span></div>
+      <div class="card-header"><span class="date-text">宽基 ETF 净申购</span></div>
       <div class="summary">宽基 ETF 累计净申购与指数走势；表格支持按日期 / 按ETF / 按宽基指数三维度查看</div>
       <div class="meta">
         <span class="badge-date" id="etf-date">更新于 —</span>
         <span class="dot hide" id="etf-dot"></span>
+      </div>
+      <span class="arrow">&#8599;</span>
+    </a>
+    <a class="report-card" href="sentiment_etf_all.html" id="card-etfall">
+      <div class="card-header"><span class="date-text">全部股票型 ETF 净申购 <span style="font-size:12px;color:#868e96;font-weight:400">（调试中）</span></span></div>
+      <div class="summary">全部股票型 ETF 一级市场净申购总量与三层分类（宽基 / 行业主题 / 策略）；按日期 / 按ETF / 按指数汇总查看</div>
+      <div class="meta">
+        <span class="badge-date" id="etfall-date">更新于 —</span>
+        <span class="dot hide" id="etfall-dot"></span>
       </div>
       <span class="arrow">&#8599;</span>
     </a>
@@ -58,7 +67,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif
 </div>
 <script>
 /* 与条件选股 screening.html 同款：更新于 YYYY-MM-DD + 未读红点（localStorage 记忆已读）。 */
-var RZ_DATE = "20261126", UD_DATE = "20261127", ETF_DATE = "20261127";
+var RZ_DATE = "20261126", UD_DATE = "20261127", ETF_DATE = "20261127", ETFALL_DATE = "20261127";
 var META_KEY = "ashare_sentiment_meta_read_v1";
 function loadRead(){ try { return JSON.parse(localStorage.getItem(META_KEY) || "{}"); } catch(e){ return {}; } }
 function saveRead(o){ try { localStorage.setItem(META_KEY, JSON.stringify(o)); } catch(e){} }
@@ -74,6 +83,7 @@ function setupCard(prefix, dateStr){
 }
 setupCard("rz", UD_DATE);
 setupCard("etf", ETF_DATE);
+setupCard("etfall", ETFALL_DATE);
 function markRead(prefix, dateStr){
   var r = loadRead(); r[prefix] = dateStr || ""; saveRead(r);
   var dot = document.getElementById(prefix + "-dot");
@@ -81,6 +91,7 @@ function markRead(prefix, dateStr){
 }
 document.getElementById("card-rz").addEventListener("click", function(){ markRead("rz", UD_DATE); });
 document.getElementById("card-etf").addEventListener("click", function(){ markRead("etf", ETF_DATE); });
+document.getElementById("card-etfall").addEventListener("click", function(){ markRead("etfall", ETFALL_DATE); });
 </script>
 </body>
 </html>

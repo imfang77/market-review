@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <script>(function(){try{fetch('_rzrq_meta.json?v='+Date.now()).then(function(r){return r.json();}).then(function(m){if(!m||!m.builtAt)return;var cur=new URLSearchParams(location.search).get('v');if(cur!==m.builtAt){history.replaceState(null,'','sentiment_etf.html?v='+encodeURIComponent(m.builtAt));}}).catch(function(){});}catch(e){}})();</script>
-<title>宽基 ETF 资金流 | 情绪看板</title>
+<title>宽基 ETF 净申购 | 情绪看板</title>
 <style>*{box-sizing:border-box;margin:0;padding:0}
 body{background:#eef1f6;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;color:#1f2937;padding:22px}
 .wrap{max-width:1180px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 6px 28px rgba(31,41,55,.08);overflow:hidden}
@@ -176,7 +176,7 @@ body.sb-etf #sbEtfHd{padding:8px 28px 2px}
 </style></head>
 <body><div class="wrap">
 <div id="sbViewRz"><div class="hd">
-<h1>宽基 ETF 资金流</h1>
+<h1>宽基 ETF 净申购</h1>
 <div class="asof asof-line">行情最新：<b>2026-11-27</b>（涨跌家数）</div><div class="asof asof-line">融资余额最新披露：<b>2026-11-26</b>（两融 T+1 披露）</div>
 <div class="sub">单图双轴：左轴（蓝刻度）=融资余额蓝线（随粒度切快照），右轴（红刻度）=上涨家数红线（恒为每日）。</div>
 </div>
@@ -213,7 +213,7 @@ body.sb-etf #sbEtfHd{padding:8px 28px 2px}
 <div id="lsOv"><div id="lsWrap"></div><button id="lsClose" type="button">✕ 退出横屏</button></div>
 <div id="sbViewEtf" class="sb-hidden"><div class="etfchart-sec">
 <div class="etfchart-hd">
-<div class="etfchart-title">宽基 ETF 资金流（全市场净申购）</div>
+<div class="etfchart-title">宽基 ETF 净申购（全市场净申购）</div>
 <div class="etfchart-sub">12 宽基指数 · 30 只头部 ETF · 全历史逐日净申购（口径与数据说明见图表下方）</div>
 </div>
 <div class="rngbar" id="eRng"><div class="rngrow rngrow2"><span class="lbl rng-lbl">时间段：</span>
@@ -750,7 +750,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   window.addEventListener('resize',function(){if(OV.classList.contains('on'))layout();});
 })();
 </script>
-<script>/* ===== 宽基ETF净资金流 图表（主图资金 + 副图指数走势 + 图3 ETF走势） =====
+<script>/* ===== 宽基ETF净申购 图表（主图资金 + 副图指数走势 + 图3 ETF走势） =====
    语义（11-26 晚定稿）：
    主图 = 蓝线全市场份额存量（左轴·亿份·前复权）+ 红绿柱当日净申购（右轴·亿元）。
        默认不显示任何指数；选中指数后才叠加该指数累计净申购曲线（右侧第二轴·亿元·同指数同色）。
@@ -1413,7 +1413,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
       var box=document.createElement('div');
       box.id='sbEtfHd';box.className='hd';
       var ed=(typeof ETF_D!=='undefined'&&ETF_D.length)?ETF_D[ETF_D.length-1]:'—';
-      box.innerHTML='<h1>宽基 ETF 资金流</h1><div class="asof asof-line">行情最新：<b>'+ed+'</b>（ETF 净申购）</div>';
+      box.innerHTML='<h1>宽基 ETF 净申购</h1><div class="asof asof-line">行情最新：<b>'+ed+'</b>（ETF 净申购）</div>';
       sec.insertBefore(box,sec.firstChild);
       var oldhd=sec.querySelector('.etfchart-hd');
       if(oldhd) oldhd.style.display='none';
