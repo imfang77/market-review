@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>20261127  A股复盘  · 恐贪指数 —</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:#eef1f5;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#2d3436}
+  .card{max-width:480px;margin:14px auto;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.08)}
+  .hd{background:linear-gradient(135deg,#0984e3,#6c5ce7);color:#fff;padding:18px 20px}
+  .hd h1{margin:0;font-size:clamp(16px,5vw,21px);font-weight:800;white-space:nowrap;letter-spacing:-.3px;overflow:hidden}
+  .ct-fg{font-size:11px;font-weight:600;color:rgba(255,255,255,.92);margin-left:6px}
+  .sec{padding:16px 18px;border-bottom:1px solid #f0f1f3}
+  .sec:last-child{border-bottom:none}
+  .sec-h{font-size:14px;font-weight:800;color:#0984e3;margin:0 0 10px;display:flex;align-items:center;gap:6px}
+  .sec-h::before{content:"";width:4px;height:14px;background:#0984e3;border-radius:2px}
+  .gauge-wrap{background:#f8f9fb;border-radius:12px;padding:6px 0}
+  ul.concl{margin:0;padding-left:18px;font-size:13px;line-height:1.7}
+  ul.concl li{margin:4px 0}
+  .seg{margin:10px 0}
+  .seg-h{font-size:13px;font-weight:800;color:#2d3436;background:#eef3fb;border-left:4px solid #0984e3;padding:5px 10px;border-radius:4px;margin-bottom:8px}
+  .ml{background:#f8f9fb;border-radius:10px;padding:9px 10px;margin:8px 0}
+  .ml-name{font-size:14px;font-weight:700;margin-bottom:4px;color:#c0392b}
+  .ml-meta{font-size:11px;color:#636e72;font-weight:500;margin-left:6px}
+  .ml-desc{font-size:11.5px;line-height:1.55;color:#4b5563;background:#fff;border-radius:8px;padding:7px 9px;margin:5px 0}
+  .ml-seg{margin:4px 0;line-height:1.6}
+  .seg-dot{color:#2d3436;font-weight:700;margin-right:5px}
+  .seg-lab{color:#2d3436;font-weight:700;margin-right:1px}
+  .ld-tbl{width:100%;border-collapse:collapse;margin:7px 0 2px;font-size:11px;table-layout:fixed}
+  .ld-tbl th,.ld-tbl td{border:1px solid #e3e8ef;padding:4px 3px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ld-tbl th{background:#eef3fb;color:#0984e3;font-weight:700}
+  .ld-tbl td.ld-cat{background:#f3f7fd;color:#2d3436;font-weight:600;text-align:left;white-space:nowrap}
+  .ld-empty{font-size:11px;color:#b2bec3;text-align:center;padding:6px 0}
+  .tech-sub{font-size:12.5px;font-weight:800;color:#2d3436;margin:9px 0 3px;text-align:center}
+  .mini-tbl{width:100%;border-collapse:collapse;margin:4px 0 8px;font-size:12px}
+  .mini-tbl th,.mini-tbl td{border:1px solid #e3e8ef;padding:5px 7px;white-space:nowrap}
+  .mini-tbl th{background:#eef3fb;color:#0984e3;font-weight:700;font-size:11.5px;text-align:center}
+  .mini-tbl td{text-align:center}
+  .mini-tbl td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+  .mini-tbl td:first-child{font-weight:600;color:#2d3436}
+  .mini-tbl .subcode{font-size:10px;color:#636e72;font-weight:500}
+  ul.tech{margin:0;padding-left:16px;font-size:12.5px;line-height:1.75}
+  .ft{padding:14px 18px;background:#fafbfc;font-size:12px;color:#636e72;line-height:1.8;text-align:center}
+  .ft a{color:#0984e3;text-decoration:none;font-weight:700;font-size:13px}
+  .fg-card{background:#f8f9fb;border-radius:10px;padding:10px 12px;margin:2px 0}
+  .fg-top{display:flex;align-items:baseline;gap:8px}
+  .fg-num{font-size:26px;font-weight:800;color:#2d3436;line-height:1}
+  .fg-level{font-size:13px;font-weight:700;color:#0984e3}
+  .fg-desc{font-size:11px;color:#636e72;margin-top:6px;line-height:1.5}
+  .empty{color:#b2bec3;font-size:13px;text-align:center;padding:14px}
+  /* 市场脉搏：融资余额 / 涨跌家数（各一行，手机不折行） */
+  .pulse{background:#f8f9fb;border:1px solid #eef1f5;border-radius:10px;padding:8px 10px;margin:10px 0 2px}
+  .pl-row{display:flex;flex-wrap:nowrap;align-items:baseline;white-space:nowrap;overflow:hidden;font-size:12px;line-height:1.95;font-variant-numeric:tabular-nums}
+  .pl-k{color:#636e72;font-size:11.5px;font-weight:700;margin-right:4px;flex-shrink:0}
+  .pl-v{font-size:13px;font-weight:800;color:#2d3436;font-variant-numeric:tabular-nums;margin-right:2px}
+  .pl-sep{color:#dfe6e9;margin:0 4px;font-weight:400}
+  .pl-x{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+  .pl-x.up{color:#d63031}
+  .pl-x.down{color:#00b894}
+  .pl-x.flat{color:#b2bec3}
+  .pl-x.mut{color:#636e72;font-weight:500}
+  .pl-dt{color:#b2bec3;font-size:11px;font-variant-numeric:tabular-nums;margin-left:auto}
+  .pl-ar{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;margin-left:3px}
+  .pl-ar.up{color:#d63031}
+  .pl-ar.down{color:#00b894}
+  .pl-ar.flat{color:#b2bec3}
+</style></head>
+<body>
+<div class="card">
+  <div class="hd">
+    <h1>20261127  A股复盘<span class="ct-fg"> · 恐贪指数 —</span></h1>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h">当日核心结论</div>
+    <ul class="concl"><li>市场：涨跌 5025/181 · 涨停 467只 · 成交 2.00万亿</li><li>三大指数全线上涨，沪指 +3.73% 报 3606.49，深成指 +7.24%、创业板指 +11.61%、科创50 +15.07%、中证全指 +5.97%</li><li>两市成交约 2.00万亿，成交显著放量</li><li>电子 / 计算机 领涨，当日主线资金主要集中于算力租赁等方向</li></ul>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h">5-20日主线（核心 · 9 · 通达信401板块口径）</div>
+    <div class="seg">
+    <div class="seg-h">5日主线（按5日涨幅）</div>
+    <div class="ml">
+      <div class="ml-name">通信设备 <span class="ml-meta">5日 +19.26%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：中际旭创（中游·通信设备）、天孚通信（中游·通信设备）、工业富联（中游·消费电子组件）；核心梯队：新易盛（中游·通信设备）、光库科技（中游·通信设备）、美利信（中游·通信设备）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：短周期反弹性质（仅5日向上，更长周期未共振）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +15.81 个百分点，核心个股近5日累计成交约 955 亿，领涨股 天孚通信 近5日涨 +57.10%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>工业富联</td><td>中际旭创</td><td>新易盛</td><td>长飞光纤</td><td>天孚通信</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>中际旭创</td><td>新易盛</td><td>天孚通信</td><td>工业富联</td><td>亨通光电</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>天孚通信</td><td>新易盛</td><td>光库科技</td><td>中际旭创</td><td>美利信</td></tr>
+    </tbody>
+  </table>
+    </div><div class="ml">
+      <div class="ml-name">渔业 <span class="ml-meta">5日 +15.39%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：东方海洋（上游·水产养殖）、好当家（上游·水产养殖）；核心梯队：獐子岛（上游·水产养殖）、国联水产（上游·水产养殖）、中水渔业（上游·水产养殖）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +11.94 个百分点，核心个股近5日累计成交约 67 亿，领涨股 好当家 近5日涨 +32.87%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>东方海洋</td><td>好当家</td><td>国联水产</td><td>中水渔业</td><td>獐子岛</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>东方海洋</td><td>好当家</td><td>中水渔业</td><td>国联水产</td><td>獐子岛</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>好当家</td><td>东方海洋</td><td>獐子岛</td><td>国联水产</td><td>中水渔业</td></tr>
+    </tbody>
+  </table>
+    </div><div class="ml">
+      <div class="ml-name">公路 <span class="ml-meta">5日 +5.13%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：恒通股份（下游·物流）、原尚股份（下游·物流）；核心梯队：长久物流（下游·物流）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：中等。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 215（前 53.6%），相对中证全指跑赢 +1.68 个百分点，核心个股近5日累计成交约 2 亿，领涨股 原尚股份 近5日涨 +11.21%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>恒通股份</td><td>长久物流</td><td>原尚股份</td><td>-</td><td>-</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>恒通股份</td><td>原尚股份</td><td>长久物流</td><td>-</td><td>-</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>原尚股份</td><td>恒通股份</td><td>长久物流</td><td>-</td><td>-</td></tr>
+    </tbody>
+  </table>
+    </div>
+  </div><div class="seg">
+    <div class="seg-h">10日主线（按10日涨幅）</div>
+    <div class="ml">
+      <div class="ml-name">啤酒 <span class="ml-meta">10日 +3.98%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：青岛啤酒（下游·啤酒）、兰州黄河（下游·啤酒）；核心梯队：永顺泰（下游·啤酒）、重庆啤酒（下游·啤酒）、珠江啤酒（下游·啤酒）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +3.22 个百分点，核心个股近5日累计成交约 12 亿，领涨股 兰州黄河 近5日涨 +6.29%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>青岛啤酒</td><td>燕京啤酒</td><td>重庆啤酒</td><td>珠江啤酒</td><td>永顺泰</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>青岛啤酒</td><td>燕京啤酒</td><td>重庆啤酒</td><td>永顺泰</td><td>珠江啤酒</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>重庆啤酒</td><td>青岛啤酒</td><td>燕京啤酒</td><td>珠江啤酒</td><td>永顺泰</td></tr>
+    </tbody>
+  </table>
+    </div><div class="ml">
+      <div class="ml-name">水力发电 <span class="ml-meta">10日 +3.89%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：长江电力（上游·发电）、闽东电力（上游·发电）；核心梯队：湖南发展（上游·发电）、韶能股份（上游·发电）、梅雁吉祥（上游·发电）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：短线承压；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 3（前 0.7%），相对中证全指跑赢 -0.57 个百分点，核心个股近5日累计成交约 87 亿，领涨股 闽东电力 近5日涨 +11.89%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>长江电力</td><td>华能水电</td><td>国投电力</td><td>川投能源</td><td>桂冠电力</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>长江电力</td><td>闽东电力</td><td>川投能源</td><td>华能水电</td><td>国投电力</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>桂冠电力</td><td>黔源电力</td><td>湖北能源</td><td>华能水电</td><td>长江电力</td></tr>
+    </tbody>
+  </table>
+    </div><div class="ml">
+      <div class="ml-name">银行 <span class="ml-meta">10日 +2.92%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：建设银行（金融地产·银行）、招商银行（金融地产·银行）、浙商银行（金融地产·银行）；核心梯队：郑州银行（金融地产·银行）、紫金银行（金融地产·银行）、邮储银行（金融地产·银行）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：短线承压；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 5（前 1.2%），相对中证全指跑赢 -0.79 个百分点，核心个股近5日累计成交约 279 亿，领涨股 浙商银行 近5日涨 +4.73%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：政策与时事背景（1 条，点击展开）国内资本市场：【国常会：加力发挥“国家队”稳市作用，优化中央汇金类“平准基金”功能】11月27日国务院常务会议研究持续深化资本市场投融资综合改革工作。会议指出，资本市场事关经济发展大局，要坚持目标导向、问题导向，坚持逆周期调节和改革攻坚两手抓，持续完善资本市场稳市机制，实施好存量政策，谋划出台增量政策，促进资本市场平稳健康发展。要推动上市公司加大分红回购力度，加力发挥“国家队”稳市作用，进一步优化中央汇金公司的类“平准基金”功能，提供充足流动性保障。完善保险、企业年金、社保基金等中长期资金入市支持引导政策，不断壮大中长期投资力量。要加强输入性风险防范应对。要通过深化改革增强资本市场高质量发展的内生动力，加快发展多层次资本市场。要依法强化资本市场全链条监管，坚决查处财务造假、违规减持等行为，有效保护投资者合法权益。</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>建设银行</td><td>工商银行</td><td>农业银行</td><td>中国银行</td><td>招商银行</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>招商银行</td><td>工商银行</td><td>农业银行</td><td>兴业银行</td><td>交通银行</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>农业银行</td><td>交通银行</td><td>浙商银行</td><td>邮储银行</td><td>民生银行</td></tr>
+    </tbody>
+  </table>
+    </div>
+  </div><div class="seg">
+    <div class="seg-h">20日主线（按20日涨幅）</div>
+    <div class="ml">
+      <div class="ml-name">渔业 <span class="ml-meta">20日 +25.77%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：东方海洋（上游·水产养殖）、好当家（上游·水产养殖）；核心梯队：獐子岛（上游·水产养殖）、国联水产（上游·水产养殖）、中水渔业（上游·水产养殖）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：长短周期共振向上，趋势性/基本面驱动性质（5/10/20日同向向上）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 1（前 0.2%），相对中证全指跑赢 +14.26 个百分点，核心个股近5日累计成交约 67 亿，领涨股 好当家 近5日涨 +32.87%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>东方海洋</td><td>好当家</td><td>国联水产</td><td>中水渔业</td><td>獐子岛</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>东方海洋</td><td>好当家</td><td>中水渔业</td><td>国联水产</td><td>獐子岛</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>好当家</td><td>东方海洋</td><td>国联水产</td><td>獐子岛</td><td>中水渔业</td></tr>
+    </tbody>
+  </table>
+    </div><div class="ml">
+      <div class="ml-name">半导体 <span class="ml-meta">20日 +10.63%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：长鑫科技（中游·半导体）、盛合晶微（中游·半导体）；核心梯队：富瀚微（中游·半导体）、伟测科技（中游·半导体）、敏芯股份（中游·半导体）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：短周期反弹性质（仅5日向上，更长周期未共振）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 2（前 0.5%），相对中证全指跑赢 +7.60 个百分点，核心个股近5日累计成交约 952 亿，领涨股 盛合晶微 近5日涨 +32.16%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：政策与时事背景（3 条，点击展开）国内宏观数据：【国家统计局：1—10月规模以上工业企业利润总额同比增长16.0%，10月单月增长20.1%】其中电子行业利润同比增长1.0倍，拉动全部规上工业企业利润增长9.7个百分点，人工智能算力需求带动存储芯片及周边制造利润持续增长。国内产业政策：【广东印发算力发展规划：到2028年智算规模突破1000 EFLOPS，鼓励优先采用国产芯片】算力基础设施建设需求形成硬增量，国产算力采用比例有望快速提升。国际产业政策：【美国商品贸易逆差连续第四个月扩大】10月份，美国商品贸易逆差连续第四个月扩大，原因在于资本货物进口持续增长。</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>长鑫科技</td><td>中芯国际</td><td>寒武纪</td><td>海光信息</td><td>华虹宏力</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>长鑫科技</td><td>寒武纪</td><td>中芯国际</td><td>兆易创新</td><td>中微公司</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>盛合晶微</td><td>华虹宏力</td><td>伟测科技</td><td>盛美上海</td><td>芯源微</td></tr>
+    </tbody>
+  </table>
+    </div><div class="ml">
+      <div class="ml-name">影视音像 <span class="ml-meta">20日 +7.47%</span></div>
+      <div class="ml-desc"><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">龙头梯队</span>：横店影视（下游·影视院线）、芒果超媒（下游·数字媒体）；核心梯队：中视传媒（下游·影视院线）、幸福蓝海（下游·影视院线）、华智数媒（下游·影视院线）</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">性质</span>：短周期反弹性质（仅5日向上，更长周期未共振）；</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">持续性评估</span>：较强。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（技术面）</span>：区间涨幅在全部 401 个板块中排名第 3（前 0.7%），相对中证全指跑赢 +5.54 个百分点，核心个股近5日累计成交约 131 亿，领涨股 横店影视 近5日涨 +14.65%。</div><div class="ml-seg"><span class="seg-dot">•</span><span class="seg-lab">原因（政策/时事面）</span>：暂无近期政策/时事催化</div></div>
+      <table class="ld-tbl">
+    <thead><tr><th>类别</th><th>龙1</th><th>龙2</th><th>龙3</th><th>龙4</th><th>龙5</th></tr></thead>
+    <tbody>
+      <tr><td class="ld-cat">按市值</td><td>芒果超媒</td><td>光线传媒</td><td>中国电影</td><td>东方明珠</td><td>儒意电影</td></tr>
+      <tr><td class="ld-cat">按成交额</td><td>芒果超媒</td><td>文投控股</td><td>华策影视</td><td>捷成股份</td><td>光线传媒</td></tr>
+      <tr><td class="ld-cat">按涨幅</td><td>华智数媒</td><td>芒果超媒</td><td>文投控股</td><td>儒意电影</td><td>幸福蓝海</td></tr>
+    </tbody>
+  </table>
+    </div>
+  </div>
+    <div class="pulse"><div class="pl-row"><span class="pl-k">两融</span><span class="pl-x mut">待次日披露后更新</span></div><div class="pl-row">
+      <span class="pl-k">涨跌</span>
+      <span class="pl-x up">5025</span><span class="pl-sep">/</span>
+      <span class="pl-x flat">359</span><span class="pl-sep">/</span>
+      <span class="pl-x down">181</span><span class="pl-sep">·</span>
+      <span class="pl-x mut">总5565</span>
+    </div></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-h">技术面选股 · 当日新增</div>
+    <div class="tech-sub">趋势突破（今日 37 只）</div>
+    <table class="mini-tbl"><thead><tr><th>名称</th><th>代码</th><th>涨幅</th><th>综合评分</th></tr></thead><tbody><tr><td>中芯国际</td><td>688981</td><td class="num" style="color:#d63031">+15.38%</td><td class="num">91.40</td></tr><tr><td>寒武纪</td><td>688256</td><td class="num" style="color:#d63031">+18.68%</td><td class="num">91.46</td></tr><tr><td>中国船舶</td><td>600150</td><td class="num" style="color:#d63031">+1.99%</td><td class="num">79.71</td></tr><tr><td>卫星化学</td><td>002648</td><td class="num" style="color:#d63031">+3.08%</td><td class="num">86.77</td></tr><tr><td>赤峰黄金</td><td>600988</td><td class="num" style="color:#d63031">+6.52%</td><td class="num">89.34</td></tr><tr><td>安集科技</td><td>688019</td><td class="num" style="color:#d63031">+20.00%</td><td class="num">90.33</td></tr><tr><td>华大九天</td><td>301269</td><td class="num" style="color:#d63031">+15.02%</td><td class="num">69.91</td></tr><tr><td>奥比中光-W</td><td>688322</td><td class="num" style="color:#d63031">+16.56%</td><td class="num">89.27</td></tr><tr><td>华林证券</td><td>002945</td><td class="num" style="color:#d63031">+8.62%</td><td class="num">82.73</td></tr><tr><td>网宿科技</td><td>300017</td><td class="num" style="color:#d63031">+15.21%</td><td class="num">88.47</td></tr><tr><td>儒意电影</td><td>002739</td><td class="num" style="color:#d63031">+7.00%</td><td class="num">72.33</td></tr><tr><td>鸿日达</td><td>301285</td><td class="num" style="color:#d63031">+18.01%</td><td class="num">90.65</td></tr><tr><td>崇达技术</td><td>002815</td><td class="num" style="color:#d63031">+10.03%</td><td class="num">92.11</td></tr><tr><td>沈阳机床</td><td>000410</td><td class="num" style="color:#d63031">+4.73%</td><td class="num">72.06</td></tr><tr><td>华锐精密</td><td>688059</td><td class="num" style="color:#d63031">+10.23%</td><td class="num">90.35</td></tr><tr><td>美利云</td><td>000815</td><td class="num" style="color:#d63031">+6.90%</td><td class="num">91.56</td></tr><tr><td>共进股份</td><td>603118</td><td class="num" style="color:#d63031">+8.90%</td><td class="num">90.43</td></tr><tr><td>药石科技</td><td>300725</td><td class="num" style="color:#d63031">+10.97%</td><td class="num">78.18</td></tr><tr><td>掌阅科技</td><td>603533</td><td class="num" style="color:#d63031">+6.61%</td><td class="num">91.43</td></tr><tr><td>利君股份</td><td>002651</td><td class="num" style="color:#d63031">+10.01%</td><td class="num">86.48</td></tr><tr><td>华孚时尚</td><td>002042</td><td class="num" style="color:#d63031">+6.52%</td><td class="num">77.12</td></tr><tr><td>肇民科技</td><td>301000</td><td class="num" style="color:#d63031">+11.99%</td><td class="num">89.11</td></tr><tr><td>绿盟科技</td><td>300369</td><td class="num" style="color:#d63031">+9.31%</td><td class="num">92.79</td></tr><tr><td>汇金科技</td><td>300561</td><td class="num" style="color:#d63031">+14.00%</td><td class="num">84.23</td></tr><tr><td>阿尔特</td><td>300825</td><td class="num" style="color:#d63031">+17.85%</td><td class="num">91.83</td></tr><tr><td>亿嘉和</td><td>603666</td><td class="num" style="color:#d63031">+9.89%</td><td class="num">84.20</td></tr><tr><td>日发精机</td><td>002520</td><td class="num" style="color:#d63031">+9.58%</td><td class="num">87.27</td></tr><tr><td>兴业股份</td><td>603928</td><td class="num" style="color:#d63031">+8.80%</td><td class="num">93.02</td></tr><tr><td>骏亚科技</td><td>603386</td><td class="num" style="color:#d63031">+9.99%</td><td class="num">93.11</td></tr><tr><td>瑞丰高材</td><td>300243</td><td class="num" style="color:#d63031">+11.04%</td><td class="num">90.70</td></tr><tr><td>浙文影业</td><td>601599</td><td class="num" style="color:#d63031">+3.53%</td><td class="num">90.52</td></tr><tr><td>敏芯股份</td><td>688286</td><td class="num" style="color:#d63031">+16.20%</td><td class="num">90.17</td></tr><tr><td>中央商场</td><td>600280</td><td class="num" style="color:#d63031">+10.00%</td><td class="num">75.36</td></tr><tr><td>金百泽</td><td>301041</td><td class="num" style="color:#d63031">+10.10%</td><td class="num">91.31</td></tr><tr><td>慈文传媒</td><td>002343</td><td class="num" style="color:#d63031">+2.30%</td><td class="num">83.76</td></tr><tr><td>丝路视觉</td><td>300556</td><td class="num" style="color:#d63031">+8.15%</td><td class="num">88.06</td></tr><tr><td>皇台酒业</td><td>000995</td><td class="num" style="color:#d63031">+2.03%</td><td class="num">81.22</td></tr></tbody></table>
+    <div class="tech-sub">净利润断层（新增 0 只）</div>
+    <div class="ld-empty">净利润断层 今日无新增</div>
+    <div class="tech-sub">ETF 5日最强（前 5）</div>
+    <table class="mini-tbl"><thead><tr><th>ETF名称</th><th>ETF代码</th><th>5日涨幅</th></tr></thead><tbody><tr><td>创业板人工智能ETF华宝</td><td>sz159363</td><td class="num" style="color:#d63031">+21.28%</td></tr><tr><td>创业板人工智能ETF南方</td><td>sz159382</td><td class="num" style="color:#d63031">+21.28%</td></tr><tr><td>创业板人工智能ETF国泰</td><td>sz159388</td><td class="num" style="color:#d63031">+21.00%</td></tr><tr><td>创业板人工智能ETF富国</td><td>sz159246</td><td class="num" style="color:#d63031">+20.87%</td></tr><tr><td>创业板人工智能ETF华夏</td><td>sz159381</td><td class="num" style="color:#d63031">+20.32%</td></tr></tbody></table>
+  </div>
+
+  <div class="ft">
+    📎 <a href="https://imfang77.github.io/market-review/mainline_concept-20261127.html">完整主线报告 ›</a> ｜ <a href="https://imfang77.github.io/market-review/index.html">详情请看复盘中心</a>
+  </div>
+</div>
+</body></html>
