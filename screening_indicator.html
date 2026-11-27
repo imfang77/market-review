@@ -174,7 +174,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
     </div></details>
   </div>
 </div>
-<div class="wrap" id="indFaWrap"><div id="indFaHost">融资余额分析加载中…</div></div>
+<div class="wrap" id="indFaWrap"><div id="indFaHost" class="fa-embed">融资余额分析加载中…</div></div>
 
 <script>
 (function(){
@@ -191,7 +191,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       function mount(){ if(!window.RZQFA){rej(new Error('RZQFA missing'));return;}
         window.RZQFA.mount(host).then(function(){loaded=true;loading=false;res();},rej); }
       if(window.RZQFA){mount();return;}
-      var s=document.createElement('script'); s.src='_rzrq_fa.js?v=202611270900'; s.onload=mount;
+      var s=document.createElement('script'); s.src='_rzrq_fa.js?v=202611270930'; s.onload=mount;
       s.onerror=function(){loading=false;host.textContent='模块加载失败，请刷新重试';rej(new Error('module load failed'));};
       document.head.appendChild(s);
     });
