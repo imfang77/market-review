@@ -84,7 +84,8 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
 .ind-top-tabs button{border:1px solid #dee2e6;background:#fff;border-radius:8px;padding:9px 18px;font-size:13.5px;color:#64748b;cursor:pointer;font-family:inherit}
 .ind-top-tabs button.on{background:#2f6bff;border-color:#2f6bff;color:#fff;font-weight:700}
 #indFaWrap{display:none}
-@media(max-width:600px){.ind-top-tabs{padding:0 8px;margin:10px auto 0}.ind-top-tabs button{padding:7px 12px;font-size:12.5px}}
+#indFaHost{display:block;background:#fff;border-radius:12px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.05);min-height:200px}
+@media(max-width:600px){.ind-top-tabs{padding:0 8px;margin:10px auto 0}.ind-top-tabs button{padding:7px 12px;font-size:12.5px}#indFaHost{padding:12px}}
 </style>
 </head>
 <body>
@@ -173,7 +174,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
     </div></details>
   </div>
 </div>
-<div class="wrap" id="indFaWrap"><div id="indFaHost" style="padding:16px;min-height:200px;color:#94a3b8;font-size:12.5px">融资余额分析加载中…</div></div>
+<div class="wrap" id="indFaWrap"><div id="indFaHost">融资余额分析加载中…</div></div>
 
 <script>
 (function(){
@@ -190,7 +191,7 @@ tr:hover td:first-child,tr:hover td:nth-child(2){background:#fafbff}
       function mount(){ if(!window.RZQFA){rej(new Error('RZQFA missing'));return;}
         window.RZQFA.mount(host).then(function(){loaded=true;loading=false;res();},rej); }
       if(window.RZQFA){mount();return;}
-      var s=document.createElement('script'); s.src='_rzrq_fa.js?v=202611270500'; s.onload=mount;
+      var s=document.createElement('script'); s.src='_rzrq_fa.js?v=202611270900'; s.onload=mount;
       s.onerror=function(){loading=false;host.textContent='模块加载失败，请刷新重试';rej(new Error('module load failed'));};
       document.head.appendChild(s);
     });
