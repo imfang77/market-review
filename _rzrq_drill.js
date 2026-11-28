@@ -1148,6 +1148,9 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + 'table.etf-table{border-collapse:collapse;width:100%;font-size:14px}'
     + 'table.etf-table.dim-etf{min-width:1160px}'
     + 'table.etf-table.dim-etf th,table.etf-table.dim-etf td{padding:9px 7px}'
+    + 'table.etf-table.dim-etf td.nm{white-space:nowrap;line-height:1.25}'
+    + 'table.etf-table.dim-etf td.nm .nmt{display:inline;font-weight:600;color:#2f6bff}'
+    + 'table.etf-table.dim-etf td.nm .subcode{display:inline;margin-left:5px;margin-top:0;font-size:10px;vertical-align:1px}'
     + 'table.etf-table.dim-etf td.chg{font-variant-numeric:tabular-nums}'
     + 'table.etf-table th,table.etf-table td{padding:9px 14px;border-bottom:1px solid #eef1f5;white-space:nowrap;text-align:right}'
     + 'table.etf-table th{background:#f8fafc;color:#64748b;font-weight:600;text-align:center;position:sticky;top:0;cursor:default}'
@@ -1190,7 +1193,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '.etf-subtabs{display:flex;gap:6px;margin:4px 2px 6px}'
     + '.etf-subtabs button{font-size:11.5px;padding:3px 10px;border:1px solid #cbd5e1;background:#fff;color:#64748b;border-radius:5px;cursor:pointer}'
     + '.etf-subtabs button.on{background:#0f766e;color:#fff;border-color:#0f766e}'
-    + '@media(max-width:620px){table.etf-table{table-layout:auto}table.etf-table th:first-child,table.etf-table td:first-child{min-width:88px}table.etf-table.dim-etf th:first-child,table.etf-table.dim-etf td:first-child{min-width:clamp(112px,34vw,148px)}table.etf-table.dim-etf td.nm{white-space:normal;line-height:1.35}table.etf-table.dim-etf td.nm .nmt{display:block}table.etf-table th,table.etf-table td{padding:8px 4px;font-size:13.5px}.etf-sub table th,.etf-sub table td{padding:8px 4px;font-size:13.5px}.eth-full{display:inline}.eth-mini{display:none}.etf-tblwrap{max-height:440px}#tpanel-e .tblbox{padding:6px 8px 8px}}'
+    + '@media(max-width:620px){table.etf-table{table-layout:auto}table.etf-table th:first-child,table.etf-table td:first-child{min-width:88px}table.etf-table.dim-etf th:first-child,table.etf-table.dim-etf td:first-child{min-width:clamp(112px,34vw,148px)}table.etf-table.dim-etf td.nm{white-space:nowrap;line-height:1.3}table.etf-table.dim-etf td.nm .nmt{display:inline}table.etf-table th,table.etf-table td{padding:8px 4px;font-size:13.5px}.etf-sub table th,.etf-sub table td{padding:8px 4px;font-size:13.5px}.eth-full{display:inline}.eth-mini{display:none}.etf-tblwrap{max-height:440px}#tpanel-e .tblbox{padding:6px 8px 8px}}'
     + '@media(max-width:360px){table.etf-table th,table.etf-table td{padding:8px 1px}#tpanel-e .tblbox{padding:6px 0 8px}}'
     + '@media(max-width:620px){table.etf-table.dim-etf{min-width:1560px}table.etf-table.dim-etf td.chg{font-size:13px}.etfdays-in table{table-layout:fixed}.etfdays-in th,.etfdays-in td{padding:7px 3px;font-size:12.5px}.etf-sub .etfmini{table-layout:fixed}.etf-sub .etfmini th,.etf-sub .etfmini td{padding:6px 2px;font-size:11.5px}}'
     /* ===== 14 组 / 分组行 / 其他宽基 ===== */
@@ -1256,6 +1259,17 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + NOTE2.join('');
   sec.appendChild(panel);
 
+  /* 把图表下方的「口径与数据说明」移到表格面板最下方、表格口径说明之前；
+     格式与后者统一（左对齐 + 向右小三角 + 黑字），去掉原 descfold 卡片样式。 */
+  (function(){
+    var desc=document.querySelector('details.etf-desc');
+    if(!desc) return;
+    var note2=panel.querySelector('details.etf-note2');
+    desc.className='etf-note2 etf-desc';
+    var sub=desc.querySelector('.sub'); if(sub) sub.className='';
+    if(note2) panel.insertBefore(desc, note2); else panel.appendChild(desc);
+  })();
+
   var DATA=null, tbody=panel.querySelector('#etfTbody'), dim='d';
   /* ===== 全市场 384 只口径（_etf_broad14.json）：14 组指数 = 13 主指数（含科创综指）+ 其他宽基 =====
      idx{n} 14 组 / oth{n} 其他宽基拆出的 10 个指数 / etf[] 每只 ETF 逐日 net·dsh·sh·px
@@ -1304,11 +1318,19 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   var CHG=null, CLOSING=false;
   function ensureCloses(){
     if(CHG||CLOSING) return;
-    if(typeof ETF_CLOSES!=='undefined' && ETF_CLOSES){ CHG=ETF_CLOSES; return; }
     CLOSING=true;
-    RZQ.load('_etf_close_2012.json').then(function(d){
-      CHG=(d && d.close && typeof d.close==='object' && !Array.isArray(d.close)) ? d.close : (d||{});
-    }).catch(function(){ CHG={}; });
+    /* 优先全 384 只 vipdoc 长序列（250 日涨幅，336 只 >=250 根）；失败回退 30 只前复权 */
+    RZQ.load('_etf_close_384.json').then(function(d){
+      CHG=(d && d.close && typeof d.close==='object' && !Array.isArray(d.close)) ? d.close : {};
+      if(typeof ETF_CLOSES!=='undefined' && ETF_CLOSES){
+        Object.keys(ETF_CLOSES).forEach(function(c){ if(!CHG[c]||!CHG[c].length) CHG[c]=ETF_CLOSES[c]; });
+      }
+    }).catch(function(){
+      CHG=(typeof ETF_CLOSES!=='undefined' && ETF_CLOSES)?ETF_CLOSES:{};
+      if(!Object.keys(CHG).length) RZQ.load('_etf_close_2012.json').then(function(d){
+        CHG=(d && d.close && typeof d.close==='object' && !Array.isArray(d.close)) ? d.close : (d||{});
+      }).catch(function(){ CHG={}; });
+    });
   }
   function chgOf(code,n){
     if(!CHG) return null;
@@ -1558,7 +1580,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       rows.push({oth:true, net:agg(rs,sl,true)[k], ds:agg(rd,sl,true)[k], ss:agg(rh,sl,false)[k], cnt:rest.length});
     }
     rows.sort(function(a,b){ return (b.net==null?-Infinity:b.net)-(a.net==null?-Infinity:a.net); });
-    var out=rows.map(function(r){
+    var TOTAL=rows.length, shownN=moreN.e||50; if(shownN>TOTAL) shownN=TOTAL;
+    var out=rows.slice(0,shownN).map(function(r){
       if(r.oth){
         return '<tr class="othEtfRow" data-oth="1"><td class="nm"><span class="nmt">其他 ETF</span><span class="subcode">'+r.cnt+' 只 · 点开看成分</span></td>'
           +'<td class="'+cls2(r.net)+'">'+sign2(r.net)+'</td><td class="'+cls2(r.ds)+'">'+sign2(r.ds)+'</td><td>'+fmtSh(r.ss)+'</td>'
@@ -1574,6 +1597,9 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
         + '<td class="chg st-amt" data-code="'+x.c+'">'+amt2(statOf(x.c,'amt'))+'</td><td class="st-mcap" data-code="'+x.c+'">'+amt2(statOf(x.c,'mcap'))+'</td>'
         + '<td>'+(x.i||'—')+'</td></tr>';
     });
+    if(shownN<TOTAL){
+      out.push('<tr class="moreRow"><td colspan="14"><button type="button" class="morebtn" data-more="1">显示更多（已列 '+shownN+' / '+TOTAL+'，再列 '+Math.min(50,TOTAL-shownN)+'）</button></td></tr>');
+    }
     tbody.innerHTML=out.join('');
     tableSortable(true);
   }
@@ -1733,7 +1759,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     var b=e.target.closest('button.morebtn');
     if(b){
       var more=parseInt(b.dataset.more,10);
-      moreN[dim]=(more===0)?0:((moreN[dim]||0)+20);
+      var step=(dim==='e')?50:20;
+      moreN[dim]=(more===0)?0:((moreN[dim]||50)+step);
       renderTable();
       return;
     }
