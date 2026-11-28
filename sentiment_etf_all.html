@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"><title>ETF 资金流 · v9</title>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>全部股票型 ETF 净申购</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f5f7fa;color:#1e2533;font:13px -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif}
 .wrap{max-width:1280px;margin:0 auto;padding:16px 18px 40px}
-.hd{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
-.hd h1{font-size:17px;margin:0;font-weight:650}
-.hd .sub{font-size:11.5px;color:#8a94a6}
+.hd{text-align:center;margin-bottom:12px}
+.hd h1{font-size:17px;margin:0 0 3px;font-weight:650}
+.hd .sub{display:block;font-size:11.5px;color:#8a94a6}
 .up{color:#d81e3f!important}.dn{color:#0f9d58!important}
 .panel{background:#fff;border:1px solid #e6ebf2;border-radius:9px;padding:12px 16px;margin-bottom:14px}
 .lbl{font-size:11.5px;color:#8a94a6;margin-right:8px}
@@ -16,26 +16,34 @@ body{margin:0;background:#f5f7fa;color:#1e2533;font:13px -apple-system,BlinkMacS
 .eqbar .sum{border:2px solid #2563eb;background:#eff6ff;border-radius:8px;padding:7px 13px;cursor:pointer;user-select:none;position:relative}
 .eqbar .sum .nm{font-size:12.5px;color:#1e40af;font-weight:700}
 .eqbar .sum .amt{font-size:16px;font-weight:700;margin-left:9px}
-.eqbar .part{border:1px solid #e2e8f0;background:#fbfcfe;border-radius:7px;padding:7px 12px;cursor:pointer;user-select:none}
+.eqbar .part{border:1px solid #e2e8f0;background:#fbfcfe;border-radius:7px;padding:7px 12px;cursor:pointer;user-select:none;position:relative}
 .eqbar .part.on{border-color:#93b8f5;background:#f5f9ff}
 .eqbar .part .nm{font-size:12px;color:#475569}
 .eqbar .part .amt{font-size:14px;font-weight:650;margin-left:8px}
 .eqbar .op{color:#64748b;font-size:17px;font-weight:500;padding:0 1px;user-select:none}
 .eqbar input[type=checkbox]{width:13px;height:13px;accent-color:#2563eb;margin:0 6px 0 0;vertical-align:-2px;cursor:pointer}
-.eqbar .sum:hover .hovercard{display:block}
+.eqbar .sum:hover .hovercard,.eqbar .part:hover .hovercard{display:block}
 .hovercard{display:none;position:absolute;top:calc(100% + 6px);left:0;z-index:50;background:#fff;border:1px solid #dbe3ee;border-radius:8px;box-shadow:0 6px 20px rgba(31,41,55,.12);padding:9px 11px;min-width:190px;font-size:11.5px;color:#475569;line-height:1.9}
 .hovercard b{color:#1e293b}
 .hovercard .r{display:flex;justify-content:space-between;gap:18px}
 @media(max-width:720px){
-  .eqbar{gap:4px}
-  .eqbar .sum,.eqbar .part{padding:5px 7px}
-  .eqbar .sum .nm{font-size:11px}
-  .eqbar .sum .amt{font-size:13px;margin-left:6px}
-  .eqbar .part .nm{font-size:10.5px}
-  .eqbar .part .amt{font-size:12px;margin-left:5px}
-  .eqbar .op{font-size:14px}
-  .eqbar input[type=checkbox]{width:12px;height:12px;margin-right:4px}
+  .eqbar{display:grid;grid-template-columns:13px minmax(0,1fr) 13px minmax(0,1fr) 13px minmax(0,1fr);gap:3px;align-items:stretch}
+  .eqbar .sum{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 8px;text-align:center}
+  .eqbar .sum .nm{font-size:11.5px}
+  .eqbar .sum .amt{font-size:13px;margin-left:0}
+  .eqbar .part{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 2px;text-align:center;min-width:0}
+  .eqbar .part .nm{font-size:10px;white-space:nowrap}
+  .eqbar .part .amt{font-size:12px;margin-left:0}
+  .eqbar .part input{margin:0}
+  .eqbar .op{font-size:14px;display:flex;align-items:center;justify-content:center}
+  .eqbar .hovercard{display:none!important}
 }
+/* 时间段筛选 */
+.rngbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 12px 0}
+.rngbar .lbl{margin-right:2px}
+.rng-btn{border:1px solid #dfe5ee;background:#fff;color:#64748b;font-size:11.5px;padding:3px 11px;border-radius:4px;cursor:pointer}
+.rng-btn.active{background:#2f6bff;border-color:#2f6bff;color:#fff;font-weight:600}
+@media(max-width:720px){.rngbar{gap:4px;padding:8px 9px 0}.rng-btn{padding:3px 8px;font-size:11px}}
 /* 图 */
 .chartbox{background:#fff;border:1px solid #e6ebf2;border-radius:9px;padding:12px 16px 8px;margin-bottom:0}
 .ctitle{font-size:13px;font-weight:600;margin-bottom:4px}
@@ -72,6 +80,7 @@ td.l,th.l{text-align:left}
 td.ctr,th.ctr{text-align:center}
 tbody tr:hover{background:#fafbfd}
 .nmwrap{display:inline-flex;align-items:center;gap:6px}
+.subcode{display:block;font-size:10.5px;color:#9aa4b2;margin-top:1px;line-height:1.2}
 .lk{color:#2563eb!important;cursor:pointer;text-decoration:none}
 .lk:hover{text-decoration:underline}
 .dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex:none}
@@ -81,7 +90,7 @@ tbody tr:hover{background:#fafbfd}
 .grandrow th{background:#eef4ff;color:#1e40af;font-weight:700}
 .subrow td{padding:0;background:#fbfcfe}
 .subin{padding:7px 12px 10px}
-.subhint{font-size:11.5px;color:#7b8798;margin:3px 0 6px}
+.subhint{font-size:11.5px;color:#7b8798;margin:3px 0 6px;text-align:left}
 .subtabs{display:flex;gap:6px;margin-bottom:6px}
 .subtabs button{border:1px solid #dfe5ee;background:#fff;border-radius:4px;padding:2px 10px;font-size:11px;color:#64748b;cursor:pointer}
 .subtabs button.on{background:#2563eb;color:#fff;border-color:#2563eb}
@@ -93,7 +102,7 @@ tbody tr:hover{background:#fafbfd}
 .ircur{display:flex;align-items:center;gap:14px;padding:9px 0;font-size:12px;color:#475569;flex-wrap:wrap}
 .ircur label{cursor:pointer;display:flex;align-items:center;gap:4px}
 .ircur input{width:13px;height:13px;accent-color:#2563eb;margin:0}
-.ircusbtn{border:1px solid #dfe5ee;background:#fff;border-radius:4px;padding:2px 9px;font-size:11.5px;color:#64748b;cursor:pointer}
+.ircusbtn{border:1px solid #93b8f5;background:#f5f9ff;border-radius:4px;padding:2px 9px;font-size:11.5px;color:#2563eb;font-weight:600;cursor:pointer}
 .ircusrow{display:flex;align-items:center;gap:7px;margin-top:-3px;padding:8px 0;font-size:11.5px;color:#64748b}
 .ircusrow input{border:1px solid #dfe5ee;border-radius:4px;padding:3px 6px;font-size:11.5px}
 .irasof{font-size:11px;color:#9aa4b2}
@@ -102,7 +111,7 @@ tbody tr:hover{background:#fafbfd}
 </style></head><body><div class="wrap">
 <div class="hd"><h1>全部股票型 ETF 净申购</h1><span class="sub">调试中 · 三层分类（宽基 / 行业主题 / 策略）· 一级市场净申购</span></div>
 <div class="panel"><div class="eqbar" id="selbar"></div></div>
-<div class="chartbox"><div class="ctitle" id="cht"></div><svg id="csvg" viewBox="0 0 1000 220"></svg><div class="cdesc" id="cdesc"></div></div>
+<div class="chartbox"><div class="rngbar" id="rngbar"><span class="lbl">时间段：</span><button class="rng-btn" data-range="m1">1个月</button><button class="rng-btn active" data-range="m3">3个月</button><button class="rng-btn" data-range="m6">半年</button><button class="rng-btn" data-range="ytd">今年以来</button><button class="rng-btn" data-range="all">全部</button></div><div class="ctitle" id="cht"></div><svg id="csvg" viewBox="0 0 1000 220"></svg><div class="cdesc" id="cdesc"></div></div>
 <div class="grans"><span>统计粒度（同时作用于上方图表与下方表格）：</span><span id="grans"></span><span class="catsep"></span><span class="lbl" style="margin-right:0">显示类别</span><span class="cats" id="hint"></span></div>
 <div class="tabs"><button data-tab="flow" class="on">净申购明细</button><button data-tab="chg" id="chgTab">指数涨跌汇总</button></div>
 <div id="flowpane">
@@ -146,7 +155,7 @@ const KN={bidx:'宽基指数',theme:'行业主题',strat:'策略分类',all:'全
 const SHORT={bidx:'宽基指数',theme:'行业主题',strat:'策略分类'};
 const TOTAL={bidx:TIER.broad,theme:TIER.theme,strat:TIER.strategy,all:TIER.all};
 const COLOR={bidx:'#2563eb',theme:'#7c3aed',strat:'#15803d'};
-let sel=new Set(['bidx']), gran='day', tab='flow', dim='date', expanded=null, subTab={}, expandedIdx=null, sort={k:-1,dir:-1};
+let sel=new Set(['bidx']), gran='day', range='m3', tab='flow', dim='date', expanded=null, subTab={}, expandedIdx=null, sort={k:-1,dir:-1};
 
 function f(v){if(v===null||v===undefined||v==='')return '—';const n=Number(String(v).replace(/[+−,]/g,m=>m==='−'?'-':''));if(isNaN(n))return v;return (n>0?'+':n<0?'−':'')+Math.abs(n).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function cls(v){const n=Number(String(v).replace(/[+−,]/g,m=>m==='−'?'-':''));return n>0?'up':n<0?'dn':''}
@@ -164,11 +173,12 @@ function renderSel(){
   const ck=k=>isAll()||sel.has(k);
   const amt=k=>'<span class="amt '+cls(TOTAL[k])+'">'+f(TOTAL[k])+'</span>';
   const hover='<span class="hovercard">'+keys.map(k=>'<span class="r"><span>'+SHORT[k]+'</span><b class="'+cls(TOTAL[k])+'">'+f(TOTAL[k])+'</b></span>').join('')+'<span class="r" style="border-top:1px solid #eef1f6;margin-top:3px;padding-top:3px"><span>股票型合计</span><b class="'+cls(TOTAL.all)+'">'+f(TOTAL.all)+'</b></span></span>';
+  const hoverFor=k=>'<span class="hovercard"><span class="r"><span>口径</span><b>一级市场净申购</b></span><span class="r"><span>覆盖</span><b>'+({bidx:'385 只宽基 ETF',theme:'862 只行业主题 ETF',strat:'152 只策略 ETF'})[k]+'</b></span><span class="r"><span>算法</span><b>份额法 · 全市场</b></span><span class="r" style="border-top:1px solid #eef1f6;margin-top:3px;padding-top:3px"><span>'+SHORT[k]+'</span><b class="'+cls(TOTAL[k])+'">'+f(TOTAL[k])+'</b></span></span>';
   const root='<span class="sum it" data-k="all"><input type="checkbox" data-k="all" '+(isAll()?'checked':'')+'><span class="nm">全部股票型 ETF</span>'+amt('all')+hover+'</span>';
   let parts='<span class="op">=</span>';
   keys.forEach((k,i)=>{
     if(i>0)parts+='<span class="op">+</span>';
-    parts+='<span class="part it '+(ck(k)?'on':'')+'" data-k="'+k+'"><input type="checkbox" data-k="'+k+'" '+(ck(k)?'checked':'')+'><span class="nm">'+SHORT[k]+'</span>'+amt(k)+'</span>';
+    parts+='<span class="part it '+(ck(k)?'on':'')+'" data-k="'+k+'"><input type="checkbox" data-k="'+k+'" '+(ck(k)?'checked':'')+'><span class="nm">'+SHORT[k]+'</span>'+amt(k)+hoverFor(k)+'</span>';
   });
   $('#selbar').innerHTML=root+parts;
   $$('#selbar .it').forEach(el=>{
@@ -179,6 +189,7 @@ function renderSel(){
 /* 粒度 */
 $('#grans').innerHTML=['day','week','month'].map(g=>'<button data-g="'+g+'" class="'+(g===gran?'on':'')+'">'+(g==='day'?'日':g==='week'?'周':'月')+'</button>').join('');
 $$('#grans button').forEach(b=>b.onclick=()=>{gran=b.dataset.g;$$('#grans button').forEach(x=>x.classList.toggle('on',x===b));expanded=null;renderAll();});
+$$('#rngbar button').forEach(b=>b.onclick=()=>{range=b.dataset.range;$$('#rngbar button').forEach(x=>x.classList.toggle('active',x===b));expanded=null;expandedIdx=null;renderAll();});
 $$('.tabs button').forEach(b=>b.onclick=()=>{
   tab=b.dataset.tab;$$('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
   $('#flowpane').style.display=tab==='flow'?'':'none';$('#chgpane').style.display=tab==='chg'?'':'none';
@@ -188,7 +199,7 @@ function renderDims(){
   const ds=isAll()?[['date','按日期'],['etf','按ETF'],['idx','按指数'],['group','按指数类别对比']]:[['date','按日期'],['etf','按ETF'],['idx','按指数']];
   if(!ds.some(d=>d[0]===dim))dim='date';
   $('#dims').innerHTML=ds.map(d=>'<button data-dim="'+d[0]+'" class="'+(d[0]===dim?'on':'')+'">'+d[1]+'</button>').join('');
-  $$('#dims button').forEach(b=>b.onclick=()=>{dim=b.dataset.dim;expanded=null;sort={k:-1,dir:-1};renderAll();});
+  $$('#dims button').forEach(b=>b.onclick=()=>{dim=b.dataset.dim;expanded=null;expandedIdx=null;sort={k:-1,dir:-1};renderAll();});
   $('#hint').innerHTML=['bidx','theme','strat'].map(k=>'<label class="ck"><input type="checkbox" data-c="'+k+'" '+(activeKeys().includes(k)?'checked':'')+'>'+SHORT[k]+'</label>').join('');
   $$('#hint input').forEach(x=>x.onchange=()=>{const k=x.dataset.c;if(sel.has('all'))sel=new Set(['bidx','theme','strat']);x.checked?sel.add(k):sel.delete(k);if(!sel.size)sel=new Set(['bidx']);expanded=null;renderAll();});
   $('#chgTab').textContent=chgTitle();
@@ -205,6 +216,47 @@ function histTotal(d){
   const v=['宽基','行业主题','策略'].map(c=>(HIST.groups[c]||{})[d]).filter(x=>x!==undefined);
   return v.length?v.reduce((a,b)=>a+b,0):null;
 }
+/* 时间段过滤 + 日/周/月聚合（图表与表格共用） */
+function rangeName(){return ({m1:'近1个月',m3:'近3个月',m6:'近半年',ytd:'今年以来',all:'全部'})[range]||range;}
+function granName(){return ({day:'日',week:'周',month:'月'})[gran]||gran;}
+function rangeDates(){
+  const ds=HIST.dates&&HIST.dates.length?HIST.dates.slice():ORIG.date.rows.map(r=>r[0]);
+  if(!ds.length||range==='all')return ds;
+  const last=ds[ds.length-1], dt=new Date(last+'T00:00:00');
+  if(range==='m1')dt.setMonth(dt.getMonth()-1);
+  else if(range==='m3')dt.setMonth(dt.getMonth()-3);
+  else if(range==='m6')dt.setMonth(dt.getMonth()-6);
+  else if(range==='ytd')dt=new Date(last.slice(0,4)+'-01-01T00:00:00');
+  const fs=dt.toISOString().slice(0,10);
+  return ds.filter(d=>d>=fs);
+}
+function periodKey(d){
+  if(gran==='month')return d.slice(0,7);
+  if(gran==='week'){const dt=new Date(d+'T00:00:00');dt.setDate(dt.getDate()-((dt.getDay()+6)%7));return dt.toISOString().slice(0,10);}
+  return d;
+}
+function periods(){
+  const ds=rangeDates().slice().reverse();
+  if(gran==='day')return ds.map(d=>({label:d,dates:[d],latest:d}));
+  const map=new Map();
+  ds.forEach(d=>{const k=periodKey(d);if(!map.has(k))map.set(k,[]);map.get(k).push(d);});
+  return [...map.values()].map(a=>{
+    const label=gran==='week'?(a[a.length-1].slice(5)+'~'+a[0].slice(5)):(a[0].slice(0,7)+'月');
+    return {label,dates:a,latest:a[0]};
+  });
+}
+function periodNet(k,p){
+  let s=0,has=false;
+  p.dates.forEach(d=>{const v=histNet(k,d);if(v!==undefined){s+=v;has=true;}});
+  return has?s:null;
+}
+function periodTotal(p){
+  let s=0,has=false;
+  p.dates.forEach(d=>{const v=histTotal(d);if(v!==undefined){s+=v;has=true;}});
+  return has?s:null;
+}
+function netOf(k,p){return gran==='day'?histNet(k,p.latest):periodNet(k,p);}
+function totalOf(p){return gran==='day'?histTotal(p.latest):periodTotal(p);}
 function etfRows(k){
   if(k==='bidx')return ORIG.etf.rows.map(r=>({code:(r[0].match(/\d{6}/)||[''])[0],name:r[0].replace(/\d{6}/,'').trim(),cells:r,cat:k}));
   if(k==='theme')return IND.map(x=>({code:x[0],name:x[1],net:x[2],chg:x[3],size:x[4],cat:k}));
@@ -220,48 +272,49 @@ function idxRows(k){
 const ORIG_BY_DATE={}; ORIG.date.rows.forEach(r=>ORIG_BY_DATE[r[0]]=r);
 function renderDate(){
   const keys=activeKeys(), multi=keys.length>1;
-  const hist=HIST.dates&&HIST.dates.length;
-  const dates=hist?HIST.dates.slice().reverse():ORIG.date.rows.map(r=>r[0]);  // 新->旧
-  let h='<thead><tr><th class="l" rowspan="2">日期</th><th class="grandrow" colspan="'+(1+keys.length)+'">全部股票型 ETF · 当日净申购(亿元)</th><th rowspan="2">当日份额增减(亿份)</th><th rowspan="2">份额存量(亿份)</th><th rowspan="2">纳入指数</th></tr><tr>';
+  const ps=periods();
+  let h='<thead><tr><th class="l" rowspan="2">'+(gran==='day'?'日期':gran==='week'?'周':'月')+'</th><th class="grandrow" colspan="'+(1+keys.length)+'">全部股票型 ETF · '+(gran==='day'?'当日':'周期')+'净申购(亿元)</th><th rowspan="2">当日份额增减(亿份)</th><th rowspan="2">份额存量(亿份)</th><th rowspan="2">纳入指数</th></tr><tr>';
   if(multi)h+='<th>合计</th>'+keys.map(k=>'<th>'+SHORT[k]+'</th>').join('');
   else h+='<th>'+SHORT[keys[0]]+'</th>';
   h+='</tr></thead><tbody>';
-  dates.forEach((d,i)=>{
-    const r=ORIG_BY_DATE[d];
-    const hv=histNet(keys[0],d), ht=histTotal(d);
-    const netSingle=hv!==undefined?hv:(r?r[1]:null);
-    const netTot=ht!==undefined?ht:(multi?keys.reduce((a,k)=>a+(histNet(k,d)||0),0):netSingle);
-    h+='<tr class="daterow" data-i="'+i+'" data-date="'+d+'"><td class="l"><span class="lk">'+d+'</span></td>'+
-      (multi?'<td class="'+cls(netTot)+'">'+f(netTot)+'</td>'+keys.map(k=>{const v=histNet(k,d);return '<td class="'+cls(v)+'">'+f(v)+'</td>';}).join(''):'<td class="'+cls(netSingle)+'">'+f(netSingle)+'</td>')+
+  ps.forEach((p,i)=>{
+    const r=ORIG_BY_DATE[p.latest];
+    const ns=keys.map(k=>netOf(k,p)), tt=totalOf(p);
+    h+='<tr class="daterow" data-i="'+i+'" data-date="'+p.latest+'"><td class="l"><span class="lk">'+p.label+'</span></td>'+
+      (multi?'<td class="'+cls(tt)+'">'+f(tt)+'</td>'+ns.map(v=>'<td class="'+cls(v)+'">'+f(v)+'</td>').join(''):'<td class="'+cls(ns[0])+'">'+f(ns[0])+'</td>')+
       '<td>'+(r?f(r[2]):'—')+'</td><td>'+(r?r[3]:'—')+'</td><td>'+(r?r[4]:'—')+'</td></tr>';
-    if(expanded&&expanded.type==='date'&&expanded.i===i)h+=drillDateHtml(i,d,keys);
+    if(expanded&&expanded.type==='date'&&expanded.i===i)h+=drillDateHtml(i,p,keys);
   });
-  $('#flowNote').innerHTML=hist?'净申购为全市场股票型 ETF 单只份额法重算（沪 SCALE÷净值、深份额；差分×当日净值），覆盖 '+HIST.dates[0]+' ~ '+HIST.dates[HIST.dates.length-1]+' 共 '+HIST.dates.length+' 个交易日；11-27 与定稿口径一致。份额增减/存量/纳入指数仅原表 59 天有值，其余显示 —。':'历史数据未就绪。';
+  $('#flowNote').innerHTML='净申购为全市场股票型 ETF 单只份额法重算（沪 SCALE÷净值、深份额；差分×当日净值），覆盖 '+HIST.dates[0]+' ~ '+HIST.dates[HIST.dates.length-1]+' 共 '+HIST.dates.length+' 个交易日；11-27 与定稿口径一致。份额增减/存量/纳入指数仅原表 59 天有值，其余显示 —。当前：'+rangeName()+' · '+granName()+'粒度（周/月净申购为区间求和，份额类取周期末交易日）。';
   return h+'</tbody>';
 }
-function drillDateHtml(i,d,keys){
-  let h='<tr class="subrow"><td colspan="'+(6+keys.length)+'"><div class="subin"><div class="subhint">截至 '+d+' · 按当前选中类别同时下钻　<span style="color:#2563eb">点指数名称继续下钻</span></div>';
+function drillDateHtml(i,p,keys){
+  const d=p.latest;
+  let h='<tr class="subrow"><td colspan="'+(6+keys.length)+'"><div class="subin"><div class="subhint">截至 '+d+' · 按当前选中类别同时下钻 · 点指数名称继续下钻</div>';
   keys.forEach(k=>{
-    h+='<div class="subsec"><h4><span class="dot" style="background:'+COLOR[k]+'"></span> '+SHORT[k]+' · 当日净申购 <b class="'+cls(TOTAL[k])+'">'+f(TOTAL[k])+'</b> 亿</h4>';
-    h+='<table><thead><tr>'+[SHORT[k],'当日净申购(亿元)','当日份额增减(亿份)','份额存量(亿份)','ETF数','类别'].map(x=>'<th data-sk="1">'+x+'</th>').join('')+'</tr></thead><tbody>';
+    const net=netOf(k,p);
+    h+='<div class="subsec"><h4><span class="dot" style="background:'+COLOR[k]+'"></span> '+SHORT[k]+' · '+(gran==='day'?'当日':'周期')+'净申购 <b class="'+cls(net)+'">'+f(net)+'</b> 亿</h4>';
+    h+='<table><thead><tr>'+[SHORT[k],(gran==='day'?'当日':'周期')+'净申购(亿元)','当日份额增减(亿份)','份额存量(亿份)','ETF数','类别'].map(x=>'<th data-sk="1">'+x+'</th>').join('')+'</tr></thead><tbody>';
     const rows=k==='bidx'?ORIG.idx.rows.map(r=>({name:r[0],net:r[1],share:r[2],hold:r[3],n:r[4]}))
       :k==='theme'?TH.map(x=>({name:x[0],net:x[3],share:null,hold:x[2],n:x[1]}))
       :[{name:'策略分类',net:STRAT.net,share:null,hold:HOLD.strategy,n:STRAT.n}];
     rows.forEach(x=>{
       h+='<tr class="idxrow" data-name="'+x.name+'" data-k="'+k+'"><td class="l"><span class="lk">'+x.name+'</span></td><td class="'+cls(x.net)+'">'+f(x.net)+'</td>'+
         '<td>'+(x.share===null?'—':f(x.share))+'</td><td>'+(typeof x.hold==='number'?x.hold.toFixed(2):x.hold)+'</td><td>'+x.n+'</td><td>'+pill(k)+'</td></tr>';
-      if(expandedIdx===k+'|'+x.name)h+=drillIdxHtml(x.name,x.net,k);
+      if(expandedIdx===k+'|'+x.name)h+=drillIdxHtml(x.name,x.net,k,true,p);
     });
     h+='</tbody></table></div>';
   });
   return h+'</div></td></tr>';
 }
-function drillIdxHtml(name,net,k){
-  const st2=subTab[k+'|'+name]||'d';
-  let h='<tr class="subrow"><td colspan="6"><div class="subin"><div class="subtabs">'+
+function drillIdxHtml(name,net,k,fromDate,p){
+  const st2=fromDate?'e':(subTab[k+'|'+name]||'d');
+  let h='<tr class="subrow"><td colspan="6"><div class="subin">';
+  if(fromDate)h+='<div class="subhint" style="text-align:left">'+name+' · 按 ETF 明细</div>';
+  else h+='<div class="subtabs">'+
     '<button data-sub="d" class="'+(st2==='d'?'on':'')+'" data-name="'+k+'|'+name+'">按日期</button>'+
-    '<button data-sub="e" class="'+(st2==='e'?'on':'')+'" data-name="'+k+'|'+name+'">按ETF</button></div>'+
-    '<table><thead><tr>'+(st2==='d'?['日期','当日净申购(亿元)','当日份额增减(亿份)','份额存量(亿份)']:
+    '<button data-sub="e" class="'+(st2==='e'?'on':'')+'" data-name="'+k+'|'+name+'">按ETF</button></div>';
+  h+='<table><thead><tr>'+(st2==='d'?['日期','当日净申购(亿元)','当日份额增减(亿份)','份额存量(亿份)']:
       ['ETF','当日净申购(亿元)','当日份额增减(亿份)','份额存量(亿份)','所属'+SHORT[k],'类别']).map(x=>'<th data-sk="1">'+x+'</th>').join('')+'</tr></thead><tbody>';
   if(st2==='d'){
     ORIG.date.rows.slice(0,12).forEach((r,i)=>{const v=i===0?net:r[1];h+='<tr><td class="l">'+r[0]+'</td><td class="'+cls(v)+'">'+f(v)+'</td><td class="'+cls(r[2])+'">'+f(r[2])+'</td><td>'+r[3]+'</td></tr>';});
@@ -272,7 +325,6 @@ function drillIdxHtml(name,net,k){
   }
   return h+'</tbody></table></div></td></tr>';
 }
-
 /* 按 ETF：表头居中、内容中文左对齐、指数名蓝色、列宽紧凑 */
 function renderEtf(){
   const keys=activeKeys();
@@ -302,9 +354,9 @@ function renderEtf(){
   return h+'</tbody>';
 }
 function drillEtfHtml(r){
-  let h='<tr class="subrow"><td colspan="15"><div class="subin"><div class="subhint">'+r.name+'（'+r.code+'） · 逐日明细</div>'+
+  let h='<tr class="subrow"><td colspan="15"><div class="subin"><div class="subhint" style="text-align:left">'+r.name+'（'+r.code+'） · 逐日明细</div>'+
     '<table><thead><tr>'+ORIG.etfDays.head[0].map(x=>'<th>'+x.t+'</th>').join('')+'</tr></thead><tbody>';
-  ORIG.etfDays.rows.slice(0,20).forEach(x=>h+='<tr>'+x.map((v,j)=>'<td class="'+(j===0?'l':cls(v))+'">'+v+'</td>').join('')+'</tr>');
+  ORIG.etfDays.rows.slice(1,21).forEach(x=>h+='<tr>'+x.map((v,j)=>'<td class="'+(j===0?'l':cls(v))+'">'+v+'</td>').join('')+'</tr>');
   return h+'</tbody></table></div></td></tr>';
 }
 
@@ -360,14 +412,13 @@ $$('.ircur input').forEach(x=>x.onchange=()=>renderChg());
 const RED=['#d81e3f','#e8637a','#f4a3b0'], GREEN=['#0f9d58','#5fbf8a','#a4ddb9'];
 function chart(){
   const keys=activeKeys(),all=isAll(),W=1000,H=220,L=48,R=16,T=14,B=34,zero=112;
-  const alldates=HIST.dates&&HIST.dates.length?HIST.dates:ORIG.date.rows.map(r=>r[0]);
-  const recent=alldates.slice(-6);
-  const CDATE=recent.map(d=>d.slice(5));
-  const dates=recent;
+  const ps=periods().slice(0,6).reverse();
+  const CDATE=ps.map(p=>gran==='day'?p.label.slice(5):p.label);
+  const dates=ps;
   const multi=keys.length>1;
-  const data=dates.map((d,idx)=>{
-    if(!multi){const v=histNet(keys[0],d);return v!==undefined?v:(idx===dates.length-1?TOTAL[keys[0]]:0);}
-    return keys.map(k=>{const v=histNet(k,d);return v!==undefined?v:(idx===dates.length-1?TOTAL[k]:0);});
+  const data=dates.map((p,idx)=>{
+    if(!multi){const v=netOf(keys[0],p);return v!==undefined?v:(idx===dates.length-1?TOTAL[keys[0]]:0);}
+    return keys.map(k=>{const v=netOf(k,p);return v!==undefined?v:(idx===dates.length-1?TOTAL[k]:0);});
   });
   let maxv=0;
   data.forEach(x=>{if(Array.isArray(x)){let p=0,n=0;x.forEach(v=>{v>=0?p+=v:n+=v});maxv=Math.max(maxv,p,Math.abs(n));}else maxv=Math.max(maxv,Math.abs(x));});
@@ -395,10 +446,10 @@ function chart(){
     g+='<text x="'+(bx+bw/2)+'" y="'+(H-12)+'" text-anchor="middle" font-size="10.5" fill="#94a3b8">'+CDATE[i]+'</text>';
   });
   $('#csvg').innerHTML=g;
-  $('#cht').textContent=(all?'全部股票型 ETF':keys.map(k=>KN[k]).join(' + '))+' 净资金流';
+  $('#cht').textContent=(all?'全部股票型 ETF':keys.map(k=>KN[k]).join(' + '))+' 净申购';
   let lg='';
   if(multi)lg='<div class="legend">'+keys.map((k,i)=>'<span><i style="background:'+RED[i%3]+'"></i>'+SHORT[k]+'</span>').join('')+'<span>（净流出为对应深浅绿）</span></div>';
-  $('#cdesc').innerHTML=(all?'柱顶＝股票型合计 ＝ 宽基 + 行业 + 策略。':'柱顶＝当前选中类别合计。')+(multi?'按类别分段着色，深浅区分；':'')+(HIST.dates&&HIST.dates.length?'历史为全市场重算，11-27 与定稿一致。':'历史未重算。')+lg;
+  $('#cdesc').innerHTML=(all?'柱顶＝股票型合计 ＝ 宽基 + 行业 + 策略。':'柱顶＝当前选中类别合计。')+(multi?'按类别分段着色，深浅区分；':'')+'时间段 '+rangeName()+' · '+granName()+'粒度（周/月为区间净申购求和）。'+(HIST.dates&&HIST.dates.length?'历史为全市场重算，11-27 与定稿一致。':'历史未重算。')+lg;
 }
 
 /* 事件 */
