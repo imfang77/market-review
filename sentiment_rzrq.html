@@ -213,7 +213,7 @@ body.sb-etf #sbEtfHd{padding:8px 28px 2px}
 <div id="lsOv"><div id="lsWrap"></div><button id="lsClose" type="button">✕ 退出横屏</button></div>
 <div id="sbViewEtf" class="sb-hidden"><div class="etfchart-sec">
 <div class="etfchart-hd">
-<div class="etfchart-title">宽基 ETF 资金流（全市场净申购）</div>
+<div class="etfchart-title">宽基 ETF 净申购（全市场净申购）</div>
 <div class="etfchart-sub">12 宽基指数 · 30 只头部 ETF · 全历史逐日净申购（口径与数据说明见图表下方）</div>
 </div>
 <div class="rngbar" id="eRng"><div class="rngrow rngrow2"><span class="lbl rng-lbl">时间段：</span>
@@ -750,7 +750,7 @@ function lsRect(el){var r=el.getBoundingClientRect(),k=lsK(),SW=window.innerWidt
   window.addEventListener('resize',function(){if(OV.classList.contains('on'))layout();});
 })();
 </script>
-<script>/* ===== 宽基ETF净资金流 图表（主图资金 + 副图指数走势 + 图3 ETF走势） =====
+<script>/* ===== 宽基ETF净申购 图表（主图资金 + 副图指数走势 + 图3 ETF走势） =====
    语义（11-26 晚定稿）：
    主图 = 蓝线全市场份额存量（左轴·亿份·前复权）+ 红绿柱当日净申购（右轴·亿元）。
        默认不显示任何指数；选中指数后才叠加该指数累计净申购曲线（右侧第二轴·亿元·同指数同色）。
