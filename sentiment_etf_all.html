@@ -97,7 +97,7 @@ tbody tr:hover{background:#fafbfd}
 .subin table{width:auto;background:#fff;border:1px solid #e6ebf2;border-radius:5px}
 .subin table th,.subin table td{padding:4px 9px}
 .subsec{margin-bottom:12px}
-.subsec h4{font-size:11.5px;margin:0 0 4px;color:#334155}
+.subsec h4{font-size:11.5px;margin:0 0 4px;color:#334155;text-align:left;font-weight:600}
 .note{font-size:11.5px;color:#8a94a6;line-height:1.7;padding:10px 2px 0}
 .ircur{display:flex;align-items:center;gap:14px;padding:9px 0;font-size:12px;color:#475569;flex-wrap:wrap}
 .ircur label{cursor:pointer;display:flex;align-items:center;gap:4px}
@@ -121,8 +121,9 @@ tbody tr:hover{background:#fafbfd}
 .subrow .subin{border-left:3px solid #2563eb;margin-left:6px;background:#f8fbff}
 .oth .subin{border-left-color:#7c3aed}
 @media(max-width:720px){
-  .subhint,.subsec h4,[data-fromdate]{font-size:11px!important;line-height:1.5}
+  .subhint,.subsec h4,[data-fromdate]{font-size:10.5px!important;line-height:1.45;font-weight:400!important}
   .subsec h4{text-align:left!important}
+  #csvg text.axttl{font-size:22px!important}
   .subrow .subin{margin-left:0;padding:7px 8px}
   .subin table{display:block;width:100%!important;overflow:auto}
   #csvg text{font-size:21px!important}
@@ -130,7 +131,7 @@ tbody tr:hover{background:#fafbfd}
 </style></head><body><div class="wrap">
 <div class="hd"><h1>全部股票型 ETF 净申购</h1><span class="sub">调试中 · 三层分类（宽基 / 行业主题 / 策略）· 一级市场净申购</span></div>
 <div class="panel"><div class="eqbar" id="selbar"></div></div>
-<div class="chartbox"><div class="rngbar" id="rngbar"><span class="lbl">时间段：</span><button class="rng-btn" data-range="m1">1个月</button><button class="rng-btn active" data-range="m3">3个月</button><button class="rng-btn" data-range="m6">半年</button><button class="rng-btn" data-range="ytd">今年以来</button><button class="rng-btn" data-range="all">全部</button></div><div class="ctitle" id="cht"></div><svg id="csvg" viewBox="0 0 1000 330"></svg><div class="cdesc" id="cdesc"></div></div>
+<div class="chartbox"><div class="rngbar" id="rngbar"><span class="lbl">时间段：</span><button class="rng-btn" data-range="m1">1个月</button><button class="rng-btn active" data-range="m3">3个月</button><button class="rng-btn" data-range="m6">半年</button><button class="rng-btn" data-range="ytd">今年以来</button><button class="rng-btn" data-range="all">全部</button></div><svg id="csvg" viewBox="0 0 1000 330"></svg><div class="cdesc" id="cdesc"></div></div>
 <div class="ctip" id="ctip"></div>
 <div class="grans"><span>统计粒度（同时作用于上方图表与下方表格）：</span><span id="grans"></span><span class="catsep"></span><span class="lbl" style="margin-right:0">显示类别</span><span class="cats" id="hint"></span></div>
 <div class="tabs"><button data-tab="flow" class="on">净申购明细</button><button data-tab="chg" id="chgTab">指数涨跌汇总</button></div>
@@ -178,7 +179,7 @@ const KN={bidx:'宽基指数',theme:'行业主题',strat:'策略分类',all:'全
 const SHORT={bidx:'宽基指数',theme:'行业主题',strat:'策略分类'};
 const TOTAL={bidx:TIER.broad,theme:TIER.theme,strat:TIER.strategy,all:TIER.all};
 const COLOR={bidx:'#2563eb',theme:'#7c3aed',strat:'#15803d'};
-let sel=new Set(['bidx']), gran='day', range='m3', tab='flow', dim='date', expanded=null, subTab={}, expandedIdx=null, sort={k:-1,dir:-1};
+let sel=new Set(['bidx','theme','strat']), gran='day', range='m3', tab='flow', dim='date', expanded=null, subTab={}, expandedIdx=null, sort={k:-1,dir:-1};
 let cusFrom=null,cusTo=null,cusOn=false;
 
 function f(v){if(v===null||v===undefined||v==='')return '—';const n=Number(String(v).replace(/[+−,]/g,m=>m==='−'?'-':''));if(isNaN(n))return v;return (n>0?'+':n<0?'−':'')+Math.abs(n).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})}
@@ -496,7 +497,8 @@ $$('.ircur input').forEach(x=>x.onchange=()=>renderChg());
 const RED=['#d81e3f','#e8637a','#f4a3b0'], GREEN=['#0f9d58','#5fbf8a','#a4ddb9'];
 let CHART_PTS=[];
 function chart(){
-  const keys=activeKeys(),all=isAll(),W=1000,H=330,L=68,R=76,T=26,B=48;
+  const keys=activeKeys(),all=isAll(),W=1000,H=330,L=68,R=76,T=58,B=48;
+  const catTxt=keys.map(k=>({bidx:'宽基',theme:'行业',strat:'策略'})[k]).join('+');
   const zero=T+(H-T-B)/2, plotB=H-B;
   const ps=periods().slice(0,6).reverse();
   const CDATE=ps.map(p=>gran==='day'?p.label.slice(5):p.label);
@@ -522,8 +524,8 @@ function chart(){
     g+='<text x="'+(L-8)+'" y="'+(y+4.5).toFixed(1)+'" text-anchor="end" font-size="12.5" fill="#2f6bff">'+Math.round(lv).toLocaleString()+'</text>';
     g+='<text x="'+(W-R+8)+'" y="'+(y+4.5).toFixed(1)+'" text-anchor="start" font-size="12.5" fill="#94a3b8">'+Math.round(rv).toLocaleString()+'</text>';
   }
-  g+='<text x="8" y="'+(T-8)+'" font-size="12.5" font-weight="600" fill="#2f6bff">全市场份额存量（亿份·宽基+行业+策略）</text>';
-  g+='<text x="'+(W-R+8)+'" y="'+(T-8)+'" font-size="12.5" font-weight="600" fill="#64748b">净申购（亿元）</text>';
+  g+='<text class="axttl" x="8" y="16" font-size="12.5" font-weight="600" fill="#2f6bff">全市场份额存量（亿份·'+catTxt+'）</text>';
+  g+='<text class="axttl" x="'+(W-2)+'" y="16" text-anchor="end" font-size="12.5" font-weight="600" fill="#64748b">净申购（亿元·'+catTxt+'）</text>';
   // 蓝线：全市场份额存量（所有 ETF 汇总，与是否选中类别无关）
   const pts=[];
   stocks.forEach((v,i)=>{if(v!==null)pts.push([L+26+i*gap+bw/2,sy(v)]);});
@@ -545,7 +547,6 @@ function chart(){
     g+='<text x="'+cx.toFixed(1)+'" y="'+(H-14)+'" text-anchor="middle" font-size="12.5" fill="#64748b">'+CDATE[i]+'</text>';
   });
   $('#csvg').innerHTML=g;
-  $('#cht').textContent='全部股票 ETF 净申购';
   const lg='<div class="legend"><span><i style="background:#2f6bff"></i>全市场份额存量（亿份·左轴）</span>'+keys.map((k,i)=>'<span><i style="background:'+RED[i%3]+'"></i>'+SHORT[k]+'（亿元·右轴）</span>').join('')+'</div>';
   $('#cdesc').innerHTML='蓝线＝全市场 1,401 只股票型 ETF 份额存量（宽基+行业主题+策略汇总，左轴）；红绿柱＝当日净申购（右轴，按类别分段，红涨绿跌）。时间段 '+rangeName()+' · '+granName()+'粒度（周/月净申购为求和、蓝线取周期末）。历史为全市场重算，11-27 与定稿一致。'+lg;
 }

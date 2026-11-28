@@ -1128,7 +1128,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
 })();
 
 
-/* ===== 宽基ETF净资金流 标签页（表格部分；图表已移到主图下方由 _build_final_v2.py 生成） ===== */
+/* ===== 宽基ETF净申购 标签页（表格部分；图表已移到主图下方由 _build_final_v2.py 生成） ===== */
 (function(){
   if (typeof RZQ === 'undefined') return;
   var tabs = document.querySelector('.tbltabs');
@@ -1198,7 +1198,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   }
 
   var eBtn = document.createElement('button');
-  eBtn.className='tbtn'; eBtn.dataset.t='e'; eBtn.textContent='宽基ETF净资金流';
+  eBtn.className='tbtn'; eBtn.dataset.t='e'; eBtn.textContent='宽基ETF净申购';
   tabs.insertBefore(eBtn, uBtn);
 
   var panel = document.createElement('div');
@@ -1636,7 +1636,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
         自定义区间早于内联起点时按需 fetch _idx_close_2012.json 全历史。 */
 (function(){
   if (typeof RZQ === 'undefined') return;
-  /* 本表挂在「宽基ETF净资金流」面板内部，作为该面板的二级标签，
+  /* 本表挂在「宽基ETF净申购」面板内部，作为该面板的二级标签，
      不再占用顶层标签栏（顶层 m/s/e/u 在手机端换行后会被误读成融资余额/涨跌家数那一组）。 */
   var panelE = document.getElementById('tpanel-e');
   if (!panelE) return;                  /* 依赖宽基ETF标签页先注入 */
@@ -1736,10 +1736,10 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     var st = document.createElement('style'); st.id = 'ir-tab-css'; st.textContent = css; document.head.appendChild(st);
   }
 
-  /* ---------- 二级标签（宽基ETF 面板内部：资金流明细 / 宽基指数涨跌汇总） ---------- */
+  /* ---------- 二级标签（宽基ETF 面板内部：净申购明细 / 宽基指数涨跌汇总） ---------- */
   var subnav = document.createElement('div');
   subnav.className = 'ir-subtabs'; subnav.id = 'irSubtabs';
-  subnav.innerHTML = '<button type="button" data-v="flow" class="on">资金流明细</button>'
+  subnav.innerHTML = '<button type="button" data-v="flow" class="on">净申购明细</button>'
                    + '<button type="button" data-v="ret">宽基指数涨跌汇总</button>';
   panelE.insertBefore(subnav, panelE.firstChild);
   /* 既有内容（整理维度/表体/说明）打标记，切到涨跌汇总时整组隐藏 */
@@ -2066,7 +2066,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   }
   initDates();
 
-  /* 二级标签切换：资金流明细 ↔ 各指数涨跌汇总（首次切入才渲染） */
+  /* 二级标签切换：净申购明细 ↔ 各指数涨跌汇总（首次切入才渲染） */
   var subBtns = Array.prototype.slice.call(subnav.querySelectorAll('button'));
   var rendered = false;
   function setView(v){
@@ -2078,7 +2078,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   subBtns.forEach(function (b) {
     b.addEventListener('click', function () { setView(b.dataset.v); });
   });
-  /* 从其它顶层标签切回「宽基ETF净资金流」时回到资金流明细，避免误以为进了别的表 */
+  /* 从其它顶层标签切回「宽基ETF净申购」时回到净申购明细，避免误以为进了别的表 */
   var eTop = document.querySelector('.tbltabs [data-t="e"]');
   if (eTop) eTop.addEventListener('click', function () { setView('flow'); });
 
