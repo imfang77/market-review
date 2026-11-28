@@ -1238,7 +1238,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   var B=null, BD=[], BIDX={}, BOTH={}, BE=[], EMAP={}, BING=false, OTHNAMES=[];
   var K13=["沪深300","中证A500","上证50","中证500","中证1000","科创50","创业板指","中证2000","科创100","创业板50","上证指数","深证成指","科创综指"];
   var OTHN='其他宽基';
-  var TOT={net:[],dsh:[],sh:[]};
+  var TOT={net:[],dsh:[],sh:[]}, TOTCNT=0;
   var moreN={};        /* 其他宽基组已展开只数 */
 
   function fmtAxis(v){ if(v==null) return '—'; var a=Math.abs(v); if(a>=10000) return (v/10000).toFixed(2)+'万亿'; return v.toFixed(2); }
@@ -1347,6 +1347,33 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     });
   }
 
+  /* ETF 明细层（384 只 × 218 天，约 1.9MB）只在「按ETF」维度与 ETF 下钻时才拉，避免首屏卡住 */
+  var BEING=false, BEFAIL=false;
+  function ensureEtf(cb){
+    if(BE && BE.length){ if(cb) cb(); return; }
+    if(BEING){ return; }
+    if(BEFAIL){ if(cb) cb(); return; }
+    BEING=true;
+    RZQ.load('_etf_broad14_etf.json').then(function(d){
+      BEING=false;
+      if(!d||!d.etf) throw new Error('明细格式异常');
+      BE=d.etf; EMAP={};
+      BE.forEach(function(x){ EMAP[x.c]=x; });
+      if(cb){ cb(); return; }
+      /* 加载前就在等下钻的用户：自动把已展开的 ETF 子表补上，不必再点一次 */
+      var sub=tbody.querySelector('tr.etf-sub[data-lv="etf"]');
+      if(sub && sub.previousElementSibling && sub.previousElementSibling.dataset.name){
+        var p=sub.previousElementSibling, nm=p.dataset.name;
+        var sl=slices(), k=sl.length-1, pk=nearestK(p);
+        if(pk!=null) k=pk;
+        killSub(p);
+        addSub(p,'etf',etfRowsHtml(nm,sl,k,gtxt(gran())));
+      } else {
+        renderTable();
+      }
+    }).catch(function(){ BEING=false; BEFAIL=true; if(cb) cb(); else renderTable(); });
+  }
+
   function ensure(){
     if(B){ renderTable(); return; }
     if(BING) return;
@@ -1354,12 +1381,12 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     tbody.innerHTML='<tr><td colspan="5" class="etf-msg">宽基 ETF 全市场数据加载中…</td></tr>';
     RZQ.load('_etf_broad14.json').then(function(d){
       if(!d||!d.dates||!d.idx) throw new Error('数据格式异常');
-      B=d; BD=d.dates; BIDX=d.idx; BOTH=d.oth||{}; BE=d.etf||[];
+      B=d; BD=d.dates; BIDX=d.idx; BOTH=d.oth||{};
       K13=(d.names||K13).filter(function(n){ return n!==OTHN; });
       OTHNAMES=Object.keys(BOTH);
-      EMAP={};
-      BE.forEach(function(x){ EMAP[x.c]=x; });
       /* 全市场 14 组合计 */
+      TOTCNT=0;
+      (d.names||[]).forEach(function(n){ var o=BIDX[n]; if(o&&o.cnt) TOTCNT+=o.cnt; });
       TOT={net:[],dsh:[],sh:[]};
       for(var i=0;i<BD.length;i++){
         var tn=0, td=0, ts=0;
@@ -1404,7 +1431,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       rows.push('<tr class="drow" data-k="'+k+'"><td>'+BD[sl[k].gi]+'</td>'
         +'<td class="'+cls2(net[k])+'">'+sign2(net[k])+'</td>'
         +'<td class="'+cls2(dsh[k])+'">'+sign2(dsh[k])+'</td>'
-        +'<td>'+fmtSh(shm[k])+'</td><td>'+BE.length+'</td></tr>');
+        +'<td>'+fmtSh(shm[k])+'</td><td>'+TOTCNT+'</td></tr>');
     }
     tbody.innerHTML=rows.join('');
     resetSort();
@@ -1432,6 +1459,12 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   /* ③ 按ETF：13 个指数的成分 ETF 全部列出 + 「其他」组（默认前 20，可继续加载） */
   function renderEtfDim(){
     ensureStats(); ensureCloses();
+    if(!BE.length){
+      headOf('<th>ETF（名称 / 代码）</th><th>净申购</th><th>份额增减</th><th>份额存量</th>');
+      tbody.innerHTML='<tr><td colspan="5" class="etf-msg">'+(BEFAIL?'ETF 明细数据暂未就绪，请稍后重试':'ETF 明细加载中…（384 只逐日数据）')+'</td></tr>';
+      ensureEtf();
+      return;
+    }
     var sl=slices(), k=sl.length-1, g=gran(), gt=gtxt(g);
     headOf('<th>ETF（名称 / 代码）</th><th><span class="eth-full">'+gt+'净申购(亿元)</span><span class="eth-mini">'+gt+'(亿元)</span></th><th><span class="eth-full">'+gt+'份额增减(亿份)</span><span class="eth-mini">份额(亿份)</span></th><th><span class="eth-full">份额存量(亿份)</span><span class="eth-mini">存量(亿份)</span></th>'
       + '<th>当日</th><th>5日</th><th>10日</th><th>20日</th><th>60日</th><th>120日</th><th>250日</th>'
@@ -1515,6 +1548,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     return h+'</tbody></table>';
   }
   function etfRowsHtml(name, sl, k, gt){
+    if(!BE.length){ ensureEtf(); return '<div class="etf-msg">成分 ETF 明细加载中…</div>'; }
     var list=BE.filter(function(x){ return (x.i||'')===name; });
     list.sort(function(a,b){ var an=agg(a.net,sl,true)[k], bn=agg(b.net,sl,true)[k]; return (bn==null?-Infinity:bn)-(an==null?-Infinity:an); });
     var h='<table class="etfmini"><thead><tr><th>ETF（名称 / 代码）</th><th>'+gt+'净申购(亿元)</th><th>'+gt+'份额增减(亿份)</th><th>份额存量(亿份)</th><th>当日成交(亿)</th><th>规模·市值(亿)</th></tr></thead><tbody>';
@@ -1603,7 +1637,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   /* 行点击：日期行 / 14 组指数行 / 其他宽基 10 指数行 / ETF 行 */
   tbody.addEventListener('click', function(e){
     var g=e.target.closest('tr.grpoth');
-    if(g){ moreN[dim]=(moreN[dim]||0)?0:20; renderTable(); return; }
+    if(g){ moreN[dim]=(moreN[dim]||0)?0:20; ensureEtf(); renderTable(); return; }
     var b=e.target.closest('button.morebtn');
     if(b){
       var more=parseInt(b.dataset.more,10);
