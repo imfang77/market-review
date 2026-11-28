@@ -121,7 +121,9 @@ tbody tr:hover{background:#fafbfd}
 .subrow .subin{border-left:3px solid #2563eb;margin-left:6px;background:#f8fbff}
 .oth .subin{border-left-color:#7c3aed}
 @media(max-width:720px){
-  .subhint,.subsec h4,[data-fromdate]{font-size:10.5px!important;line-height:1.45;font-weight:400!important}
+  .subhint,.subsec h4,[data-fromdate]{font-size:11px!important;line-height:1.45;font-weight:400!important}
+  .subin table th,.subin table td{font-size:11px!important}
+  .subrow .subin{width:calc(100vw - 38px);max-width:calc(100vw - 38px);white-space:normal;overflow-wrap:anywhere}
   .subsec h4{text-align:left!important}
   #csvg text.axttl{font-size:22px!important}
   .subrow .subin{margin-left:0;padding:7px 8px}
@@ -250,7 +252,7 @@ function granName(){return ({day:'日',week:'周',month:'月'})[gran]||gran;}
 function rangeDates(){
   const ds=HIST.dates&&HIST.dates.length?HIST.dates.slice():ORIG.date.rows.map(r=>r[0]);
   if(!ds.length||range==='all')return ds;
-  const last=ds[ds.length-1], dt=new Date(last+'T00:00:00');
+  const last=ds[ds.length-1]; let dt=new Date(last+'T00:00:00');
   if(range==='m1')dt.setMonth(dt.getMonth()-1);
   else if(range==='m3')dt.setMonth(dt.getMonth()-3);
   else if(range==='m6')dt.setMonth(dt.getMonth()-6);
@@ -493,6 +495,14 @@ $('#irAdd').onclick=()=>{
 $('#irClear').onclick=()=>{cusFrom=cusTo=null;cusOn=false;$('#irFrom').value='';$('#irTo').value='';renderChg();};
 $$('.ircur input').forEach(x=>x.onchange=()=>renderChg());
 
+/* 图表抽样：在所选时间段内均匀取最多 6 个周期，避免 m1/m3/m6/ytd 都只显示最后 6 天 */
+function chartPeriods(){
+  const ps=periods();              // 新→旧
+  if(ps.length<=6)return ps.slice().reverse();
+  const idx=[];
+  for(let i=0;i<6;i++)idx.push(Math.round(i*(ps.length-1)/5));
+  return idx.map(i=>ps[i]).reverse();   // 旧→新，含区间首尾
+}
 /* 图表：多类别按类别配色，净流入深浅红、净流出深浅绿 */
 const RED=['#d81e3f','#e8637a','#f4a3b0'], GREEN=['#0f9d58','#5fbf8a','#a4ddb9'];
 let CHART_PTS=[];
@@ -500,7 +510,7 @@ function chart(){
   const keys=activeKeys(),all=isAll(),W=1000,H=330,L=68,R=76,T=58,B=48;
   const catTxt=keys.map(k=>({bidx:'宽基',theme:'行业',strat:'策略'})[k]).join('+');
   const zero=T+(H-T-B)/2, plotB=H-B;
-  const ps=periods().slice(0,6).reverse();
+  const ps=chartPeriods();
   const CDATE=ps.map(p=>gran==='day'?p.label.slice(5):p.label);
   const multi=keys.length>1;
   const vals=ps.map((p,idx)=>{
@@ -524,8 +534,9 @@ function chart(){
     g+='<text x="'+(L-8)+'" y="'+(y+4.5).toFixed(1)+'" text-anchor="end" font-size="12.5" fill="#2f6bff">'+Math.round(lv).toLocaleString()+'</text>';
     g+='<text x="'+(W-R+8)+'" y="'+(y+4.5).toFixed(1)+'" text-anchor="start" font-size="12.5" fill="#94a3b8">'+Math.round(rv).toLocaleString()+'</text>';
   }
-  g+='<text class="axttl" x="8" y="16" font-size="12.5" font-weight="600" fill="#2f6bff">全市场份额存量（亿份·'+catTxt+'）</text>';
-  g+='<text class="axttl" x="'+(W-2)+'" y="16" text-anchor="end" font-size="12.5" font-weight="600" fill="#64748b">净申购（亿元·'+catTxt+'）</text>';
+  const axisY=18;
+  g+='<text class="axttl" x="8" y="'+axisY+'" dominant-baseline="middle" font-size="12.5" font-weight="600" fill="#2f6bff">全市场份额存量（亿份·'+catTxt+'）</text>';
+  g+='<text class="axttl" x="'+(W-2)+'" y="'+axisY+'" dominant-baseline="middle" text-anchor="end" font-size="12.5" font-weight="600" fill="#64748b">净申购（亿元·'+catTxt+'）</text>';
   // 蓝线：全市场份额存量（所有 ETF 汇总，与是否选中类别无关）
   const pts=[];
   stocks.forEach((v,i)=>{if(v!==null)pts.push([L+26+i*gap+bw/2,sy(v)]);});
@@ -543,12 +554,12 @@ function chart(){
       v>=0?pos+=h:neg+=h;
     });
     const tot=x.reduce((a,b)=>a+b,0);
-    g+='<text x="'+cx.toFixed(1)+'" y="'+(tot>=0?Math.max(zero-pos-7,T+12):zero+neg+19).toFixed(1)+'" text-anchor="middle" font-size="12.5" font-weight="700" fill="'+(tot>=0?'#d81e3f':'#0f9d58')+'">'+f(tot)+'</text>';
+    g+='<text x="'+cx.toFixed(1)+'" y="'+(tot>=0?Math.max(zero-pos-8,30):zero+neg+19).toFixed(1)+'" text-anchor="middle" font-size="12.5" font-weight="700" fill="'+(tot>=0?'#d81e3f':'#0f9d58')+'">'+f(tot)+'</text>';
     g+='<text x="'+cx.toFixed(1)+'" y="'+(H-14)+'" text-anchor="middle" font-size="12.5" fill="#64748b">'+CDATE[i]+'</text>';
   });
   $('#csvg').innerHTML=g;
   const lg='<div class="legend"><span><i style="background:#2f6bff"></i>全市场份额存量（亿份·左轴）</span>'+keys.map((k,i)=>'<span><i style="background:'+RED[i%3]+'"></i>'+SHORT[k]+'（亿元·右轴）</span>').join('')+'</div>';
-  $('#cdesc').innerHTML='蓝线＝全市场 1,401 只股票型 ETF 份额存量（宽基+行业主题+策略汇总，左轴）；红绿柱＝当日净申购（右轴，按类别分段，红涨绿跌）。时间段 '+rangeName()+' · '+granName()+'粒度（周/月净申购为求和、蓝线取周期末）。历史为全市场重算，11-27 与定稿一致。'+lg;
+  $('#cdesc').innerHTML='蓝线＝全市场 1,401 只股票型 ETF 份额存量（宽基+行业主题+策略汇总，左轴）；红绿柱＝当日净申购（右轴，按类别分段，红涨绿跌）。时间段 '+rangeName()+' · '+granName()+'粒度（区间内均匀抽样最多 6 个周期展示；周/月净申购为求和、蓝线取周期末）。历史为全市场重算，11-27 与定稿一致。'+lg;
 }
 /* 悬浮框跟随鼠标 */
 $('#csvg').addEventListener('mousemove',e=>{
