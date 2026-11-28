@@ -1247,6 +1247,15 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   function fmtSh(v){ if(v==null) return '—'; return v.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   function amt2(v){ return v==null?'—':v.toFixed(2); }
   function sAt(a,i){ return (a&&i>=0&&i<a.length)?a[i]:null; }
+  /* ETF 明细层不存 dsh（省 25% 体积）→ 由份额存量差分还原，与生成端口径一致（含 0 钳位） */
+  function dshOf(x){
+    if(x._dsh) return x._dsh;
+    var a=[], p=x.sh||[];
+    for(var i=0;i<p.length;i++){
+      a.push((i && p[i]!=null && p[i-1]!=null) ? Math.round((p[i]-p[i-1])*10000)/10000 : null);
+    }
+    x._dsh=a; return a;
+  }
 
   /* ===== ETF 当日成交额 / 总市值(规模) 快照：_etf_stats.json（腾讯行情，几KB，仅 30 只头部有值） ===== */
   var STATS=null, STATSING=false;
@@ -1478,7 +1487,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       (byIdx[key]||(byIdx[key]=[])).push(x);
     });
     function rowOf(x){
-      var net=agg(x.net,sl,true)[k], ds=agg(x.dsh,sl,true)[k], ss=agg(x.sh,sl,false)[k];
+      var net=agg(x.net,sl,true)[k], ds=agg(dshOf(x),sl,true)[k], ss=agg(x.sh,sl,false)[k];
       var chg=CHGDAYS.map(function(n){ return n>=250?chgOf(x.c,n):(chgB(x.c,n)!=null?chgB(x.c,n):chgOf(x.c,n)); });
       return '<tr class="etfRow" data-code="'+x.c+'"><td class="nm"><span class="nmt">'+x.n+'</span><span class="subcode">'+x.c+'</span></td>'
         +'<td class="'+cls2(net)+'">'+sign2(net)+'</td><td class="'+cls2(ds)+'">'+sign2(ds)+'</td><td>'+fmtSh(ss)+'</td>'
@@ -1553,7 +1562,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     list.sort(function(a,b){ var an=agg(a.net,sl,true)[k], bn=agg(b.net,sl,true)[k]; return (bn==null?-Infinity:bn)-(an==null?-Infinity:an); });
     var h='<table class="etfmini"><thead><tr><th>ETF（名称 / 代码）</th><th>'+gt+'净申购(亿元)</th><th>'+gt+'份额增减(亿份)</th><th>份额存量(亿份)</th><th>当日成交(亿)</th><th>规模·市值(亿)</th></tr></thead><tbody>';
     list.forEach(function(x){
-      var net=agg(x.net,sl,true)[k], ds=agg(x.dsh,sl,true)[k], ss=agg(x.sh,sl,false)[k];
+      var net=agg(x.net,sl,true)[k], ds=agg(dshOf(x),sl,true)[k], ss=agg(x.sh,sl,false)[k];
       h+='<tr class="etfRow" data-code="'+x.c+'"><td class="nm"><span class="nmt">'+x.n+'</span><span class="subcode">'+x.c+'</span></td>'
         +'<td class="'+cls2(net)+'">'+sign2(net)+'</td><td class="'+cls2(ds)+'">'+sign2(ds)+'</td><td>'+fmtSh(ss)+'</td>'
         +'<td class="st-amt" data-code="'+x.c+'">'+amt2(statOf(x.c,'amt'))+'</td><td class="st-mcap" data-code="'+x.c+'">'+amt2(statOf(x.c,'mcap'))+'</td></tr>';
@@ -1563,11 +1572,12 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   function daysRowsHtml(x){
     var w=rangeWin(), days=[];
     for(var i=0;i<BD.length;i++){ if(BD[i]>=w.from && BD[i]<=w.to) days.push(i); }
+    var dd=dshOf(x);
     var h='<div class="subhd">'+x.n+'（'+x.c+'） · '+(x.i||'—')+' · 逐日明细（视窗内，固定按日）</div>'
       + '<table><thead><tr><th>日期</th><th>当日净申购(亿元)</th><th>当日份额增减(亿份)</th><th>份额存量(亿份)</th></tr></thead><tbody>';
     for(var j=days.length-1;j>=0;j--){
       var d=days[j];
-      h+='<tr><td>'+BD[d]+'</td><td class="'+cls2(x.net[d])+'">'+sign2(x.net[d])+'</td><td class="'+cls2(x.dsh[d])+'">'+sign2(x.dsh[d])+'</td><td>'+fmtSh(x.sh[d])+'</td></tr>';
+      h+='<tr><td>'+BD[d]+'</td><td class="'+cls2(x.net[d])+'">'+sign2(x.net[d])+'</td><td class="'+cls2(dd[d])+'">'+sign2(dd[d])+'</td><td>'+fmtSh(x.sh[d])+'</td></tr>';
     }
     return h+'</tbody></table>';
   }
