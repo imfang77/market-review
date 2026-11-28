@@ -2312,7 +2312,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   if (document.getElementById('rzq-fa-host')) return;
   var tabs = document.querySelector('.tbltabs'), sec = document.querySelector('.tblsec');
   if (!tabs || !sec) return;
-  var FA_JS = '_rzrq_fa.js?v=202611270930';
+  var FA_JS = '_rzrq_fa.js?v=202611290045';
 
   var sBtn = tabs.querySelector('[data-t="s"]');
   var uBtn = tabs.querySelector('[data-t="u"]');
