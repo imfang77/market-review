@@ -1196,6 +1196,13 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     /* ===== 14 组 / 分组行 / 其他宽基 ===== */
     + '.etf-dim .dimnote{font-size:11px;color:#94a3b8;margin-left:4px;white-space:nowrap}'
     + 'table.etf-table tbody tr.grp td{background:#f1f5fb;font-weight:700;color:#334155;text-align:left;padding:8px 10px}'
+    + 'table.etf-table tbody tr.othEtfRow{cursor:pointer}'
+    + 'table.etf-table tbody tr.othEtfRow:hover{background:#eef7f5}'
+    + 'table.etf-table tbody tr.othEtfRow td:first-child{color:#0f766e}'
+    + 'table.etf-table tbody tr.othEtfRow .nmt{color:#0f766e}'
+    + '.othmorewrap{text-align:center;padding:8px 0 2px}'
+    + '.othmore{font-size:11.5px;padding:4px 12px;border:1px solid #cbd5e1;background:#fff;color:#0f766e;border-radius:6px;cursor:pointer}'
+    + '.othmore:hover{background:#eef7f5;border-color:#0f766e}'
     + 'table.etf-table tbody tr.grp{position:static}'
     + 'table.etf-table tbody tr.grp td:first-child{position:static;box-shadow:none;background:#f1f5fb}'
     + 'table.etf-table tbody tr.grp .grpnote{font-weight:400;color:#94a3b8;font-size:11.5px;margin-left:8px}'
@@ -1217,6 +1224,24 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     var st = document.createElement('style'); st.id='etf-tab-css'; st.textContent = css; document.head.appendChild(st);
   }
 
+  /* 表格口径说明：本页若已有图表下方的「口径与数据说明」折叠块，则只保留表格特有条目，口径定义不重复第二遍 */
+  var _sawDesc = !!document.querySelector('details.etf-desc');
+  var NOTE2 = ['<details class="etf-note2"><summary>表格口径与数据说明（默认折叠，点击展开）</summary><div>'];
+  if (!_sawDesc) {
+    NOTE2.push('<div class="nl"><b>覆盖范围</b>：14 组 = 13 个宽基指数（沪深300、中证A500、上证50、中证500、中证1000、科创50、创业板指、中证2000、科创100、创业板50、上证指数、深证成指、<b>科创综指</b>）+ <b>其他宽基</b>（其余 54 只，可再拆 10 个指数）。共 384 只宽基 ETF。</div>');
+    NOTE2.push('<div class="nl"><b>与汇总页同源</b>：本页 14 组合计 = 「全部股票型 ETF 净申购」页的宽基口径（11-27 当日净申购 573.50 亿元、份额存量 9178.09 亿份），两处数字逐步对齐。</div>');
+    NOTE2.push('<div class="nl"><b>净申购(亿元)</b>：iFinD 份额法净流入金额 =（当日份额 − 前日份额）× 当日净值，已剔除份额拆分影响。全市场申赎净额，非汇金独占。</div>');
+    NOTE2.push('<div class="nl"><b>份额增减(亿份)</b>：基金总份额差分，剔除拆分（真实一级市场申赎，负 = 净赎回）。</div>');
+    NOTE2.push('<div class="nl"><b>份额存量(亿份)</b>：该时点基金总份额。<b>以末日真实总份额为锚、按逐日净申购反推</b>的连续序列（已剔除份额拆分跳变，末端值 = 真实总份额）。</div>');
+    NOTE2.push('<div class="nl"><b>周期口径</b>：跟随上方 ETF 图的「统计粒度」与「时间段」——日 = 当日、周 = 本周累计（周一起）、月 = 本月累计；净申购与份额增减取周期累加，份额存量取周期末快照。</div>');
+  }
+  NOTE2.push('<div class="nl"><b>四层下钻（按日期 / 按宽基指数）</b>：日期行 → 14 组指数 → 「其他宽基」行 → 10 个指数 → 成分 ETF → 该 ETF 逐日明细；13 个主指数直接到 ETF 一层。</div>');
+  NOTE2.push('<div class="nl"><b>按ETF维度</b>：384 只<b>不分指数、放在同一张表里按净申购统一排序</b>（可直接点表头改排序列）；「其他 ETF」（不含 13 个指数的 54 只）作为<b>一行参与排名</b>，位置由自身净申购合计决定，点开才列出成分（先前 10，按「加载更多」每次 +10 直至列完）。</div>');
+  NOTE2.push('<div class="nl"><b>涨幅列</b>：当日／5日／10日／20日／60日／120日 用 2026 年内净值序列回溯（当日 = 相对上一交易日，N 日 = 相对 N 个交易日前）；250 日需更长序列，取长历史净值，上市不足显示「—」。</div>');
+  NOTE2.push('<div class="nl"><b>当日成交(亿)／ETF规模·市值(亿)</b>：腾讯行情快照（规模 = 总市值；收盘后为全日额），仅头部样本有快照，其余显示「—」。</div>');
+  NOTE2.push('</div></details>');
+  var note2 = NOTE2.join('');
+
   var eBtn = document.createElement('button');
   eBtn.className='tbtn'; eBtn.dataset.t='e'; eBtn.textContent='宽基ETF净申购';
   tabs.insertBefore(eBtn, uBtn);
@@ -1228,7 +1253,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     + '<div class="tblbox"><div class="etf-tblwrap"><table class="etf-table"><thead><tr id="etfHead">'
     +   '<th>日期</th><th><span class="eth-full">当日净申购(亿元)</span><span class="eth-mini">当日(亿元)</span></th><th><span class="eth-full">当日份额增减(亿份)</span><span class="eth-mini">份额(亿份)</span></th><th><span class="eth-full">份额存量(亿份)</span><span class="eth-mini">存量(亿份)</span></th><th><span class="eth-full">纳入指数</span><span class="eth-mini">指数</span></th>'
     + '</tr></thead><tbody id="etfTbody"></tbody></table></div></div>'
-    + '<details class="etf-note2"><summary>表格口径与数据说明（默认折叠，点击展开）</summary><div>'    +   '<div class="nl"><b>覆盖范围</b>：14 组 = 13 个宽基指数（沪深300、中证A500、上证50、中证500、中证1000、科创50、创业板指、中证2000、科创100、创业板50、上证指数、深证成指、<b>科创综指</b>）+ <b>其他宽基</b>（其余 54 只，可再拆 10 个指数）。共 384 只宽基 ETF。</div>'    +   '<div class="nl"><b>与汇总页同源</b>：本页 14 组合计 = 「全部股票型 ETF 净申购」页的宽基口径（11-27 当日净申购 573.50 亿元、份额存量 9178.09 亿份），两处数字逐步对齐。</div>'    +   '<div class="nl"><b>净申购(亿元)</b>：iFinD 份额法净流入金额 =（当日份额 − 前日份额）× 当日净值，已剔除份额拆分影响。全市场申赎净额，非汇金独占。</div>'    +   '<div class="nl"><b>份额增减(亿份)</b>：基金总份额差分，剔除拆分（真实一级市场申赎，负 = 净赎回）。</div>'    +   '<div class="nl"><b>份额存量(亿份)</b>：该时点基金总份额。<b>前复权连续值</b>（发生拆分的 ETF 其历史段按比例回算，曲线无跳变），<b>末端值 = 真实总份额</b>。</div>'    +   '<div class="nl"><b>周期口径</b>：跟随上方 ETF 图的「统计粒度」与「时间段」——日 = 当日、周 = 本周累计（周一起）、月 = 本月累计；净申购与份额增减取周期累加，份额存量取周期末快照。</div>'    +   '<div class="nl"><b>四层下钻</b>：按日期行 → 14 组指数 → 「其他宽基」行 → 10 个指数 → 成分 ETF → 该 ETF 逐日明细。「其他宽基」以外 13 个指数直接到 ETF 一层。</div>'    +   '<div class="nl"><b>按ETF维度</b>：13 个指数的成分 ETF <b>全部列出</b>（组内按净申购降序）；「其他宽基」组默认展开当日净申购<b>前 20</b>，其余按「加载更多」每次 +20 直至列完。</div>'    +   '<div class="nl"><b>涨幅列</b>：当日／5日／10日／20日／60日／120日 用 2026 年内净值序列回溯（当日 = 相对上一交易日，N 日 = 相对 N 个交易日前）；250 日需更长序列，取长历史净值，上市不足显示「—」。</div>'    +   '<div class="nl"><b>当日成交(亿)／ETF规模·市值(亿)</b>：腾讯行情快照（规模 = 总市值；收盘后为全日额），仅头部 30 只有快照，其余显示「—」。</div>'    + '</div></details>';
+    + NOTE2.join('');
   sec.appendChild(panel);
 
   var DATA=null, tbody=panel.querySelector('#etfTbody'), dim='d';
@@ -1241,10 +1266,12 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   var TOT={net:[],dsh:[],sh:[]}, TOTCNT=0;
   var moreN={};        /* 其他宽基组已展开只数 */
 
-  function fmtAxis(v){ if(v==null) return '—'; var a=Math.abs(v); if(a>=10000) return (v/10000).toFixed(2)+'万亿'; return v.toFixed(2); }
-  function sign2(v){ if(v==null) return '—'; return (v>=0?'+':'')+v.toFixed(2); }
+  function fmtAxis(v){ if(v==null) return '—'; var a=Math.abs(v); if(a>=10000) return r6(v/10000).toFixed(2)+'万亿'; return r6(v).toFixed(2); }
+  /* 浮点求和会出现 573.4949999 这类尾差 → 先规整到 3 位再 toFixed，保证与汇总页同数字（573.50 而非 573.49） */
+  function r6(v){ return Math.round(v*1000)/1000; }
+  function sign2(v){ if(v==null) return '—'; v=r6(v); return (v>=0?'+':'')+v.toFixed(2); }
   function cls2(v){ return v==null?'':(v>=0?'etf-pos':'etf-neg'); }
-  function fmtSh(v){ if(v==null) return '—'; return v.toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function fmtSh(v){ if(v==null) return '—'; return r6(v).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   function amt2(v){ return v==null?'—':v.toFixed(2); }
   function sAt(a,i){ return (a&&i>=0&&i<a.length)?a[i]:null; }
   /* ETF 明细层不存 dsh（省 25% 体积）→ 由份额存量差分还原，与生成端口径一致（含 0 钳位） */
@@ -1352,7 +1379,8 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       if(!sum) return sAt(arr,s.gi);
       var t=0, any=false;
       s.days.forEach(function(i){ var v=sAt(arr,i); if(v!=null){ t+=v; any=true; } });
-      return any?Math.round(t*100)/100:null;
+      /* 聚合保留 3 位：先按 2 位舍入会与汇总页差 0.01（11-27 曾 573.49 vs 573.50） */
+      return any?Math.round(t*1000)/1000:null;
     });
   }
 
@@ -1404,7 +1432,7 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
           tn+=(o.net[i]||0); ts+=(o.sh[i]||0);
           if(o.dsh[i]!=null) td+=o.dsh[i];
         });
-        TOT.net.push(Math.round(tn*100)/100);
+        TOT.net.push(Math.round(tn*1000)/1000);
         TOT.dsh.push(Math.round(td*10000)/10000);
         TOT.sh.push(Math.round(ts*10000)/10000);
       }
@@ -1465,7 +1493,48 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
     resetSort();
   }
 
-  /* ③ 按ETF：13 个指数的成分 ETF 全部列出 + 「其他」组（默认前 20，可继续加载） */
+  /* ③ 按ETF：全部 384 只放在同一张表里按「当日净申购」统一排序（不分组），
+     「其他 ETF」作为一行参与排名（位置由它自己的净申购合计决定），点开才展开其成分（先前 10，可继续加载）。 */
+  function sumSeries(list, fn){
+    var out=[];
+    for(var i=0;i<BD.length;i++){
+      var t=0, has=false;
+      for(var j=0;j<list.length;j++){
+        var a=fn(list[j]); var v=(a&&i<a.length)?a[i]:null;
+        if(v!=null){ t+=v; has=true; }
+      }
+      out.push(has?t:null);
+    }
+    return out;
+  }
+  function isIn13(x){ return K13.indexOf(x.i||'')>=0; }
+  function restList(){ return BE.filter(function(x){ return !isIn13(x); }); }
+  function etfMiniHtml(list, sl, k, gt){
+    var h='<table class="etfmini"><thead><tr><th>ETF（名称 / 代码）</th><th>'+gt+'净申购(亿元)</th><th>'+gt+'份额增减(亿份)</th><th>份额存量(亿份)</th><th>当日成交(亿)</th><th>规模·市值(亿)</th></tr></thead><tbody>';
+    list.forEach(function(x){
+      var net=agg(x.net,sl,true)[k], ds=agg(dshOf(x),sl,true)[k], ss=agg(x.sh,sl,false)[k];
+      h+='<tr class="etfRow" data-code="'+x.c+'"><td class="nm"><span class="nmt">'+x.n+'</span><span class="subcode">'+x.c+'</span></td>'
+        +'<td class="'+cls2(net)+'">'+sign2(net)+'</td><td class="'+cls2(ds)+'">'+sign2(ds)+'</td><td>'+fmtSh(ss)+'</td>'
+        +'<td class="st-amt" data-code="'+x.c+'">'+amt2(statOf(x.c,'amt'))+'</td><td class="st-mcap" data-code="'+x.c+'">'+amt2(statOf(x.c,'mcap'))+'</td></tr>';
+    });
+    return h+'</tbody></table>';
+  }
+  function othEtfSubHtml(sl, k, gt){
+    var rest=restList().slice().sort(sortNetBy(sl,k));
+    var shown=moreN.oe||10; if(shown>rest.length) shown=rest.length;
+    var h='<div class="subhd">其他 ETF · 共 '+rest.length+' 只（不含 13 个宽基指数的成分）· 按'+gt+'净申购降序，已列前 '+shown+'</div>';
+    h+=etfMiniHtml(rest.slice(0,shown), sl, k, gt);
+    h+= shown<rest.length
+      ? '<div class="othmorewrap"><button type="button" class="othmore">加载更多（再列 '+Math.min(10,rest.length-shown)+' 只，剩余 '+(rest.length-shown)+' 只）</button></div>'
+      : '<div class="othmorewrap"><button type="button" class="othmore" data-all="1">已全部展开 '+rest.length+' 只（收起）</button></div>';
+    return h;
+  }
+  function sortNetBy(sl,k){
+    return function(a,b){
+      var an=agg(a.net,sl,true)[k], bn=agg(b.net,sl,true)[k];
+      return (bn==null?-Infinity:bn)-(an==null?-Infinity:an);
+    };
+  }
   function renderEtfDim(){
     ensureStats(); ensureCloses();
     if(!BE.length){
@@ -1480,41 +1549,33 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
       + '<th><span class="eth-full">当日成交(亿)</span><span class="eth-mini">成交(亿)</span></th><th><span class="eth-full">ETF规模·市值(亿)</span><span class="eth-mini">规模(亿)</span></th>'
       + '<th><span class="eth-full">所属宽基指数</span><span class="eth-mini">指数</span></th>');
     var CHGDAYS=[1,5,10,20,60,120,250];
-    var byIdx={};
-    BE.forEach(function(x){
-      var nm=x.i||'';
-      var key=(K13.indexOf(nm)>=0)?nm:OTHN;
-      (byIdx[key]||(byIdx[key]=[])).push(x);
-    });
-    function rowOf(x){
-      var net=agg(x.net,sl,true)[k], ds=agg(dshOf(x),sl,true)[k], ss=agg(x.sh,sl,false)[k];
+    var rest=restList();
+    var rows=BE.filter(isIn13).map(function(x){ return {x:x, net:agg(x.net,sl,true)[k]}; });
+    if(rest.length){
+      var rs=sumSeries(rest, function(x){ return x.net; });
+      var rd=sumSeries(rest, function(x){ return dshOf(x); });
+      var rh=sumSeries(rest, function(x){ return x.sh; });
+      rows.push({oth:true, net:agg(rs,sl,true)[k], ds:agg(rd,sl,true)[k], ss:agg(rh,sl,false)[k], cnt:rest.length});
+    }
+    rows.sort(function(a,b){ return (b.net==null?-Infinity:b.net)-(a.net==null?-Infinity:a.net); });
+    var out=rows.map(function(r){
+      if(r.oth){
+        return '<tr class="othEtfRow" data-oth="1"><td class="nm"><span class="nmt">其他 ETF</span><span class="subcode">'+r.cnt+' 只 · 点开看成分</span></td>'
+          +'<td class="'+cls2(r.net)+'">'+sign2(r.net)+'</td><td class="'+cls2(r.ds)+'">'+sign2(r.ds)+'</td><td>'+fmtSh(r.ss)+'</td>'
+          + CHGDAYS.map(function(){ return '<td class="chg">—</td>'; }).join('')
+          + '<td class="chg">—</td><td>—</td><td>其他宽基（10 个指数）</td></tr>';
+      }
+      var x=r.x;
+      var net=r.net, ds=agg(dshOf(x),sl,true)[k], ss=agg(x.sh,sl,false)[k];
       var chg=CHGDAYS.map(function(n){ return n>=250?chgOf(x.c,n):(chgB(x.c,n)!=null?chgB(x.c,n):chgOf(x.c,n)); });
       return '<tr class="etfRow" data-code="'+x.c+'"><td class="nm"><span class="nmt">'+x.n+'</span><span class="subcode">'+x.c+'</span></td>'
         +'<td class="'+cls2(net)+'">'+sign2(net)+'</td><td class="'+cls2(ds)+'">'+sign2(ds)+'</td><td>'+fmtSh(ss)+'</td>'
         + chg.map(function(v){ return '<td class="chg '+cls2(v)+'">'+pct2(v)+'</td>'; }).join('')
         + '<td class="chg st-amt" data-code="'+x.c+'">'+amt2(statOf(x.c,'amt'))+'</td><td class="st-mcap" data-code="'+x.c+'">'+amt2(statOf(x.c,'mcap'))+'</td>'
         + '<td>'+(x.i||'—')+'</td></tr>';
-    }
-    function sortNet(a,b){ var an=agg(a.net,sl,true)[k], bn=agg(b.net,sl,true)[k]; return (bn==null?-Infinity:bn)-(an==null?-Infinity:an); }
-    var out=[];
-    K13.forEach(function(nm){
-      var list=(byIdx[nm]||[]).slice().sort(sortNet);
-      if(!list.length) return;
-      out.push('<tr class="grp" data-grp="1"><td colspan="14">'+nm+' · '+list.length+' 只<span class="grpnote">按'+gt+'净申购降序</span></td></tr>');
-      list.forEach(function(x){ out.push(rowOf(x)); });
     });
-    var rest=(byIdx[OTHN]||[]).slice().sort(sortNet);
-    if(rest.length){
-      var shown=moreN[dim]||0;
-      out.push('<tr class="grp grpoth" data-grp="1"><td colspan="14">其他宽基 · '+rest.length+' 只<span class="grpnote">'+(shown?'已展开 '+Math.min(shown,rest.length)+' / '+rest.length:'点击展开当日净申购前 20')+'</span></td></tr>');
-      if(shown){
-        rest.slice(0,shown).forEach(function(x){ out.push(rowOf(x)); });
-        if(shown<rest.length) out.push('<tr class="moreRow"><td colspan="14"><button type="button" class="morebtn" data-more="1">加载更多（+20，剩余 '+(rest.length-shown)+' 只）</button></td></tr>');
-        else out.push('<tr class="moreRow"><td colspan="14"><button type="button" class="morebtn" data-more="0">已全部展开 '+rest.length+' 只（收起）</button></td></tr>');
-      }
-    }
     tbody.innerHTML=out.join('');
-    tableSortable(false);
+    tableSortable(true);
   }
 
   function resetSort(){ var t=panel.querySelector('table.etf-table'); if(t) t._sk=null; tableSortable(true); }
@@ -1648,6 +1709,27 @@ window.RZQ = window.RZQ || { unit: 'a', code: '', name: '' };
   tbody.addEventListener('click', function(e){
     var g=e.target.closest('tr.grpoth');
     if(g){ moreN[dim]=(moreN[dim]||0)?0:20; ensureEtf(); renderTable(); return; }
+    /* 「其他 ETF」行 → 展开前 10 只成分（可继续加载） */
+    var ob=e.target.closest('button.othmore');
+    if(ob){
+      var sub0=ob.closest('tr.etf-sub'), host=sub0&&sub0.previousElementSibling;
+      if(host){
+        if(ob.dataset.all){ moreN.oe=10; }
+        else { moreN.oe=(moreN.oe||10)+10; }
+        var slm=slices(), km=slm.length-1, gtm=gtxt(gran()), pkm=nearestK(host);
+        if(pkm!=null) km=pkm;
+        killSub(host); addSub(host,'othe',othEtfSubHtml(slm,km,gtm));
+      }
+      return;
+    }
+    var orow=e.target.closest('tr.othEtfRow');
+    if(orow){
+      if(orow.nextElementSibling && orow.nextElementSibling.dataset.lv==='othe'){ killSub(orow); return; }
+      var slo=slices(), ko=slo.length-1, gto=gtxt(gran()), pko=nearestK(orow);
+      if(pko!=null) ko=pko;
+      killSub(orow); addSub(orow,'othe',othEtfSubHtml(slo,ko,gto));
+      return;
+    }
     var b=e.target.closest('button.morebtn');
     if(b){
       var more=parseInt(b.dataset.more,10);
